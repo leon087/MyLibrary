@@ -43,18 +43,18 @@ android {
 	buildToolsVersion "19"
 
 	signingConfigs {
-		wondertek {
-			storeFile file("keystore/wondertek.keystore")
-			storePassword "wondertek*123"
-			keyAlias "wondertek"
-			keyPassword "wondertek*123"
+		nbtstatx {
+			storeFile file("keystore/nbtstatx.keystore")
+			storePassword "nbtstatx"
+			keyAlias "nbtstatx"
+			keyPassword "nbtstatx"
 		}
 		debug { storeFile file("keystore/debug.keystore") }
 	}
 
 	buildTypes {
 		release {
-			signingConfig  signingConfigs.wondertek
+			signingConfig  signingConfigs.nbtstatx
 			runProguard true
 			proguardFile getDefaultProguardFile('proguard-android.txt')
 			proguardFile new File(project(':library:WdUtil').getProjectDir(), 'util-proguard-project.txt')
