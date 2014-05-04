@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base application theme is the default theme. -->
+    <style name="Theme" parent="android:Theme" />
+
+    <!-- 自定义activity主题 -->
+    <style name="Theme_Activity">
+        <item name="android:configChanges">orientation|keyboardHidden|locale</item>
+        <item name="android:screenOrientation">portrait</item>
+        <item name="android:windowSoftInputMode">adjustPan|stateHidden</item>
+    </style>
+
+    <!-- 从右向左滑入，从左到右滑出 -->
+    <style name="Theme_Activity_Animation" parent="@style/Theme_Activity">
+        <item name="android:windowAnimationStyle">@style/Activity_Animation_Style</item>
+    </style>
+
+    <style name="Activity_Animation_Style" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
+    </style>
+
+    <style name="Theme_Base_Dialog_Fragment_1" parent="@android:style/Theme">
+
+        <!-- <item name="android:windowBackground">@drawable/dialog_bg</item> -->
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <!-- <item name="android:windowAnimationStyle">@style/SubMenuPanel</item> -->
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme_Base_Dialog_Fragment_2" parent="@android:style/Theme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <!-- <item name="android:windowAnimationStyle">@style/SubMenuPanel</item> -->
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme_Base_Dialog_Fragment_3" parent="@android:style/Theme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Toast</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme_Base_Dialog_Fragment_4" parent="@android:style/Theme">
+
+        <!-- <item name="android:windowBackground">@drawable/publish_dialog_bg</item> -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <!-- <item name="android:windowAnimationStyle">@android:style/Animation.Toast</item> -->
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+</resources>

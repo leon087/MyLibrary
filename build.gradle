@@ -1,0 +1,24 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+	repositories {
+		//从中央库里面获取依赖
+		mavenCentral()
+		//mavenLocal()
+		/*
+		 //或者使用指定的本地maven 库
+		 maven{
+		 url "file://F:/githubrepo/releases"
+		 }
+		 */
+		//或者使用指定的远程maven库
+		//maven { url "http://172.16.18.233:8081/nexus/content/repositories/central/" }
+	}
+
+	dependencies { classpath 'com.android.tools.build:gradle:0.7.+' }
+}
+
+allprojects {
+	tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
+}
+
+task wrapper(type: Wrapper) {  gradleVersion = '1.9'  }

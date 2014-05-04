@@ -1,0 +1,6 @@
+
+#================================自定义======================================
+-keepnames class wd.android.common.image.ImageManager
+-keepnames class wd.android.common.download.ApkDownloadManager
+
+#================================自定义======================================

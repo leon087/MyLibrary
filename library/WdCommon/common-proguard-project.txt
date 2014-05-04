@@ -1,0 +1,11 @@
+#================================框架======================================
+
+-keep class com.j256.** { *; }
+-keep class wd.android.custom.ui.** { *; }
+-keep class wd.android.common.ui.** { *; }
+
+-keep class wd.android.common.db.** { *; }
+-keep class * extends wd.android.common.db.BaseBean { *; }
+-keep class * extends wd.android.common.db.BaseDao { *; }
+
+#================================框架======================================
