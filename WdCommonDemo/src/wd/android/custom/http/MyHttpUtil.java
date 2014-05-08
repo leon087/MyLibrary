@@ -4,13 +4,13 @@ import wd.android.app.global.UrlData;
 import wd.android.app.manager.DeviceManager;
 import wd.android.common.http.HttpUtil;
 import wd.android.common.http.MyDataResponseHandler;
+import wd.android.encrypt.EncryptUtils;
 import wd.android.util.util.Utils;
 import android.util.Base64;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.uus.mv2.uitl.EncryptUtils;
 
 public class MyHttpUtil {
 	public static void exec(String linkUrl, BaseHttpListener httpListener) {
