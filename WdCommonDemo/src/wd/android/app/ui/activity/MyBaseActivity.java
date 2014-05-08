@@ -8,8 +8,7 @@ import wd.android.app.ui.fragment.dialog.LoadingDialog;
 import wd.android.custom.MainApp;
 import wd.android.custom.http.BaseHttpListener;
 import wd.android.framework.ui.BaseActivity;
-import wd.android.util.sdk.WeakHandler;
-import wd.android.util.sdk.WeakHandler.WeakCallback;
+import wd.android.util.sdk.MyHandler;
 import wd.android.util.util.MapUtil;
 import wd.android.util.util.Utils;
 import wd.android.wdcommondemo.R;
@@ -78,7 +77,7 @@ public abstract class MyBaseActivity extends BaseActivity {
 		}
 	}
 
-	public WeakHandler showLoadingHandler = new WeakHandler(new WeakCallback() {
+	public MyHandler showLoadingHandler = new MyHandler() {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_SHOW_PROGRESS:
@@ -91,7 +90,7 @@ public abstract class MyBaseActivity extends BaseActivity {
 				break;
 			}
 		}
-	});
+	};
 
 	/**
 	 * show loading dialog

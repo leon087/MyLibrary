@@ -11,8 +11,7 @@ import wd.android.custom.MainApp;
 import wd.android.custom.MyManager;
 import wd.android.framework.util.MyIntent;
 import wd.android.util.net.NetworkUtil;
-import wd.android.util.sdk.WeakHandler;
-import wd.android.util.sdk.WeakHandler.WeakCallback;
+import wd.android.util.sdk.MyHandler;
 import wd.android.util.util.UIUtils;
 import wd.android.util.util.Utils;
 import wd.android.wdcommondemo.R;
@@ -70,8 +69,7 @@ public class InitActivity extends MyBaseActivity {
 	/**
 	 * UI处理handler
 	 */
-	private WeakHandler uiHandler = new WeakHandler(new WeakCallback() {
-
+	private MyHandler uiHandler = new MyHandler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -85,7 +83,7 @@ public class InitActivity extends MyBaseActivity {
 				break;
 			}
 		}
-	});
+	};
 
 	@Override
 	public void initView(View rootView, Bundle bundle) {
@@ -158,8 +156,7 @@ public class InitActivity extends MyBaseActivity {
 	/**
 	 * 初始化流程handler
 	 */
-	private WeakHandler initHandler = new WeakHandler(new WeakCallback() {
-
+	private MyHandler initHandler = new MyHandler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -199,7 +196,7 @@ public class InitActivity extends MyBaseActivity {
 				break;
 			}
 		}
-	});
+	};
 
 	private void setText(int tipId) {
 		String tips = MainApp.getApp().getString(tipId);
