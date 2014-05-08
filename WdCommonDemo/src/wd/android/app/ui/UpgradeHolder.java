@@ -9,9 +9,10 @@ import wd.android.app.ui.fragment.dialog.UpgradeDialog;
 import wd.android.custom.MainApp;
 import wd.android.custom.MyManager;
 import wd.android.framework.ui.BaseActivity;
+import wd.android.util.sdk.WeakHandler;
+import wd.android.util.sdk.WeakHandler.WeakCallback;
 import wd.android.util.util.MapUtil;
 import wd.android.wdcommondemo.R;
-import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 
 public class UpgradeHolder {
@@ -122,7 +123,7 @@ public class UpgradeHolder {
 		activity.showDialog(null, confirmDialog);
 	}
 
-	private Handler uiHandler = new Handler() {
+	private WeakHandler uiHandler = new WeakHandler(new WeakCallback() {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case UpgradeManager.MSG_UPGRADE_NONE:
@@ -143,7 +144,7 @@ public class UpgradeHolder {
 				break;
 			}
 		}
-	};
+	});
 
 	private void dismissDialog() {
 		dismissDialog(upgradeDialog);

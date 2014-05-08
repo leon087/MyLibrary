@@ -11,13 +11,14 @@ import wd.android.custom.MainApp;
 import wd.android.custom.MyManager;
 import wd.android.framework.util.MyIntent;
 import wd.android.util.net.NetworkUtil;
+import wd.android.util.sdk.WeakHandler;
+import wd.android.util.sdk.WeakHandler.WeakCallback;
 import wd.android.util.util.UIUtils;
 import wd.android.util.util.Utils;
 import wd.android.wdcommondemo.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
@@ -69,8 +70,10 @@ public class InitActivity extends MyBaseActivity {
 	/**
 	 * UI处理handler
 	 */
-	protected Handler uiHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
+	private WeakHandler uiHandler = new WeakHandler(new WeakCallback() {
+
+		@Override
+		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_SHOW_PROGRESS:
 				// mProgressingDialog.show();
@@ -82,7 +85,7 @@ public class InitActivity extends MyBaseActivity {
 				break;
 			}
 		}
-	};
+	});
 
 	@Override
 	public void initView(View rootView, Bundle bundle) {
@@ -155,7 +158,9 @@ public class InitActivity extends MyBaseActivity {
 	/**
 	 * 初始化流程handler
 	 */
-	private Handler initHandler = new Handler() {
+	private WeakHandler initHandler = new WeakHandler(new WeakCallback() {
+
+		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case OPERATE_INIT:
@@ -194,7 +199,7 @@ public class InitActivity extends MyBaseActivity {
 				break;
 			}
 		}
-	};
+	});
 
 	private void setText(int tipId) {
 		String tips = MainApp.getApp().getString(tipId);

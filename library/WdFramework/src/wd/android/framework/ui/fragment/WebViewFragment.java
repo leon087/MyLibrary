@@ -1,5 +1,6 @@
 package wd.android.framework.ui.fragment;
 
+import wd.android.util.util.EnvironmentInfo.SdkUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,7 +9,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 /**
- *  A copy of Honeycomb's {@link android.webkit.WebViewFragment}.
+ * A copy of Honeycomb's {@link android.webkit.WebViewFragment}.
  */
 public class WebViewFragment extends Fragment {
 	private WebView mWebView;
@@ -21,7 +22,8 @@ public class WebViewFragment extends Fragment {
 	 * Called to instantiate the view. Creates and returns the WebView.
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		if (mWebView != null) {
 			mWebView.destroy();
 		}
@@ -37,7 +39,9 @@ public class WebViewFragment extends Fragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		mWebView.onPause();
+		if (SdkUtil.hasHoneycomb()) {
+			mWebView.onPause();
+		}
 	}
 
 	/**
@@ -45,13 +49,15 @@ public class WebViewFragment extends Fragment {
 	 */
 	@Override
 	public void onResume() {
-		mWebView.onResume();
+		if (SdkUtil.hasHoneycomb()) {
+			mWebView.onResume();
+		}
 		super.onResume();
 	}
 
 	/**
-	 * Called when the WebView has been detached from the fragment. The WebView is
-	 * no longer available after this time.
+	 * Called when the WebView has been detached from the fragment. The WebView
+	 * is no longer available after this time.
 	 */
 	@Override
 	public void onDestroyView() {

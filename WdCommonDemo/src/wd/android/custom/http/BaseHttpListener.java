@@ -2,11 +2,15 @@ package wd.android.custom.http;
 
 import java.util.Map;
 
+import org.apache.http.Header;
+
 import wd.android.common.http.CacheHttpListener;
 import wd.android.custom.MyManager;
 import wd.android.framework.global.CommonTag;
 import wd.android.util.util.MapUtil;
 import wd.android.util.util.Utils;
+
+import com.alibaba.fastjson.JSON;
 
 public abstract class BaseHttpListener extends CacheHttpListener {
 
@@ -22,16 +26,12 @@ public abstract class BaseHttpListener extends CacheHttpListener {
 		onSuccess(headers, responseMap);
 	}
 
-	// @SuppressWarnings("unchecked")
-	// @Override
-	// protected Map<String, Object> parseResponse(Header[] headers,
-	// byte[] responseBytes) throws Throwable {
-	// byte[] base64 = Base64.decode(responseBytes, Base64.DEFAULT);
-	// byte[] realByte = EncryptUtils.decrypt(base64);
-	// String rawJsonData = Utils.getString(realByte,
-	// AsyncHttpResponseHandler.DEFAULT_CHARSET);
-	// return JSON.parseObject(rawJsonData, Map.class);
-	// }
+	@Override
+	protected Map<String, Object> parseResponse(Header[] headers,
+			byte[] responseBytes) throws Throwable {
+		String rawJsonData = MyHttpUtil.decode(responseBytes);
+		return JSON.parseObject(rawJsonData, Map.class);
+	}
 
 	// private String getSessionId(String setCookie) {
 	// return (setCookie.split(";")[0]).split("=")[1];

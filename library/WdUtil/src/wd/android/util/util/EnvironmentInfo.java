@@ -432,7 +432,8 @@ public class EnvironmentInfo {
 		 * @return
 		 */
 		public static boolean hasHoneycomb() {
-			return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+			return Build.VERSION.SDK_INT >= 11;
+			// return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
 		}
 
 		/**
@@ -441,11 +442,14 @@ public class EnvironmentInfo {
 		 * @return
 		 */
 		public static boolean hasHoneycombMR1() {
-			return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1;
+			return Build.VERSION.SDK_INT >= 12;
+			// return Build.VERSION.SDK_INT >=
+			// Build.VERSION_CODES.HONEYCOMB_MR1;
 		}
 
-		// public static boolean hasJellyBean() {
-		// return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-		// }
+		public static boolean hasJellyBean() {
+			return Build.VERSION.SDK_INT >= 16;
+			// return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+		}
 	}
 }

@@ -60,10 +60,12 @@ public class ImageManager {
 				context);
 		// 当同一个Uri获取不同大小的图片，缓存到内存时，只缓存一个。默认会缓存多个不同的大小的相同图片
 		// builder.denyCacheImageMultipleSizesInMemory();
-		builder.discCacheFileCount(100);
+		builder.diskCacheFileCount(100);
 		File cacheDir = null;
+		File reserveCacheDir = StorageUtils
+				.getIndividualCacheDirectory(context);
 		if (Utils.isEmpty(cacheDirPath)) {
-			cacheDir = StorageUtils.getIndividualCacheDirectory(context);
+			cacheDir = reserveCacheDir;
 		} else {
 			cacheDir = new File(cacheDirPath);
 		}
@@ -71,7 +73,7 @@ public class ImageManager {
 		// builder.discCache(new TotalSizeLimitedDiscCache(cacheDir,
 		// new Md5FileNameGenerator(), 100 * 1024 * 1024));
 		// 缓存保存5天
-		builder.discCache(new LimitedAgeDiscCache(cacheDir,
+		builder.diskCache(new LimitedAgeDiscCache(cacheDir, reserveCacheDir,
 				new Md5FileNameGenerator(), 24 * 60 * 60 * 5));
 		builder.tasksProcessingOrder(QueueProcessingType.LIFO);
 		builder.threadPriority(Thread.NORM_PRIORITY);
@@ -98,7 +100,7 @@ public class ImageManager {
 		// 设置下载的图片是否缓存在内存中
 		builder.cacheInMemory(true);
 		// 设置下载的图片是否缓存在SD卡中
-		builder.cacheOnDisc(true);
+		builder.cacheOnDisk(true);
 		// builder.displayer(new RoundedBitmapDisplayer(20));
 		// 设置图片的解码类型
 		builder.bitmapConfig(Bitmap.Config.RGB_565);
@@ -131,10 +133,10 @@ public class ImageManager {
 		if (flag == CLEAR_CACHE_MEMORY) {
 			imageLoader.clearMemoryCache();
 		} else if (flag == CLEAR_CACHE_DISC) {
-			imageLoader.clearDiscCache();
+			imageLoader.clearDiskCache();
 		} else {
 			imageLoader.clearMemoryCache();
-			imageLoader.clearDiscCache();
+			imageLoader.clearDiskCache();
 		}
 	}
 
@@ -145,7 +147,7 @@ public class ImageManager {
 	 */
 	public void clearCache(String uri) {
 		MemoryCacheUtils.removeFromCache(uri, imageLoader.getMemoryCache());
-		DiscCacheUtils.removeFromCache(uri, imageLoader.getDiscCache());
+		DiscCacheUtils.removeFromCache(uri, imageLoader.getDiskCache());
 	}
 
 	public void loadImage(String uri, ImageView imageView) {

@@ -10,6 +10,8 @@ public class UrlData {
 	/** 获得地址列表 */
 	public static final String URL_INIT = MainConfig.SERVER_ROOT
 			+ "/portal-ott/ott/system/init.jsp";
+	public static final String URL_INIT_ENCRYPT = MainConfig.SERVER_ROOT
+			+ "/init.jsp";
 
 	private Map<String, String> urls = new HashMap<String, String>();
 
