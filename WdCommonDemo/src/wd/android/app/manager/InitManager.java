@@ -4,12 +4,10 @@ import java.util.Map;
 
 import wd.android.app.global.Tag;
 import wd.android.app.global.UrlData;
-import wd.android.common.http.HttpLoader;
 import wd.android.common.http.HttpUtil;
 import wd.android.custom.MyManager;
 import wd.android.custom.http.BaseHttpListener;
 import wd.android.util.util.MapUtil;
-import wd.android.util.util.MyLog;
 import wd.android.util.util.Utils;
 import android.content.Context;
 
@@ -65,7 +63,7 @@ public class InitManager {
 		HttpUtil.exec(UrlData.URL_INIT, initHttpHandler);
 	}
 
-	private BaseHttpListener initHttpHandler = new BaseHttpListener() {
+	private BaseHttpListener<Map<String, Object>> initHttpHandler = new BaseHttpListener<Map<String, Object>>() {
 		@Override
 		protected void onStart() {
 			iInitInterface.onInit();

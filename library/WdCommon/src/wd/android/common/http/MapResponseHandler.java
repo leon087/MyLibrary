@@ -1,15 +1,19 @@
 package wd.android.common.http;
 
+import java.util.Map;
+
 import org.apache.http.Header;
 
 import wd.android.util.util.MyLog;
 import wd.android.util.util.Utils;
 
-public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
+public class MapResponseHandler extends
+		HttpResponseHandler<Map<String, Object>> {
 	private String url;
-	private HttpListener<T> httpListener;
+	private HttpListener<Map<String, Object>> httpListener;
 
-	public MyDataResponseHandler(String url, HttpListener<T> httpListener) {
+	public MapResponseHandler(String url,
+			HttpListener<Map<String, Object>> httpListener) {
 		this.url = url;
 		this.httpListener = httpListener;
 	}
@@ -34,7 +38,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
 
 	@Override
 	public void onSuccess(int statusCode, Header[] headers,
-			byte[] responseBytes, T response) {
+			byte[] responseBytes, Map<String, Object> response) {
 		MyLog.i("statusCode = " + statusCode);
 		if (MyLog.isDebug()) {
 			MyLog.d("header:----------------------------------------");
@@ -51,15 +55,16 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
 
 	@Override
 	public void onFailure(int statusCode, Header[] headers,
-			Throwable throwable, byte[] responseBytes, T errorResponse) {
+			Throwable throwable, byte[] responseBytes,
+			Map<String, Object> errorResponse) {
 		httpListener.onFailure(throwable, errorResponse);
 		String responseBody = Utils.getString(responseBytes, getCharset());
 		MyLog.e(responseBody, throwable);
 	}
 
 	@Override
-	protected T parseResponse(Header[] headers, byte[] responseBytes,
-			boolean isFailure) throws Throwable {
+	protected Map<String, Object> parseResponse(Header[] headers,
+			byte[] responseBytes, boolean isFailure) throws Throwable {
 		return httpListener.parseResponse(headers, responseBytes);
 	}
 }

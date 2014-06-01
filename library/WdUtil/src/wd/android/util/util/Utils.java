@@ -501,7 +501,13 @@ public class Utils {
 			dest = m.replaceAll("");
 		}
 		return dest;
+	}
 
+	public static String getString(String str) {
+		if (isEmpty(str)) {
+			return "";
+		}
+		return str;
 	}
 
 }

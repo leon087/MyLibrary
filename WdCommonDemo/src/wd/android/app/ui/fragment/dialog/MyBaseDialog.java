@@ -80,7 +80,8 @@ public abstract class MyBaseDialog extends BaseDialogFragment implements
 
 	public abstract boolean cancelable();
 
-	public class MyBaseHttpHandler extends BaseHttpListener {
+	public class MyBaseHttpHandler extends
+			BaseHttpListener<Map<String, Object>> {
 
 		@Override
 		protected void onSuccess(Map<String, String> headers,

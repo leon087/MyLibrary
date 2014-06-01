@@ -40,9 +40,11 @@ public abstract class MyBaseFragment extends BaseFragment {
 		}
 	};
 
-	public class MyBaseHttpHandler extends BaseHttpListener {
+	public class MyBaseHttpHandler extends
+			BaseHttpListener<Map<String, Object>> {
+
 		@Override
-		protected void onSuccess(Map<String, String> headers,
+		protected void onSuccess(java.util.Map<String, String> headers,
 				Map<String, Object> responseMap) {
 		}
 

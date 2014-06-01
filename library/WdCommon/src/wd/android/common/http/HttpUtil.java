@@ -31,34 +31,44 @@ public final class HttpUtil {
 
 	/**
 	 * JSON数据请求
+	 * 
+	 * @param <T>
 	 */
-	public static void exec(String url, HttpListener httpHandler) {
+	public static <T> void exec(String url, HttpListener<T> httpHandler) {
 		exec(url, null, null, httpHandler);
 	}
 
 	/**
 	 * JSON数据请求
+	 * 
+	 * @param <T>
 	 */
-	public static void exec(String url, Header[] headers,
-			HttpListener httpHandler) {
+	public static <T> void exec(String url, Header[] headers,
+			HttpListener<T> httpHandler) {
 		exec(url, headers, null, httpHandler);
 	}
 
 	/**
 	 * JSON数据请求
+	 * 
+	 * @param <T>
+	 * 
+	 * @param <T>
 	 */
-	public static void exec(String url, RequestParams params,
-			HttpListener httpHandler) {
+	public static <T> void exec(String url, RequestParams params,
+			HttpListener<T> httpHandler) {
 		exec(url, null, params, httpHandler);
 	}
 
 	/**
 	 * JSON数据请求
+	 * 
+	 * @param <T>
 	 */
-	public static void exec(String url, Header[] headers, RequestParams params,
-			HttpListener httpListener) {
-		MyDataResponseHandler responseHandler = new MyDataResponseHandler(url,
-				httpListener);
+	public static <T> void exec(String url, Header[] headers,
+			RequestParams params, HttpListener<T> httpListener) {
+		MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(
+				url, httpListener);
 		exec(url, headers, params, responseHandler);
 	}
 

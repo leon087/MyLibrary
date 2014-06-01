@@ -12,11 +12,15 @@ import wd.android.util.util.Utils;
 
 import com.alibaba.fastjson.JSON;
 
-public abstract class BaseHttpListener extends CacheHttpListener {
+public abstract class BaseHttpListener<T> extends CacheHttpListener<T> {
+
+	public BaseHttpListener() {
+		super();
+	}
 
 	@Override
 	protected final void onSuccess(int statusCode, Map<String, String> headers,
-			Map<String, Object> responseMap) {
+			T responseMap) {
 		String sessionId = MapUtil.getString(headers, CommonTag.SESSION_ID);
 		if (!Utils.isEmpty(sessionId)) {
 			// String sessionId = getSessionId(setCookie);
@@ -27,16 +31,11 @@ public abstract class BaseHttpListener extends CacheHttpListener {
 	}
 
 	@Override
-	protected Map<String, Object> parseResponse(Header[] headers,
-			byte[] responseBytes) throws Throwable {
+	protected T parseResponse(Header[] headers, byte[] responseBytes)
+			throws Throwable {
 		String rawJsonData = MyHttpUtil.decode(responseBytes);
-		return JSON.parseObject(rawJsonData, Map.class);
+		return JSON.parseObject(rawJsonData, clazz);
 	}
 
-	// private String getSessionId(String setCookie) {
-	// return (setCookie.split(";")[0]).split("=")[1];
-	// }
-
-	protected abstract void onSuccess(Map<String, String> headers,
-			Map<String, Object> responseMap);
+	protected abstract void onSuccess(Map<String, String> headers, T responseMap);
 }

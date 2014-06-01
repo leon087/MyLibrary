@@ -49,7 +49,8 @@ public abstract class MyBaseActivity extends BaseActivity {
 		// super.onSaveInstanceState(outState);
 	}
 
-	public abstract class MyBaseHttpHandler extends BaseHttpListener {
+	public abstract class MyBaseHttpHandler extends
+			BaseHttpListener<Map<String, Object>> {
 		// @Override
 		// protected void onSuccess(Map<String, String> headers,
 		// Map<String, Object> responseMap) {

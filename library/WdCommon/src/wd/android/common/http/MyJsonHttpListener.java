@@ -1,21 +1,30 @@
 package wd.android.common.http;
 
-import java.util.Map;
-
 import org.apache.http.Header;
 
+import wd.android.util.util.GenericsUtil;
 import wd.android.util.util.Utils;
 
 import com.alibaba.fastjson.JSON;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public abstract class MyJsonHttpListener extends HttpListener {
+public abstract class MyJsonHttpListener<T> extends HttpListener<T> {
+	protected Class<T> clazz = null;
+
+	/**
+	 * 
+	 */
 	@SuppressWarnings("unchecked")
+	public MyJsonHttpListener() {
+		this.clazz = GenericsUtil
+				.getSuperClassGenricType(MyJsonHttpListener.class);
+	}
+
 	@Override
-	protected Map<String, Object> parseResponse(Header[] headers,
-			byte[] responseBytes) throws Throwable {
+	protected T parseResponse(Header[] headers, byte[] responseBytes)
+			throws Throwable {
 		String rawJsonData = Utils.getString(responseBytes,
 				AsyncHttpResponseHandler.DEFAULT_CHARSET);
-		return JSON.parseObject(rawJsonData, Map.class);
+		return JSON.parseObject(rawJsonData, clazz);
 	}
 }

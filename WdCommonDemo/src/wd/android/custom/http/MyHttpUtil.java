@@ -13,7 +13,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class MyHttpUtil {
-	public static void exec(String linkUrl, BaseHttpListener httpListener) {
+	public static <T> void exec(String linkUrl, BaseHttpListener<T> httpListener) {
 		exec(linkUrl, null, httpListener);
 	}
 
@@ -45,8 +45,8 @@ public class MyHttpUtil {
 		return params;
 	}
 
-	public static void exec(String linkUrl, RequestParams params,
-			BaseHttpListener httpListener) {
+	public static <T> void exec(String linkUrl, RequestParams params,
+			BaseHttpListener<T> httpListener) {
 		RequestParams header = genHeader();
 
 		String encryptHeaderUrl = AsyncHttpClient.getUrlWithQueryString(true,
@@ -61,8 +61,8 @@ public class MyHttpUtil {
 		String url = AsyncHttpClient.getUrlWithQueryString(true,
 				UrlData.URL_INIT_ENCRYPT, urlParams);
 
-		MyDataResponseHandler responseHandler = new MyDataResponseHandler(url,
-				httpListener);
+		MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(
+				url, httpListener);
 		HttpUtil.exec(url, encryptBytes.getBytes(), responseHandler);
 	}
 }

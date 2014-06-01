@@ -2,7 +2,6 @@ package wd.android.common.http;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -36,17 +35,17 @@ public class HttpLoader {
 		localCache = new LocalCache(cacheLoder);
 	}
 
-	public static void load(String url, CacheHttpListener httpHandler) {
+	public static <T> void load(String url, CacheHttpListener<T> httpHandler) {
 		load(url, null, httpHandler, true);
 	}
 
-	public static void load(String url, Header[] header,
-			CacheHttpListener httpHandler) {
+	public static <T> void load(String url, Header[] header,
+			CacheHttpListener<T> httpHandler) {
 		load(url, header, httpHandler, true);
 	}
 
-	public static void load(final String url, final Header[] header,
-			final CacheHttpListener httpHandler, boolean cacheFlag) {
+	public static <T> void load(final String url, final Header[] header,
+			final CacheHttpListener<T> httpHandler, boolean cacheFlag) {
 		// 如果有缓存，并且缓存未失效，则返回成功，否则http请求
 		// 要确保url和参数都一致!!把post参数与url合并
 
@@ -61,8 +60,8 @@ public class HttpLoader {
 					if (!Utils.isEmpty(content)) {
 						byte[] responseBytes = content.getBytes();
 						Header[] headers = Utils.genHeader(entry.getHeaders());
-						Map<String, Object> responseMap = httpHandler
-								.parseResponse(headers, responseBytes);
+						T responseMap = httpHandler.parseResponse(headers,
+								responseBytes);
 						if (null != responseMap) {
 							httpHandler.onSuccess(200, entry.getHeaders(),
 									responseMap);

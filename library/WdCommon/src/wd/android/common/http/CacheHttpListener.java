@@ -7,7 +7,14 @@ import org.apache.http.Header;
 import wd.android.common.cache.disk.entry.HttpCacheEntry;
 import wd.android.util.util.Utils;
 
-public abstract class CacheHttpListener extends MyJsonHttpListener {
+public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
+
+	/**
+	 * 
+	 */
+	public CacheHttpListener() {
+		super();
+	}
 
 	public void setCache(String url) {
 		cacheHolder.setCache(url);
@@ -17,7 +24,7 @@ public abstract class CacheHttpListener extends MyJsonHttpListener {
 
 	@Override
 	final void onSuccess(int statusCode, Header[] headers,
-			byte[] responseBytes, Map<String, Object> responseMap) {
+			byte[] responseBytes, T responseMap) {
 		// Map<String, Object> responseMap = JSON.parseObject(
 		// responseBody.getBytes(), Map.class);
 
