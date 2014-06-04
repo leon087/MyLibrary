@@ -8,6 +8,7 @@ build
 .idea
 .gradle
 .DS_Store
+.idea/workspace.xml
 
 doc
 WdCommonAPI
