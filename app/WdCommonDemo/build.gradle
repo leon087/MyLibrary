@@ -28,7 +28,7 @@ android {
 
 android {
 	compileSdkVersion 14
-	buildToolsVersion "19"
+	buildToolsVersion "19.1"
 
 	signingConfigs {
 		nbtstatx {
