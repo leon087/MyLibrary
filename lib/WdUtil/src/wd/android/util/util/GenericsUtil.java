@@ -13,7 +13,7 @@ public class GenericsUtil {
 	 * @return the first generic declaration, or <code>Object.class</code> if
 	 *         cannot be determined
 	 */
-	public static Class getSuperClassGenricType(Class clazz) {
+	public static Type getSuperClassGenricType(Class clazz) {
 		return getSuperClassGenricType(clazz, 0);
 	}
 
@@ -26,7 +26,7 @@ public class GenericsUtil {
 	 * @param index
 	 *            the Index of the generic ddeclaration,start from 0.
 	 */
-	public static Class getSuperClassGenricType(Class clazz, int index)
+	public static Type getSuperClassGenricType(Class clazz, int index)
 			throws IndexOutOfBoundsException {
 
 		Type genType = clazz.getGenericSuperclass();
@@ -43,6 +43,6 @@ public class GenericsUtil {
 		if (!(params[index] instanceof Class)) {
 			return Object.class;
 		}
-		return (Class) params[index];
+		return params[index];
 	}
 }

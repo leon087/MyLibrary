@@ -16,8 +16,8 @@ public abstract class MyJsonHttpListener<T> extends HttpListener<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public MyJsonHttpListener() {
-		this.clazz = GenericsUtil
-				.getSuperClassGenricType(MyJsonHttpListener.class);
+		this.clazz = (Class<T>) GenericsUtil
+				.getSuperClassGenricType(getClass());
 	}
 
 	@Override

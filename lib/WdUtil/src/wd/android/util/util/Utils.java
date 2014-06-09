@@ -1,5 +1,20 @@
 package wd.android.util.util;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.res.AssetManager;
+import android.os.Bundle;
+import android.text.TextUtils;
+import com.alibaba.fastjson.JSON;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import wd.android.util.applications.AppUtil;
+import wd.android.util.global.MyParcelable;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -9,33 +24,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
-
-import wd.android.util.applications.AppUtil;
-import wd.android.util.global.MyParcelable;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.res.AssetManager;
-import android.os.Bundle;
-import android.text.TextUtils;
-
-import com.alibaba.fastjson.JSON;
 
 /**
  * 常用工具类
@@ -132,7 +126,7 @@ public class Utils {
 	/**
 	 * 网络序 整形值转换，比如：10.0.0.172 转换为：0xAC00000A
 	 * 
-	 * @param 网络地址
+	 * @param ipAddress 网络地址
 	 * @return 转换后的整形值
 	 */
 	public static int lookupHost(String ipAddress) {
@@ -273,7 +267,7 @@ public class Utils {
 	/**
 	 * 
 	 * 
-	 * @param url
+	 * @param text
 	 * @return
 	 */
 	public static int getLineCount(String text) {
@@ -444,6 +438,7 @@ public class Utils {
 	 * @param context
 	 * @return
 	 */
+    @TargetApi(8)
 	public static long getDexCrc(Context context) {
 		long crc = 0;
 		ZipFile zf;
