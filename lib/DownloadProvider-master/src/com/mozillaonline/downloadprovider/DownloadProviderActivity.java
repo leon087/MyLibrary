@@ -1,6 +1,5 @@
 package com.mozillaonline.downloadprovider;
 
-import wd.android.common.download.DownloadManagerPro;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-
+import cm.android.common.download.DownloadManagerPro;
 import com.mozillaonline.providers.DownloadManager;
 import com.mozillaonline.providers.downloads.DownloadService;
 import com.mozillaonline.providers.downloads.ui.DownloadList;

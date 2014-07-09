@@ -21,7 +21,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
-
 import com.mozillaonline.downloadprovider.R;
 
 /**

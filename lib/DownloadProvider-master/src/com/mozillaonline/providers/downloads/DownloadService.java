@@ -16,13 +16,6 @@
 
 package com.mozillaonline.providers.downloads;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -37,6 +30,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Process;
 import android.util.Log;
+
+import java.io.File;
+import java.util.*;
 
 /**
  * Performs the background downloads requested by applications that use the

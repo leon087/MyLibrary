@@ -25,17 +25,11 @@ import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
-
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.SyncFailedException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;

@@ -1,0 +1,101 @@
+apply plugin: 'android'
+
+dependencies {
+	//android.jar
+	//compile files("${android.sdk}/platforms/${android.target}/android.jar")
+
+	compile fileTree(dir: 'libs', include: '*.jar')
+
+	compile project(':lib:MyCommon')
+	compile project(':lib:MyFramework')
+	compile project(':lib:MyCommonUI')
+	compile project(':lib:DownloadProvider-master')
+}
+
+android {
+	packagingOptions {
+		exclude 'META-INF/DEPENDENCIES.txt'
+		exclude 'META-INF/LICENSE.txt'
+		exclude 'META-INF/NOTICE.txt'
+	}
+
+	lintOptions { abortOnError false }
+
+	dexOptions { preDexLibraries = false }
+}
+
+android {
+	compileSdkVersion 14
+	buildToolsVersion "19.1"
+
+	signingConfigs {
+		nbtstatx {
+			storeFile file("keystore/nbtstatx.keystore")
+			storePassword "nbtstatx"
+			keyAlias "nbtstatx"
+			keyPassword "nbtstatx"
+		}
+		debug { storeFile file("keystore/debug.keystore") }
+	}
+
+	buildTypes {
+		release {
+			signingConfig  signingConfigs.nbtstatx
+			runProguard true
+			proguardFile getDefaultProguardFile('proguard-android.txt')
+			proguardFile new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.txt')
+			proguardFile new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.txt')
+			proguardFile 'proguard-rules.txt'
+		}
+
+		debug {
+			signingConfig  signingConfigs.debug
+			runProguard false
+		}
+	}
+
+	/*//	设置不同包名的包
+	 productFlavors {
+	 original {  packageName='com.yd.appstore.ott'  }
+	 //自定义渠道
+	 //		testPlay {
+	 //			packageName='com.testplay'
+	 //			//name=testPlay
+	 //			//minSdkVersion=8
+	 //			//targetSdkVersion=10
+	 //			//renderscriptTargetApi=18
+	 //			//versionCode=1
+	 //			//versionName=1.0
+	 //			//testPackageName=null
+	 //			//testInstrumentationRunner=null
+	 //			//signingConfig=signingConfigs.wondertek
+	 //		}
+	 }*/
+
+	sourceSets {
+		main {
+			manifest.srcFile 'AndroidManifest.xml'
+			java.srcDirs = ['src']
+			resources.srcDirs = ['src']
+			aidl.srcDirs = ['src']
+			renderscript.srcDirs = ['src']
+			res.srcDirs = ['res']
+			assets.srcDirs = ['assets']
+			jniLibs.srcDirs = ['libs']
+		}
+
+		// Move the tests to tests/java, tests/res, etc...
+		//instrumentTest.setRoot('tests')
+
+		// Move the build types to build-types/<type>
+		// For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+		// This moves them out of them default location under src/<type>/... which would
+		// conflict with src/ being used by the main source set.
+		// Adding new build types or product flavors should be accompanied
+		// by a similar customization.
+		original.setRoot('build-types/original')
+
+		//自定义渠道
+		//testPlay.setRoot('build-types/testplay')
+	}
+}

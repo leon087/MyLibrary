@@ -26,7 +26,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.format.Formatter;
 import android.util.Log;
-
 import com.mozillaonline.downloadprovider.R;
 
 import java.util.LinkedList;

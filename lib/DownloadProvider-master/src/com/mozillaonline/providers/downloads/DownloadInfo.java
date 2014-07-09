@@ -16,18 +16,13 @@
 
 package com.mozillaonline.providers.downloads;
 
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.util.Log;
 import android.util.Pair;
-
 import com.mozillaonline.providers.DownloadManager;
 
 import java.util.ArrayList;

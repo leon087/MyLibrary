@@ -16,18 +16,12 @@
 
 package com.mozillaonline.providers.downloads;
 
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
-
 import com.mozillaonline.providers.DownloadManager;
 
 import java.io.File;
