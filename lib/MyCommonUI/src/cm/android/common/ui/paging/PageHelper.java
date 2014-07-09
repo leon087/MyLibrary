@@ -1,6 +1,6 @@
 package cm.android.common.ui.paging;
 
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 import java.util.ArrayList;
 import java.util.List;

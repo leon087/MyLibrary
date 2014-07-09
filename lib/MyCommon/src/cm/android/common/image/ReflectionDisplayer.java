@@ -1,7 +1,7 @@
 package cm.android.common.image;
 
 import android.graphics.Bitmap;
-import cm.android.util.util.BitmapUtil;
+import cm.android.util.BitmapUtil;
 import com.nostra13.universalimageloader.core.assist.LoadedFrom;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;

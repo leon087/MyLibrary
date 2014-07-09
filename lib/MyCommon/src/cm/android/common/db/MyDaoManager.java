@@ -1,8 +1,8 @@
 package cm.android.common.db;
 
 import android.content.Context;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.ObjectUtil;
+import cm.android.util.MyLog;
+import cm.android.util.ObjectUtil;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 

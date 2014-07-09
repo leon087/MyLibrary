@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.TextView;
 import cm.android.framework.ui.BaseActivity.KeyEventListener;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 /**
  * android.support.v4.app.Fragment的包装类

@@ -6,7 +6,7 @@ import cm.android.app.manager.DeviceManager;
 import cm.android.common.http.HttpUtil;
 import cm.android.common.http.MyDataResponseHandler;
 import cm.android.encrypt.EncryptUtils;
-import cm.android.util.util.Utils;
+import cm.android.util.Utils;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;

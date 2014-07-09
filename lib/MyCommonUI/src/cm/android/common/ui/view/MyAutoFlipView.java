@@ -13,7 +13,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Gallery;
 import android.widget.ViewFlipper;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 public class MyAutoFlipView extends Gallery {
 

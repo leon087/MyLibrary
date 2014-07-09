@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import cm.android.framework.global.CommonTag;
-import cm.android.util.global.MyParcelable;
-import cm.android.util.util.ObjectUtil;
+import cm.android.global.MyParcelable;
+import cm.android.util.ObjectUtil;
 
 /**
  * 封装了一些Intent操作

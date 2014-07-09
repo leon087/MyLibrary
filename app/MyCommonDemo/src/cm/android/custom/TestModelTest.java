@@ -1,8 +1,8 @@
 package cm.android.custom;
 
 import cm.android.app.model.TestModel;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.ObjectUtil;
+import cm.android.util.MyLog;
+import cm.android.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 

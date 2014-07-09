@@ -3,7 +3,7 @@ package cm.android.common.image;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-import cm.android.util.util.Utils;
+import cm.android.util.Utils;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;

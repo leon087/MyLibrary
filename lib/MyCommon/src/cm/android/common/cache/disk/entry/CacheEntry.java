@@ -1,8 +1,8 @@
 package cm.android.common.cache.disk.entry;
 
-import cm.android.util.util.Charsets;
-import cm.android.util.util.IoUtil;
-import cm.android.util.util.StrictLineReader;
+import cm.android.util.Charsets;
+import cm.android.util.IoUtil;
+import cm.android.util.StrictLineReader;
 import com.jakewharton.disklrucache.DiskLruCache;
 
 import java.io.*;

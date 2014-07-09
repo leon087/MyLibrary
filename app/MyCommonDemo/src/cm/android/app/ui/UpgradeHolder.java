@@ -8,8 +8,8 @@ import cm.android.app.ui.fragment.dialog.UpgradeDialog;
 import cm.android.custom.MainApp;
 import cm.android.custom.MyManager;
 import cm.android.framework.ui.BaseActivity;
-import cm.android.util.sdk.MyHandler;
-import cm.android.util.util.MapUtil;
+import cm.android.sdk.MyHandler;
+import cm.android.util.MapUtil;
 import cm.android.cmcommondemo.R;
 
 import java.util.Map;

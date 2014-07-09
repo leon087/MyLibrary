@@ -10,8 +10,8 @@ import cm.android.app.ui.MyUIUtil;
 import cm.android.app.ui.activity.MyBaseActivity;
 import cm.android.custom.http.BaseHttpListener;
 import cm.android.framework.ui.BaseDialogFragment;
-import cm.android.util.util.MapUtil;
-import cm.android.util.util.Utils;
+import cm.android.util.MapUtil;
+import cm.android.util.Utils;
 import cm.android.cmcommondemo.R;
 
 import java.util.Map;

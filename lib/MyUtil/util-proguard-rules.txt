@@ -163,7 +163,7 @@
 #================================框架======================================
 
 #保留class名字的时候同时混淆该class
--keepnames class cm.android.util.thread.ThreadPool
+-keepnames class ThreadPool
 
 -dontwarn android.support.**
 -keep class * extends android.support.**

@@ -1,7 +1,7 @@
 package cm.android.common.cache.core;
 
-import cm.android.util.util.ByteUtil;
-import cm.android.util.util.MyLog;
+import cm.android.util.ByteUtil;
+import cm.android.util.MyLog;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

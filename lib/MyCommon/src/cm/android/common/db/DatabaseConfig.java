@@ -1,6 +1,6 @@
 package cm.android.common.db;
 
-import cm.android.util.util.ObjectUtil;
+import cm.android.util.ObjectUtil;
 
 import java.util.Collection;
 import java.util.Set;

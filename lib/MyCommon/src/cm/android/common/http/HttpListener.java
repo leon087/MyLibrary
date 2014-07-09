@@ -1,6 +1,6 @@
 package cm.android.common.http;
 
-import cm.android.util.util.Utils;
+import cm.android.util.Utils;
 import org.apache.http.Header;
 
 import java.util.Map;

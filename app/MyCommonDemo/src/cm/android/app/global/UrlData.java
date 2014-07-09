@@ -1,7 +1,7 @@
 package cm.android.app.global;
 
 import cm.android.custom.MainConfig;
-import cm.android.util.util.MapUtil;
+import cm.android.util.MapUtil;
 
 import java.util.HashMap;
 import java.util.Map;

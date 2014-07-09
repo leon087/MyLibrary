@@ -3,12 +3,12 @@ package cm.android.common.pm;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import cm.android.util.applications.AppUtil;
-import cm.android.util.cmd.ShellUtil;
-import cm.android.util.cmd.ShellUtil.CommandResult;
-import cm.android.util.util.IntentUtil;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.Utils;
+import cm.android.applications.AppUtil;
+import cm.android.cmd.ShellUtil;
+import cm.android.cmd.ShellUtil.CommandResult;
+import cm.android.util.IntentUtil;
+import cm.android.util.MyLog;
+import cm.android.util.Utils;
 
 import java.io.File;
 

@@ -2,7 +2,7 @@ package cm.android.common.download;
 
 import cm.android.common.download.db.DownloadDao;
 import cm.android.common.download.downloader.DefaultDownloader;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 public class DownloadTask implements Runnable {
 	private IDownloadListener<DownloadTask> iDownloadListener;

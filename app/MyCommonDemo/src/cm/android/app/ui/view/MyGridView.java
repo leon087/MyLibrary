@@ -3,7 +3,7 @@ package cm.android.app.ui.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.GridView;
-import cm.android.util.util.UIUtils;
+import cm.android.util.UIUtils;
 
 /**
  * 创建一个可以自适配高度的ListView

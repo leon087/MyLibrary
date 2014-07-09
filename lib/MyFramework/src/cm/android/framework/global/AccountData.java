@@ -1,7 +1,7 @@
 package cm.android.framework.global;
 
-import cm.android.util.callback.Observable;
-import cm.android.util.util.ObjectUtil;
+import cm.android.callback.Observable;
+import cm.android.util.ObjectUtil;
 
 import java.util.Map;
 

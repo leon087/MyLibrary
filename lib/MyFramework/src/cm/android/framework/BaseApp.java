@@ -4,10 +4,10 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import cm.android.framework.manager.BaseManager;
-import cm.android.util.applications.AppUtil;
-import cm.android.util.util.ActivityStack;
-import cm.android.util.util.EnvironmentInfo;
-import cm.android.util.util.MyLog;
+import cm.android.applications.AppUtil;
+import cm.android.util.ActivityStack;
+import cm.android.util.EnvironmentInfo;
+import cm.android.util.MyLog;
 
 public abstract class BaseApp extends Application implements IApp {
 	private static BaseApp sApp = null;

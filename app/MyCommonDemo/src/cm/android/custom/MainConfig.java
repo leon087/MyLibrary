@@ -2,8 +2,8 @@ package cm.android.custom;
 
 import cm.android.framework.AppConfig;
 import cm.android.framework.global.DirData;
-import cm.android.util.util.MyLog.MyLogManager.Level;
-import cm.android.util.util.MyLog.MyLogManager.LogMode;
+import cm.android.util.MyLog.MyLogManager.Level;
+import cm.android.util.MyLog.MyLogManager.LogMode;
 
 public class MainConfig extends AppConfig {
 	public static final String DOWNLOAD = "download/";

@@ -2,10 +2,10 @@ package cm.android.common.download.downloader;
 
 import cm.android.common.download.*;
 import cm.android.common.download.db.DownloadBean;
-import cm.android.util.thread.ThreadUtil;
-import cm.android.util.util.EnvironmentInfo;
-import cm.android.util.util.IoUtil;
-import cm.android.util.util.MyLog;
+import cm.android.thread.ThreadUtil;
+import cm.android.util.EnvironmentInfo;
+import cm.android.util.IoUtil;
+import cm.android.util.MyLog;
 
 import java.io.*;
 import java.net.HttpURLConnection;

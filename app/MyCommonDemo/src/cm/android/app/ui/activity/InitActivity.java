@@ -17,10 +17,10 @@ import cm.android.app.ui.fragment.dialog.ConfirmDialog;
 import cm.android.custom.MainApp;
 import cm.android.custom.MyManager;
 import cm.android.framework.util.MyIntent;
-import cm.android.util.net.NetworkUtil;
-import cm.android.util.sdk.MyHandler;
-import cm.android.util.util.UIUtils;
-import cm.android.util.util.Utils;
+import cm.android.net.NetworkUtil;
+import cm.android.sdk.MyHandler;
+import cm.android.util.UIUtils;
+import cm.android.util.Utils;
 import cm.android.cmcommondemo.R;
 
 public class InitActivity extends MyBaseActivity {

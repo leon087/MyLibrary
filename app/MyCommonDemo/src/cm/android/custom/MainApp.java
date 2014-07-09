@@ -7,7 +7,7 @@ import cm.android.framework.AppConfig;
 import cm.android.framework.BaseApp;
 import cm.android.framework.manager.BaseManager;
 import cm.android.framework.util.MyIntent;
-import cm.android.util.util.ActivityStack;
+import cm.android.util.ActivityStack;
 
 public class MainApp extends BaseApp {
 

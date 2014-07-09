@@ -1,7 +1,7 @@
 package cm.android.common.db;
 
-import cm.android.util.util.MyLog;
-import cm.android.util.util.ObjectUtil;
+import cm.android.util.MyLog;
+import cm.android.util.ObjectUtil;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.stmt.DeleteBuilder;

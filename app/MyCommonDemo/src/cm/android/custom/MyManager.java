@@ -8,7 +8,7 @@ import cm.android.framework.global.CommonTag;
 import cm.android.framework.global.DirData;
 import cm.android.framework.global.GlobalData;
 import cm.android.framework.manager.ServiceHolder;
-import cm.android.util.global.MyPreference;
+import cm.android.global.MyPreference;
 
 public class MyManager {
 

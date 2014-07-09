@@ -1,10 +1,10 @@
 package cm.android.common.upload.uploader;
 
 import cm.android.common.upload.*;
-import cm.android.util.util.IoUtil;
-import cm.android.util.util.MapUtil;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.Utils;
+import cm.android.util.IoUtil;
+import cm.android.util.MapUtil;
+import cm.android.util.MyLog;
+import cm.android.util.Utils;
 
 import java.io.*;
 import java.net.HttpURLConnection;

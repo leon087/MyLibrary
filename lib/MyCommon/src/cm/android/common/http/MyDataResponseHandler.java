@@ -1,7 +1,7 @@
 package cm.android.common.http;
 
-import cm.android.util.util.MyLog;
-import cm.android.util.util.Utils;
+import cm.android.util.MyLog;
+import cm.android.util.Utils;
 import org.apache.http.Header;
 
 public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {

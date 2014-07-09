@@ -1,8 +1,8 @@
 package cm.android.common.cache.disk.local;
 
 import cm.android.common.cache.core.ILocalCache;
-import cm.android.util.util.IoUtil;
-import cm.android.util.util.MyLog;
+import cm.android.util.IoUtil;
+import cm.android.util.MyLog;
 import com.jakewharton.disklrucache.DiskLruCache;
 
 import java.io.File;

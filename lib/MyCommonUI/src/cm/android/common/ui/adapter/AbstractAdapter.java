@@ -3,7 +3,7 @@ package cm.android.common.ui.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
-import cm.android.util.util.ObjectUtil;
+import cm.android.util.ObjectUtil;
 
 import java.util.List;
 

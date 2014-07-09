@@ -6,8 +6,8 @@ import android.os.Build;
 import android.telephony.TelephonyManager;
 import cm.android.custom.MainApp;
 import cm.android.framework.BaseApp;
-import cm.android.util.applications.AppUtil;
-import cm.android.util.util.MyLog;
+import cm.android.applications.AppUtil;
+import cm.android.util.MyLog;
 
 public class DeviceManager {
 	private static final int versionCode;

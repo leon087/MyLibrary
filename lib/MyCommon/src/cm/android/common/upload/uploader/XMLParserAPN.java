@@ -1,6 +1,6 @@
 package cm.android.common.upload.uploader;
 
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

@@ -67,6 +67,11 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 14 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="ormlite-android-4.48" level="project" />
+    <orderEntry type="library" exported="" name="ormlite-core-4.48" level="project" />
+    <orderEntry type="library" exported="" name="android-async-http-1.4.5-20140708" level="project" />
+    <orderEntry type="library" exported="" name="android-universal-image-loader-20140708" level="project" />
+    <orderEntry type="library" exported="" name="eventbus-20140117" level="project" />
     <orderEntry type="module" module-name="MyCommon" exported="" />
   </component>
 </module>

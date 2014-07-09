@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import cm.android.app.global.Tag;
-import cm.android.util.util.Utils;
+import cm.android.util.Utils;
 import cm.android.cmcommondemo.R;
 
 public class ConfirmDialog extends DialogFragment {

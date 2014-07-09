@@ -4,10 +4,10 @@ import android.net.Uri;
 import android.os.Handler;
 import cm.android.common.http.HttpUtil;
 import cm.android.framework.BaseApp;
-import cm.android.util.util.EnvironmentInfo;
-import cm.android.util.util.IntentUtil;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.Utils;
+import cm.android.util.EnvironmentInfo;
+import cm.android.util.IntentUtil;
+import cm.android.util.MyLog;
+import cm.android.util.Utils;
 import com.loopj.android.http.ApkHttpResponseHandler;
 import org.apache.http.Header;
 

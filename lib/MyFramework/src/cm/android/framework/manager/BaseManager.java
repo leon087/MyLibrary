@@ -1,7 +1,7 @@
 package cm.android.framework.manager;
 
 import android.content.Context;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 /**
  * Manager基类

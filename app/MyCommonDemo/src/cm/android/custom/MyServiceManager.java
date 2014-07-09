@@ -10,9 +10,9 @@ import cm.android.common.image.ImageManager;
 import cm.android.framework.global.DirData;
 import cm.android.framework.manager.CommonBaseManager;
 import cm.android.framework.manager.ServiceHolder;
-import cm.android.util.sdk.ExternalStorageReceiver;
-import cm.android.util.sdk.ExternalStorageReceiver.ExternalStorageListener;
-import cm.android.util.util.Utils;
+import cm.android.sdk.ExternalStorageReceiver;
+import cm.android.sdk.ExternalStorageReceiver.ExternalStorageListener;
+import cm.android.util.Utils;
 
 import java.util.Properties;
 

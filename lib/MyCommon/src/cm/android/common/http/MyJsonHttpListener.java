@@ -1,7 +1,7 @@
 package cm.android.common.http;
 
-import cm.android.util.util.GenericsUtil;
-import cm.android.util.util.Utils;
+import cm.android.util.GenericsUtil;
+import cm.android.util.Utils;
 import com.alibaba.fastjson.JSON;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.apache.http.Header;

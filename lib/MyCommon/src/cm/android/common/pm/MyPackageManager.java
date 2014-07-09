@@ -3,8 +3,8 @@ package cm.android.common.pm;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import cm.android.util.applications.AppUtil;
-import cm.android.util.thread.ThreadUtil;
+import cm.android.applications.AppUtil;
+import cm.android.thread.ThreadUtil;
 
 import java.util.concurrent.ExecutorService;
 

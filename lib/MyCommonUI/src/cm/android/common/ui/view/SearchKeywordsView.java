@@ -10,7 +10,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.*;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 import java.util.LinkedList;
 import java.util.Random;

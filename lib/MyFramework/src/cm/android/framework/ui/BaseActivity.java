@@ -7,10 +7,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
-import cm.android.util.util.ActivityStack;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.ObjectUtil;
-import cm.android.util.util.UIUtils;
+import cm.android.util.ActivityStack;
+import cm.android.util.MyLog;
+import cm.android.util.ObjectUtil;
+import cm.android.util.UIUtils;
 
 import java.util.Set;
 

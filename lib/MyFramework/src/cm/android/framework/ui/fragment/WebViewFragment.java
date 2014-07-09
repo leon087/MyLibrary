@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import cm.android.util.util.EnvironmentInfo.SdkUtil;
+import cm.android.util.EnvironmentInfo.SdkUtil;
 
 /**
  * A copy of Honeycomb's {@link android.webkit.WebViewFragment}.

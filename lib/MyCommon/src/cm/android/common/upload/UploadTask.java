@@ -2,7 +2,7 @@ package cm.android.common.upload;
 
 import cm.android.common.upload.db.UploadDao;
 import cm.android.common.upload.uploader.DefaultUploader;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 public class UploadTask implements Runnable {
 	private UploadItem uploadItem;

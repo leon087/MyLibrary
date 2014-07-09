@@ -3,8 +3,8 @@ package cm.android.custom.http;
 import cm.android.common.http.CacheHttpListener;
 import cm.android.custom.MyManager;
 import cm.android.framework.global.CommonTag;
-import cm.android.util.util.MapUtil;
-import cm.android.util.util.Utils;
+import cm.android.util.MapUtil;
+import cm.android.util.Utils;
 import com.alibaba.fastjson.JSON;
 import org.apache.http.Header;
 

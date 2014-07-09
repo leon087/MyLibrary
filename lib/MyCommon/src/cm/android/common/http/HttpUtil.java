@@ -1,7 +1,7 @@
 package cm.android.common.http;
 
 import android.content.Context;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;

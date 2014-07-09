@@ -5,12 +5,12 @@ import cm.android.common.db.MyDaoManager;
 import cm.android.common.download.db.DownloadBean;
 import cm.android.common.download.db.DownloadDao;
 import cm.android.common.ui.callback.UICallback;
-import cm.android.util.thread.ThreadPool;
-import cm.android.util.thread.ThreadUtil;
-import cm.android.util.util.IoUtil;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.ObjectUtil;
-import cm.android.util.util.Utils;
+import cm.android.thread.ThreadPool;
+import cm.android.thread.ThreadUtil;
+import cm.android.util.IoUtil;
+import cm.android.util.MyLog;
+import cm.android.util.ObjectUtil;
+import cm.android.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;

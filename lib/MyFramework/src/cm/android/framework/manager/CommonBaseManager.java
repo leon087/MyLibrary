@@ -2,7 +2,7 @@ package cm.android.framework.manager;
 
 import android.content.Context;
 import cm.android.framework.global.GlobalData;
-import cm.android.util.global.MyPreference;
+import cm.android.global.MyPreference;
 
 public class CommonBaseManager extends BaseManager {
 

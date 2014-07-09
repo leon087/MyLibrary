@@ -9,7 +9,7 @@ import android.support.v4.app.MyDialogFragment;
 import android.view.*;
 import android.widget.TextView;
 import cm.android.framework.ui.BaseActivity.KeyEventListener;
-import cm.android.util.util.MyLog;
+import cm.android.util.MyLog;
 
 public abstract class BaseDialogFragment extends MyDialogFragment implements
 		IFragment, KeyEventListener {

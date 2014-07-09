@@ -1,8 +1,8 @@
 package cm.android.framework;
 
-import cm.android.util.util.CrashHandler;
-import cm.android.util.util.MyLog;
-import cm.android.util.util.MyLog.MyLogManager.Level;
+import cm.android.util.CrashHandler;
+import cm.android.util.MyLog;
+import cm.android.util.MyLog.MyLogManager.Level;
 
 public abstract class AppConfig {
 
@@ -66,7 +66,7 @@ public abstract class AppConfig {
 	 * @return {@link Level#DEBUG}, {@link Level#INFO}, {@link Level#ERROR},
 	 *         {@link Level#LEVEL_MAX}
 	 */
-	protected abstract cm.android.util.util.MyLog.MyLogManager.Level initLogLevel();
+	protected abstract MyLog.MyLogManager.Level initLogLevel();
 
-	protected abstract cm.android.util.util.MyLog.MyLogManager.LogMode initLogMode();
+	protected abstract MyLog.MyLogManager.LogMode initLogMode();
 }

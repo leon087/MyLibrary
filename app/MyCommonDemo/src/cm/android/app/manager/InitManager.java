@@ -6,8 +6,8 @@ import cm.android.app.global.UrlData;
 import cm.android.common.http.HttpUtil;
 import cm.android.custom.MyManager;
 import cm.android.custom.http.BaseHttpListener;
-import cm.android.util.util.MapUtil;
-import cm.android.util.util.Utils;
+import cm.android.util.MapUtil;
+import cm.android.util.Utils;
 
 import java.util.Map;
 
