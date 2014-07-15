@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cm.android.framework"
-    android:versionCode="1"
-    android:versionName="1.0" >
+          package="cm.android.framework"
+          android:versionCode="1"
+          android:versionName="1.0">
 
     <!-- <uses-sdk -->
     <!-- android:minSdkVersion="15" -->
@@ -38,10 +38,11 @@
     <!-- <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" /> -->
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
     <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
+    
     <!-- <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" /> -->
     <!-- <uses-permission android:name="android.permission.RESTART_PACKAGES" /> -->
 
-    <application android:allowBackup="true" >
+    <application android:allowBackup="true">
     </application>
 
 </manifest>

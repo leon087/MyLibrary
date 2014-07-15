@@ -12,44 +12,44 @@ import android.support.v4.app.FragmentTransaction;
  */
 public class FragmentHelper {
 
-	private FragmentManager mFragmentManager;
+    private FragmentManager mFragmentManager;
 
-	public FragmentHelper(FragmentManager fragmentManager) {
-		mFragmentManager = fragmentManager;
-		FragmentManager.enableDebugLogging(false);
-	}
+    public FragmentHelper(FragmentManager fragmentManager) {
+        mFragmentManager = fragmentManager;
+        FragmentManager.enableDebugLogging(false);
+    }
 
-	/**
-	 * BackStack中是否有Fragment存在
-	 * 
-	 * @return true:历史栈中存在Fragment
-	 */
-	public boolean hasBackStackEntry() {
-		int count = mFragmentManager.getBackStackEntryCount();
-		if (count == 0) {
-			return false;
-		}
-		return true;
-	}
+    /**
+     * BackStack中是否有Fragment存在
+     *
+     * @return true:历史栈中存在Fragment
+     */
+    public boolean hasBackStackEntry() {
+        int count = mFragmentManager.getBackStackEntryCount();
+        if (count == 0) {
+            return false;
+        }
+        return true;
+    }
 
-	public int getBackStackEntryCount() {
-		return mFragmentManager.getBackStackEntryCount();
-	}
+    public int getBackStackEntryCount() {
+        return mFragmentManager.getBackStackEntryCount();
+    }
 
-	/**
-	 * 获取BackStack中对应位置的Fragment
-	 * 
-	 * @param position
-	 * @return
-	 */
-	public BackStackEntry getBackStackEntry(int position) {
-		int count = mFragmentManager.getBackStackEntryCount();
-		if (count == 0) {
-			return null;
-		} else {
-			return mFragmentManager.getBackStackEntryAt(position);
-		}
-	}
+    /**
+     * 获取BackStack中对应位置的Fragment
+     *
+     * @param position
+     * @return
+     */
+    public BackStackEntry getBackStackEntry(int position) {
+        int count = mFragmentManager.getBackStackEntryCount();
+        if (count == 0) {
+            return null;
+        } else {
+            return mFragmentManager.getBackStackEntryAt(position);
+        }
+    }
 
     /************************************************************************************************
      * add 是把一个fragment添加到一个容器 container 里
@@ -63,183 +63,183 @@ public class FragmentHelper {
      * 而至于返回键的时候，这个跟事务有关，跟使用add还是replace没有任何关系。
      ************************************************************************************************/
 
-	/**
-	 * 替换resId中存在的Fragment
-	 * 
-	 * @param arguments
-	 * @param resId
-	 * @param fragment
-	 */
-	public void replace(Bundle arguments, int resId, Fragment fragment) {
-		String tag = fragment.getClass().getName();
-		Fragment preFragment = mFragmentManager.findFragmentByTag(tag);
-		removeFragment(preFragment);
+    /**
+     * 替换resId中存在的Fragment
+     *
+     * @param arguments
+     * @param resId
+     * @param fragment
+     */
+    public void replace(Bundle arguments, int resId, Fragment fragment) {
+        String tag = fragment.getClass().getName();
+        Fragment preFragment = mFragmentManager.findFragmentByTag(tag);
+        removeFragment(preFragment);
 
-		if (null != arguments) {
-			fragment.setArguments(arguments);
-		}
-		FragmentTransaction fragmentTransaction = mFragmentManager
-				.beginTransaction();
-		fragmentTransaction.replace(resId, fragment, tag);
-		// fragmentTransaction.commit();
-		fragmentTransaction.commitAllowingStateLoss();
-	}
+        if (null != arguments) {
+            fragment.setArguments(arguments);
+        }
+        FragmentTransaction fragmentTransaction = mFragmentManager
+                .beginTransaction();
+        fragmentTransaction.replace(resId, fragment, tag);
+        // fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
+    }
 
-	/**
-	 * 在resId中添加Fragment
-	 * 
-	 * @param arguments
-	 * @param resId
-	 * @param fragment
-	 * @param backStackName
-	 */
-	public void add(Bundle arguments, int resId, Fragment fragment) {
-		String tag = fragment.getClass().getName();
-		Fragment preFragment = mFragmentManager.findFragmentByTag(tag);
-		removeFragment(preFragment);
+    /**
+     * 在resId中添加Fragment
+     *
+     * @param arguments
+     * @param resId
+     * @param fragment
+     * @param backStackName
+     */
+    public void add(Bundle arguments, int resId, Fragment fragment) {
+        String tag = fragment.getClass().getName();
+        Fragment preFragment = mFragmentManager.findFragmentByTag(tag);
+        removeFragment(preFragment);
 
-		if (null != arguments) {
-			fragment.setArguments(arguments);
-		}
-		FragmentTransaction fragmentTransaction = mFragmentManager
-				.beginTransaction();
-		fragmentTransaction.add(resId, fragment, tag);
-		fragmentTransaction
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-		fragmentTransaction.addToBackStack(tag);
-		// fragmentTransaction.commit();
-		fragmentTransaction.commitAllowingStateLoss();
-	}
+        if (null != arguments) {
+            fragment.setArguments(arguments);
+        }
+        FragmentTransaction fragmentTransaction = mFragmentManager
+                .beginTransaction();
+        fragmentTransaction.add(resId, fragment, tag);
+        fragmentTransaction
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.addToBackStack(tag);
+        // fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
+    }
 
-	/**
-	 * 弹出对话框
-	 * 
-	 * @param arguments
-	 * @param dialogFragment
-	 */
-	public void showDialog(Bundle arguments, DialogFragment dialogFragment) {
-		String tag = dialogFragment.getClass().getName();
-		Fragment preFragment = mFragmentManager.findFragmentByTag(tag);
-		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		if (preFragment != null) {
-			ft.remove(preFragment);
-		}
-		// ft.addToBackStack(tag);
-		if (null != arguments) {
-			dialogFragment.setArguments(arguments);
-		}
-		dialogFragment.show(ft, tag);
-	}
+    /**
+     * 弹出对话框
+     *
+     * @param arguments
+     * @param dialogFragment
+     */
+    public void showDialog(Bundle arguments, DialogFragment dialogFragment) {
+        String tag = dialogFragment.getClass().getName();
+        Fragment preFragment = mFragmentManager.findFragmentByTag(tag);
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        if (preFragment != null) {
+            ft.remove(preFragment);
+        }
+        // ft.addToBackStack(tag);
+        if (null != arguments) {
+            dialogFragment.setArguments(arguments);
+        }
+        dialogFragment.show(ft, tag);
+    }
 
-	/**
-	 * 删除对话框Fragment
-	 * 
-	 * @param dialogFragment
-	 */
-	public void removeDialogFragment(DialogFragment dialogFragment) {
-		// String backStateName = dialogFragment.getClass().getSimpleName();
-		// Fragment mBackStackFragment = mFragmentManager
-		// .findFragmentByTag(backStateName);
-		// Fragment mBackStackFragment =
-		// findFragment(dialogFragment.getClass());
-		if (dialogFragment != null && dialogFragment.isVisible()) {
-			removeFragment(dialogFragment);
-		}
-	}
+    /**
+     * 删除对话框Fragment
+     *
+     * @param dialogFragment
+     */
+    public void removeDialogFragment(DialogFragment dialogFragment) {
+        // String backStateName = dialogFragment.getClass().getSimpleName();
+        // Fragment mBackStackFragment = mFragmentManager
+        // .findFragmentByTag(backStateName);
+        // Fragment mBackStackFragment =
+        // findFragment(dialogFragment.getClass());
+        if (dialogFragment != null && dialogFragment.isVisible()) {
+            removeFragment(dialogFragment);
+        }
+    }
 
-	/**
-	 * 返回到第一个fragment
-	 */
-	public void popBackStackImmediate(String backStateName) {
-		mFragmentManager.popBackStackImmediate(backStateName, 0);
-	}
+    /**
+     * 返回到第一个fragment
+     */
+    public void popBackStackImmediate(String backStateName) {
+        mFragmentManager.popBackStackImmediate(backStateName, 0);
+    }
 
-	/**
-	 * 返回之前的fragment
-	 */
-	public void popBackStack() {
-		mFragmentManager.popBackStack();
-	}
+    /**
+     * 返回之前的fragment
+     */
+    public void popBackStack() {
+        mFragmentManager.popBackStack();
+    }
 
-	/**
-	 * 删除一个fragment
-	 * 
-	 * @param fragment
-	 */
-	public void removeFragment(Fragment fragment) {
-		if (fragment != null) {
-			FragmentTransaction fragmentTransaction = mFragmentManager
-					.beginTransaction();
-			fragmentTransaction.remove(fragment);
-			fragmentTransaction.commit();
-		}
-	}
+    /**
+     * 删除一个fragment
+     *
+     * @param fragment
+     */
+    public void removeFragment(Fragment fragment) {
+        if (fragment != null) {
+            FragmentTransaction fragmentTransaction = mFragmentManager
+                    .beginTransaction();
+            fragmentTransaction.remove(fragment);
+            fragmentTransaction.commit();
+        }
+    }
 
-	/**
-	 * 通过findFragmentByTag获取Fragment，如果不存在则会根据默认构造创建出Fragment对象
-	 * 
-	 * @param clazz
-	 * @return
-	 */
-	public android.support.v4.app.Fragment findFragment(
-			Class<? extends android.support.v4.app.Fragment> clazz) {
-		String tag = clazz.getName();
-		android.support.v4.app.Fragment fragment = mFragmentManager
-				.findFragmentByTag(tag);
-		if (fragment == null) {
-			// 创建
-			// Fragment.instantiate(context, fname);
-			try {
-				Fragment f = (Fragment) clazz.newInstance();
-				return f;
-			} catch (java.lang.InstantiationException e) {
-				e.printStackTrace();
-				// throw new java.lang.InstantiationException(
-				// "Unable to instantiate fragment "
-				// + tag
-				// + ": make sure class name exists, is public, and has an"
-				// + " empty constructor that is public");
-				// throw new InstantiationException(
-				// "Unable to instantiate fragment "
-				// + tag
-				// + ": make sure class name exists, is public, and has an"
-				// + " empty constructor that is public", e);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-				// throw new InstantiationException(
-				// "Unable to instantiate fragment "
-				// + tag
-				// + ": make sure class name exists, is public, and has an"
-				// + " empty constructor that is public", e);
-			}
-		}
-		return fragment;
-	}
+    /**
+     * 通过findFragmentByTag获取Fragment，如果不存在则会根据默认构造创建出Fragment对象
+     *
+     * @param clazz
+     * @return
+     */
+    public android.support.v4.app.Fragment findFragment(
+            Class<? extends android.support.v4.app.Fragment> clazz) {
+        String tag = clazz.getName();
+        android.support.v4.app.Fragment fragment = mFragmentManager
+                .findFragmentByTag(tag);
+        if (fragment == null) {
+            // 创建
+            // Fragment.instantiate(context, fname);
+            try {
+                Fragment f = (Fragment) clazz.newInstance();
+                return f;
+            } catch (java.lang.InstantiationException e) {
+                e.printStackTrace();
+                // throw new java.lang.InstantiationException(
+                // "Unable to instantiate fragment "
+                // + tag
+                // + ": make sure class name exists, is public, and has an"
+                // + " empty constructor that is public");
+                // throw new InstantiationException(
+                // "Unable to instantiate fragment "
+                // + tag
+                // + ": make sure class name exists, is public, and has an"
+                // + " empty constructor that is public", e);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+                // throw new InstantiationException(
+                // "Unable to instantiate fragment "
+                // + tag
+                // + ": make sure class name exists, is public, and has an"
+                // + " empty constructor that is public", e);
+            }
+        }
+        return fragment;
+    }
 
-	/**
-	 * 根据xml中设置的ID来查找Fragment
-	 * 
-	 * @param resId
-	 * @return
-	 */
-	public android.support.v4.app.Fragment findFragmentById(int resId) {
-		android.support.v4.app.Fragment fragment = mFragmentManager
-				.findFragmentById(resId);
-		return fragment;
-	}
+    /**
+     * 根据xml中设置的ID来查找Fragment
+     *
+     * @param resId
+     * @return
+     */
+    public android.support.v4.app.Fragment findFragmentById(int resId) {
+        android.support.v4.app.Fragment fragment = mFragmentManager
+                .findFragmentById(resId);
+        return fragment;
+    }
 
-	/**
-	 * 根据Tag查找Fragment
-	 * 
-	 * @param resId
-	 * @return
-	 */
-	public android.support.v4.app.Fragment findFragmentByTag(
-			Class<? extends android.support.v4.app.Fragment> clazz) {
-		String tag = clazz.getName();
-		android.support.v4.app.Fragment fragment = mFragmentManager
-				.findFragmentByTag(tag);
-		return fragment;
-	}
+    /**
+     * 根据Tag查找Fragment
+     *
+     * @param resId
+     * @return
+     */
+    public android.support.v4.app.Fragment findFragmentByTag(
+            Class<? extends android.support.v4.app.Fragment> clazz) {
+        String tag = clazz.getName();
+        android.support.v4.app.Fragment fragment = mFragmentManager
+                .findFragmentByTag(tag);
+        return fragment;
+    }
 
 }

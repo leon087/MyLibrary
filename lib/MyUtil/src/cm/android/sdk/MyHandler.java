@@ -7,45 +7,45 @@ import java.lang.ref.WeakReference;
 
 public abstract class MyHandler {
 
-	private static class WeakHandler extends Handler {
-		private WeakReference<MyHandler> mOuter;
+    private final WeakHandler handler = new WeakHandler(this);
 
-		public WeakHandler(MyHandler callback) {
-			mOuter = new WeakReference<MyHandler>(callback);
-		}
+    public abstract void handleMessage(Message msg);
 
-		@Override
-		public final void handleMessage(Message msg) {
-			MyHandler outer = mOuter.get();
-			if (outer != null) {
-				outer.handleMessage(msg);
-			}
-		}
-	}
+    public Handler getHandler() {
+        return handler;
+    }
 
-	private final WeakHandler handler = new WeakHandler(this);
+    public void sendMessage(Message msg) {
+        handler.sendMessage(msg);
+    }
 
-	public abstract void handleMessage(Message msg);
+    public Message obtainMessage(int what) {
+        return handler.obtainMessage(what);
+    }
 
-	public Handler getHandler() {
-		return handler;
-	}
+    public void sendEmptyMessage(int what) {
+        handler.sendEmptyMessage(what);
+    }
 
-	public void sendMessage(Message msg) {
-		handler.sendMessage(msg);
-	}
+    private static class WeakHandler extends Handler {
+        private WeakReference<MyHandler> mOuter;
 
-	public Message obtainMessage(int what) {
-		return handler.obtainMessage(what);
-	}
+        public WeakHandler(MyHandler callback) {
+            mOuter = new WeakReference<MyHandler>(callback);
+        }
 
-	public void sendEmptyMessage(int what) {
-		handler.sendEmptyMessage(what);
-	}
+        @Override
+        public final void handleMessage(Message msg) {
+            MyHandler outer = mOuter.get();
+            if (outer != null) {
+                outer.handleMessage(msg);
+            }
+        }
+    }
 
-	// void xx(){
-	// handler.sendEmptyMessage(what);
-	// handler.sendEmptyMessageAtTime(what, uptimeMillis)
-	// handler.sendEmptyMessageDelayed(what, delayMillis)
-	// }
+    // void xx(){
+    // handler.sendEmptyMessage(what);
+    // handler.sendEmptyMessageAtTime(what, uptimeMillis)
+    // handler.sendEmptyMessageDelayed(what, delayMillis)
+    // }
 }

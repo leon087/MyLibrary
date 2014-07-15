@@ -15,427 +15,425 @@ import java.util.Calendar;
  */
 public class MyLog {
 
-	private MyLog() {
-	}
+    private MyLog() {
+    }
 
-	/**
-	 * 设置日志级别
-	 * 
-	 * @param level
-	 */
-	public static void setLogLevel(Level level) {
-		MyLogManager.getLogger().logLevel = level;
-	}
+    /**
+     * 设置日志级别
+     *
+     * @param level
+     */
+    public static void setLogLevel(Level level) {
+        MyLogManager.getLogger().logLevel = level;
+    }
 
-	/**
-	 * 设置日志记录模式
-	 * 
-	 * @param mode
-	 */
-	public static void setLogMode(LogMode mode) {
-		if (mode != null) {
-			MyLogManager.getLogger().logMode = mode;
-		}
-	}
+    /**
+     * 设置日志记录模式
+     *
+     * @param mode
+     */
+    public static void setLogMode(LogMode mode) {
+        if (mode != null) {
+            MyLogManager.getLogger().logMode = mode;
+        }
+    }
 
-	/**
-	 * 初始化
-	 * 
-	 * @param traceTag
-	 */
-	public static void initialize(String traceTag) {
-		MyLogManager.getLogger().init(traceTag);
-	}
+    /**
+     * 初始化
+     *
+     * @param traceTag
+     */
+    public static void initialize(String traceTag) {
+        MyLogManager.getLogger().init(traceTag);
+    }
 
-	/**
-	 * 释放
-	 */
-	public static void release() {
-		MyLogManager.getLogger().deInit();
-	}
+    /**
+     * 释放
+     */
+    public static void release() {
+        MyLogManager.getLogger().deInit();
+    }
 
-	/**
-	 * 打印{@link Level#DEBUG}级别的日志
-	 * 
-	 * @param msg
-	 */
-	public static void d(String msg) {
-		MyLogManager.getLogger().log(Level.DEBUG, msg);
-	}
+    /**
+     * 打印{@link Level#DEBUG}级别的日志
+     *
+     * @param msg
+     */
+    public static void d(String msg) {
+        MyLogManager.getLogger().log(Level.DEBUG, msg);
+    }
 
-	// public void d(String msg) {
-	// log(Level.DEBUG, msg);
-	// }
-	/**
-	 * 打印{@link Level#INFO}级别的日志
-	 * 
-	 * @param msg
-	 */
-	public static void i(String msg) {
-		MyLogManager.getLogger().log(Level.INFO, msg);
-	}
+    // public void d(String msg) {
+    // log(Level.DEBUG, msg);
+    // }
 
-	/**
-	 * 打印{@link Level#ERROR}级别的日志
-	 * 
-	 * @param msg
-	 */
-	public static void e(String msg) {
-		MyLogManager.getLogger().log(Level.ERROR, msg);
-	}
+    /**
+     * 打印{@link Level#INFO}级别的日志
+     *
+     * @param msg
+     */
+    public static void i(String msg) {
+        MyLogManager.getLogger().log(Level.INFO, msg);
+    }
 
-	/**
-	 * 打印{@link Level#ERROR}级别的日志
-	 * 
-	 * @param msg
-	 */
-	public static void e(Throwable tr) {
-		MyLogManager.getLogger().log(Level.ERROR,
-				android.util.Log.getStackTraceString(tr));
-	}
+    /**
+     * 打印{@link Level#ERROR}级别的日志
+     *
+     * @param msg
+     */
+    public static void e(String msg) {
+        MyLogManager.getLogger().log(Level.ERROR, msg);
+    }
 
-	/**
-	 * 打印{@link Level#ERROR}级别的日志
-	 * 
-	 * @param msg
-	 */
-	public static void e(String msg, Throwable tr) {
-		MyLogManager.getLogger().log(
-				Level.ERROR,
-				msg + System.getProperty("line.separator")
-						+ android.util.Log.getStackTraceString(tr));
-	}
+    /**
+     * 打印{@link Level#ERROR}级别的日志
+     *
+     * @param tr
+     */
+    public static void e(Throwable tr) {
+        MyLogManager.getLogger().log(Level.ERROR,
+                android.util.Log.getStackTraceString(tr));
+    }
 
-	/**
-	 * 判断是否为DEBUG级别
-	 */
-	public static boolean isDebug() {
-		// 设置的level比debug小，则可以记录debug日志
-		return MyLogManager.getLogger().logLevel.getLevel() <= Level.DEBUG
-				.getLevel();
-	}
+    /**
+     * 打印{@link Level#ERROR}级别的日志
+     *
+     * @param msg
+     */
+    public static void e(String msg, Throwable tr) {
+        MyLogManager.getLogger().log(
+                Level.ERROR,
+                msg + System.getProperty("line.separator")
+                        + android.util.Log.getStackTraceString(tr));
+    }
 
-	/**
-	 * 日志管理类
-	 */
-	public static class MyLogManager {
-		static volatile String MY_TRACE = "MY_TRACE: ";
+    /**
+     * 判断是否为DEBUG级别
+     */
+    public static boolean isDebug() {
+        // 设置的level比debug小，则可以记录debug日志
+        return MyLogManager.getLogger().logLevel.getLevel() <= Level.DEBUG
+                .getLevel();
+    }
 
-		private MyLogManager() {
-		}
+    /**
+     * 日志管理类
+     */
+    public static class MyLogManager {
+        static volatile String MY_TRACE = "MY_TRACE: ";
+        // 可配参数
+        Level logLevel = Level.MAX;
+        LogMode logMode = LogMode.LOGCAT;
+        // logger
+        private LogcatLogger logcatLogger = new LogcatLogger();
+        private FileLogger fileLogger = new FileLogger(logcatLogger);
 
-		static MyLogManager getLogger() {
-			return SingletonHolder.INSTANCE;
-		}
+        private MyLogManager() {
+        }
 
-		private static final class SingletonHolder {
-			private static final MyLogManager INSTANCE = new MyLogManager();
-		}
+        static MyLogManager getLogger() {
+            return SingletonHolder.INSTANCE;
+        }
 
-		// 可配参数
-		Level logLevel = Level.INFO;
-		LogMode logMode = LogMode.LOGCAT;
+        void log(Level level, String msg) {
+            if (level.getLevel() < logLevel.getLevel()) {
+                return;
+            }
 
-		/**
-		 * 日志记录模式 {@link #LOGCAT}和{@link #FILE}
-		 */
-		public static enum LogMode {
-			/**
-			 * logcat方式输出
-			 */
-			LOGCAT,
-			/**
-			 * 日志写入到本地文件
-			 */
-			FILE;
+            // logcat
+            logcatLogger.log(level, msg);
 
-			private LogMode() {
-			}
-		}
+            if (isMode(LogMode.FILE)) {
+                fileLogger.log(level, msg);
+            }
+        }
 
-		/**
-		 * 日志记录级别
-		 */
-		public static enum Level {
-			/**
-			 * DEBUG
-			 */
-			DEBUG("[DEBUG] - ", android.util.Log.DEBUG),
-			/**
-			 * INFO
-			 */
-			INFO("[INFO] - ", android.util.Log.INFO),
-			/**
-			 * ERROR
-			 */
-			ERROR("[ERROR] - ", android.util.Log.ERROR),
-			/**
-			 * MAX，不记录日志
-			 */
-			MAX("", Integer.MAX_VALUE);
+        void init(String traceTag) {
+            MY_TRACE = traceTag + ": ";
+            if (isMode(LogMode.FILE)) {
+                fileLogger.initSdcardMode();
+            }
 
-			private String tag = null;
-			private int level = 0;
+            String format = "MODE = %s,LEVEL = %s";
+            log(Level.INFO, String.format(format, logMode, logLevel));
+        }
 
-			private Level(String tag, int level) {
-				this.tag = tag;
-				this.level = level;
-			}
+        void deInit() {
+            if (isMode(LogMode.FILE)) {
+                fileLogger.releaseSdcardMode();
+            }
+        }
 
-			public int getLevel() {
-				return level;
-			}
+        private boolean isMode(LogMode mode) {
+            // return (MODE & mode) == mode;
+            return logMode == mode;
+        }
 
-			public String getTag() {
-				return tag;
-			}
-		}
+        /**
+         * 日志记录模式 {@link #LOGCAT}和{@link #FILE}
+         */
+        public static enum LogMode {
+            /**
+             * logcat方式输出
+             */
+            LOGCAT,
+            /**
+             * 日志写入到本地文件
+             */
+            FILE;
 
-		// logger
-		private LogcatLogger logcatLogger = new LogcatLogger();
-		private FileLogger fileLogger = new FileLogger(logcatLogger);
+            private LogMode() {
+            }
+        }
 
-		void log(Level level, String msg) {
-			if (level.getLevel() < logLevel.getLevel()) {
-				return;
-			}
+        /**
+         * 日志记录级别
+         */
+        public static enum Level {
+            /**
+             * DEBUG
+             */
+            DEBUG("[DEBUG] - ", android.util.Log.DEBUG),
+            /**
+             * INFO
+             */
+            INFO("[INFO] - ", android.util.Log.INFO),
+            /**
+             * ERROR
+             */
+            ERROR("[ERROR] - ", android.util.Log.ERROR),
+            /**
+             * MAX，不记录日志
+             */
+            MAX("", Integer.MAX_VALUE);
 
-			// logcat
-			logcatLogger.log(level, msg);
+            private String tag = null;
+            private int level = 0;
 
-			if (isMode(LogMode.FILE)) {
-				fileLogger.log(level, msg);
-			}
-		}
+            private Level(String tag, int level) {
+                this.tag = tag;
+                this.level = level;
+            }
 
-		void init(String traceTag) {
-			MY_TRACE = traceTag + ": ";
-			if (isMode(LogMode.FILE)) {
-				fileLogger.initSdcardMode();
-			}
+            public int getLevel() {
+                return level;
+            }
 
-			String format = "MODE = %s,LEVEL = %s";
-			log(Level.INFO, String.format(format, logMode, logLevel));
-		}
+            public String getTag() {
+                return tag;
+            }
+        }
 
-		void deInit() {
-			if (isMode(LogMode.FILE)) {
-				fileLogger.releaseSdcardMode();
-			}
-		}
-
-		private boolean isMode(LogMode mode) {
-			// return (MODE & mode) == mode;
-			return logMode == mode;
-		}
-	}
+        private static final class SingletonHolder {
+            private static final MyLogManager INSTANCE = new MyLogManager();
+        }
+    }
 
 }
 
 abstract class BaseLogger {
-	protected String getTag() {
-		StringBuilder sb = new StringBuilder();
-		StackTraceElement[] sts = Thread.currentThread().getStackTrace();
-		if (sts == null) {
-			return null;
-		}
-		for (StackTraceElement st : sts) {
-			if (st.getClassName().equals(BaseLogger.class.getName())) {
-				continue;
-			}
-			if (st.getClassName().equals(MyLogManager.class.getName())) {
-				continue;
-			}
-			if (st.getClassName().equals(MyLog.class.getName())) {
-				continue;
-			}
+    private static String generateTag(StackTraceElement caller) {
+        String tag = "[ %s:%s:%s():%d ]";
+        String callerFileName = caller.getFileName();
+        String fileName = callerFileName;
+        // if (null != callerFileName) {
+        // fileName = callerFileName.substring(0,
+        // callerFileName.lastIndexOf('.'));
+        // }
+        tag = String.format(tag, Thread.currentThread().getName(), fileName,
+                caller.getMethodName(), caller.getLineNumber());
+        return tag;
+    }
 
-			if (st.isNativeMethod()) {
-				continue;
-			}
-			if (st.getClassName().equals(Thread.class.getName())) {
-				continue;
-			}
-			if (st.getClassName().equals(this.getClass().getName())) {
-				continue;
-			}
+    protected String getTag() {
+        StringBuilder sb = new StringBuilder();
+        StackTraceElement[] sts = Thread.currentThread().getStackTrace();
+        if (sts == null) {
+            return null;
+        }
+        for (StackTraceElement st : sts) {
+            if (st.getClassName().equals(BaseLogger.class.getName())) {
+                continue;
+            }
+            if (st.getClassName().equals(MyLogManager.class.getName())) {
+                continue;
+            }
+            if (st.getClassName().equals(MyLog.class.getName())) {
+                continue;
+            }
 
-			sb.append(generateTag(st));
-			return sb.toString();
-		}
-		return null;
-	}
+            if (st.isNativeMethod()) {
+                continue;
+            }
+            if (st.getClassName().equals(Thread.class.getName())) {
+                continue;
+            }
+            if (st.getClassName().equals(this.getClass().getName())) {
+                continue;
+            }
 
-	private static String generateTag(StackTraceElement caller) {
-		String tag = "[ %s:%s:%s():%d ]";
-		String callerFileName = caller.getFileName();
-		String fileName = callerFileName;
-		// if (null != callerFileName) {
-		// fileName = callerFileName.substring(0,
-		// callerFileName.lastIndexOf('.'));
-		// }
-		tag = String.format(tag, Thread.currentThread().getName(), fileName,
-				caller.getMethodName(), caller.getLineNumber());
-		return tag;
-	}
+            sb.append(generateTag(st));
+            return sb.toString();
+        }
+        return null;
+    }
 
-	/**
-	 * 运行UT时打印一行信息
-	 */
-	protected void printLine(String tag, String msg) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(tag);
-		sb.append(" ");
-		sb.append(msg);
-		System.out.println(sb.toString());
-	}
+    /**
+     * 运行UT时打印一行信息
+     */
+    protected void printLine(String tag, String msg) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(tag);
+        sb.append(" ");
+        sb.append(msg);
+        System.out.println(sb.toString());
+    }
 
-	public abstract void log(Level level, String msg);
+    public abstract void log(Level level, String msg);
 }
 
 class LogcatLogger extends BaseLogger {
-	@Override
-	public void log(Level level, String msg) {
-		String tag = getTag();
-		String msgStr = msg;
-		// String tag = MyLogManager.MY_TRACE;
-		// String msgStr = getTag() + " - " + msg;
-		try {
-			if (Level.DEBUG == level) {
-				android.util.Log.d(tag, msgStr);
-			} else if (Level.INFO == level) {
-				android.util.Log.i(tag, msgStr);
-			} else if (Level.ERROR == level) {
-				android.util.Log.e(tag, msgStr);
-			}
-		} catch (Exception e) {
-			printLine(tag, msgStr);
-		}
-	}
+    @Override
+    public void log(Level level, String msg) {
+        String tag = getTag();
+        String msgStr = msg;
+        // String tag = MyLogManager.MY_TRACE;
+        // String msgStr = getTag() + " - " + msg;
+        try {
+            if (Level.DEBUG == level) {
+                android.util.Log.d(tag, msgStr);
+            } else if (Level.INFO == level) {
+                android.util.Log.i(tag, msgStr);
+            } else if (Level.ERROR == level) {
+                android.util.Log.e(tag, msgStr);
+            }
+        } catch (Exception e) {
+            printLine(tag, msgStr);
+        }
+    }
 }
 
 class FileLogger extends BaseLogger {
-	private static final int BUFFER_SIZE = 1024 * 100;
+    private static final int BUFFER_SIZE = 1024 * 100;
+    private static final String FILE_EXT = ".log";
+    private volatile boolean initSdcardSuccess = false;
+    private File logFile;
+    private BufferedOutputStream outputStream = null;
+    private StringBuilder builder = new StringBuilder();
 
-	private volatile boolean initSdcardSuccess = false;
-	private File logFile;
-	private static final String FILE_EXT = ".log";
-	private BufferedOutputStream outputStream = null;
-	private StringBuilder builder = new StringBuilder();
+    private LogcatLogger logcatLogger;
 
-	private LogcatLogger logcatLogger;
+    public FileLogger(LogcatLogger logcatLogger) {
+        this.logcatLogger = logcatLogger;
+    }
 
-	public FileLogger(LogcatLogger logcatLogger) {
-		this.logcatLogger = logcatLogger;
-	}
+    private String getName() {
+        String fileNameFormat = "%s_%s.%s";
+        String fileName = String.format(fileNameFormat, MyLogManager.MY_TRACE,
+                getCurrDateStr(), FILE_EXT);
+        return fileName;
+    }
 
-	private String getName() {
-		String fileNameFormat = "%s_%s.%s";
-		String fileName = String.format(fileNameFormat, MyLogManager.MY_TRACE,
-				getCurrDateStr(), FILE_EXT);
-		return fileName;
-	}
+    public void initSdcardMode() {
+        if (initSdcardSuccess) {
+            return;
+        }
 
-	public void initSdcardMode() {
-		if (initSdcardSuccess) {
-			return;
-		}
+        logFile = Environment.getExternalStorageDirectory();
+        if (!EnvironmentInfo.isExternalStorageUsable()) {
+            logFile = null;
+        }
 
-		logFile = Environment.getExternalStorageDirectory();
-		if (!EnvironmentInfo.isExternalStorageUsable()) {
-			logFile = null;
-		}
+        if (logFile == null) {
+            return;
+        }
 
-		if (logFile == null) {
-			return;
-		}
+        logFile = new File(logFile, getName());
 
-		logFile = new File(logFile, getName());
+        boolean append = true;
+        // 是否存在文件
+        if (!IoUtil.isFileExist(logFile.getAbsolutePath())) {
+            IoUtil.createFile(logFile.getAbsolutePath());
+            append = false;
+        }
 
-		boolean append = true;
-		// 是否存在文件
-		if (!IoUtil.isFileExist(logFile.getAbsolutePath())) {
-			IoUtil.createFile(logFile.getAbsolutePath());
-			append = false;
-		}
+        try {
+            outputStream = new BufferedOutputStream(new FileOutputStream(
+                    logFile, append), BUFFER_SIZE);
+            if (null == outputStream) {
+                logcatLogger.log(Level.ERROR, "Open logfile failed!");
+                return;
+            }
+            initSdcardSuccess = true;
+        } catch (Exception e) {
+            logcatLogger.log(Level.ERROR, "Open logfile exception!");
+            e.printStackTrace();
+        }
+    }
 
-		try {
-			outputStream = new BufferedOutputStream(new FileOutputStream(
-					logFile, append), BUFFER_SIZE);
-			if (null == outputStream) {
-				logcatLogger.log(Level.ERROR, "Open logfile failed!");
-				return;
-			}
-			initSdcardSuccess = true;
-		} catch (Exception e) {
-			logcatLogger.log(Level.ERROR, "Open logfile exception!");
-			e.printStackTrace();
-		}
-	}
+    public void releaseSdcardMode() {
+        initSdcardSuccess = false;
+        if (null != outputStream) {
+            try {
+                outputStream.flush();
+                outputStream.close();
+                outputStream = null;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public void releaseSdcardMode() {
-		initSdcardSuccess = false;
-		if (null != outputStream) {
-			try {
-				outputStream.flush();
-				outputStream.close();
-				outputStream = null;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    private String getCurrDateStr() {
+        return MyFormatter.formatDate("yyyyMMdd", System.currentTimeMillis());
+    }
 
-	private String getCurrDateStr() {
-		return MyFormatter.formatDate("yyyyMMdd", System.currentTimeMillis());
-	}
+    public synchronized void log(Level level, String msg) {
+        if (false == initSdcardSuccess) {
+            logcatLogger.log(Level.ERROR, "Try open logfile.");
+            initSdcardMode();
+        }
 
-	public synchronized void log(Level level, String msg) {
-		if (false == initSdcardSuccess) {
-			logcatLogger.log(Level.ERROR, "Try open logfile.");
-			initSdcardMode();
-		}
+        if (null != outputStream) {
+            String str = formatLogStr(level, MyLogManager.MY_TRACE, msg);
 
-		if (null != outputStream) {
-			String str = formatLogStr(level, MyLogManager.MY_TRACE, msg);
+            try {
+                outputStream.write(str.getBytes());
+            } catch (Exception e) {
+                initSdcardSuccess = false;
+                logcatLogger.log(Level.ERROR,
+                        android.util.Log.getStackTraceString(e));
+                e.printStackTrace();
+            }
+        }
+    }
 
-			try {
-				outputStream.write(str.getBytes());
-			} catch (Exception e) {
-				initSdcardSuccess = false;
-				logcatLogger.log(Level.ERROR,
-						android.util.Log.getStackTraceString(e));
-				e.printStackTrace();
-			}
-		}
-	}
+    private String formatLogStr(Level level, String tag, String msg) {
+        // 格式：[INFO] - YYYY-MM-DD HH:MM:SS.SSS :[tag] msg
+        Calendar cld = Calendar.getInstance();
+        builder.setLength(0);
+        builder.append(level.getTag());
+        builder.append(cld.get(Calendar.YEAR));
+        builder.append("-");
+        builder.append(cld.get(Calendar.MONTH) + 1);
+        builder.append("-");
+        builder.append(cld.get(Calendar.DATE));
+        builder.append(" ");
+        builder.append(cld.get(Calendar.HOUR_OF_DAY));
+        builder.append(":");
+        builder.append(cld.get(Calendar.MINUTE));
+        builder.append(":");
+        builder.append(cld.get(Calendar.SECOND));
+        builder.append(".");
+        builder.append(cld.get(Calendar.MILLISECOND));
+        builder.append(" : [");
+        builder.append(tag);
+        builder.append("] ");
+        builder.append(getTag());
+        builder.append(" - ");
+        builder.append(msg);
+        builder.append(System.getProperty("line.separator"));
 
-	private String formatLogStr(Level level, String tag, String msg) {
-		// 格式：[INFO] - YYYY-MM-DD HH:MM:SS.SSS :[tag] msg
-		Calendar cld = Calendar.getInstance();
-		builder.setLength(0);
-		builder.append(level.getTag());
-		builder.append(cld.get(Calendar.YEAR));
-		builder.append("-");
-		builder.append(cld.get(Calendar.MONTH) + 1);
-		builder.append("-");
-		builder.append(cld.get(Calendar.DATE));
-		builder.append(" ");
-		builder.append(cld.get(Calendar.HOUR_OF_DAY));
-		builder.append(":");
-		builder.append(cld.get(Calendar.MINUTE));
-		builder.append(":");
-		builder.append(cld.get(Calendar.SECOND));
-		builder.append(".");
-		builder.append(cld.get(Calendar.MILLISECOND));
-		builder.append(" : [");
-		builder.append(tag);
-		builder.append("] ");
-		builder.append(getTag());
-		builder.append(" - ");
-		builder.append(msg);
-		builder.append(System.getProperty("line.separator"));
-
-		return builder.toString();
-	}
+        return builder.toString();
+    }
 }

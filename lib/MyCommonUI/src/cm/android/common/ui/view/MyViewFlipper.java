@@ -9,81 +9,81 @@ import android.widget.AdapterViewFlipper;
 
 @TargetApi(12)
 public class MyViewFlipper extends AdapterViewFlipper {
-	private static final int ANIMATOR_DURATION = 300;
+    private static final int ANIMATOR_DURATION = 300;
 
-	public MyViewFlipper(Context context) {
-		super(context);
-	}
+    public MyViewFlipper(Context context) {
+        super(context);
+    }
 
-	public MyViewFlipper(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public MyViewFlipper(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	private static class AnimatorHolder {
-		private ObjectAnimator in;
-		private ObjectAnimator out;
+    @Override
+    public void showNext() {
+        AnimatorHolder animatorHolder = AnimatorHolder.next(this);
+        setInAnimation(animatorHolder.in);
+        setOutAnimation(animatorHolder.out);
 
-		public static AnimatorHolder next(View target) {
-			AnimatorHolder animatorHolder = new AnimatorHolder();
+        super.showNext();
+    }
 
-			animatorHolder.in = ObjectAnimator.ofFloat(target,
-					View.TRANSLATION_X, target.getWidth(), 0f);
-			animatorHolder.in.setDuration(ANIMATOR_DURATION);
+    @Override
+    public void showPrevious() {
+        AnimatorHolder animatorHolder = AnimatorHolder.prev(this);
+        setInAnimation(animatorHolder.in);
+        setOutAnimation(animatorHolder.out);
 
-			animatorHolder.out = ObjectAnimator.ofFloat(target,
-					View.TRANSLATION_X, 0, -target.getWidth());
-			animatorHolder.out.setDuration(ANIMATOR_DURATION);
+        super.showPrevious();
+    }
 
-			return animatorHolder;
-		}
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        updateFlip(hasWindowFocus);
+    }
 
-		public static AnimatorHolder prev(View target) {
-			AnimatorHolder animatorHolder = new AnimatorHolder();
+    private void updateFlip(boolean start) {
+        if (start) {
+            if (isAutoStart()) {
+                startFlipping();
+            }
+        } else {
+            stopFlipping();
+        }
+    }
 
-			animatorHolder.in = ObjectAnimator.ofFloat(target,
-					View.TRANSLATION_X, -target.getWidth(), 0f);
-			animatorHolder.in.setDuration(ANIMATOR_DURATION);
+    private static class AnimatorHolder {
+        private ObjectAnimator in;
+        private ObjectAnimator out;
 
-			animatorHolder.out = ObjectAnimator.ofFloat(target,
-					View.TRANSLATION_X, 0, target.getWidth());
-			animatorHolder.out.setDuration(ANIMATOR_DURATION);
+        public static AnimatorHolder next(View target) {
+            AnimatorHolder animatorHolder = new AnimatorHolder();
 
-			return animatorHolder;
-		}
-	}
+            animatorHolder.in = ObjectAnimator.ofFloat(target,
+                    View.TRANSLATION_X, target.getWidth(), 0f);
+            animatorHolder.in.setDuration(ANIMATOR_DURATION);
 
-	@Override
-	public void showNext() {
-		AnimatorHolder animatorHolder = AnimatorHolder.next(this);
-		setInAnimation(animatorHolder.in);
-		setOutAnimation(animatorHolder.out);
+            animatorHolder.out = ObjectAnimator.ofFloat(target,
+                    View.TRANSLATION_X, 0, -target.getWidth());
+            animatorHolder.out.setDuration(ANIMATOR_DURATION);
 
-		super.showNext();
-	}
+            return animatorHolder;
+        }
 
-	@Override
-	public void showPrevious() {
-		AnimatorHolder animatorHolder = AnimatorHolder.prev(this);
-		setInAnimation(animatorHolder.in);
-		setOutAnimation(animatorHolder.out);
+        public static AnimatorHolder prev(View target) {
+            AnimatorHolder animatorHolder = new AnimatorHolder();
 
-		super.showPrevious();
-	}
+            animatorHolder.in = ObjectAnimator.ofFloat(target,
+                    View.TRANSLATION_X, -target.getWidth(), 0f);
+            animatorHolder.in.setDuration(ANIMATOR_DURATION);
 
-	@Override
-	public void onWindowFocusChanged(boolean hasWindowFocus) {
-		super.onWindowFocusChanged(hasWindowFocus);
-		updateFlip(hasWindowFocus);
-	}
+            animatorHolder.out = ObjectAnimator.ofFloat(target,
+                    View.TRANSLATION_X, 0, target.getWidth());
+            animatorHolder.out.setDuration(ANIMATOR_DURATION);
 
-	private void updateFlip(boolean start) {
-		if (start) {
-			if (isAutoStart()) {
-				startFlipping();
-			}
-		} else {
-			stopFlipping();
-		}
-	}
+            return animatorHolder;
+        }
+    }
 
 }

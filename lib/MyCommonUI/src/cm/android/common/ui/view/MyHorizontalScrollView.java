@@ -7,46 +7,46 @@ import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 
 public class MyHorizontalScrollView extends HorizontalScrollView {
-	private ViewPager viewPager;
+    private ViewPager viewPager;
 
-	public void setViewPager(ViewPager viewPager) {
-		this.viewPager = viewPager;
-	}
+    public MyHorizontalScrollView(Context context, AttributeSet attrs,
+                                  int defStyle) {
+        super(context, attrs, defStyle);
+    }
 
-	public MyHorizontalScrollView(Context context, AttributeSet attrs,
-			int defStyle) {
-		super(context, attrs, defStyle);
-	}
+    public MyHorizontalScrollView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	public MyHorizontalScrollView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public MyHorizontalScrollView(Context context) {
+        super(context);
+    }
 
-	public MyHorizontalScrollView(Context context) {
-		super(context);
-	}
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
+    }
 
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		if (null != viewPager) {
-			viewPager.requestDisallowInterceptTouchEvent(true);
-		}
-		return super.dispatchTouchEvent(ev);
-	}
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (null != viewPager) {
+            viewPager.requestDisallowInterceptTouchEvent(true);
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-		if (null != viewPager) {
-			viewPager.requestDisallowInterceptTouchEvent(true);
-		}
-		return super.onInterceptTouchEvent(ev);
-	}
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (null != viewPager) {
+            viewPager.requestDisallowInterceptTouchEvent(true);
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		if (null != viewPager) {
-			viewPager.requestDisallowInterceptTouchEvent(true);
-		}
-		return super.onTouchEvent(event);
-	}
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (null != viewPager) {
+            viewPager.requestDisallowInterceptTouchEvent(true);
+        }
+        return super.onTouchEvent(event);
+    }
 }

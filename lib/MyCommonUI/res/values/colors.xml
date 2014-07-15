@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--     <drawable name="red">#7f00</drawable> -->
-<!--     <drawable name="blue">#770000ff</drawable> -->
-<!--     <drawable name="green">#7700ff00</drawable> -->
-<!--     <drawable name="yellow">#77ffff00</drawable> -->
+    <!--     <drawable name="red">#7f00</drawable> -->
+    <!--     <drawable name="blue">#770000ff</drawable> -->
+    <!--     <drawable name="green">#7700ff00</drawable> -->
+    <!--     <drawable name="yellow">#77ffff00</drawable> -->
 
     <color name="default_black">#000000</color>
-<!--     透明 -->
-<!--     <drawable name="transparent_background">#00000000</drawable> -->
-<!--     半透明 -->
-<!--     <color name="half_transparent">#88000000</color> -->
-<!--     透明 -->
-<!--     <color name="transparent">#88000000</color> -->
+    <!--     透明 -->
+    <!--     <drawable name="transparent_background">#00000000</drawable> -->
+    <!--     半透明 -->
+    <!--     <color name="half_transparent">#88000000</color> -->
+    <!--     透明 -->
+    <!--     <color name="transparent">#88000000</color> -->
 
 </resources>

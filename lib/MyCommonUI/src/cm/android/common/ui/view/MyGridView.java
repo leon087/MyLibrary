@@ -8,105 +8,102 @@ import android.widget.GridView;
 
 /**
  * 自适应高度的GridView
- * 
+ *
  * @author Administrator
- * 
  */
 public class MyGridView extends GridView {
-	public final static int SCROOL_UNKNOW = 0;
-	public final static int SCROOL_UP = SCROOL_UNKNOW + 1;
-	public final static int SCROOL_DOWN = SCROOL_UP + 1;
-	public final static int SCROOL_LEFT = SCROOL_DOWN + 1;
-	public final static int SCROOL_RIGHT = SCROOL_LEFT + 1;
+    public final static int SCROOL_UNKNOW = 0;
+    public final static int SCROOL_UP = SCROOL_UNKNOW + 1;
+    public final static int SCROOL_DOWN = SCROOL_UP + 1;
+    public final static int SCROOL_LEFT = SCROOL_DOWN + 1;
+    public final static int SCROOL_RIGHT = SCROOL_LEFT + 1;
+    private int scrollDirctionX = SCROOL_UNKNOW;
+    private int scrollDirctionY = SCROOL_UNKNOW;
+    private GestureDetector gestureDetector = new GestureDetector(
+            new GestureDetector.SimpleOnGestureListener() {
+                public boolean onDown(MotionEvent arg0) {
+                    return true;
+                }
 
-	private boolean allowScrollYAxis = true;
-	private boolean allowScroll = true;
+                ;
 
-	private int scrollDirctionX = SCROOL_UNKNOW;
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2,
+                                       float velocityX, float velocityY) {
 
-	private int scrollDirctionY = SCROOL_UNKNOW;
+                    return super.onFling(e1, e2, velocityX, velocityY);
+                }
 
-	private GestureDetector gestureDetector = new GestureDetector(
-			new GestureDetector.SimpleOnGestureListener() {
-				public boolean onDown(MotionEvent arg0) {
-					return true;
-				};
+                @Override
+                public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                        float distanceX, float distanceY) {
 
-				@Override
-				public boolean onFling(MotionEvent e1, MotionEvent e2,
-						float velocityX, float velocityY) {
+                    if (distanceY > 0) {
+                        scrollDirctionY = SCROOL_UP;
+                    } else if (distanceY < 0) {
+                        scrollDirctionY = SCROOL_DOWN;
+                    }
+                    if (distanceX > 0) {
+                        scrollDirctionX = SCROOL_RIGHT;
 
-					return super.onFling(e1, e2, velocityX, velocityY);
-				}
+                    } else if (distanceX < 0) {
+                        scrollDirctionX = SCROOL_LEFT;
+                    }
+                    return super.onScroll(e1, e2, distanceX, distanceY);
+                }
 
-				@Override
-				public boolean onScroll(MotionEvent e1, MotionEvent e2,
-						float distanceX, float distanceY) {
+            });
+    private boolean allowScrollYAxis = true;
+    private boolean allowScroll = true;
 
-					if (distanceY > 0) {
-						scrollDirctionY = SCROOL_UP;
-					} else if (distanceY < 0) {
-						scrollDirctionY = SCROOL_DOWN;
-					}
-					if (distanceX > 0) {
-						scrollDirctionX = SCROOL_RIGHT;
+    public MyGridView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
 
-					} else if (distanceX < 0) {
-						scrollDirctionX = SCROOL_LEFT;
-					}
-					return super.onScroll(e1, e2, distanceX, distanceY);
-				}
+    public MyGridView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-			});
+    public MyGridView(Context context) {
+        super(context);
+    }
 
-	public MyGridView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        // gestureDetector.onTouchEvent(ev);
+        if (!allowScrollYAxis && ev.getAction() == MotionEvent.ACTION_MOVE) {
+            return true;
 
-	public MyGridView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+        }
+        return super.onTouchEvent(ev);
+    }
 
-	public MyGridView(Context context) {
-		super(context);
-	}
+    public int getScroolDirctionX() {
+        return scrollDirctionX;
+    }
 
-	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-		// gestureDetector.onTouchEvent(ev);
-		if (!allowScrollYAxis && ev.getAction() == MotionEvent.ACTION_MOVE) {
-			return true;
+    public int getScroolDirctionY() {
+        return scrollDirctionY;
+    }
 
-		}
-		return super.onTouchEvent(ev);
-	}
+    public boolean isAllowScroolYAxis() {
+        return allowScrollYAxis;
+    }
 
-	public int getScroolDirctionX() {
-		return scrollDirctionX;
-	}
+    public void setAllowScroolYAxis(boolean allowScroolYAxis) {
+        this.allowScrollYAxis = allowScroolYAxis;
+    }
 
-	public int getScroolDirctionY() {
-		return scrollDirctionY;
-	}
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (!allowScroll) {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(
+                    Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 
-	public boolean isAllowScroolYAxis() {
-		return allowScrollYAxis;
-	}
-
-	public void setAllowScroolYAxis(boolean allowScroolYAxis) {
-		this.allowScrollYAxis = allowScroolYAxis;
-	}
-
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		if (!allowScroll) {
-			heightMeasureSpec = MeasureSpec.makeMeasureSpec(
-					Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
-		}
-		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	}
-
-	public void setAllowScrool(boolean allowScrool) {
-		this.allowScroll = allowScrool;
-	}
+    public void setAllowScrool(boolean allowScrool) {
+        this.allowScroll = allowScrool;
+    }
 
 }

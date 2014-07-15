@@ -2,7 +2,7 @@ package cm.android.framework;
 
 public interface IApp {
 
-	void exitApp();
+    void exitApp();
 
-	void initApp();
+    void initApp();
 }

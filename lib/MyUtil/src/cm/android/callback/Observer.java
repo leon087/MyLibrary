@@ -31,10 +31,8 @@ public interface Observer {
      * {@code notifyObservers} method is called (because the {@code Observable}
      * object has been updated.
      *
-     * @param observable
-     *            the {@link Observable} object.
-     * @param data
-     *            the data passed to {@link Observable#notifyObservers(Object)}.
+     * @param observable the {@link Observable} object.
+     * @param data       the data passed to {@link Observable#notifyObservers(Object)}.
      */
     void update(Observable observable, Object data);
 }

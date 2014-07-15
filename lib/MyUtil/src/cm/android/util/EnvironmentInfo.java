@@ -20,6 +20,8 @@ import java.net.SocketException;
 import java.util.Enumeration;
 
 public class EnvironmentInfo {
+    private static final long REMAIN_SPACE = 5 * 1024 * 1024;
+
     private EnvironmentInfo() {
     }
 
@@ -223,8 +225,6 @@ public class EnvironmentInfo {
         // stats.getAvailableBlocks();
         return getAvailableSize(path);
     }
-
-    private static final long REMAIN_SPACE = 5 * 1024 * 1024;
 
     /**
      * 获取存储可用内存大小

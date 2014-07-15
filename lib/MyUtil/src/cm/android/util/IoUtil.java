@@ -16,10 +16,10 @@ import java.util.zip.ZipFile;
  * IO读写Util类
  */
 public class IoUtil {
+    private static final int BUF_SIZE = 1024 * 100;
+
     private IoUtil() {
     }
-
-    private static final int BUF_SIZE = 1024 * 100;
 
     /**
      * 判断目录是否可用, 已经挂载并且拥有可读可写权限 true 可用
