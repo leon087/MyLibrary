@@ -16,6 +16,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
@@ -511,6 +512,18 @@ public class Utils {
         }
 
         return false;
+    }
+
+    public static long getCrc(Context context) {
+        try {
+            ZipFile zipFile = new ZipFile(context.getApplicationContext().getPackageCodePath());
+            ZipEntry zipEntry = zipFile.getEntry("classes.dex");
+            return zipEntry.getCrc();
+        } catch (IOException e) {
+            MyLog.e(e);
+            return 0;
+        }
+
     }
 
 }
