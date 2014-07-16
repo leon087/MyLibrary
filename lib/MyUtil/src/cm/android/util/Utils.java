@@ -88,7 +88,7 @@ public class Utils {
                 .substring(fName.lastIndexOf(".") + 1, fName.length())
                 .toLowerCase();
         if (isOpen) {
-			/* 依附档名的类型决定MimeType */
+            /* 依附档名的类型决定MimeType */
             if (end.equals("m4a") || end.equals("mp3") || end.equals("mid")
                     || end.equals("xmf") || end.equals("ogg")
                     || end.equals("wav")) {
@@ -100,7 +100,7 @@ public class Utils {
                     || end.equals("bmp")) {
                 type = "image";
             } else {
-				/* 如果无法直接打开，就跳出软件列表给用户选择 */
+                /* 如果无法直接打开，就跳出软件列表给用户选择 */
                 type = "*";
             }
             type += "/*";
@@ -496,12 +496,21 @@ public class Utils {
     /**
      * 将object包装至Bundle中
      */
-    public Bundle generateBundle(String key, Object object) {
+    public static Bundle generateBundle(String key, Object object) {
         Bundle bundle = new Bundle();
         MyParcelable<Object> parcelable = ObjectUtil.newParcelable();
         parcelable.setValue(object);
         bundle.putParcelable(key, parcelable);
         return bundle;
+    }
+
+    @TargetApi(4)
+    public static boolean isDebuggable(Context context) {
+        if ((context.getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+            return true;
+        }
+
+        return false;
     }
 
 }

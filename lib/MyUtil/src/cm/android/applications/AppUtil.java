@@ -51,8 +51,8 @@ public class AppUtil {
     /**
      * 获取已安装的应用
      *
-     * @param context
-     * @param flag    {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
+     * @param pm
+     * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
      * @return PackageInfo列表
      */
     public static List<PackageInfo> getInstalledPackages(PackageManager pm,
@@ -170,8 +170,8 @@ public class AppUtil {
     /**
      * 获取已安装的应用
      *
-     * @param context
-     * @param flag    {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
+     * @param pm
+     * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
      * @return
      */
     public static Map<String, PackageInfo> getInstalledPackagesMap(
@@ -206,7 +206,7 @@ public class AppUtil {
     /**
      * 同时获取用户应用和系统应用
      *
-     * @param context
+     * @param pm
      * @param userAppList
      * @param sysAppList
      */
@@ -239,7 +239,7 @@ public class AppUtil {
     /**
      * 获取未安装的APK信息
      *
-     * @param context
+     * @param pm
      * @param archiveFilePath APK文件的路径。如：/sdcard /download/XX.apk
      */
     public static PackageInfo getUninatllAppInfo(PackageManager pm,
@@ -252,7 +252,7 @@ public class AppUtil {
     /**
      * 获取拥有应用入口的应用列表
      *
-     * @param context
+     * @param pm
      * @return
      */
     // 获得所有启动Activity的信息，类似于Launch界面
@@ -294,7 +294,7 @@ public class AppUtil {
     /**
      * 获取应用PackageInfo信息
      *
-     * @param context
+     * @param pm
      * @param packageName
      * @return
      */
@@ -312,7 +312,7 @@ public class AppUtil {
     /**
      * 获取应用签名
      *
-     * @param context
+     * @param pm
      * @param packageName
      * @return
      */
@@ -329,9 +329,9 @@ public class AppUtil {
     }
 
     /**
-     * 获取签名
+     * 获取签名hash
      *
-     * @param context
+     * @param pm
      * @param packageName
      * @return
      */
