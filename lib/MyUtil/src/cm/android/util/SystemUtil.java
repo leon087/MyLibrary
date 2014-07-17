@@ -1,5 +1,6 @@
 package cm.android.util;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Debug;
+import android.text.TextUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -26,6 +28,7 @@ public class SystemUtil {
      * @param name 运行的进程名
      * @return
      */
+    @TargetApi(3)
     public static boolean isProcessRunning(Context ctx, String name) {
         ActivityManager am = (ActivityManager) ctx
                 .getSystemService(Context.ACTIVITY_SERVICE);
@@ -38,6 +41,7 @@ public class SystemUtil {
         return false;
     }
 
+    @TargetApi(3)
     public static boolean isTopActivity(Context ctx) {
         ActivityManager am = (ActivityManager) ctx.getApplicationContext()
                 .getSystemService(Context.ACTIVITY_SERVICE);
@@ -94,6 +98,7 @@ public class SystemUtil {
      * @param ctx
      * @return
      */
+    @TargetApi(3)
     public static List<RunningAppProcessInfo> getRunningProcess(Context ctx) {
         ActivityManager am = (ActivityManager) ctx
                 .getSystemService(Context.ACTIVITY_SERVICE);
@@ -107,6 +112,7 @@ public class SystemUtil {
      * @param ctx
      * @return
      */
+    @TargetApi(4)
     public static ArrayList<String> getActivities(Context ctx) {
         ArrayList<String> result = new ArrayList<String>();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
@@ -118,6 +124,7 @@ public class SystemUtil {
         return result;
     }
 
+    @TargetApi(5)
     public static Debug.MemoryInfo getRunningProcessMemoryInfo(Context context,
                                                                String packageName) {
         ActivityManager am = (ActivityManager) context
@@ -143,6 +150,7 @@ public class SystemUtil {
      *
      * @return
      */
+    @TargetApi(3)
     public static RunningAppProcessInfo getRunningAppProcessInfo(
             Context context, String processName) {
         ActivityManager am = (ActivityManager) context
@@ -182,4 +190,24 @@ public class SystemUtil {
         }
         return qemuKernel;
     }
+
+    public static boolean isAppForeground(Context paramContext, String paramString) {
+        if (TextUtils.isEmpty(paramString)) ;
+        ActivityManager.RunningTaskInfo localRunningTaskInfo = getFirstRunningTaskInfo(paramContext);
+
+        if (localRunningTaskInfo == null) {
+            return false;
+        }
+
+        return TextUtils.equals(localRunningTaskInfo.baseActivity.getPackageName(), paramString);
+    }
+
+    public static ActivityManager.RunningTaskInfo getFirstRunningTaskInfo(Context paramContext) {
+        List localList = ((ActivityManager) paramContext.getSystemService(Context.ACTIVITY_SERVICE)).getRunningTasks(1);
+        if ((Utils.isEmpty(localList))) {
+            return null;
+        }
+        return (ActivityManager.RunningTaskInfo) localList.get(0);
+    }
+
 }
