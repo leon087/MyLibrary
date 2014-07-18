@@ -73,6 +73,7 @@
     <orderEntry type="library" exported="" name="android-universal-image-loader-20140708" level="project" />
     <orderEntry type="library" exported="" name="eventbus-20140117" level="project" />
     <orderEntry type="module" module-name="MyCommon" exported="" />
+    <orderEntry type="module" module-name="MyUtil" exported="" />
   </component>
 </module>
 

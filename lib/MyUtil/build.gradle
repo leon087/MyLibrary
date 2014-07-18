@@ -1,22 +1,52 @@
-apply plugin: 'android-library'
+buildscript {
+    repositories {
+        //从中央库里面获取依赖
+        mavenCentral()
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+        //maven {
+        //    url "https://oss.sonatype.org/content/repositories/snapshots"
+        //}
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.10.+'
+    }
 }
+
+tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
+
+apply plugin: 'android-library'
 
 android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
     }
 
     lintOptions { abortOnError false }
 }
 
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
 android {
     compileSdkVersion 19
     buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+//        minSdkVersion 8
+//        targetSdkVersion 19
+//        versionCode 1
+//        versionName "1.0"
+    }
 
     sourceSets {
         main {
@@ -30,15 +60,8 @@ android {
             jniLibs.srcDirs = ['libs']
         }
 
-        // Move the tests to tests/java, tests/res, etc...
         instrumentTest.setRoot('tests')
 
-        // Move the build types to build-types/<type>
-        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
-        // This moves them out of them default location under src/<type>/... which would
-        // conflict with src/ being used by the main source set.
-        // Adding new build types or product flavors should be accompanied
-        // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }

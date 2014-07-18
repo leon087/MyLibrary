@@ -1,10 +1,27 @@
+buildscript {
+    repositories {
+        //从中央库里面获取依赖
+        mavenCentral()
+
+        //maven {
+        //    url "https://oss.sonatype.org/content/repositories/snapshots"
+        //}
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.10.+'
+    }
+}
+
+tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
+
 apply plugin: 'android'
 
 dependencies {
-	//android.jar
-	//compile files("${android.sdk}/platforms/${android.target}/android.jar")
+    //android.jar
+    //compile files("${android.sdk}/platforms/${android.target}/android.jar")
 
-	compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 
 	compile project(':lib:MyCommon')
 	compile project(':lib:MyFramework')
@@ -13,30 +30,43 @@ dependencies {
 }
 
 android {
-	packagingOptions {
-		exclude 'META-INF/DEPENDENCIES.txt'
-		exclude 'META-INF/LICENSE.txt'
-		exclude 'META-INF/NOTICE.txt'
-	}
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
 
-	lintOptions { abortOnError false }
+    lintOptions { abortOnError false }
 
-	dexOptions { preDexLibraries = false }
+    dexOptions { preDexLibraries = false }
 }
 
 android {
-	compileSdkVersion 19
-	buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 19
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
-	signingConfigs {
-		nbtstatx {
-			storeFile file("keystore/nbtstatx.keystore")
-			storePassword "nbtstatx"
-			keyAlias "nbtstatx"
-			keyPassword "nbtstatx"
-		}
-		debug { storeFile file("keystore/debug.keystore") }
-	}
+    defaultConfig {
+//        minSdkVersion 8
+//        targetSdkVersion 19
+//        versionCode 1
+//        versionName "1.0"
+    }
+
+    signingConfigs {
+        nbtstatx {
+            storeFile file("keystore/nbtstatx.keystore")
+            storePassword "nbtstatx"
+            keyAlias "nbtstatx"
+            keyPassword "nbtstatx"
+        }
+        debug { storeFile file("keystore/debug.keystore") }
+    }
 
 	buildTypes {
 		release {
@@ -56,7 +86,7 @@ android {
 
 	/*//	设置不同包名的包
 	 productFlavors {
-	 original {  packageName='com.yd.appstore.ott'  }
+	 original {  packageName='com.nbtstatx.mycommondemo'  }
 	 //自定义渠道
 	 //		testPlay {
 	 //			packageName='com.testplay'
@@ -72,30 +102,22 @@ android {
 	 //		}
 	 }*/
 
-	sourceSets {
-		main {
-			manifest.srcFile 'AndroidManifest.xml'
-			java.srcDirs = ['src']
-			resources.srcDirs = ['src']
-			aidl.srcDirs = ['src']
-			renderscript.srcDirs = ['src']
-			res.srcDirs = ['res']
-			assets.srcDirs = ['assets']
-			jniLibs.srcDirs = ['libs']
-		}
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+        }
 
-		// Move the tests to tests/java, tests/res, etc...
-		//instrumentTest.setRoot('tests')
+        instrumentTest.setRoot('tests')
 
-		// Move the build types to build-types/<type>
-		// For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
-		// This moves them out of them default location under src/<type>/... which would
-		// conflict with src/ being used by the main source set.
-		// Adding new build types or product flavors should be accompanied
-		// by a similar customization.
-		original.setRoot('build-types/original')
+        original.setRoot('build-types/original')
 
-		//自定义渠道
-		//testPlay.setRoot('build-types/testplay')
-	}
+        //testPlay.setRoot('build-types/testplay')
+    }
 }
