@@ -42,7 +42,11 @@ android {
         exclude 'META-INF/ASL2.0'
     }
 
-    lintOptions { abortOnError false }
+    lintOptions {
+        abortOnError false
+        quiet false
+        showAll true
+    }
 
     dexOptions { preDexLibraries = false }
 }
