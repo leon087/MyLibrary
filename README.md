@@ -13,6 +13,8 @@ MyFrameworkExt：基于framework.jar而非android-sdk构建，提供了一些非
 DownloadProvider-master：基于android源码的下载模块;<br/>
 
 ### 参考:
+[slf4j](https://github.com/qos-ch/slf4j)<br/>
+[logback-android](http://tony19.github.io/logback-android)<br/>
 [eventbus](https://github.com/greenrobot/EventBus)<br/>
 [android-async-http](https://github.com/loopj/android-async-http)<br/>
 [android-universal-image](https://github.com/nostra13/Android-Universal-Image-Loader)<br/>
