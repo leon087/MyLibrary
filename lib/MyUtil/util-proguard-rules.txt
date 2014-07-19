@@ -170,4 +170,8 @@
 -keep class * extends android.app.**
 -keep class android.support.** { *; }
 
+-keep class ch.qos.** { *; }
+-keep class org.slf4j.** { *; }
+-dontwarn ch.qos.logback.core.net.*
+
 #================================框架======================================
