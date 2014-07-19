@@ -37,10 +37,6 @@ import java.util.HashMap;
  */
 class DownloadNotification {
 
-    Context mContext;
-    HashMap<String, NotificationItem> mNotifications;
-    private SystemFacade mSystemFacade;
-
     static final String LOGTAG = "DownloadNotification";
     static final String WHERE_RUNNING =
             "(" + Downloads.COLUMN_STATUS + " >= '100') AND (" +
@@ -53,39 +49,9 @@ class DownloadNotification {
             Downloads.COLUMN_STATUS + " >= '200' AND " +
                     Downloads.COLUMN_VISIBILITY +
                     " == '" + Downloads.VISIBILITY_VISIBLE_NOTIFY_COMPLETED + "'";
-
-
-    /**
-     * This inner class is used to collate downloads that are owned by
-     * the same application. This is so that only one notification line
-     * item is used for all downloads of a given application.
-     */
-    static class NotificationItem {
-        int mId;  // This first db _id for the download for the app
-        long mTotalCurrent = 0;
-        long mTotalTotal = 0;
-        int mTitleCount = 0;
-        String mPackageName;  // App package name
-        String mDescription;
-        String[] mTitles = new String[2]; // download titles.
-        String mPausedText = null;
-
-        /*
-         * Add a second download to this notification item.
-         */
-        void addItem(String title, long currentBytes, long totalBytes) {
-            mTotalCurrent += currentBytes;
-            if (totalBytes <= 0 || mTotalTotal == -1) {
-                mTotalTotal = -1;
-            } else {
-                mTotalTotal += totalBytes;
-            }
-            if (mTitleCount < 2) {
-                mTitles[mTitleCount] = title;
-            }
-            mTitleCount++;
-        }
-    }
+    Context mContext;
+    HashMap<String, NotificationItem> mNotifications;
+    private SystemFacade mSystemFacade;
 
 
     /**
@@ -277,6 +243,38 @@ class DownloadNotification {
         sb.append(progress);
         sb.append('%');
         return sb.toString();
+    }
+
+    /**
+     * This inner class is used to collate downloads that are owned by
+     * the same application. This is so that only one notification line
+     * item is used for all downloads of a given application.
+     */
+    static class NotificationItem {
+        int mId;  // This first db _id for the download for the app
+        long mTotalCurrent = 0;
+        long mTotalTotal = 0;
+        int mTitleCount = 0;
+        String mPackageName;  // App package name
+        String mDescription;
+        String[] mTitles = new String[2]; // download titles.
+        String mPausedText = null;
+
+        /*
+         * Add a second download to this notification item.
+         */
+        void addItem(String title, long currentBytes, long totalBytes) {
+            mTotalCurrent += currentBytes;
+            if (totalBytes <= 0 || mTotalTotal == -1) {
+                mTotalTotal = -1;
+            } else {
+                mTotalTotal += totalBytes;
+            }
+            if (mTitleCount < 2) {
+                mTitles[mTitleCount] = title;
+            }
+            mTitleCount++;
+        }
     }
 
 }

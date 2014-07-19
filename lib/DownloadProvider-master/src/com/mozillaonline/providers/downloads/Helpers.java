@@ -40,13 +40,12 @@ import java.util.regex.Pattern;
  */
 public class Helpers {
 
-    public static Random sRandom = new Random(SystemClock.uptimeMillis());
-
     /**
      * Regex used to parse content-disposition headers
      */
     private static final Pattern CONTENT_DISPOSITION_PATTERN = Pattern
             .compile("attachment;\\s*filename\\s*=\\s*\"([^\"]*)\"");
+    public static Random sRandom = new Random(SystemClock.uptimeMillis());
 
     private Helpers() {
     }
@@ -68,22 +67,6 @@ public class Helpers {
             // the header
         }
         return null;
-    }
-
-    /**
-     * Exception thrown from methods called by generateSaveFile() for any fatal
-     * error.
-     */
-    public static class GenerateSaveFileError extends Exception {
-        private static final long serialVersionUID = 4293675292408637112L;
-
-        int mStatus;
-        String mMessage;
-
-        public GenerateSaveFileError(int status, String message) {
-            mStatus = status;
-            mMessage = message;
-        }
     }
 
     /**
@@ -452,7 +435,7 @@ public class Helpers {
         }
         filename = filename + Constants.FILENAME_SEQUENCE_SEPARATOR;
         /*
-		 * This number is used to generate partially randomized filenames to
+         * This number is used to generate partially randomized filenames to
 		 * avoid collisions. It starts at 1. The next 9 iterations increment it
 		 * by 1 at a time (up to 10). The next 9 iterations increment it by 1 to
 		 * 10 (random) at a time. The next 9 iterations increment it by 1 to 100
@@ -587,6 +570,39 @@ public class Helpers {
     }
 
     /**
+     * Delete the given file from device and delete its row from the downloads
+     * database.
+     */
+	/* package */
+    static void deleteFile(ContentResolver resolver, long id,
+                           String path, String mimeType) {
+        try {
+            File file = new File(path);
+            file.delete();
+        } catch (Exception e) {
+            Log.w(Constants.TAG, "file: '" + path + "' couldn't be deleted", e);
+        }
+        resolver.delete(Downloads.ALL_DOWNLOADS_CONTENT_URI, Downloads._ID
+                + " = ? ", new String[]{String.valueOf(id)});
+    }
+
+    /**
+     * Exception thrown from methods called by generateSaveFile() for any fatal
+     * error.
+     */
+    public static class GenerateSaveFileError extends Exception {
+        private static final long serialVersionUID = 4293675292408637112L;
+
+        int mStatus;
+        String mMessage;
+
+        public GenerateSaveFileError(int status, String message) {
+            mStatus = status;
+            mMessage = message;
+        }
+    }
+
+    /**
      * A simple lexer that recognizes the words of our restricted subset of SQL
      * where clauses
      */
@@ -604,9 +620,9 @@ public class Helpers {
 
         private final String mSelection;
         private final Set<String> mAllowedColumns;
+        private final char[] mChars;
         private int mOffset = 0;
         private int mCurrentToken = TOKEN_START;
-        private final char[] mChars;
 
         public Lexer(String selection, Set<String> allowedColumns) {
             mSelection = selection;
@@ -614,6 +630,15 @@ public class Helpers {
             mChars = new char[mSelection.length()];
             mSelection.getChars(0, mChars.length, mChars, 0);
             advance();
+        }
+
+        private static final boolean isIdentifierStart(char c) {
+            return c == '_' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+        }
+
+        private static final boolean isIdentifierChar(char c) {
+            return c == '_' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
+                    || (c >= '0' && c <= '9');
         }
 
         public int currentToken() {
@@ -762,31 +787,5 @@ public class Helpers {
             throw new IllegalArgumentException("illegal character: "
                     + chars[mOffset]);
         }
-
-        private static final boolean isIdentifierStart(char c) {
-            return c == '_' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-        }
-
-        private static final boolean isIdentifierChar(char c) {
-            return c == '_' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')
-                    || (c >= '0' && c <= '9');
-        }
-    }
-
-    /**
-     * Delete the given file from device and delete its row from the downloads
-     * database.
-     */
-	/* package */
-    static void deleteFile(ContentResolver resolver, long id,
-                           String path, String mimeType) {
-        try {
-            File file = new File(path);
-            file.delete();
-        } catch (Exception e) {
-            Log.w(Constants.TAG, "file: '" + path + "' couldn't be deleted", e);
-        }
-        resolver.delete(Downloads.ALL_DOWNLOADS_CONTENT_URI, Downloads._ID
-                + " = ? ", new String[]{String.valueOf(id)});
     }
 }

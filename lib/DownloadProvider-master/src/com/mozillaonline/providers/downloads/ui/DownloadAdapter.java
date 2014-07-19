@@ -43,13 +43,6 @@ import java.util.List;
  * List adapter for Cursors returned by {@link DownloadManager}.
  */
 public class DownloadAdapter extends CursorAdapter {
-    private Context mContext;
-    private Cursor mCursor;
-    private DownloadSelectListener mDownloadSelectionListener;
-    private Resources mResources;
-    private DateFormat mDateFormat;
-    private DateFormat mTimeFormat;
-
     final private int mTitleColumnId;
     final private int mStatusColumnId;
     final private int mReasonColumnId;
@@ -58,6 +51,12 @@ public class DownloadAdapter extends CursorAdapter {
     final private int mMediaTypeColumnId;
     final private int mDateColumnId;
     final private int mIdColumnId;
+    private Context mContext;
+    private Cursor mCursor;
+    private DownloadSelectListener mDownloadSelectionListener;
+    private Resources mResources;
+    private DateFormat mDateFormat;
+    private DateFormat mTimeFormat;
 
     public DownloadAdapter(Context context, Cursor cursor,
                            DownloadSelectListener selectionListener) {

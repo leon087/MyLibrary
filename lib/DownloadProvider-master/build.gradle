@@ -40,7 +40,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':lib:MyUtil')
-    compile project(':lib:MyCommon')
 }
 
 android {

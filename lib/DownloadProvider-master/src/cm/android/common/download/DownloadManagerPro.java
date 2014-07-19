@@ -17,273 +17,272 @@ import com.mozillaonline.providers.downloads.DownloadService;
 import java.util.Set;
 
 public class DownloadManagerPro {
-	private DownloadManager downloadManager;
-	private Context context;
-	private DownloadReceiver downloadReceiver;
-	private volatile boolean isInit = false;
+    private DownloadManager downloadManager;
+    private Context context;
+    private DownloadReceiver downloadReceiver;
+    private volatile boolean isInit = false;
+    private Set<OnCompleteListener> onCompleteListeners = ObjectUtil
+            .newHashSet();
+    private final OnCompleteListener listener = new OnCompleteListener() {
+        @Override
+        public void onDownloadSuccess(Query downloadQuery) {
+            synchronized (onCompleteListeners) {
+                for (OnCompleteListener onCompleteListener : onCompleteListeners) {
+                    onCompleteListener.onDownloadSuccess(downloadQuery);
+                }
+            }
+        }
 
-	public void init(Context context) {
-		if (isInit) {
-			return;
-		}
-		this.context = context;
-		downloadManager = new DownloadManager(context.getContentResolver(),
-				context.getPackageName());
-		downloadManager.setAccessAllDownloads(false);
-		startDownloadService(context);
-		downloadReceiver = new DownloadReceiver(context);
-		downloadReceiver.registerReceiver();
+        @Override
+        public void onDownloadFailure(Query downloadQuery) {
+            synchronized (onCompleteListeners) {
+                for (OnCompleteListener onCompleteListener : onCompleteListeners) {
+                    onCompleteListener.onDownloadFailure(downloadQuery);
+                }
+            }
+        }
+    };
 
-		isInit = true;
-	}
+    public static boolean isDownloadSuccess(int status) {
+        if (status == DownloadManager.STATUS_SUCCESSFUL) {
+            return true;
+        }
+        return false;
+    }
 
-	public void deInit() {
-		if (!isInit) {
-			return;
-		}
-		isInit = false;
+    public static boolean isDownloadCompleted(int status) {
+        if (status == DownloadManager.STATUS_FAILED
+                || isDownloadSuccess(status)) {
+            return true;
+        }
+        return false;
+    }
 
-		clearListener();
-		stopDownloadService(context);
-		downloadReceiver.unRegisterReceiver();
-		context = null;
-	}
+    public void init(Context context) {
+        if (isInit) {
+            return;
+        }
+        this.context = context;
+        downloadManager = new DownloadManager(context.getContentResolver(),
+                context.getPackageName());
+        downloadManager.setAccessAllDownloads(false);
+        startDownloadService(context);
+        downloadReceiver = new DownloadReceiver(context);
+        downloadReceiver.registerReceiver();
 
-	private void startDownloadService(Context context) {
-		Intent intent = new Intent();
-		intent.setClass(context, DownloadService.class);
-		context.startService(intent);
-	}
+        isInit = true;
+    }
 
-	private void stopDownloadService(Context context) {
-		Intent intent = new Intent();
-		intent.setClass(context, DownloadService.class);
-		context.stopService(intent);
-	}
+    public void deInit() {
+        if (!isInit) {
+            return;
+        }
+        isInit = false;
 
-	public DownloadManager.Request getDefaultRequest(String url) {
-		Uri srcUri = Uri.parse(url);
-		DownloadManager.Request request = new Request(srcUri);
-		request.addRequestHeader("User-Agent", "Android"); // 添加一个Http请求报头，
+        clearListener();
+        stopDownloadService(context);
+        downloadReceiver.unRegisterReceiver();
+        context = null;
+    }
 
-		// 设置允许使用的网络类型，这一步Android2.3做的很好，目前有两种定义分别为NETWORK_MOBILE和NETWORK_WIFI我们可以选择使用移动网络或Wifi方式来下载。
-		request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE
-				| DownloadManager.Request.NETWORK_WIFI);
+    private void startDownloadService(Context context) {
+        Intent intent = new Intent();
+        intent.setClass(context, DownloadService.class);
+        context.startService(intent);
+    }
 
-		// 对于下载，考虑到流量费用，这里是否允许使用漫游。
-		request.setAllowedOverRoaming(false);
+    private void stopDownloadService(Context context) {
+        Intent intent = new Intent();
+        intent.setClass(context, DownloadService.class);
+        context.stopService(intent);
+    }
 
-		request.setShowRunningNotification(false); // 是否显示下载进度的提示
-		// request.setTitle("Downloading"); //设置notification的标题
-		// 设置一个描述信息，主要是最终显示的notification提示，可以随便写个自己区别
-		// request.setDescription("Downloading");
+    public DownloadManager.Request getDefaultRequest(String url) {
+        Uri srcUri = Uri.parse(url);
+        DownloadManager.Request request = new Request(srcUri);
+        request.addRequestHeader("User-Agent", "Android"); // 添加一个Http请求报头，
 
-		// 设置外部存储的公共目录，一般通过getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)方法获取。
-		// request.setDestinationInExternalPublicDir(
-		// Environment.DIRECTORY_DOWNLOADS, "/");
-		// 设置目标存储在外部目录，一般位置可以用 getExternalFilesDir()方法获取。
-		request.setDestinationInExternalFilesDir(context,
-				Environment.DIRECTORY_DOWNLOADS, "/");
+        // 设置允许使用的网络类型，这一步Android2.3做的很好，目前有两种定义分别为NETWORK_MOBILE和NETWORK_WIFI我们可以选择使用移动网络或Wifi方式来下载。
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE
+                | DownloadManager.Request.NETWORK_WIFI);
 
-		// String filename = url.substring(url.lastIndexOf("/") + 1);
-		// filename =path.getPath() + "/" + filename;
-		// if (isFileExist(path, filename)) {
-		// // StartapkinstallIntesnt();
-		// return;
-		// }
-		// Uri dpath = Uri.fromFile(new File(path.getPath() + "/" + filename));
-		// 设置下载后文件路径
-		// request.setDestinationUri(dpath);
+        // 对于下载，考虑到流量费用，这里是否允许使用漫游。
+        request.setAllowedOverRoaming(false);
 
-		// 设置mime类型，这里看服务器配置，一般国家化的都为utf-8编码。
-		// request.setMimeType(String mimeType)
+        request.setShowRunningNotification(true); // 是否显示下载进度的提示
+        // request.setTitle("Downloading"); //设置notification的标题
+        // 设置一个描述信息，主要是最终显示的notification提示，可以随便写个自己区别
+        // request.setDescription("Downloading");
 
-		// request.setVisibleInDownloadsUi(true); //设置下载管理类在处理过程中的界面是否显示
-		return request;
+        // 设置外部存储的公共目录，一般通过getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)方法获取。
+        // request.setDestinationInExternalPublicDir(
+        // Environment.DIRECTORY_DOWNLOADS, "/");
+        // 设置目标存储在外部目录，一般位置可以用 getExternalFilesDir()方法获取。
+        request.setDestinationInExternalFilesDir(context,
+                Environment.DIRECTORY_DOWNLOADS, "/");
 
-	}
+        // String filename = url.substring(url.lastIndexOf("/") + 1);
+        // filename =path.getPath() + "/" + filename;
+        // if (isFileExist(path, filename)) {
+        // // StartapkinstallIntesnt();
+        // return;
+        // }
+        // Uri dpath = Uri.fromFile(new File(path.getPath() + "/" + filename));
+        // 设置下载后文件路径
+        // request.setDestinationUri(dpath);
 
-	public long start(String url) {
-		DownloadManager.Request request = getDefaultRequest(url);
-		return start(request);
-	}
+        // 设置mime类型，这里看服务器配置，一般国家化的都为utf-8编码。
+        // request.setMimeType(String mimeType)
 
-	public long start(DownloadManager.Request request) {
-		// request.setVisibleInDownloadsUi(true); //设置下载管理类在处理过程中的界面是否显示
-		long enqueue = downloadManager.enqueue(request);
-		return enqueue;
-	}
+        // request.setVisibleInDownloadsUi(true); //设置下载管理类在处理过程中的界面是否显示
+        return request;
 
-	/**
-	 * 暂停
-	 * 
-	 * @param ids
-	 */
-	public void pause(long... ids) {
-		downloadManager.pauseDownload(ids);
-	}
+    }
 
-	/**
-	 * 继续
-	 * 
-	 * @param ids
-	 */
-	public void resume(long... ids) {
-		downloadManager.resumeDownload(ids);
-	}
+    public long start(String url) {
+        DownloadManager.Request request = getDefaultRequest(url);
+        return start(request);
+    }
 
-	/**
-	 * 删除
-	 * 
-	 * @param ids
-	 */
-	public void delete(long... ids) {
-		downloadManager.remove(ids);
-	}
+    public long start(DownloadManager.Request request) {
+        // request.setVisibleInDownloadsUi(true); //设置下载管理类在处理过程中的界面是否显示
+        long enqueue = downloadManager.enqueue(request);
+        return enqueue;
+    }
 
-	/**
-	 * 重新下载，下载完成后才能调用（成功或失败）
-	 * 
-	 * @param ids
-	 */
-	public void restart(long... ids) {
-		downloadManager.restartDownload(ids);
-	}
+    /**
+     * 暂停
+     *
+     * @param ids
+     */
+    public void pause(long... ids) {
+        downloadManager.pauseDownload(ids);
+    }
 
-	public int getStatus(long downloadId) {
-		int status = 0;
-		DownloadManager.Query query = new DownloadManager.Query()
-				.setFilterById(downloadId);
-		Cursor c = null;
-		try {
-			c = downloadManager.query(query);
-			if (c != null && c.moveToFirst()) {
-				status = c.getInt(c
-						.getColumnIndex(DownloadManager.COLUMN_STATUS));
-			}
-		} finally {
-			if (c != null) {
-				c.close();
-			}
-		}
-		return status;
-	}
+    /**
+     * 继续
+     *
+     * @param ids
+     */
+    public void resume(long... ids) {
+        downloadManager.resumeDownload(ids);
+    }
 
-	public Query query(long id) {
-		Query myDownloadQuery = new Query();
-		myDownloadQuery.setFilterById(id);
-		// Cursor cursor = downloadManager.query(myDownloadQuery);
-		return myDownloadQuery;
-	}
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    public void delete(long... ids) {
+        downloadManager.remove(ids);
+    }
 
-	public Cursor query(Query query) {
-		return downloadManager.query(query);
-	}
+    /**
+     * 重新下载，下载完成后才能调用（成功或失败）
+     *
+     * @param ids
+     */
+    public void restart(long... ids) {
+        downloadManager.restartDownload(ids);
+    }
 
-	private class DownloadReceiver extends BaseBroadcastReceiver {
+    ;
 
-		public DownloadReceiver(Context context) {
-			super(context);
-		}
+    public int getStatus(long downloadId) {
+        int status = 0;
+        DownloadManager.Query query = new DownloadManager.Query()
+                .setFilterById(downloadId);
+        Cursor c = null;
+        try {
+            c = downloadManager.query(query);
+            if (c != null && c.moveToFirst()) {
+                status = c.getInt(c
+                        .getColumnIndex(DownloadManager.COLUMN_STATUS));
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+        return status;
+    }
 
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			long reference = intent.getLongExtra(
-					DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-			Query myDownloadQuery = query(reference);
-			Cursor cursor = downloadManager.query(myDownloadQuery);
-			if (cursor.moveToFirst()) {
-				int mStatusColumnId = cursor
-						.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS);
+    public Query query(long id) {
+        Query myDownloadQuery = new Query();
+        myDownloadQuery.setFilterById(id);
+        // Cursor cursor = downloadManager.query(myDownloadQuery);
+        return myDownloadQuery;
+    }
 
-				int status = cursor.getInt(mStatusColumnId);
-				MyLog.i("status = " + status);
-				if (status == DownloadManager.STATUS_SUCCESSFUL) {
-					listener.onDownloadSuccess(myDownloadQuery);
-				} else if (status == DownloadManager.STATUS_FAILED) {
-					listener.onDownloadFailure(myDownloadQuery);
-				} else {
+    public Cursor query(Query query) {
+        return downloadManager.query(query);
+    }
 
-				}
-				// int fileNameIdx = myDownload
-				// .getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
-				// int fileUriIdx = cursor
-				// .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
-				// String fileUri = cursor.getString(fileUriIdx);
-				// 判断下载成功/失败
-			}
-			cursor.close();
-		}
+    public void addOnCompleteListener(OnCompleteListener onCompleteListener) {
+        synchronized (onCompleteListeners) {
+            onCompleteListeners.add(onCompleteListener);
+        }
+    }
 
-		@Override
-		protected IntentFilter createIntentFilter() {
-			IntentFilter filter = super.createIntentFilter();
-			// 监听下载完成（包括成功或失败）
-			filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-			return filter;
-		}
-	}
+    public void removeOnCompleteListener(OnCompleteListener onCompleteListener) {
+        synchronized (onCompleteListeners) {
+            onCompleteListeners.remove(onCompleteListener);
+        }
+    }
 
-	;
+    private void clearListener() {
+        synchronized (onCompleteListeners) {
+            onCompleteListeners.clear();
+        }
+    }
 
-	public static interface OnCompleteListener {
-		void onDownloadSuccess(Query downloadQuery);
+    public static interface OnCompleteListener {
+        void onDownloadSuccess(Query downloadQuery);
 
-		void onDownloadFailure(Query downloadQuery);
-	}
+        void onDownloadFailure(Query downloadQuery);
+    }
 
-	private Set<OnCompleteListener> onCompleteListeners = ObjectUtil
-			.newHashSet();
-	private final OnCompleteListener listener = new OnCompleteListener() {
-		@Override
-		public void onDownloadSuccess(Query downloadQuery) {
-			synchronized (onCompleteListeners) {
-				for (OnCompleteListener onCompleteListener : onCompleteListeners) {
-					onCompleteListener.onDownloadSuccess(downloadQuery);
-				}
-			}
-		}
+    private class DownloadReceiver extends BaseBroadcastReceiver {
 
-		@Override
-		public void onDownloadFailure(Query downloadQuery) {
-			synchronized (onCompleteListeners) {
-				for (OnCompleteListener onCompleteListener : onCompleteListeners) {
-					onCompleteListener.onDownloadFailure(downloadQuery);
-				}
-			}
-		}
-	};
+        public DownloadReceiver(Context context) {
+            super(context);
+        }
 
-	public void addOnCompleteListener(OnCompleteListener onCompleteListener) {
-		synchronized (onCompleteListeners) {
-			onCompleteListeners.add(onCompleteListener);
-		}
-	}
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long reference = intent.getLongExtra(
+                    DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            Query myDownloadQuery = query(reference);
+            Cursor cursor = downloadManager.query(myDownloadQuery);
+            if (cursor.moveToFirst()) {
+                int mStatusColumnId = cursor
+                        .getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS);
 
-	public void removeOnCompleteListener(OnCompleteListener onCompleteListener) {
-		synchronized (onCompleteListeners) {
-			onCompleteListeners.remove(onCompleteListener);
-		}
-	}
+                int status = cursor.getInt(mStatusColumnId);
+                MyLog.i("status = " + status);
+                if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                    listener.onDownloadSuccess(myDownloadQuery);
+                } else if (status == DownloadManager.STATUS_FAILED) {
+                    listener.onDownloadFailure(myDownloadQuery);
+                } else {
 
-	private void clearListener() {
-		synchronized (onCompleteListeners) {
-			onCompleteListeners.clear();
-		}
-	}
+                }
+                // int fileNameIdx = myDownload
+                // .getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
+                // int fileUriIdx = cursor
+                // .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
+                // String fileUri = cursor.getString(fileUriIdx);
+                // 判断下载成功/失败
+            }
+            cursor.close();
+        }
 
-	public static boolean isDownloadSuccess(int status) {
-		if (status == DownloadManager.STATUS_SUCCESSFUL) {
-			return true;
-		}
-		return false;
-	}
-
-	public static boolean isDownloadCompleted(int status) {
-		if (status == DownloadManager.STATUS_FAILED
-				|| isDownloadSuccess(status)) {
-			return true;
-		}
-		return false;
-	}
+        @Override
+        protected IntentFilter createIntentFilter() {
+            IntentFilter filter = super.createIntentFilter();
+            // 监听下载完成（包括成功或失败）
+            filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+            return filter;
+        }
+    }
 }

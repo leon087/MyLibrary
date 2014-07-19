@@ -51,32 +51,25 @@ import java.util.*;
  * downloads UI.
  */
 public class DownloadManager {
-    @SuppressWarnings("unused")
-    private static final String TAG = "DownloadManager";
-
     /**
      * An identifier for a particular download, unique across the system.
      * Clients use this ID to make subsequent calls related to the download.
      */
     public final static String COLUMN_ID = BaseColumns._ID;
-
     /**
      * The client-supplied title for this download. This will be displayed in
      * system notifications. Defaults to the empty string.
      */
     public final static String COLUMN_TITLE = "title";
-
     /**
      * The client-supplied description of this download. This will be displayed
      * in system notifications. Defaults to the empty string.
      */
     public final static String COLUMN_DESCRIPTION = "description";
-
     /**
      * URI to be downloaded.
      */
     public final static String COLUMN_URI = "uri";
-
     /**
      * Internet Media Type of the downloaded file. If no value is provided upon
      * creation, this will initially be null and will be filled in based on the
@@ -86,13 +79,11 @@ public class DownloadManager {
      * Media Types</a>
      */
     public final static String COLUMN_MEDIA_TYPE = "media_type";
-
     /**
      * Total size of the download in bytes. This will initially be -1 and will
      * be filled in once the download starts.
      */
     public final static String COLUMN_TOTAL_SIZE_BYTES = "total_size";
-
     /**
      * Uri where downloaded file will be stored. If a destination is supplied by
      * client, that URI will be used here. Otherwise, the value will initially
@@ -100,12 +91,10 @@ public class DownloadManager {
      * started.
      */
     public final static String COLUMN_LOCAL_URI = "local_uri";
-
     /**
      * Current status of the download, as one of the STATUS_* constants.
      */
     public final static String COLUMN_STATUS = "status";
-
     /**
      * Provides more detail on the status of the download. Its meaning depends
      * on the value of {@link #COLUMN_STATUS}.
@@ -126,53 +115,54 @@ public class DownloadManager {
      * 2616 status codes</a>
      */
     public final static String COLUMN_REASON = "reason";
-
     /**
      * Number of bytes download so far.
      */
     public final static String COLUMN_BYTES_DOWNLOADED_SO_FAR = "bytes_so_far";
-
     /**
      * Timestamp when the download was last modified, in
      * {@link System#currentTimeMillis System.currentTimeMillis()} (wall clock
      * time in UTC).
      */
     public final static String COLUMN_LAST_MODIFIED_TIMESTAMP = "last_modified_timestamp";
-
+    // this array must contain all public columns
+    private static final String[] COLUMNS = new String[]{COLUMN_ID,
+            COLUMN_TITLE, COLUMN_DESCRIPTION, COLUMN_URI, COLUMN_MEDIA_TYPE,
+            COLUMN_TOTAL_SIZE_BYTES, COLUMN_LOCAL_URI, COLUMN_STATUS,
+            COLUMN_REASON, COLUMN_BYTES_DOWNLOADED_SO_FAR,
+            COLUMN_LAST_MODIFIED_TIMESTAMP};
+    private static final Set<String> LONG_COLUMNS = new HashSet<String>(
+            Arrays.asList(COLUMN_ID, COLUMN_TOTAL_SIZE_BYTES, COLUMN_STATUS,
+                    COLUMN_REASON, COLUMN_BYTES_DOWNLOADED_SO_FAR,
+                    COLUMN_LAST_MODIFIED_TIMESTAMP));
     /**
      * Value of {@link #COLUMN_STATUS} when the download is waiting to start.
      */
     public final static int STATUS_PENDING = 1 << 0;
-
     /**
      * Value of {@link #COLUMN_STATUS} when the download is currently running.
      */
     public final static int STATUS_RUNNING = 1 << 1;
-
     /**
      * Value of {@link #COLUMN_STATUS} when the download is waiting to retry or
      * resume.
      */
     public final static int STATUS_PAUSED = 1 << 2;
-
     /**
      * Value of {@link #COLUMN_STATUS} when the download has successfully
      * completed.
      */
     public final static int STATUS_SUCCESSFUL = 1 << 3;
-
     /**
      * Value of {@link #COLUMN_STATUS} when the download has failed (and will
      * not be retried).
      */
     public final static int STATUS_FAILED = 1 << 4;
-
     /**
      * Value of COLUMN_ERROR_CODE when the download has completed with an error
      * that doesn't fit under any other error code.
      */
     public final static int ERROR_UNKNOWN = 1000;
-
     /**
      * Value of {@link #COLUMN_REASON} when a storage issue arises which doesn't
      * fit under any other error code. Use the more specific
@@ -180,106 +170,85 @@ public class DownloadManager {
      * when appropriate.
      */
     public final static int ERROR_FILE_ERROR = 1001;
-
     /**
      * Value of {@link #COLUMN_REASON} when an HTTP code was received that
      * download manager can't handle.
      */
     public final static int ERROR_UNHANDLED_HTTP_CODE = 1002;
-
     /**
      * Value of {@link #COLUMN_REASON} when an error receiving or processing
      * data occurred at the HTTP level.
      */
     public final static int ERROR_HTTP_DATA_ERROR = 1004;
-
     /**
      * Value of {@link #COLUMN_REASON} when there were too many redirects.
      */
     public final static int ERROR_TOO_MANY_REDIRECTS = 1005;
-
     /**
      * Value of {@link #COLUMN_REASON} when there was insufficient storage
      * space. Typically, this is because the SD card is full.
      */
     public final static int ERROR_INSUFFICIENT_SPACE = 1006;
-
     /**
      * Value of {@link #COLUMN_REASON} when no external storage device was
      * found. Typically, this is because the SD card is not mounted.
      */
     public final static int ERROR_DEVICE_NOT_FOUND = 1007;
-
     /**
      * Value of {@link #COLUMN_REASON} when some possibly transient error
      * occurred but we can't resume the download.
      */
     public final static int ERROR_CANNOT_RESUME = 1008;
-
     /**
      * Value of {@link #COLUMN_REASON} when the requested destination file
      * already exists (the download manager will not overwrite an existing
      * file).
      */
     public final static int ERROR_FILE_ALREADY_EXISTS = 1009;
-
     /**
      * Value of {@link #COLUMN_REASON} when the download is paused because some
      * network error occurred and the download manager is waiting before
      * retrying the request.
      */
     public final static int PAUSED_WAITING_TO_RETRY = 1;
-
     /**
      * Value of {@link #COLUMN_REASON} when the download is waiting for network
      * connectivity to proceed.
      */
     public final static int PAUSED_WAITING_FOR_NETWORK = 2;
-
     /**
      * Value of {@link #COLUMN_REASON} when the download exceeds a size limit
      * for downloads over the mobile network and the download manager is waiting
      * for a Wi-Fi connection to proceed.
      */
     public final static int PAUSED_QUEUED_FOR_WIFI = 3;
-
     /**
      * Value of {@link #COLUMN_REASON} when the download is paused for some
      * other reason.
      */
     public final static int PAUSED_UNKNOWN = 4;
-
     /**
      * Broadcast intent action sent by the download manager when a download
      * completes.
      */
     public final static String ACTION_DOWNLOAD_COMPLETE = "android.intent.action.DOWNLOAD_COMPLETE";
-
     /**
      * Broadcast intent action sent by the download manager when the user clicks
      * on a running download, either from a system notification or from the
      * downloads UI.
      */
     public final static String ACTION_NOTIFICATION_CLICKED = "android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED";
-
     /**
      * Intent action to launch an activity to display all downloads.
      */
     public final static String ACTION_VIEW_DOWNLOADS = "android.intent.action.VIEW_DOWNLOADS";
-
     /**
      * Intent extra included with {@link #ACTION_DOWNLOAD_COMPLETE} intents,
      * indicating the ID (as a long) of the download that just completed.
      */
     public static final String EXTRA_DOWNLOAD_ID = "extra_download_id";
-
-    // this array must contain all public columns
-    private static final String[] COLUMNS = new String[]{COLUMN_ID,
-            COLUMN_TITLE, COLUMN_DESCRIPTION, COLUMN_URI, COLUMN_MEDIA_TYPE,
-            COLUMN_TOTAL_SIZE_BYTES, COLUMN_LOCAL_URI, COLUMN_STATUS,
-            COLUMN_REASON, COLUMN_BYTES_DOWNLOADED_SO_FAR,
-            COLUMN_LAST_MODIFIED_TIMESTAMP};
-
+    @SuppressWarnings("unused")
+    private static final String TAG = "DownloadManager";
     // columns to request from DownloadProvider
     private static final String[] UNDERLYING_COLUMNS = new String[]{
             Downloads._ID, Downloads.COLUMN_TITLE,
@@ -288,11 +257,282 @@ public class DownloadManager {
             Downloads.COLUMN_STATUS, Downloads.COLUMN_CURRENT_BYTES,
             Downloads.COLUMN_LAST_MODIFICATION, Downloads.COLUMN_DESTINATION,
             Downloads.COLUMN_FILE_NAME_HINT, Downloads._DATA,};
+    private ContentResolver mResolver;
+    private String mPackageName;
+    private Uri mBaseUri = Downloads.CONTENT_URI;
+    /**
+     * @hide
+     */
+    public DownloadManager(ContentResolver resolver, String packageName) {
+        mResolver = resolver;
+        mPackageName = packageName;
+    }
 
-    private static final Set<String> LONG_COLUMNS = new HashSet<String>(
-            Arrays.asList(COLUMN_ID, COLUMN_TOTAL_SIZE_BYTES, COLUMN_STATUS,
-                    COLUMN_REASON, COLUMN_BYTES_DOWNLOADED_SO_FAR,
-                    COLUMN_LAST_MODIFIED_TIMESTAMP));
+    /**
+     * Get a parameterized SQL WHERE clause to select a bunch of IDs.
+     */
+    static String getWhereClauseForIds(long[] ids) {
+        StringBuilder whereClause = new StringBuilder();
+        whereClause.append("(");
+        for (int i = 0; i < ids.length; i++) {
+            if (i > 0) {
+                whereClause.append("OR ");
+            }
+            whereClause.append(Downloads._ID);
+            whereClause.append(" = ? ");
+        }
+        whereClause.append(")");
+        return whereClause.toString();
+    }
+
+    /**
+     * Get the selection args for a clause returned by
+     * {@link #getWhereClauseForIds(long[])}.
+     */
+    static String[] getWhereArgsForIds(long[] ids) {
+        String[] whereArgs = new String[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            whereArgs[i] = Long.toString(ids[i]);
+        }
+        return whereArgs;
+    }
+
+    /**
+     * Makes this object access the download provider through /all_downloads
+     * URIs rather than /my_downloads URIs, for clients that have permission to
+     * do so.
+     *
+     * @hide
+     */
+    public void setAccessAllDownloads(boolean accessAllDownloads) {
+        if (accessAllDownloads) {
+            mBaseUri = Downloads.ALL_DOWNLOADS_CONTENT_URI;
+        } else {
+            mBaseUri = Downloads.CONTENT_URI;
+        }
+    }
+
+    /**
+     * Enqueue a new download. The download will start automatically once the
+     * download manager is ready to execute it and connectivity is available.
+     *
+     * @param request the parameters specifying this download
+     * @return an ID for the download, unique across the system. This ID is used
+     * to make future calls related to this download.
+     */
+    public long enqueue(Request request) {
+        ContentValues values = request.toContentValues(mPackageName);
+        Uri downloadUri = mResolver.insert(Downloads.CONTENT_URI, values);
+        long id = Long.parseLong(downloadUri.getLastPathSegment());
+        return id;
+    }
+
+    /**
+     * Marks the specified download as 'to be deleted'. This is done when a
+     * completed download is to be removed but the row was stored without enough
+     * info to delete the corresponding metadata from Mediaprovider database.
+     * Actual cleanup of this row is done in DownloadService.
+     *
+     * @param ids the IDs of the downloads to be marked 'deleted'
+     * @return the number of downloads actually updated
+     * @hide
+     */
+    public int markRowDeleted(long... ids) {
+        if (ids == null || ids.length == 0) {
+            // called with nothing to remove!
+            throw new IllegalArgumentException(
+                    "input param 'ids' can't be null");
+        }
+        ContentValues values = new ContentValues();
+        values.put(Downloads.COLUMN_DELETED, 1);
+        // if only one id is passed in, then include it in the uri itself.
+        // this will eliminate a full database scan in the download service.
+        if (ids.length == 1) {
+            return mResolver.update(
+                    ContentUris.withAppendedId(mBaseUri, ids[0]), values, null,
+                    null);
+        }
+        return mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
+                getWhereArgsForIds(ids));
+
+        // if (ids == null || ids.length == 0) {
+        // // called with nothing to remove!
+        // throw new IllegalArgumentException(
+        // "input param 'ids' can't be null");
+        // }
+        // ContentValues values = new ContentValues();
+        // values.put(Downloads.COLUMN_DELETED, 1);
+        // return mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
+        // getWhereArgsForIds(ids));
+    }
+
+    // /**
+    // * Cancel downloads and remove them from the download manager. Each
+    // download
+    // * will be stopped if it was running, and it will no longer be accessible
+    // * through the download manager. If a file was already downloaded to
+    // * external storage, it will not be deleted.
+    // *
+    // * @param ids
+    // * the IDs of the downloads to remove
+    // * @return the number of downloads actually removed
+    // */
+    // public int remove(long... ids) {
+    // if (ids == null || ids.length == 0) {
+    // // called with nothing to remove!
+    // throw new IllegalArgumentException(
+    // "input param 'ids' can't be null");
+    // }
+    // return mResolver.delete(mBaseUri, getWhereClauseForIds(ids),
+    // getWhereArgsForIds(ids));
+    // }
+
+    /**
+     * Cancel downloads and remove them from the download manager. Each download
+     * will be stopped if it was running, and it will no longer be accessible
+     * through the download manager. If there is a downloaded file, partial or
+     * complete, it is deleted.
+     *
+     * @param ids the IDs of the downloads to remove
+     * @return the number of downloads actually removed
+     */
+    public int remove(long... ids) {
+        return markRowDeleted(ids);
+    }
+
+    /**
+     * Query the download manager about downloads that have been requested.
+     *
+     * @param query parameters specifying filters for this query
+     * @return a Cursor over the result set of downloads, with columns
+     * consisting of all the COLUMN_* constants.
+     */
+    public Cursor query(Query query) {
+        Cursor underlyingCursor = query.runQuery(mResolver, UNDERLYING_COLUMNS,
+                mBaseUri);
+        if (underlyingCursor == null) {
+            return null;
+        }
+        return new CursorTranslator(underlyingCursor, mBaseUri);
+    }
+
+    /**
+     * Open a downloaded file for reading. The download must have completed.
+     *
+     * @param id the ID of the download
+     * @return a read-only {@link ParcelFileDescriptor}
+     * @throws FileNotFoundException if the destination file does not already exist
+     */
+    public ParcelFileDescriptor openDownloadedFile(long id)
+            throws FileNotFoundException {
+        return mResolver.openFileDescriptor(getDownloadUri(id), "r");
+    }
+
+    /**
+     * Pause the given downloads, which must be running. This method will only
+     * work when called from within the download manager's process.
+     *
+     * @param ids the IDs of the downloads
+     * @hide
+     */
+    public void pauseDownload(long... ids) {
+        Cursor cursor = query(new Query().setFilterById(ids));
+        try {
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+                    .moveToNext()) {
+                int status = cursor
+                        .getInt(cursor.getColumnIndex(COLUMN_STATUS));
+                if (status != STATUS_RUNNING && status != STATUS_PENDING) {
+                    throw new IllegalArgumentException(
+                            "Can only pause a running download: "
+                                    + cursor.getLong(cursor
+                                    .getColumnIndex(COLUMN_ID)));
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(Downloads.COLUMN_CONTROL, Downloads.CONTROL_PAUSED);
+        values.put(Downloads.COLUMN_NO_INTEGRITY, 1);
+        mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
+                getWhereArgsForIds(ids));
+    }
+
+    /**
+     * Resume the given downloads, which must be paused. This method will only
+     * work when called from within the download manager's process.
+     *
+     * @param ids the IDs of the downloads
+     * @hide
+     */
+    public void resumeDownload(long... ids) {
+        Cursor cursor = query(new Query().setFilterById(ids));
+        try {
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+                    .moveToNext()) {
+                int status = cursor
+                        .getInt(cursor.getColumnIndex(COLUMN_STATUS));
+                if (status != STATUS_PAUSED) {
+                    throw new IllegalArgumentException(
+                            "Cann only resume a paused download: "
+                                    + cursor.getLong(cursor
+                                    .getColumnIndex(COLUMN_ID)));
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(Downloads.COLUMN_STATUS, Downloads.STATUS_PENDING);
+        values.put(Downloads.COLUMN_CONTROL, Downloads.CONTROL_RUN);
+        mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
+                getWhereArgsForIds(ids));
+    }
+
+    /**
+     * Restart the given downloads, which must have already completed
+     * (successfully or not). This method will only work when called from within
+     * the download manager's process.
+     *
+     * @param ids the IDs of the downloads
+     * @hide
+     */
+    public void restartDownload(long... ids) {
+        Cursor cursor = query(new Query().setFilterById(ids));
+        try {
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+                    .moveToNext()) {
+                int status = cursor
+                        .getInt(cursor.getColumnIndex(COLUMN_STATUS));
+                if (status != STATUS_SUCCESSFUL && status != STATUS_FAILED) {
+                    throw new IllegalArgumentException(
+                            "Cannot restart incomplete download: "
+                                    + cursor.getLong(cursor
+                                    .getColumnIndex(COLUMN_ID)));
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(Downloads.COLUMN_CURRENT_BYTES, 0);
+        values.put(Downloads.COLUMN_TOTAL_BYTES, -1);
+        values.putNull(Downloads._DATA);
+        values.put(Downloads.COLUMN_STATUS, Downloads.STATUS_PENDING);
+        mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
+                getWhereArgsForIds(ids));
+    }
+
+    /**
+     * Get the DownloadProvider URI for the download with the given ID.
+     */
+    Uri getDownloadUri(long id) {
+        return ContentUris.withAppendedId(mBaseUri, id);
+    }
 
     /**
      * This class contains all the information necessary to request a new
@@ -751,284 +991,6 @@ public class DownloadManager {
         private String statusClause(String operator, int value) {
             return Downloads.COLUMN_STATUS + operator + "'" + value + "'";
         }
-    }
-
-    private ContentResolver mResolver;
-    private String mPackageName;
-    private Uri mBaseUri = Downloads.CONTENT_URI;
-
-    /**
-     * @hide
-     */
-    public DownloadManager(ContentResolver resolver, String packageName) {
-        mResolver = resolver;
-        mPackageName = packageName;
-    }
-
-    /**
-     * Makes this object access the download provider through /all_downloads
-     * URIs rather than /my_downloads URIs, for clients that have permission to
-     * do so.
-     *
-     * @hide
-     */
-    public void setAccessAllDownloads(boolean accessAllDownloads) {
-        if (accessAllDownloads) {
-            mBaseUri = Downloads.ALL_DOWNLOADS_CONTENT_URI;
-        } else {
-            mBaseUri = Downloads.CONTENT_URI;
-        }
-    }
-
-    /**
-     * Enqueue a new download. The download will start automatically once the
-     * download manager is ready to execute it and connectivity is available.
-     *
-     * @param request the parameters specifying this download
-     * @return an ID for the download, unique across the system. This ID is used
-     * to make future calls related to this download.
-     */
-    public long enqueue(Request request) {
-        ContentValues values = request.toContentValues(mPackageName);
-        Uri downloadUri = mResolver.insert(Downloads.CONTENT_URI, values);
-        long id = Long.parseLong(downloadUri.getLastPathSegment());
-        return id;
-    }
-
-    /**
-     * Marks the specified download as 'to be deleted'. This is done when a
-     * completed download is to be removed but the row was stored without enough
-     * info to delete the corresponding metadata from Mediaprovider database.
-     * Actual cleanup of this row is done in DownloadService.
-     *
-     * @param ids the IDs of the downloads to be marked 'deleted'
-     * @return the number of downloads actually updated
-     * @hide
-     */
-    public int markRowDeleted(long... ids) {
-        if (ids == null || ids.length == 0) {
-            // called with nothing to remove!
-            throw new IllegalArgumentException(
-                    "input param 'ids' can't be null");
-        }
-        ContentValues values = new ContentValues();
-        values.put(Downloads.COLUMN_DELETED, 1);
-        // if only one id is passed in, then include it in the uri itself.
-        // this will eliminate a full database scan in the download service.
-        if (ids.length == 1) {
-            return mResolver.update(
-                    ContentUris.withAppendedId(mBaseUri, ids[0]), values, null,
-                    null);
-        }
-        return mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
-                getWhereArgsForIds(ids));
-
-        // if (ids == null || ids.length == 0) {
-        // // called with nothing to remove!
-        // throw new IllegalArgumentException(
-        // "input param 'ids' can't be null");
-        // }
-        // ContentValues values = new ContentValues();
-        // values.put(Downloads.COLUMN_DELETED, 1);
-        // return mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
-        // getWhereArgsForIds(ids));
-    }
-
-    // /**
-    // * Cancel downloads and remove them from the download manager. Each
-    // download
-    // * will be stopped if it was running, and it will no longer be accessible
-    // * through the download manager. If a file was already downloaded to
-    // * external storage, it will not be deleted.
-    // *
-    // * @param ids
-    // * the IDs of the downloads to remove
-    // * @return the number of downloads actually removed
-    // */
-    // public int remove(long... ids) {
-    // if (ids == null || ids.length == 0) {
-    // // called with nothing to remove!
-    // throw new IllegalArgumentException(
-    // "input param 'ids' can't be null");
-    // }
-    // return mResolver.delete(mBaseUri, getWhereClauseForIds(ids),
-    // getWhereArgsForIds(ids));
-    // }
-
-    /**
-     * Cancel downloads and remove them from the download manager. Each download
-     * will be stopped if it was running, and it will no longer be accessible
-     * through the download manager. If there is a downloaded file, partial or
-     * complete, it is deleted.
-     *
-     * @param ids the IDs of the downloads to remove
-     * @return the number of downloads actually removed
-     */
-    public int remove(long... ids) {
-        return markRowDeleted(ids);
-    }
-
-    /**
-     * Query the download manager about downloads that have been requested.
-     *
-     * @param query parameters specifying filters for this query
-     * @return a Cursor over the result set of downloads, with columns
-     * consisting of all the COLUMN_* constants.
-     */
-    public Cursor query(Query query) {
-        Cursor underlyingCursor = query.runQuery(mResolver, UNDERLYING_COLUMNS,
-                mBaseUri);
-        if (underlyingCursor == null) {
-            return null;
-        }
-        return new CursorTranslator(underlyingCursor, mBaseUri);
-    }
-
-    /**
-     * Open a downloaded file for reading. The download must have completed.
-     *
-     * @param id the ID of the download
-     * @return a read-only {@link ParcelFileDescriptor}
-     * @throws FileNotFoundException if the destination file does not already exist
-     */
-    public ParcelFileDescriptor openDownloadedFile(long id)
-            throws FileNotFoundException {
-        return mResolver.openFileDescriptor(getDownloadUri(id), "r");
-    }
-
-    /**
-     * Pause the given downloads, which must be running. This method will only
-     * work when called from within the download manager's process.
-     *
-     * @param ids the IDs of the downloads
-     * @hide
-     */
-    public void pauseDownload(long... ids) {
-        Cursor cursor = query(new Query().setFilterById(ids));
-        try {
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-                    .moveToNext()) {
-                int status = cursor
-                        .getInt(cursor.getColumnIndex(COLUMN_STATUS));
-                if (status != STATUS_RUNNING && status != STATUS_PENDING) {
-                    throw new IllegalArgumentException(
-                            "Can only pause a running download: "
-                                    + cursor.getLong(cursor
-                                    .getColumnIndex(COLUMN_ID)));
-                }
-            }
-        } finally {
-            cursor.close();
-        }
-
-        ContentValues values = new ContentValues();
-        values.put(Downloads.COLUMN_CONTROL, Downloads.CONTROL_PAUSED);
-        values.put(Downloads.COLUMN_NO_INTEGRITY, 1);
-        mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
-                getWhereArgsForIds(ids));
-    }
-
-    /**
-     * Resume the given downloads, which must be paused. This method will only
-     * work when called from within the download manager's process.
-     *
-     * @param ids the IDs of the downloads
-     * @hide
-     */
-    public void resumeDownload(long... ids) {
-        Cursor cursor = query(new Query().setFilterById(ids));
-        try {
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-                    .moveToNext()) {
-                int status = cursor
-                        .getInt(cursor.getColumnIndex(COLUMN_STATUS));
-                if (status != STATUS_PAUSED) {
-                    throw new IllegalArgumentException(
-                            "Cann only resume a paused download: "
-                                    + cursor.getLong(cursor
-                                    .getColumnIndex(COLUMN_ID)));
-                }
-            }
-        } finally {
-            cursor.close();
-        }
-
-        ContentValues values = new ContentValues();
-        values.put(Downloads.COLUMN_STATUS, Downloads.STATUS_PENDING);
-        values.put(Downloads.COLUMN_CONTROL, Downloads.CONTROL_RUN);
-        mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
-                getWhereArgsForIds(ids));
-    }
-
-    /**
-     * Restart the given downloads, which must have already completed
-     * (successfully or not). This method will only work when called from within
-     * the download manager's process.
-     *
-     * @param ids the IDs of the downloads
-     * @hide
-     */
-    public void restartDownload(long... ids) {
-        Cursor cursor = query(new Query().setFilterById(ids));
-        try {
-            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-                    .moveToNext()) {
-                int status = cursor
-                        .getInt(cursor.getColumnIndex(COLUMN_STATUS));
-                if (status != STATUS_SUCCESSFUL && status != STATUS_FAILED) {
-                    throw new IllegalArgumentException(
-                            "Cannot restart incomplete download: "
-                                    + cursor.getLong(cursor
-                                    .getColumnIndex(COLUMN_ID)));
-                }
-            }
-        } finally {
-            cursor.close();
-        }
-
-        ContentValues values = new ContentValues();
-        values.put(Downloads.COLUMN_CURRENT_BYTES, 0);
-        values.put(Downloads.COLUMN_TOTAL_BYTES, -1);
-        values.putNull(Downloads._DATA);
-        values.put(Downloads.COLUMN_STATUS, Downloads.STATUS_PENDING);
-        mResolver.update(mBaseUri, values, getWhereClauseForIds(ids),
-                getWhereArgsForIds(ids));
-    }
-
-    /**
-     * Get the DownloadProvider URI for the download with the given ID.
-     */
-    Uri getDownloadUri(long id) {
-        return ContentUris.withAppendedId(mBaseUri, id);
-    }
-
-    /**
-     * Get a parameterized SQL WHERE clause to select a bunch of IDs.
-     */
-    static String getWhereClauseForIds(long[] ids) {
-        StringBuilder whereClause = new StringBuilder();
-        whereClause.append("(");
-        for (int i = 0; i < ids.length; i++) {
-            if (i > 0) {
-                whereClause.append("OR ");
-            }
-            whereClause.append(Downloads._ID);
-            whereClause.append(" = ? ");
-        }
-        whereClause.append(")");
-        return whereClause.toString();
-    }
-
-    /**
-     * Get the selection args for a clause returned by
-     * {@link #getWhereClauseForIds(long[])}.
-     */
-    static String[] getWhereArgsForIds(long[] ids) {
-        String[] whereArgs = new String[ids.length];
-        for (int i = 0; i < ids.length; i++) {
-            whereArgs[i] = Long.toString(ids[i]);
-        }
-        return whereArgs;
     }
 
     /**

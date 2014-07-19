@@ -40,15 +40,19 @@ import java.util.*;
  */
 public class DownloadService extends Service {
     /**
+     * The thread that updates the internal download list from the content
+     * provider.
+     */
+    UpdateThread mUpdateThread;
+    SystemFacade mSystemFacade;
+    /**
      * Observer to get notified when the content observer's data changes
      */
     private DownloadManagerContentObserver mObserver;
-
     /**
      * Class to handle Notification Manager updates
      */
     private DownloadNotification mNotifier;
-
     /**
      * The Service's view of the list of downloads, mapping download IDs to the
      * corresponding info object. This is kept independently from the content
@@ -57,43 +61,11 @@ public class DownloadService extends Service {
      * changes or disappears.
      */
     private Map<Long, DownloadInfo> mDownloads = new HashMap<Long, DownloadInfo>();
-
-    /**
-     * The thread that updates the internal download list from the content
-     * provider.
-     */
-    UpdateThread mUpdateThread;
-
     /**
      * Whether the internal download list should be updated from the content
      * provider.
      */
     private boolean mPendingUpdate;
-
-    SystemFacade mSystemFacade;
-
-    /**
-     * Receives notifications when the data in the content provider changes
-     */
-    private class DownloadManagerContentObserver extends ContentObserver {
-
-        public DownloadManagerContentObserver() {
-            super(new Handler());
-        }
-
-        /**
-         * Receives notification when the data in the observed content provider
-         * changes.
-         */
-        public void onChange(final boolean selfChange) {
-            if (Constants.LOGVV) {
-                Log.v(Constants.TAG,
-                        "Service ContentObserver received notification");
-            }
-            updateFromProvider();
-        }
-
-    }
 
     /**
      * Returns an IBinder instance when someone wants to connect to this
@@ -160,130 +132,6 @@ public class DownloadService extends Service {
                 mUpdateThread = new UpdateThread();
                 mSystemFacade.startThread(mUpdateThread);
             }
-        }
-    }
-
-    private class UpdateThread extends Thread {
-        public UpdateThread() {
-            super("Download Service");
-        }
-
-        public void run() {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-
-            trimDatabase();
-            removeSpuriousFiles();
-
-            boolean keepService = false;
-            // for each update from the database, remember which download is
-            // supposed to get restarted soonest in the future
-            long wakeUp = Long.MAX_VALUE;
-            for (; ; ) {
-                synchronized (DownloadService.this) {
-                    if (mUpdateThread != this) {
-                        throw new IllegalStateException(
-                                "multiple UpdateThreads in DownloadService");
-                    }
-                    if (!mPendingUpdate) {
-                        mUpdateThread = null;
-                        if (!keepService) {
-                            stopSelf();
-                        }
-                        if (wakeUp != Long.MAX_VALUE) {
-                            scheduleAlarm(wakeUp);
-                        }
-                        return;
-                    }
-                    mPendingUpdate = false;
-                }
-
-                long now = mSystemFacade.currentTimeMillis();
-                keepService = false;
-                wakeUp = Long.MAX_VALUE;
-                Set<Long> idsNoLongerInDatabase = new HashSet<Long>(
-                        mDownloads.keySet());
-
-                Cursor cursor = getContentResolver().query(
-                        Downloads.ALL_DOWNLOADS_CONTENT_URI, null, null, null,
-                        null);
-                if (cursor == null) {
-                    continue;
-                }
-                try {
-                    DownloadInfo.Reader reader = new DownloadInfo.Reader(
-                            getContentResolver(), cursor);
-                    int idColumn = cursor.getColumnIndexOrThrow(Downloads._ID);
-
-                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
-                            .moveToNext()) {
-                        long id = cursor.getLong(idColumn);
-                        idsNoLongerInDatabase.remove(id);
-                        DownloadInfo info = mDownloads.get(id);
-                        if (info != null) {
-                            updateDownload(reader, info, now);
-                        } else {
-                            info = insertDownload(reader, now);
-                        }
-                        if (info.hasCompletionNotification()) {
-                            keepService = true;
-                        }
-                        long next = info.nextAction(now);
-                        if (next == 0) {
-                            keepService = true;
-                        } else if (next > 0 && next < wakeUp) {
-                            wakeUp = next;
-                        }
-                    }
-                } finally {
-                    cursor.close();
-                }
-
-                for (Long id : idsNoLongerInDatabase) {
-                    deleteDownload(id);
-                }
-
-                // is there a need to start the DownloadService? yes, if there
-                // are rows to be deleted.
-
-                for (DownloadInfo info : mDownloads.values()) {
-                    if (info.mDeleted) {
-                        keepService = true;
-                        break;
-                    }
-                }
-
-                mNotifier.updateNotification(mDownloads.values());
-
-                // look for all rows with deleted flag set and delete the rows
-                // from the database
-                // permanently
-                for (DownloadInfo info : mDownloads.values()) {
-                    if (info.mDeleted) {
-                        Helpers.deleteFile(getContentResolver(), info.mId,
-                                info.mFileName, info.mMimeType);
-                    }
-                }
-            }
-        }
-
-        private void scheduleAlarm(long wakeUp) {
-            AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            if (alarms == null) {
-                Log.e(Constants.TAG, "couldn't get alarm manager");
-                return;
-            }
-
-            if (Constants.LOGV) {
-                Log.v(Constants.TAG, "scheduling retry in " + wakeUp + "ms");
-            }
-
-            Intent intent = new Intent(Constants.ACTION_RETRY);
-            intent.setClassName(getPackageName(),
-                    DownloadReceiver.class.getName());
-            alarms.set(AlarmManager.RTC_WAKEUP,
-                    mSystemFacade.currentTimeMillis() + wakeUp, PendingIntent
-                    .getBroadcast(DownloadService.this, 0, intent,
-                            PendingIntent.FLAG_ONE_SHOT));
         }
     }
 
@@ -414,5 +262,152 @@ public class DownloadService extends Service {
         }
         mSystemFacade.cancelNotification(info.mId);
         mDownloads.remove(info.mId);
+    }
+
+    /**
+     * Receives notifications when the data in the content provider changes
+     */
+    private class DownloadManagerContentObserver extends ContentObserver {
+
+        public DownloadManagerContentObserver() {
+            super(new Handler());
+        }
+
+        /**
+         * Receives notification when the data in the observed content provider
+         * changes.
+         */
+        public void onChange(final boolean selfChange) {
+            if (Constants.LOGVV) {
+                Log.v(Constants.TAG,
+                        "Service ContentObserver received notification");
+            }
+            updateFromProvider();
+        }
+
+    }
+
+    private class UpdateThread extends Thread {
+        public UpdateThread() {
+            super("Download Service");
+        }
+
+        public void run() {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+
+            trimDatabase();
+            removeSpuriousFiles();
+
+            boolean keepService = false;
+            // for each update from the database, remember which download is
+            // supposed to get restarted soonest in the future
+            long wakeUp = Long.MAX_VALUE;
+            for (; ; ) {
+                synchronized (DownloadService.this) {
+                    if (mUpdateThread != this) {
+                        throw new IllegalStateException(
+                                "multiple UpdateThreads in DownloadService");
+                    }
+                    if (!mPendingUpdate) {
+                        mUpdateThread = null;
+                        if (!keepService) {
+                            stopSelf();
+                        }
+                        if (wakeUp != Long.MAX_VALUE) {
+                            scheduleAlarm(wakeUp);
+                        }
+                        return;
+                    }
+                    mPendingUpdate = false;
+                }
+
+                long now = mSystemFacade.currentTimeMillis();
+                keepService = false;
+                wakeUp = Long.MAX_VALUE;
+                Set<Long> idsNoLongerInDatabase = new HashSet<Long>(
+                        mDownloads.keySet());
+
+                Cursor cursor = getContentResolver().query(
+                        Downloads.ALL_DOWNLOADS_CONTENT_URI, null, null, null,
+                        null);
+                if (cursor == null) {
+                    continue;
+                }
+                try {
+                    DownloadInfo.Reader reader = new DownloadInfo.Reader(
+                            getContentResolver(), cursor);
+                    int idColumn = cursor.getColumnIndexOrThrow(Downloads._ID);
+
+                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+                            .moveToNext()) {
+                        long id = cursor.getLong(idColumn);
+                        idsNoLongerInDatabase.remove(id);
+                        DownloadInfo info = mDownloads.get(id);
+                        if (info != null) {
+                            updateDownload(reader, info, now);
+                        } else {
+                            info = insertDownload(reader, now);
+                        }
+                        if (info.hasCompletionNotification()) {
+                            keepService = true;
+                        }
+                        long next = info.nextAction(now);
+                        if (next == 0) {
+                            keepService = true;
+                        } else if (next > 0 && next < wakeUp) {
+                            wakeUp = next;
+                        }
+                    }
+                } finally {
+                    cursor.close();
+                }
+
+                for (Long id : idsNoLongerInDatabase) {
+                    deleteDownload(id);
+                }
+
+                // is there a need to start the DownloadService? yes, if there
+                // are rows to be deleted.
+
+                for (DownloadInfo info : mDownloads.values()) {
+                    if (info.mDeleted) {
+                        keepService = true;
+                        break;
+                    }
+                }
+
+                mNotifier.updateNotification(mDownloads.values());
+
+                // look for all rows with deleted flag set and delete the rows
+                // from the database
+                // permanently
+                for (DownloadInfo info : mDownloads.values()) {
+                    if (info.mDeleted) {
+                        Helpers.deleteFile(getContentResolver(), info.mId,
+                                info.mFileName, info.mMimeType);
+                    }
+                }
+            }
+        }
+
+        private void scheduleAlarm(long wakeUp) {
+            AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (alarms == null) {
+                Log.e(Constants.TAG, "couldn't get alarm manager");
+                return;
+            }
+
+            if (Constants.LOGV) {
+                Log.v(Constants.TAG, "scheduling retry in " + wakeUp + "ms");
+            }
+
+            Intent intent = new Intent(Constants.ACTION_RETRY);
+            intent.setClassName(getPackageName(),
+                    DownloadReceiver.class.getName());
+            alarms.set(AlarmManager.RTC_WAKEUP,
+                    mSystemFacade.currentTimeMillis() + wakeUp, PendingIntent
+                            .getBroadcast(DownloadService.this, 0, intent,
+                                    PendingIntent.FLAG_ONE_SHOT));
+        }
     }
 }

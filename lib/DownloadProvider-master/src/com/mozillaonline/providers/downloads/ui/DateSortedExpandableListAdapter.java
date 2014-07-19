@@ -51,32 +51,6 @@ public class DateSortedExpandableListAdapter implements ExpandableListAdapter {
     private int mIdIndex;
     private Context mContext;
 
-    private class ChangeObserver extends ContentObserver {
-        public ChangeObserver() {
-            super(new Handler());
-        }
-
-        @Override
-        public boolean deliverSelfNotifications() {
-            return true;
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            refreshData();
-        }
-    }
-
-    private class MyDataSetObserver extends DataSetObserver {
-        @Override
-        public void onChanged() {
-            buildMap();
-            for (DataSetObserver o : mObservers) {
-                o.onChanged();
-            }
-        }
-    }
-
     public DateSortedExpandableListAdapter(Context context, Cursor cursor,
                                            int dateIndex) {
         mContext = context;
@@ -360,5 +334,31 @@ public class DateSortedExpandableListAdapter implements ExpandableListAdapter {
 
     public boolean isEmpty() {
         return mCursor.isClosed() || mCursor.getCount() == 0;
+    }
+
+    private class ChangeObserver extends ContentObserver {
+        public ChangeObserver() {
+            super(new Handler());
+        }
+
+        @Override
+        public boolean deliverSelfNotifications() {
+            return true;
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            refreshData();
+        }
+    }
+
+    private class MyDataSetObserver extends DataSetObserver {
+        @Override
+        public void onChanged() {
+            buildMap();
+            for (DataSetObserver o : mObservers) {
+                o.onChanged();
+            }
+        }
     }
 }

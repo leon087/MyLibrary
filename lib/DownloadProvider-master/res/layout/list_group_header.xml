@@ -14,7 +14,7 @@
 -->
 
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:textAppearance="?android:attr/textAppearanceMedium" android:paddingLeft="43dip"
-    android:layout_gravity="center_vertical" android:gravity="center_vertical" />
+          android:layout_width="fill_parent" android:layout_height="wrap_content"
+          android:minHeight="?android:attr/listPreferredItemHeight"
+          android:textAppearance="?android:attr/textAppearanceMedium" android:paddingLeft="43dip"
+          android:layout_gravity="center_vertical" android:gravity="center_vertical"/>

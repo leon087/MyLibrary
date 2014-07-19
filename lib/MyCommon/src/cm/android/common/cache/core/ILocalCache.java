@@ -1,14 +1,14 @@
 package cm.android.common.cache.core;
 
 public interface ILocalCache<K, V> {
-	void put(K key, V value);
+    void put(K key, V value);
 
-	V get(K key);
+    V get(K key);
 
-	void delete(K key);
+    void delete(K key);
 
-	void clear();
+    void clear();
 
-	boolean isExpire(K key);
+    boolean isExpire(K key);
 
 }

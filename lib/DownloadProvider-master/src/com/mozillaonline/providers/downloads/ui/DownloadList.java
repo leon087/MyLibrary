@@ -86,26 +86,6 @@ public class DownloadList extends Activity implements OnChildClickListener,
     private Long mQueuedDownloadId = null;
     private AlertDialog mQueuedDialog;
 
-    private class MyContentObserver extends ContentObserver {
-        public MyContentObserver() {
-            super(new Handler());
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            handleDownloadsChanged();
-        }
-    }
-
-    private class MyDataSetObserver extends DataSetObserver {
-        @Override
-        public void onChanged() {
-            // may need to switch to or from the empty view
-            chooseListToShow();
-            ensureSomeGroupIsExpanded();
-        }
-    }
-
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -702,5 +682,25 @@ public class DownloadList extends Activity implements OnChildClickListener,
     public void onCancel(DialogInterface dialog) {
         mQueuedDownloadId = null;
         mQueuedDialog = null;
+    }
+
+    private class MyContentObserver extends ContentObserver {
+        public MyContentObserver() {
+            super(new Handler());
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            handleDownloadsChanged();
+        }
+    }
+
+    private class MyDataSetObserver extends DataSetObserver {
+        @Override
+        public void onChanged() {
+            // may need to switch to or from the empty view
+            chooseListToShow();
+            ensureSomeGroupIsExpanded();
+        }
     }
 }

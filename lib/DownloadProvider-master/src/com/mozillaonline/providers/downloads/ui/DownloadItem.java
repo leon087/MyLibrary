@@ -37,12 +37,6 @@ public class DownloadItem extends RelativeLayout {
     private long mDownloadId;
     private DownloadSelectListener mListener;
 
-    static interface DownloadSelectListener {
-        public void onDownloadSelectionChanged(long downloadId, boolean isSelected);
-
-        public boolean isDownloadSelected(long id);
-    }
-
     public DownloadItem(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initialize();
@@ -114,5 +108,11 @@ public class DownloadItem extends RelativeLayout {
     private void toggleCheckMark() {
         mCheckBox.toggle();
         mListener.onDownloadSelectionChanged(mDownloadId, mCheckBox.isChecked());
+    }
+
+    static interface DownloadSelectListener {
+        public void onDownloadSelectionChanged(long downloadId, boolean isSelected);
+
+        public boolean isDownloadSelected(long id);
     }
 }

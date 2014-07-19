@@ -34,171 +34,39 @@ import java.util.List;
  * Stores information about an individual download.
  */
 public class DownloadInfo {
-    public static class Reader {
-        private ContentResolver mResolver;
-        private Cursor mCursor;
-        private CharArrayBuffer mOldChars;
-        private CharArrayBuffer mNewChars;
-
-        public Reader(ContentResolver resolver, Cursor cursor) {
-            mResolver = resolver;
-            mCursor = cursor;
-        }
-
-        public DownloadInfo newDownloadInfo(Context context, SystemFacade systemFacade) {
-            DownloadInfo info = new DownloadInfo(context, systemFacade);
-            updateFromDatabase(info);
-            readRequestHeaders(info);
-            return info;
-        }
-
-        public void updateFromDatabase(DownloadInfo info) {
-            info.mId = getLong(Downloads._ID);
-            info.mUri = getString(info.mUri, Downloads.COLUMN_URI);
-            info.mNoIntegrity = getInt(Downloads.COLUMN_NO_INTEGRITY) == 1;
-            info.mHint = getString(info.mHint, Downloads.COLUMN_FILE_NAME_HINT);
-            info.mFileName = getString(info.mFileName, Downloads._DATA);
-            info.mMimeType = getString(info.mMimeType, Downloads.COLUMN_MIME_TYPE);
-            info.mDestination = getInt(Downloads.COLUMN_DESTINATION);
-            info.mVisibility = getInt(Downloads.COLUMN_VISIBILITY);
-            info.mStatus = getInt(Downloads.COLUMN_STATUS);
-            info.mNumFailed = getInt(Constants.FAILED_CONNECTIONS);
-            int retryRedirect = getInt(Constants.RETRY_AFTER_X_REDIRECT_COUNT);
-            info.mRetryAfter = retryRedirect & 0xfffffff;
-            info.mLastMod = getLong(Downloads.COLUMN_LAST_MODIFICATION);
-            info.mPackage = getString(info.mPackage, Downloads.COLUMN_NOTIFICATION_PACKAGE);
-            info.mClass = getString(info.mClass, Downloads.COLUMN_NOTIFICATION_CLASS);
-            info.mExtras = getString(info.mExtras, Downloads.COLUMN_NOTIFICATION_EXTRAS);
-            info.mCookies = getString(info.mCookies, Downloads.COLUMN_COOKIE_DATA);
-            info.mUserAgent = getString(info.mUserAgent, Downloads.COLUMN_USER_AGENT);
-            info.mReferer = getString(info.mReferer, Downloads.COLUMN_REFERER);
-            info.mTotalBytes = getLong(Downloads.COLUMN_TOTAL_BYTES);
-            info.mCurrentBytes = getLong(Downloads.COLUMN_CURRENT_BYTES);
-            info.mETag = getString(info.mETag, Constants.ETAG);
-            info.mDeleted = getInt(Downloads.COLUMN_DELETED) == 1;
-            info.mIsPublicApi = getInt(Downloads.COLUMN_IS_PUBLIC_API) != 0;
-            info.mAllowedNetworkTypes = getInt(Downloads.COLUMN_ALLOWED_NETWORK_TYPES);
-            info.mAllowRoaming = getInt(Downloads.COLUMN_ALLOW_ROAMING) != 0;
-            info.mTitle = getString(info.mTitle, Downloads.COLUMN_TITLE);
-            info.mDescription = getString(info.mDescription, Downloads.COLUMN_DESCRIPTION);
-            info.mBypassRecommendedSizeLimit =
-                    getInt(Downloads.COLUMN_BYPASS_RECOMMENDED_SIZE_LIMIT);
-
-            synchronized (this) {
-                info.mControl = getInt(Downloads.COLUMN_CONTROL);
-            }
-        }
-
-        private void readRequestHeaders(DownloadInfo info) {
-            info.mRequestHeaders.clear();
-            Uri headerUri = Uri.withAppendedPath(
-                    info.getAllDownloadsUri(), Downloads.RequestHeaders.URI_SEGMENT);
-            Cursor cursor = mResolver.query(headerUri, null, null, null, null);
-            try {
-                int headerIndex =
-                        cursor.getColumnIndexOrThrow(Downloads.RequestHeaders.COLUMN_HEADER);
-                int valueIndex =
-                        cursor.getColumnIndexOrThrow(Downloads.RequestHeaders.COLUMN_VALUE);
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    addHeader(info, cursor.getString(headerIndex), cursor.getString(valueIndex));
-                }
-            } finally {
-                cursor.close();
-            }
-
-            if (info.mCookies != null) {
-                addHeader(info, "Cookie", info.mCookies);
-            }
-            if (info.mReferer != null) {
-                addHeader(info, "Referer", info.mReferer);
-            }
-        }
-
-        private void addHeader(DownloadInfo info, String header, String value) {
-            info.mRequestHeaders.add(Pair.create(header, value));
-        }
-
-        /**
-         * Returns a String that holds the current value of the column, optimizing for the case
-         * where the value hasn't changed.
-         */
-        private String getString(String old, String column) {
-            int index = mCursor.getColumnIndexOrThrow(column);
-            if (old == null) {
-                return mCursor.getString(index);
-            }
-            if (mNewChars == null) {
-                mNewChars = new CharArrayBuffer(128);
-            }
-            mCursor.copyStringToBuffer(index, mNewChars);
-            int length = mNewChars.sizeCopied;
-            if (length != old.length()) {
-                return new String(mNewChars.data, 0, length);
-            }
-            if (mOldChars == null || mOldChars.sizeCopied < length) {
-                mOldChars = new CharArrayBuffer(length);
-            }
-            char[] oldArray = mOldChars.data;
-            char[] newArray = mNewChars.data;
-            old.getChars(0, length, oldArray, 0);
-            for (int i = length - 1; i >= 0; --i) {
-                if (oldArray[i] != newArray[i]) {
-                    return new String(newArray, 0, length);
-                }
-            }
-            return old;
-        }
-
-        private Integer getInt(String column) {
-            return mCursor.getInt(mCursor.getColumnIndexOrThrow(column));
-        }
-
-        private Long getLong(String column) {
-            return mCursor.getLong(mCursor.getColumnIndexOrThrow(column));
-        }
-    }
-
-    // the following NETWORK_* constants are used to indicates specfic reasons for disallowing a
-    // download from using a network, since specific causes can require special handling
-
     /**
      * The network is usable for the given download.
      */
     public static final int NETWORK_OK = 1;
 
+    // the following NETWORK_* constants are used to indicates specfic reasons for disallowing a
+    // download from using a network, since specific causes can require special handling
     /**
      * There is no network connectivity.
      */
     public static final int NETWORK_NO_CONNECTION = 2;
-
     /**
      * The download exceeds the maximum size for this network.
      */
     public static final int NETWORK_UNUSABLE_DUE_TO_SIZE = 3;
-
     /**
      * The download exceeds the recommended maximum size for this network, the user must confirm for
      * this download to proceed without WiFi.
      */
     public static final int NETWORK_RECOMMENDED_UNUSABLE_DUE_TO_SIZE = 4;
-
     /**
      * The current connection is roaming, and the download can't proceed over a roaming connection.
      */
     public static final int NETWORK_CANNOT_USE_ROAMING = 5;
-
     /**
      * The app requesting the download specific that it can't use the current network connection.
      */
     public static final int NETWORK_TYPE_DISALLOWED_BY_REQUESTOR = 6;
-
     /**
      * For intents used to notify the user that a download exceeds a size threshold, if this extra
      * is true, WiFi is required for this download size; otherwise, it is only recommended.
      */
     public static final String EXTRA_IS_WIFI_REQUIRED = "isWifiRequired";
-
-
     public long mId;
     public String mUri;
     public boolean mNoIntegrity;
@@ -228,15 +96,11 @@ public class DownloadInfo {
     public String mTitle;
     public String mDescription;
     public int mBypassRecommendedSizeLimit;
-
     public int mFuzz;
-
     public volatile boolean mHasActiveThread;
-
     private List<Pair<String, String>> mRequestHeaders = new ArrayList<Pair<String, String>>();
     private SystemFacade mSystemFacade;
     private Context mContext;
-
     private DownloadInfo(Context context, SystemFacade systemFacade) {
         mContext = context;
         mSystemFacade = systemFacade;
@@ -474,7 +338,6 @@ public class DownloadInfo {
         return ContentUris.withAppendedId(Downloads.ALL_DOWNLOADS_CONTENT_URI, mId);
     }
 
-
     public void logVerboseInfo() {
         Log.v(Constants.TAG, "Service adding new entry");
         Log.v(Constants.TAG, "ID      : " + mId);
@@ -530,5 +393,129 @@ public class DownloadInfo {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(EXTRA_IS_WIFI_REQUIRED, isWifiRequired);
         mContext.startActivity(intent);
+    }
+
+    public static class Reader {
+        private ContentResolver mResolver;
+        private Cursor mCursor;
+        private CharArrayBuffer mOldChars;
+        private CharArrayBuffer mNewChars;
+
+        public Reader(ContentResolver resolver, Cursor cursor) {
+            mResolver = resolver;
+            mCursor = cursor;
+        }
+
+        public DownloadInfo newDownloadInfo(Context context, SystemFacade systemFacade) {
+            DownloadInfo info = new DownloadInfo(context, systemFacade);
+            updateFromDatabase(info);
+            readRequestHeaders(info);
+            return info;
+        }
+
+        public void updateFromDatabase(DownloadInfo info) {
+            info.mId = getLong(Downloads._ID);
+            info.mUri = getString(info.mUri, Downloads.COLUMN_URI);
+            info.mNoIntegrity = getInt(Downloads.COLUMN_NO_INTEGRITY) == 1;
+            info.mHint = getString(info.mHint, Downloads.COLUMN_FILE_NAME_HINT);
+            info.mFileName = getString(info.mFileName, Downloads._DATA);
+            info.mMimeType = getString(info.mMimeType, Downloads.COLUMN_MIME_TYPE);
+            info.mDestination = getInt(Downloads.COLUMN_DESTINATION);
+            info.mVisibility = getInt(Downloads.COLUMN_VISIBILITY);
+            info.mStatus = getInt(Downloads.COLUMN_STATUS);
+            info.mNumFailed = getInt(Constants.FAILED_CONNECTIONS);
+            int retryRedirect = getInt(Constants.RETRY_AFTER_X_REDIRECT_COUNT);
+            info.mRetryAfter = retryRedirect & 0xfffffff;
+            info.mLastMod = getLong(Downloads.COLUMN_LAST_MODIFICATION);
+            info.mPackage = getString(info.mPackage, Downloads.COLUMN_NOTIFICATION_PACKAGE);
+            info.mClass = getString(info.mClass, Downloads.COLUMN_NOTIFICATION_CLASS);
+            info.mExtras = getString(info.mExtras, Downloads.COLUMN_NOTIFICATION_EXTRAS);
+            info.mCookies = getString(info.mCookies, Downloads.COLUMN_COOKIE_DATA);
+            info.mUserAgent = getString(info.mUserAgent, Downloads.COLUMN_USER_AGENT);
+            info.mReferer = getString(info.mReferer, Downloads.COLUMN_REFERER);
+            info.mTotalBytes = getLong(Downloads.COLUMN_TOTAL_BYTES);
+            info.mCurrentBytes = getLong(Downloads.COLUMN_CURRENT_BYTES);
+            info.mETag = getString(info.mETag, Constants.ETAG);
+            info.mDeleted = getInt(Downloads.COLUMN_DELETED) == 1;
+            info.mIsPublicApi = getInt(Downloads.COLUMN_IS_PUBLIC_API) != 0;
+            info.mAllowedNetworkTypes = getInt(Downloads.COLUMN_ALLOWED_NETWORK_TYPES);
+            info.mAllowRoaming = getInt(Downloads.COLUMN_ALLOW_ROAMING) != 0;
+            info.mTitle = getString(info.mTitle, Downloads.COLUMN_TITLE);
+            info.mDescription = getString(info.mDescription, Downloads.COLUMN_DESCRIPTION);
+            info.mBypassRecommendedSizeLimit =
+                    getInt(Downloads.COLUMN_BYPASS_RECOMMENDED_SIZE_LIMIT);
+
+            synchronized (this) {
+                info.mControl = getInt(Downloads.COLUMN_CONTROL);
+            }
+        }
+
+        private void readRequestHeaders(DownloadInfo info) {
+            info.mRequestHeaders.clear();
+            Uri headerUri = Uri.withAppendedPath(
+                    info.getAllDownloadsUri(), Downloads.RequestHeaders.URI_SEGMENT);
+            Cursor cursor = mResolver.query(headerUri, null, null, null, null);
+            try {
+                int headerIndex =
+                        cursor.getColumnIndexOrThrow(Downloads.RequestHeaders.COLUMN_HEADER);
+                int valueIndex =
+                        cursor.getColumnIndexOrThrow(Downloads.RequestHeaders.COLUMN_VALUE);
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    addHeader(info, cursor.getString(headerIndex), cursor.getString(valueIndex));
+                }
+            } finally {
+                cursor.close();
+            }
+
+            if (info.mCookies != null) {
+                addHeader(info, "Cookie", info.mCookies);
+            }
+            if (info.mReferer != null) {
+                addHeader(info, "Referer", info.mReferer);
+            }
+        }
+
+        private void addHeader(DownloadInfo info, String header, String value) {
+            info.mRequestHeaders.add(Pair.create(header, value));
+        }
+
+        /**
+         * Returns a String that holds the current value of the column, optimizing for the case
+         * where the value hasn't changed.
+         */
+        private String getString(String old, String column) {
+            int index = mCursor.getColumnIndexOrThrow(column);
+            if (old == null) {
+                return mCursor.getString(index);
+            }
+            if (mNewChars == null) {
+                mNewChars = new CharArrayBuffer(128);
+            }
+            mCursor.copyStringToBuffer(index, mNewChars);
+            int length = mNewChars.sizeCopied;
+            if (length != old.length()) {
+                return new String(mNewChars.data, 0, length);
+            }
+            if (mOldChars == null || mOldChars.sizeCopied < length) {
+                mOldChars = new CharArrayBuffer(length);
+            }
+            char[] oldArray = mOldChars.data;
+            char[] newArray = mNewChars.data;
+            old.getChars(0, length, oldArray, 0);
+            for (int i = length - 1; i >= 0; --i) {
+                if (oldArray[i] != newArray[i]) {
+                    return new String(newArray, 0, length);
+                }
+            }
+            return old;
+        }
+
+        private Integer getInt(String column) {
+            return mCursor.getInt(mCursor.getColumnIndexOrThrow(column));
+        }
+
+        private Long getLong(String column) {
+            return mCursor.getLong(mCursor.getColumnIndexOrThrow(column));
+        }
     }
 }

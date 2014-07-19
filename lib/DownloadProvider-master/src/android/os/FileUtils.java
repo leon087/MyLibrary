@@ -40,28 +40,10 @@ public class FileUtils {
     public static final int S_IROTH = 00004;
     public static final int S_IWOTH = 00002;
     public static final int S_IXOTH = 00001;
-
-
     /**
-     * File status information. This class maps directly to the POSIX stat structure.
-     *
-     * @hide
+     * Regular expression for safe filenames: no spaces or metacharacters
      */
-    public static final class FileStatus {
-        public int dev;
-        public int ino;
-        public int mode;
-        public int nlink;
-        public int uid;
-        public int gid;
-        public int rdev;
-        public long size;
-        public int blksize;
-        public long blocks;
-        public long atime;
-        public long mtime;
-        public long ctime;
-    }
+    private static final Pattern SAFE_FILENAME_PATTERN = Pattern.compile("[\\w%+,./=_-]+");
 
     /**
      * Get the status for the given path. This is equivalent to the POSIX stat(2) system call.
@@ -73,11 +55,6 @@ public class FileUtils {
      * permission to stat the file, then this method will return false.
      */
     public static native boolean getFileStatus(String path, FileStatus status);
-
-    /**
-     * Regular expression for safe filenames: no spaces or metacharacters
-     */
-    private static final Pattern SAFE_FILENAME_PATTERN = Pattern.compile("[\\w%+,./=_-]+");
 
     public static native int setPermissions(String file, int mode, int uid, int gid);
 
@@ -222,5 +199,26 @@ public class FileUtils {
         } finally {
             input.close();
         }
+    }
+
+    /**
+     * File status information. This class maps directly to the POSIX stat structure.
+     *
+     * @hide
+     */
+    public static final class FileStatus {
+        public int dev;
+        public int ino;
+        public int mode;
+        public int nlink;
+        public int uid;
+        public int gid;
+        public int rdev;
+        public long size;
+        public int blksize;
+        public long blocks;
+        public long atime;
+        public long mtime;
+        public long ctime;
     }
 }
