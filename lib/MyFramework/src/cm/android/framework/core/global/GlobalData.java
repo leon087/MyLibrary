@@ -1,22 +1,19 @@
-package cm.android.framework.global;
+package cm.android.framework.core.global;
 
-import java.util.HashMap;
+import cm.android.util.ObjectUtil;
+
 import java.util.Map;
 
 /**
  * 用户保存全局数据
  */
 public class GlobalData {
-    private Map<String, Object> mData = new HashMap<String, Object>();
+    private Map<String, Object> mData = ObjectUtil.newHashMap();
 
     public GlobalData() {
-        // 默认保存AccountData
-        putData(CommonTag.ACCOUNT_DATA, new AccountData());
     }
 
     public void release() {
-        AccountData accountData = getData(CommonTag.ACCOUNT_DATA);
-        accountData.release();
         mData.clear();
     }
 

@@ -1,4 +1,4 @@
-package cm.android.framework.ui;
+package cm.android.framework.ext.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.TextView;
-import cm.android.framework.ui.BaseActivity.KeyEventListener;
-import cm.android.util.MyLog;
+import cm.android.framework.ext.ui.BaseActivity.KeyEventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * android.support.v4.app.Fragment的包装类
@@ -16,6 +17,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment
         implements IFragment, KeyEventListener {
 
     protected BaseActivity mActivity;
+    private static final Logger logger = LoggerFactory.getLogger(BaseActivity.class);
 
     @Override
     public void onAttach(Activity activity) {
@@ -57,8 +59,8 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment
      * activity instance. This is called after {@link #onCreateView} and before
      * {@link #onViewStateRestored(Bundle)}.
      *
-     * @param savedInstanceState If the fragment is being re-created from a previous saved
-     *                           state, this is the state.
+     * @param bundle If the fragment is being re-created from a previous saved
+     *               state, this is the state.
      */
     @Override
     public void onActivityCreated(Bundle bundle) {
@@ -100,8 +102,8 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment
     public void setUserVisibleHint(boolean isVisibleToUser) {
         // 该方法先于onStart执行，在tab切换时会触发
         super.setUserVisibleHint(isVisibleToUser);
-        if (MyLog.isDebug()) {
-            MyLog.d("isVisibleToUser = " + isVisibleToUser + ",isVisible() = "
+        if (logger.isDebugEnabled()) {
+            logger.debug("isVisibleToUser = " + isVisibleToUser + ",isVisible() = "
                     + isVisible());
         }
         // onStart之后isVisible()会返回true

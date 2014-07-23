@@ -7,6 +7,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Looper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -27,6 +29,8 @@ public class CrashHandler implements UncaughtExceptionHandler {
     private static final String VERSION_NAME = "versionName";
     private static final String VERSION_CODE = "versionCode";
     private static final String STACK_TRACE = "STACK_TRACE";
+    private static final Logger logger = LoggerFactory.getLogger(CrashHandler.class);
+
     /**
      * 错误报告文件的扩展名
      */
@@ -236,7 +240,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
             trace.close();
             return fileName;
         } catch (Exception e) {
-            MyLog.e(
+            logger.error(
                     "an error occured while writing report file...", e);
         }
         return null;
@@ -361,7 +365,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
                         String.valueOf(pi.versionCode));
             }
         } catch (NameNotFoundException e) {
-            MyLog.e("Error while collect package info", e);
+            logger.error("Error while collect package info", e);
         }
         // 使用反射来收集设备信息.在Build类中包含各种设备信息,
         // 例如: 系统版本号,设备生产商 等帮助调试程序的有用信息
@@ -372,10 +376,9 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 field.setAccessible(true);
                 mDeviceCrashInfo.put(field.getName(),
                         String.valueOf(field.get(null)));
-                MyLog
-                        .d(field.getName() + " : " + field.get(null));
+                logger.debug(field.getName() + " : " + field.get(null));
             } catch (Exception e) {
-                MyLog.e("Error while collect crash info", e);
+                logger.error("Error while collect crash info", e);
             }
 
         }

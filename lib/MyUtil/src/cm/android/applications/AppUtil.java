@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.content.pm.*;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.DisplayMetrics;
-import cm.android.util.MyLog;
 import cm.android.util.ObjectUtil;
 import cm.android.util.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AppUtil {
+    private static final Logger logger = LoggerFactory.getLogger(AppUtil.class);
 
     public static final AppFilter THIRD_PARTY_FILTER = new AppFilter() {
         public void init() {
@@ -436,7 +438,7 @@ public class AppUtil {
                     packageName, 0);
             return AppUtil.isSystemApp(app);
         } catch (NameNotFoundException e) {
-            MyLog.e(e);
+            logger.error("packageName = " + packageName, e);
         }
         return false;
     }

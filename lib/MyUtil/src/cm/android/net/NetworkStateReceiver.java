@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import cm.android.net.NetworkUtil.NetType;
-import cm.android.util.MyLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -36,6 +37,8 @@ public class NetworkStateReceiver extends BroadcastReceiver {
     private static NetType netType;
     private static ArrayList<NetworkChangeObserver> netChangeObserverArrayList = new ArrayList<NetworkChangeObserver>();
     private static BroadcastReceiver receiver;
+
+    private static final Logger logger = LoggerFactory.getLogger(NetworkStateReceiver.class);
 
     private static BroadcastReceiver getReceiver() {
         if (receiver == null) {
@@ -79,7 +82,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
             try {
                 mContext.getApplicationContext().unregisterReceiver(receiver);
             } catch (Exception e) {
-                MyLog.i(e.getMessage());
+                logger.info(e.getMessage(), e);
             }
         }
 
@@ -101,7 +104,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
     /**
      * 注册网络连接观察者
      *
-     * @param observerKey observerKey
+     * @param observer observer
      */
     public static void registerObserver(NetworkChangeObserver observer) {
         if (netChangeObserverArrayList == null) {
@@ -113,7 +116,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
     /**
      * 注销网络连接观察者
      *
-     * @param resID observerKey
+     * @param observer observer
      */
     public static void removeRegisterObserver(NetworkChangeObserver observer) {
         if (netChangeObserverArrayList != null) {
@@ -127,12 +130,12 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         if (intent.getAction().equalsIgnoreCase(ANDROID_NET_CHANGE_ACTION)
                 || intent.getAction().equalsIgnoreCase(
                 TA_ANDROID_NET_CHANGE_ACTION)) {
-            MyLog.i("网络状态改变.");
+            logger.info("网络状态改变.");
             networkAvailable = NetworkUtil.isConnected(context);
             if (!networkAvailable) {
-                MyLog.i("没有网络连接.");
+                logger.info("没有网络连接.");
             } else {
-                MyLog.i("网络连接成功.");
+                logger.info("网络连接成功.");
                 netType = NetworkUtil.getAPNType(context);
             }
             notifyObserver();

@@ -1,4 +1,4 @@
-package cm.android.framework.ui;
+package cm.android.framework.ext.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,13 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.MyDialogFragment;
 import android.view.*;
 import android.widget.TextView;
-import cm.android.framework.ui.BaseActivity.KeyEventListener;
-import cm.android.util.MyLog;
+import cm.android.framework.ext.ui.BaseActivity.KeyEventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseDialogFragment extends MyDialogFragment implements
         IFragment, KeyEventListener {
 
     protected BaseActivity mActivity;
+    private static final Logger logger = LoggerFactory.getLogger(BaseDialogFragment.class);
 
     @Override
     public void onAttach(Activity activity) {
@@ -71,7 +73,7 @@ public abstract class BaseDialogFragment extends MyDialogFragment implements
     public void setUserVisibleHint(boolean isVisibleToUser) {
         // 该方法先于onStart执行，在tab切换时会触发
         super.setUserVisibleHint(isVisibleToUser);
-        MyLog.i("isVisibleToUser = " + isVisibleToUser + ",isVisible() = "
+        logger.info("isVisibleToUser = " + isVisibleToUser + ",isVisible() = "
                 + isVisible());
         // onStart之后isVisible()会返回true
         if (isVisible()) {

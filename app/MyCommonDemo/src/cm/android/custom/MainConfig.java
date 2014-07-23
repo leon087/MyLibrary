@@ -1,13 +1,15 @@
 package cm.android.custom;
 
-import cm.android.framework.MyAppConfig;
-import cm.android.framework.global.DirData;
-import cm.android.util.MyLog;
-import cm.android.util.MyLog.MyLogManager.Level;
-import cm.android.util.MyLog.MyLogManager.LogMode;
+import android.content.Context;
+import ch.qos.logback.classic.Level;
+import cm.android.framework.core.WorkDir;
+import cm.android.framework.ext.MyAppConfig;
+import cm.android.log.LogConfig;
 
 public class MainConfig extends MyAppConfig {
     public static final String DOWNLOAD = "download/";
+    public static final String LOG_DIR = "log/";
+
 
     @Override
     protected void initDatabase() {
@@ -19,24 +21,13 @@ public class MainConfig extends MyAppConfig {
     }
 
     @Override
-    public void initWorkDir() {
-        DirData.initDirName(DOWNLOAD);
+    public void initWorkDir(Context context) {
+        WorkDir.getInstance().initWorkDir(context, DOWNLOAD, LOG_DIR);
     }
 
     @Override
     public void initLog() {
-        MyLog.setLogMode(initLogMode());
-        MyLog.setLogLevel(initLogLevel());
-    }
-
-    @Override
-    protected Level initLogLevel() {
-        return Level.DEBUG;
-    }
-
-    @Override
-    protected LogMode initLogMode() {
-        return LogMode.LOGCAT;
+        LogConfig.configLogback(Level.ALL, WorkDir.getInstance().getDir(LOG_DIR));
     }
 
     private static final class StoreRoot {

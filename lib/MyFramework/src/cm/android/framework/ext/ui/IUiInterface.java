@@ -1,4 +1,4 @@
-package cm.android.framework.ui;
+package cm.android.framework.ext.ui;
 
 import android.os.Bundle;
 import android.view.View;

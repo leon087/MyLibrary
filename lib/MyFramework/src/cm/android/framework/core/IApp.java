@@ -1,4 +1,4 @@
-package cm.android.framework;
+package cm.android.framework.core;
 
 public interface IApp {
 

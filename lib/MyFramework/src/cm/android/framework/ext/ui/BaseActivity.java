@@ -1,4 +1,4 @@
-package cm.android.framework.ui;
+package cm.android.framework.ext.ui;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -8,9 +8,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import cm.android.util.ActivityStack;
-import cm.android.util.MyLog;
 import cm.android.util.ObjectUtil;
 import cm.android.util.UIUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public abstract class BaseActivity extends FragmentActivity implements
 
     protected FragmentHelper mFragmentHelper;
     private Set<KeyEventListener> mKeyEventListener = ObjectUtil.newHashSet();
+    private static final Logger logger = LoggerFactory.getLogger(BaseActivity.class);
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
@@ -53,19 +55,19 @@ public abstract class BaseActivity extends FragmentActivity implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        MyLog.i("newConfig");
+        logger.info("newConfig");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        MyLog.i("outState = " + outState);
+        logger.info("outState = " + outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle bundle) {
         super.onRestoreInstanceState(bundle);
-        MyLog.i("bundle = " + bundle);
+        logger.info("bundle = " + bundle);
     }
 
     @Override

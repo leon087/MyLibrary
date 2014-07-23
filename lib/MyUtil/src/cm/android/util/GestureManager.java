@@ -1,5 +1,6 @@
 package cm.android.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -16,6 +17,7 @@ public class GestureManager extends SimpleOnGestureListener implements
     private GestureDetector mGestureDetector;
     private OnGestureFlingListener mListener;
 
+    @TargetApi(3)
     public GestureManager(Context context, OnGestureFlingListener listener) {
         mGestureDetector = new GestureDetector(context, this);
         mListener = listener;

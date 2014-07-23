@@ -14,6 +14,8 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +38,8 @@ import java.util.zip.ZipFile;
  * 常用工具类
  */
 public class Utils {
+    private static final Logger logger = LoggerFactory.getLogger(Utils.class);
+
     private Utils() {
     }
 
@@ -185,7 +189,7 @@ public class Utils {
         // int i = url.lastIndexOf("/");
         // String imgName = url.substring(i);
         if ("".equals(imageName)) {
-            MyLog.e("url = " + url);
+            logger.error("url = " + url);
         }
         return imageName;
     }
@@ -226,14 +230,14 @@ public class Utils {
             byte[] bytes = IoUtil.read(inputStream);
             stubMap = JSON.parseObject(bytes, Map.class);
         } catch (Exception e) {
-            MyLog.e(e);
+            logger.error("stubFileName = " + stubFileName, e);
         } finally {
             IoUtil.closeQuietly(inputStream);
         }
 
         // TODO:
         if (stubMap == null) {
-            MyLog.e("stubMap = null");
+            logger.error("stubMap = null");
             stubMap = ObjectUtil.newHashMap();
         }
         return stubMap;
@@ -254,8 +258,8 @@ public class Utils {
         }
         for (Header header : headers) {
             if (header.getName() != null) {
-                if (MyLog.isDebug()) {
-                    MyLog.d(header.getName() + " = " + header.getValue());
+                if (logger.isDebugEnabled()) {
+                    logger.debug(header.getName() + " = " + header.getValue());
                 }
                 // Set-Cookie = JSESSIONID=5C50DF19F1DE7BA88B6A30CACEA3A2B6;
                 // Path=/market
@@ -295,7 +299,7 @@ public class Utils {
         try {
             return URLEncoder.encode(str, HTTP.UTF_8);
         } catch (Exception e) {
-            MyLog.e(e);
+            logger.error("str = " + str, e);
             return defaultValue;
         }
     }
@@ -304,7 +308,7 @@ public class Utils {
         try {
             return URLDecoder.decode(str, HTTP.UTF_8);
         } catch (Exception e) {
-            MyLog.e(e);
+            logger.error("str = " + str, e);
             return defaultValue;
         }
     }
@@ -341,7 +345,7 @@ public class Utils {
         } catch (Exception e) {
         }
 
-        MyLog.d("getSystemProperties key = " + key + "str =  " + str);
+        logger.debug("getSystemProperties key = {},str = {}", key, str);
         if (str == null) {
             return "";
         }
@@ -385,7 +389,7 @@ public class Utils {
             InputStream is = context.getResources().openRawResource(id);
             props.load(is);
         } catch (Exception e) {
-            MyLog.e("Could not find the properties file.", e);
+            logger.error("Could not find the properties file.", e);
             // e.printStackTrace();
         }
         return props;
@@ -403,7 +407,7 @@ public class Utils {
             try {
                 return Integer.parseInt(str.substring(s, e));
             } catch (NumberFormatException ex) {
-                MyLog.e("convertToInt", ex);
+                logger.error("convertToInt", ex);
                 throw new NumberFormatException();
             }
         } else {
@@ -454,7 +458,7 @@ public class Utils {
         try {
             return stringBytes == null ? "" : new String(stringBytes, charset);
         } catch (UnsupportedEncodingException e) {
-            MyLog.e("Encoding response into string failed", e);
+            logger.error("Encoding response into string failed", e);
             return "";
         }
     }
@@ -514,13 +518,14 @@ public class Utils {
         return false;
     }
 
+    @TargetApi(8)
     public static long getCrc(Context context) {
         try {
             ZipFile zipFile = new ZipFile(context.getApplicationContext().getPackageCodePath());
             ZipEntry zipEntry = zipFile.getEntry("classes.dex");
             return zipEntry.getCrc();
         } catch (IOException e) {
-            MyLog.e(e);
+            logger.error("", e);
             return 0;
         }
 

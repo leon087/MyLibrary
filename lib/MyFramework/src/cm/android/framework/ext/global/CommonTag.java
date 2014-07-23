@@ -1,4 +1,4 @@
-package cm.android.framework.global;
+package cm.android.framework.ext.global;
 
 /**
  * 全局tag

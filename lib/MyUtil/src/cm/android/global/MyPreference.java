@@ -224,4 +224,5 @@ public class MyPreference {
         editor.putStringSet(key, value);
         commit();
     }
+
 }

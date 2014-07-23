@@ -1,10 +1,10 @@
-package cm.android.framework.util;
+package cm.android.framework.ext.util;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import cm.android.framework.global.CommonTag;
+import cm.android.framework.ext.global.CommonTag;
 import cm.android.global.MyParcelable;
 import cm.android.util.ObjectUtil;
 
@@ -19,7 +19,6 @@ public class MyIntent {
      * @param <T>
      * @param activity
      * @param clazz
-     * @param map
      * @param requestCode If >= 0, this code will be returned in onActivityResult() when
      *                    the activity exits.
      */
@@ -34,8 +33,7 @@ public class MyIntent {
      *
      * @param <T>
      * @param context
-     * @param name
-     * @param map
+     * @param
      */
     public static <T> void startActivity(Context context, Class<?> clazz, T data) {
         startActivity(context, clazz, data, false);
@@ -47,7 +45,6 @@ public class MyIntent {
      * @param <T>
      * @param context
      * @param clazz     跳转activity的类名
-     * @param map       Intent中传递的参数
      * @param isNewtask true: 添加{@link Intent.FLAG_ACTIVITY_NEW_TASK}标记
      */
     public static <T> void startActivity(Context context, Class<?> clazz,
@@ -89,7 +86,7 @@ public class MyIntent {
      * 获取Bundle中数据
      *
      * @param <T>
-     * @param bulde
+     * @param bunlde
      * @return
      */
     public static <T> T getData(Bundle bundle) {
@@ -144,7 +141,6 @@ public class MyIntent {
      * @param <T>
      * @param context
      * @param action
-     * @param map
      */
     public static <T> void sendBroadcast(Context context, String action, T data) {
         Intent intent = new Intent(action);

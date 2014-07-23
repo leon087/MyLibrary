@@ -5,12 +5,12 @@ import cm.android.app.global.Tag;
 import cm.android.app.manager.UpgradeManager;
 import cm.android.app.ui.fragment.dialog.ConfirmDialog;
 import cm.android.app.ui.fragment.dialog.UpgradeDialog;
+import cm.android.cmcommondemo.R;
 import cm.android.custom.MainApp;
 import cm.android.custom.MyManager;
-import cm.android.framework.ui.BaseActivity;
+import cm.android.framework.ext.ui.BaseActivity;
 import cm.android.sdk.MyHandler;
 import cm.android.util.MapUtil;
-import cm.android.cmcommondemo.R;
 
 import java.util.Map;
 

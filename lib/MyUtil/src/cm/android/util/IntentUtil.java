@@ -3,6 +3,8 @@ package cm.android.util;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -10,6 +12,7 @@ import java.io.File;
  * 封装了一些Intent操作
  */
 public class IntentUtil {
+    private static final Logger logger = LoggerFactory.getLogger(IntentUtil.class);
     // private static Context sContext = StoreApp.getApp();
     //
     // public static void sendIntent(Class<?> cls, Bundle bundle, int flags) {
@@ -41,7 +44,7 @@ public class IntentUtil {
                 return true;
             }
         } catch (Exception e) {
-            MyLog.e(e);
+            logger.error("packageName = " + packageName, e);
         }
         return false;
     }

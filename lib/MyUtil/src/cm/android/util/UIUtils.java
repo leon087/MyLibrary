@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 
@@ -20,6 +22,7 @@ import java.lang.reflect.Method;
  */
 public class UIUtils {
     private static Toast mToast = null;
+    private static final Logger logger = LoggerFactory.getLogger(UIUtils.class);
 
     public static void cancel() {
         if (null != mToast) {
@@ -73,7 +76,7 @@ public class UIUtils {
         try {
             return (E) view.findViewById(id);
         } catch (ClassCastException e) {
-            MyLog.e("Could not cast View to concrete class.", e);
+            logger.error("Could not cast View to concrete class.", e);
             throw e;
         }
     }

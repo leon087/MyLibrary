@@ -1,17 +1,20 @@
-package cm.android.framework;
+package cm.android.framework.core;
 
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import cm.android.applications.AppUtil;
-import cm.android.framework.manager.BaseManager;
+import cm.android.framework.core.manager.BaseManager;
 import cm.android.util.ActivityStack;
 import cm.android.util.EnvironmentInfo;
 import cm.android.util.MyLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseApp extends Application implements IApp {
     private static BaseApp sApp = null;
     private volatile boolean isInit = false;
     private BaseManager mServiceManager;
+    private static final Logger logger = LoggerFactory.getLogger(BaseApp.class);
 
     public static boolean isInit() {
         if (sApp == null) {
@@ -33,13 +36,13 @@ public abstract class BaseApp extends Application implements IApp {
     public void onCreate() {
         super.onCreate();
         sApp = this;
-        initConfig().init();
+        initConfig().init(this);
         disableConnectionReuseIfNecessary();
         MyLog.initialize(this.getPackageName());
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 this.getPackageManager(), this.getPackageName());
-        MyLog.i("versionCode = " + packageInfo.versionCode + ",versionName = "
-                + packageInfo.versionName);
+        logger.info("versionCode = {},versionName = {}", packageInfo.versionCode
+                , packageInfo.versionName);
     }
 
     /**
@@ -57,7 +60,7 @@ public abstract class BaseApp extends Application implements IApp {
      */
     @Override
     public synchronized void initApp() {
-        MyLog.i("isInit = " + isInit);
+        logger.info("isInit = " + isInit);
         isInit = true;
 
         if (mServiceManager == null) {
@@ -73,7 +76,7 @@ public abstract class BaseApp extends Application implements IApp {
      */
     @Override
     public synchronized void exitApp() {
-        MyLog.i("isInit = " + isInit);
+        logger.info("isInit = " + isInit);
         isInit = false;
         ActivityStack.getInstance().finishAll();
 
@@ -83,7 +86,6 @@ public abstract class BaseApp extends Application implements IApp {
             mServiceManager = null;
             System.gc();
         }
-        MyLog.release();
     }
 
     public void exitAppProcess() {

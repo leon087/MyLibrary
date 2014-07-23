@@ -3,12 +3,14 @@ package cm.android.sdk;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import cm.android.util.MyLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * sdcard监听类
  */
 public class ExternalStorageReceiver extends BaseBroadcastReceiver {
+    private static final Logger logger = LoggerFactory.getLogger(ExternalStorageReceiver.class);
     private ExternalStorageListener externalStorageListener;
 
     /**
@@ -43,7 +45,7 @@ public class ExternalStorageReceiver extends BaseBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        MyLog.i("intent = " + intent);
+        logger.info("intent = " + intent);
         String action = intent.getAction();
 
         if (Intent.ACTION_MEDIA_MOUNTED.equals(action)

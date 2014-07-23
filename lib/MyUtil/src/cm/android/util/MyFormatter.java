@@ -1,5 +1,6 @@
 package cm.android.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.text.format.Formatter;
 
@@ -93,6 +94,7 @@ public class MyFormatter {
      * @param size
      * @return
      */
+    @TargetApi(3)
     public static String formateFileSize(Context context, long size) {
         return Formatter.formatFileSize(context, size);
     }

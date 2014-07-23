@@ -12,6 +12,8 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.InetAddress;
@@ -21,6 +23,7 @@ import java.util.Enumeration;
 
 public class EnvironmentInfo {
     private static final long REMAIN_SPACE = 5 * 1024 * 1024;
+    private static final Logger logger = LoggerFactory.getLogger(EnvironmentInfo.class);
 
     private EnvironmentInfo() {
     }
@@ -67,7 +70,7 @@ public class EnvironmentInfo {
         boolean isMounted = Environment.MEDIA_MOUNTED.equals(Environment
                 .getExternalStorageState());
         if (!isMounted) {
-            MyLog.i("ExternalStorageState = "
+            logger.info("ExternalStorageState = "
                     + Environment.getExternalStorageState());
         }
 
@@ -349,7 +352,7 @@ public class EnvironmentInfo {
                 }
             }
         } catch (SocketException ex) {
-            MyLog.e(ex);
+            logger.error("", ex);
         }
         return null;
     }

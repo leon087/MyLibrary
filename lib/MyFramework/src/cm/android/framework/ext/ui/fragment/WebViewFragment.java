@@ -1,4 +1,4 @@
-package cm.android.framework.ui.fragment;
+package cm.android.framework.ext.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

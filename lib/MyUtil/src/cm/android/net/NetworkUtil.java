@@ -5,13 +5,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.net.ConnectivityManagerCompat;
 import android.telephony.TelephonyManager;
-import cm.android.util.MyLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class NetworkUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(NetworkUtil.class);
 
     // sim卡是否可读
     public static boolean isSimReady(Context context) {
@@ -223,19 +226,19 @@ public class NetworkUtil {
             setMobileDataEnabledMethod.setAccessible(true);
             setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
         } catch (SecurityException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NoSuchFieldException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (ClassNotFoundException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (IllegalArgumentException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (IllegalAccessException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NoSuchMethodException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (InvocationTargetException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
     }
 }

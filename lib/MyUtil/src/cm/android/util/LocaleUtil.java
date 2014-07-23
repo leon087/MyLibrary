@@ -91,7 +91,6 @@ public class LocaleUtil {
         Locale locale = Locale.getDefault();
         if (locale != null) {
             String lo = locale.getLanguage();
-            MyLog.i("getLocale " + lo);
             if (lo != null) {
                 return lo.toLowerCase();
             }

@@ -11,7 +11,7 @@ import cm.android.app.ui.activity.MyBaseActivity;
 import cm.android.cmcommondemo.R;
 import cm.android.custom.MainApp;
 import cm.android.custom.http.BaseHttpListener;
-import cm.android.framework.ui.BaseFragment;
+import cm.android.framework.ext.ui.BaseFragment;
 import cm.android.util.MapUtil;
 import cm.android.util.Utils;
 

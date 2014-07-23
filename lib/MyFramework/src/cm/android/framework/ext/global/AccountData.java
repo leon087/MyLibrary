@@ -1,4 +1,4 @@
-package cm.android.framework.global;
+package cm.android.framework.ext.global;
 
 import cm.android.callback.Observable;
 import cm.android.util.ObjectUtil;

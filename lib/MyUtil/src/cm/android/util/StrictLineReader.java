@@ -16,6 +16,8 @@
 
 package cm.android.util;
 
+import android.annotation.TargetApi;
+
 import java.io.*;
 import java.nio.charset.Charset;
 
@@ -152,6 +154,7 @@ public class StrictLineReader implements Closeable {
      * @throws IOException  for underlying {@code InputStream} errors.
      * @throws EOFException for the end of source stream.
      */
+    @TargetApi(9)
     public String readLine() throws IOException {
         synchronized (in) {
             if (buf == null) {

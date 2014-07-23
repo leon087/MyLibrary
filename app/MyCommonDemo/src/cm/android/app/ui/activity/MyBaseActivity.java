@@ -6,13 +6,13 @@ import android.view.Window;
 import cm.android.app.global.Tag;
 import cm.android.app.ui.MyUIUtil;
 import cm.android.app.ui.fragment.dialog.LoadingDialog;
+import cm.android.cmcommondemo.R;
 import cm.android.custom.MainApp;
 import cm.android.custom.http.BaseHttpListener;
-import cm.android.framework.ui.BaseActivity;
+import cm.android.framework.ext.ui.BaseActivity;
 import cm.android.sdk.MyHandler;
 import cm.android.util.MapUtil;
 import cm.android.util.Utils;
-import cm.android.cmcommondemo.R;
 
 import java.util.Map;
 

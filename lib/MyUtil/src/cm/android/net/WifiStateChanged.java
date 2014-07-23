@@ -9,9 +9,12 @@ import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.Parcelable;
-import cm.android.util.MyLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WifiStateChanged {
+
+    private static final Logger logger = LoggerFactory.getLogger(WifiStateChanged.class);
 
     private Context mContext;
     private NetworkConnectChangedReceiver wifiReceiver = new NetworkConnectChangedReceiver();
@@ -61,7 +64,7 @@ public class WifiStateChanged {
     private class NetworkConnectChangedReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            MyLog.i("intent.getAction() = " + intent.getAction());
+            logger.info("intent.getAction() = " + intent.getAction());
 
             if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(intent
                     .getAction())) {// 这个监听wifi的连接状态
@@ -82,15 +85,15 @@ public class WifiStateChanged {
                 NetworkInfo info = intent
                         .getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
                 if (info != null) {
-                    MyLog.e("info.getType() = " + info.getType());
+                    logger.error("info.getType() = " + info.getType());
                     if (NetworkInfo.State.CONNECTED == info.getState()) {
-                        MyLog.e("info.getState() = CONNECTED");
+                        logger.error("info.getState() = CONNECTED");
                     } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {
                         if (NetworkInfo.State.DISCONNECTED == info.getState()
                                 || NetworkInfo.State.DISCONNECTING == info
                                 .getState()) {
                             // showWifiDisconnected(context);
-                            MyLog.e(
+                            logger.error(
                                     "info.getState() = " + info.getState());
                         }
                     }

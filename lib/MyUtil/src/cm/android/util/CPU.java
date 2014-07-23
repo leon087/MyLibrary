@@ -17,6 +17,8 @@ package cm.android.util;
 
 import android.os.Build;
 import android.text.TextUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +39,8 @@ public class CPU {
     private static final Map<String, String> cpuinfo = new HashMap<String, String>();
     private static int cachedFeature = -1;
     private static String cachedFeatureString = null;
+
+    private static final Logger logger = LoggerFactory.getLogger(CPU.class);
 
     public static String getFeatureString() {
         getFeature();
@@ -64,20 +68,20 @@ public class CPU {
                     }
                 }
             } catch (Exception e) {
-                MyLog.e(e);
+                logger.error("", e);
             } finally {
                 try {
                     if (bis != null)
                         bis.close();
                 } catch (IOException e) {
-                    MyLog.e(e);
+                    logger.error("", e);
                 }
             }
         }
 
         if (!cpuinfo.isEmpty()) {
             for (String key : cpuinfo.keySet())
-                MyLog.d(key + ":" + cpuinfo.get(key));
+                logger.debug(key + ":" + cpuinfo.get(key));
 
             boolean hasARMv6 = false;
             boolean hasARMv7 = false;
@@ -86,7 +90,7 @@ public class CPU {
             if (!TextUtils.isEmpty(val)) {
                 try {
                     int i = Utils.convertToInt(val);
-                    MyLog.d("CPU architecture: " + i + "s");
+                    logger.debug("CPU architecture: " + i + "s");
                     if (i >= 7) {
                         hasARMv6 = true;
                         hasARMv7 = true;
@@ -95,7 +99,7 @@ public class CPU {
                         hasARMv7 = false;
                     }
                 } catch (NumberFormatException ex) {
-                    MyLog.e("getCPUFeature", ex);
+                    logger.error("getCPUFeature", ex);
                 }
 
                 val = cpuinfo.get("Processor");
@@ -161,7 +165,7 @@ public class CPU {
                 sb.append("MIPS ");
             cachedFeatureString = sb.toString();
         }
-        MyLog.d("GET CPU FATURE: " + cachedFeatureString);
+        logger.debug("GET CPU FATURE: " + cachedFeatureString);
         return cachedFeature;
     }
 

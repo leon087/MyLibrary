@@ -1,5 +1,6 @@
 package cm.android.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.Bitmap.Config;
@@ -9,10 +10,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
 public class BitmapUtil {
+    private static final Logger logger = LoggerFactory.getLogger(BitmapUtil.class);
+
     private BitmapUtil() {
     }
 
@@ -47,7 +52,7 @@ public class BitmapUtil {
     /**
      * 图片反转
      *
-     * @param bm
+     * @param bmp
      * @param flag 0为水平反转，1为垂直反转
      * @return
      */
@@ -208,7 +213,8 @@ public class BitmapUtil {
     }
 
     /**
-     * @param 将图片内容解析成字节数组
+     * 将图片内容解析成字节数组
+     *
      * @param inStream
      * @return byte[]
      * @throws Exception
@@ -246,7 +252,8 @@ public class BitmapUtil {
     }
 
     /**
-     * @param 图片缩放
+     * 图片缩放
+     *
      * @param bitmap 对象
      * @param w      要缩放的宽度
      * @param h      要缩放的高度
@@ -365,8 +372,7 @@ public class BitmapUtil {
             // bitmap = readBitmap(is);
             bitmap = decodeBitmap(is, displayWidth, displayHeight);
         } catch (IOException e) {
-            e.printStackTrace();
-            MyLog.e(e);
+            logger.error("", e);
             return null;
         } finally {
             IoUtil.closeQuietly(is);
@@ -800,6 +806,7 @@ public class BitmapUtil {
      * @param view
      * @return
      */
+    @TargetApi(4)
     public static Bitmap getBitmapFromView(View view) {
         view.destroyDrawingCache();
         view.measure(View.MeasureSpec.makeMeasureSpec(0,

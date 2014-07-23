@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.telephony.TelephonyManager;
-import cm.android.custom.MainApp;
-import cm.android.framework.BaseApp;
 import cm.android.applications.AppUtil;
+import cm.android.custom.MainApp;
+import cm.android.framework.core.BaseApp;
 import cm.android.util.MyLog;
 
 public class DeviceManager {

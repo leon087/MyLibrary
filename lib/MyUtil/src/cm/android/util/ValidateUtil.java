@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -7,6 +10,7 @@ import java.util.regex.Pattern;
  * 简单检验工具类
  */
 public class ValidateUtil {
+    private static final Logger logger = LoggerFactory.getLogger(ValidateUtil.class);
     // 仅支持英文数字下划线中划线@英文句号
     public static final String RULE_USERNAME = "[0-9a-zA-Z\\._\\-@]*";
     public static final String RULE_POSTALCODE_SIMPLE = "^[0-9]{6}$";
@@ -18,14 +22,14 @@ public class ValidateUtil {
     /**
      * 判断8-15位字母或数据的合法密码
      *
-     * @param phone
+     * @param passWord
      * @return
      */
     public static boolean checkPassword(String passWord) {
         if (passWord == null) {
             return false;
         }
-        MyLog.i("=============passWord is:" + passWord);
+        logger.info("=============passWord is:" + passWord);
         Pattern pattern = Pattern.compile("^[a-z|A-Z|0-9]{8,25}$");
         Matcher matcher = pattern.matcher(passWord);
 
@@ -43,7 +47,7 @@ public class ValidateUtil {
      */
     public static boolean checkMobilePhone(String phone) {
         /*
-		 * 匹配移动手机号 "^1(3[4-9]|5[012789]|8[78])\d{8}$"以代码为准
+         * 匹配移动手机号 "^1(3[4-9]|5[012789]|8[78])\d{8}$"以代码为准
 		 *
 		 * 匹配电信手机号 "^18[09]\d{8}$"
 		 *
@@ -209,8 +213,7 @@ public class ValidateUtil {
     /**
      * 判断各字段是否为数字或者为字母 ，长度
      *
-     * @param str     需要判断的字符串
-     * @param wapType wap 类型
+     * @param str 需要判断的字符串
      * @return 字段是数字或者为字母长度符合规则, 返回true，否则返回 false
      */
     public static boolean isChannelId(String str) {
@@ -250,8 +253,7 @@ public class ValidateUtil {
     /**
      * 判断各字段是否为数字或者为字母
      *
-     * @param str     需要判断的字符串
-     * @param wapType wap 类型
+     * @param str 需要判断的字符串
      * @return 字段是数字或者为字母长度符合规则, 返回true，否则返回 false
      */
     private static boolean isChar(String str, int index) {
@@ -323,7 +325,7 @@ public class ValidateUtil {
     /**
      * 简单校验邮政编码（规则：长度为6，仅数字）
      *
-     * @param mobile
+     * @param postalCode
      * @return
      */
     public static boolean isValidPostalCode(String postalCode) {

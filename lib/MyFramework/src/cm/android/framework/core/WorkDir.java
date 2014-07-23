@@ -1,58 +1,44 @@
-package cm.android.framework.global;
+package cm.android.framework.core;
 
 import android.content.Context;
 import cm.android.util.EnvironmentInfo;
 import cm.android.util.IoUtil;
-import cm.android.util.MyLog;
 import cm.android.util.ObjectUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * 目录管理基类
  */
-public class DirData {
+public class WorkDir {
     public static final String WORK_PATH = "workpath";
-    private static final HashSet<String> dirsStr = ObjectUtil.newHashSet();
-    private final HashMap<String, File> mDirs = ObjectUtil.newHashMap();
+    private static final HashMap<String, File> mDirs = ObjectUtil.newHashMap();
     private File workDir = null;
 
-    public DirData(Context context) {
-        initWorkDir(context);
+    private static final Logger logger = LoggerFactory.getLogger(WorkDir.class);
+
+    private WorkDir() {
     }
 
-    /**
-     * 设置初始化目录
-     *
-     * @param dirName
-     */
-    public static void initDirName(String... dirName) {
-        for (String string : dirName) {
-            dirsStr.add(string);
-        }
+    private static final class Singleton {
+        private static final WorkDir SINGLETON = new WorkDir();
+    }
+
+    public static WorkDir getInstance() {
+        return Singleton.SINGLETON;
     }
 
     /**
      * 初始化存储路径
      */
-    public void initWorkDir(Context context) {
+    public void initWorkDir(Context context, String... dirName) {
         workDir = getRootDir(context);
-        MyLog.i("workDir = " + workDir.getAbsolutePath());
-        initDirs(context);
+        logger.info("workDir = " + workDir.getAbsolutePath());
+        initDirs(context, dirName);
     }
-
-    // /**
-    // * 创建本地存储文件路径
-    // */
-    // private void createFolder(Context context) {
-    // // Utils.createFolder(workPath);
-    // for (String dir : mDirs.keySet()) {
-    // // IoUtil.createDirector(mDirs.get(dir));
-    // EnvironmentInfo.getExternalFilesDir(context, mDirs.get(dir));
-    // }
-    // }
 
     private File getRootDir(Context context) {
         File rootDir = new File(context.getFilesDir(), WORK_PATH);
@@ -77,8 +63,8 @@ public class DirData {
         return mDirs.get(dir);
     }
 
-    private void initDirs(Context context) {
-        for (String dir : dirsStr) {
+    private void initDirs(Context context, String... dirNames) {
+        for (String dir : dirNames) {
             File file = new File(workDir, dir);
             file.mkdirs();
             mDirs.put(dir, file);

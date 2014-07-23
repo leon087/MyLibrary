@@ -1,5 +1,6 @@
 package cm.android.util;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 
 import java.io.File;
@@ -18,6 +19,7 @@ public class LibLoader {
      * @param soFileName
      * @param entryName
      */
+    @TargetApi(8)
     public static void load(Context context, String soFileName, String entryName) {
         File sopath = context.getDir("libs", Context.MODE_PRIVATE);
         File soname = new File(sopath, soFileName);

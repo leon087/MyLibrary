@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.Map;
 
@@ -7,16 +10,17 @@ import java.util.Map;
  * JSON数据处理Util类
  */
 public class MapUtil {
+    private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
     private static final String DEF_VALUE_STRING = "";
     private static final int DEF_VALUE_INT = -1;
     private static final boolean DEF_VALUE_BOOLEAN = false;
+
     private MapUtil() {
     }
 
     /**
      * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_STRING}
      *
-     * @param <H>
      * @param map
      * @param key
      * @return
@@ -40,7 +44,6 @@ public class MapUtil {
     /**
      * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_BOOLEAN}
      *
-     * @param <H>
      * @param map
      * @param key
      * @return
@@ -62,7 +65,7 @@ public class MapUtil {
             try {
                 return Boolean.valueOf(value.toString());
             } catch (NumberFormatException e) {
-                MyLog.e(e);
+                logger.error("value = " + value, e);
                 return DEF_VALUE_BOOLEAN;
             }
         }
@@ -71,7 +74,6 @@ public class MapUtil {
     /**
      * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
      *
-     * @param <H>
      * @param map
      * @param key
      * @return
@@ -91,7 +93,7 @@ public class MapUtil {
             try {
                 return Long.valueOf(value.toString());
             } catch (NumberFormatException e) {
-                MyLog.e(e);
+                logger.error("value = " + value, e);
                 return DEF_VALUE_INT;
             }
         }
@@ -100,7 +102,6 @@ public class MapUtil {
     /**
      * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
      *
-     * @param <H>
      * @param map
      * @param key
      * @return
@@ -120,7 +121,7 @@ public class MapUtil {
             try {
                 return Integer.valueOf(value.toString());
             } catch (NumberFormatException e) {
-                MyLog.e(e);
+                logger.error("value = " + value, e);
                 return DEF_VALUE_INT;
             }
         }
@@ -129,7 +130,6 @@ public class MapUtil {
     /**
      * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
      *
-     * @param <H>
      * @param map
      * @param key
      * @return
@@ -149,7 +149,7 @@ public class MapUtil {
             try {
                 return Double.valueOf(value.toString());
             } catch (NumberFormatException e) {
-                MyLog.e(e);
+                logger.error("value = " + value, e);
                 return DEF_VALUE_INT;
             }
         }
@@ -158,7 +158,6 @@ public class MapUtil {
     /**
      * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
      *
-     * @param <H>
      * @param map
      * @param key
      * @return
@@ -178,7 +177,7 @@ public class MapUtil {
             try {
                 return Float.valueOf(value.toString());
             } catch (NumberFormatException e) {
-                MyLog.e(e);
+                logger.error("value = " + value, e);
                 return DEF_VALUE_INT;
             }
         }
@@ -188,8 +187,6 @@ public class MapUtil {
      * 根据key获取map中的List，如果不存在，返回空List(不返回null);只获取List类型的值，其他类型空List(不返回null)
      *
      * @param <P>
-     * @param <T>
-     * @param <H>
      */
     public static <K, V, P> List<P> getList(Map<K, V> map, K key) {
         if (map == null) {
@@ -207,7 +204,6 @@ public class MapUtil {
      * @param <K>
      * @param <V>
      * @param <T>
-     * @param <H>
      * @param map
      * @param key
      * @return

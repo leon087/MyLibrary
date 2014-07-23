@@ -14,14 +14,14 @@ import cm.android.app.ui.MyUIUtil;
 import cm.android.app.ui.UpgradeHolder;
 import cm.android.app.ui.UpgradeHolder.IUpgrade;
 import cm.android.app.ui.fragment.dialog.ConfirmDialog;
+import cm.android.cmcommondemo.R;
 import cm.android.custom.MainApp;
 import cm.android.custom.MyManager;
-import cm.android.framework.util.MyIntent;
+import cm.android.framework.ext.util.MyIntent;
 import cm.android.net.NetworkUtil;
 import cm.android.sdk.MyHandler;
 import cm.android.util.UIUtils;
 import cm.android.util.Utils;
-import cm.android.cmcommondemo.R;
 
 public class InitActivity extends MyBaseActivity {
     public static final int CODE_EXIT = Activity.RESULT_CANCELED;

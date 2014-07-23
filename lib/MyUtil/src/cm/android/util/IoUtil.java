@@ -3,6 +3,8 @@ package cm.android.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.StatFs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.zip.ZipFile;
  */
 public class IoUtil {
     private static final int BUF_SIZE = 1024 * 100;
+    private static final Logger logger = LoggerFactory.getLogger(IoUtil.class);
 
     private IoUtil() {
     }
@@ -80,7 +83,7 @@ public class IoUtil {
                     fileName));
             write(inputStream, outputStream);
         } catch (IOException e) {
-            MyLog.e("fileName = " + fileName, e);
+            logger.error("fileName = " + fileName, e);
         } finally {
             closeQuietly(inputStream);
             closeQuietly(outputStream);
@@ -106,7 +109,7 @@ public class IoUtil {
                             | Context.MODE_WORLD_WRITEABLE));
             write(inputStream, outputStream);
         } catch (IOException e) {
-            MyLog.e("fileName = " + fileName, e);
+            logger.error("fileName = " + fileName, e);
         } finally {
             closeQuietly(inputStream);
             closeQuietly(outputStream);
@@ -134,7 +137,7 @@ public class IoUtil {
         try {
             files = assetManager.list(assetPath);
         } catch (IOException e) {
-            MyLog.e("assetPath = " + assetPath, e);
+            logger.error("assetPath = " + assetPath, e);
             return;
         }
 
@@ -150,7 +153,7 @@ public class IoUtil {
                 write(inputStream, outputStream);
             } catch (IOException e) {
                 // e.printStackTrace();
-                MyLog.e("assetPath = " + assetPath, e);
+                logger.error("assetPath = " + assetPath, e);
             } finally {
                 closeQuietly(inputStream);
                 closeQuietly(outputStream);
@@ -170,7 +173,7 @@ public class IoUtil {
                 throw rethrown;
             } catch (Exception e) {
                 // e.printStackTrace();
-                MyLog.e(e);
+                logger.error("", e);
             }
         }
     }
@@ -255,7 +258,7 @@ public class IoUtil {
                     destFilePath));
             write(inputStream, outputStream);
         } catch (IOException e) {
-            MyLog.e("srcName = " + srcName + ",destFilePath = " + destFilePath,
+            logger.error("srcName = " + srcName + ",destFilePath = " + destFilePath,
                     e);
         } finally {
             closeQuietly(inputStream);
@@ -278,7 +281,7 @@ public class IoUtil {
                     destPath));
             write(inputStream, outputStream);
         } catch (IOException e) {
-            MyLog.e("srcPath = " + srcPath + ",destPath = " + destPath, e);
+            logger.error("srcPath = " + srcPath + ",destPath = " + destPath, e);
         } finally {
             closeQuietly(inputStream);
             closeQuietly(outputStream);
@@ -310,7 +313,7 @@ public class IoUtil {
         try {
             return file.createNewFile();
         } catch (IOException e) {
-            MyLog.e("file:" + file, e);
+            logger.error("file:" + file, e);
             return false;
         }
     }
@@ -469,7 +472,7 @@ public class IoUtil {
             if (!newfile.exists()) {
                 return oldfile.renameTo(newfile);
             } else {
-                MyLog.e("newfile.exists() = true");
+                logger.error("newfile.exists() = true");
             }
         }
         return false;
@@ -495,7 +498,7 @@ public class IoUtil {
             byte[] bytes = outputStream.toByteArray();
             return bytes;
         } catch (IOException e) {
-            MyLog.e("file = " + file, e);
+            logger.error("file = " + file, e);
             return null;
         } finally {
             closeQuietly(outputStream);
@@ -532,7 +535,7 @@ public class IoUtil {
             outputStream.flush();
             return true;
         } catch (IOException e) {
-            MyLog.e("file = " + file, e);
+            logger.error("file = " + file, e);
             return false;
         } finally {
             closeQuietly(outputStream);
@@ -560,7 +563,7 @@ public class IoUtil {
             write(inputStream, outputStream);
             return true;
         } catch (Exception e) {
-            MyLog.e("srcFilePath = " + srcFilePath + ",destFileName = "
+            logger.error("srcFilePath = " + srcFilePath + ",destFileName = "
                     + destFileName, e);
             return false;
         } finally {
@@ -570,7 +573,7 @@ public class IoUtil {
     }
 
     /**
-     * 读取{@link zipfile}中{@link entryName}文件写入到{@link soFile}中
+     * 读取{@link ZipFile}中{@link String}文件写入到{@link File}中
      *
      * @param zipfile   zip压缩包
      * @param entryName 需要读取的压缩包中文件文件名
@@ -593,7 +596,7 @@ public class IoUtil {
             }
             return true;
         } catch (Exception e) { // I am still lazy ~~~
-            MyLog.e("zipfile = " + zipfile + ",entryName = " + entryName
+            logger.error("zipfile = " + zipfile + ",entryName = " + entryName
                     + ",soFile = " + soFile, e);
             return false;
         } finally {
@@ -603,7 +606,7 @@ public class IoUtil {
     }
 
     /**
-     * 将{@link inputStream}中内容写入{@link outputStream}
+     * 将{@link InputStream}中内容写入{@link OutputStream}
      *
      * @param inputStream
      * @param outputStream
@@ -619,7 +622,7 @@ public class IoUtil {
     }
 
     /**
-     * 读取{@link inputStream}中内容，以byte[]返回
+     * 读取{@link InputStream}中内容，以byte[]返回
      *
      * @param inputStream
      * @return
@@ -630,7 +633,7 @@ public class IoUtil {
             write(inputStream, baos);
             return baos.toByteArray();
         } catch (IOException e) {
-            MyLog.e(e);
+            logger.error("", e);
             return null;
         } finally {
             closeQuietly(baos);
@@ -655,7 +658,7 @@ public class IoUtil {
             oos.writeObject(obj);
             return baos.toByteArray();
         } catch (Exception e) {
-            MyLog.e(e);
+            logger.error("", e);
             return null;
         } finally {
             IoUtil.closeQuietly(baos);
@@ -681,7 +684,7 @@ public class IoUtil {
             Object o = ois.readObject();
             return o;
         } catch (Exception e) {
-            MyLog.e(e);
+            logger.error("", e);
             return null;
         } finally {
             IoUtil.closeQuietly(baos);

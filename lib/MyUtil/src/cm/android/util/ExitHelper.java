@@ -1,5 +1,6 @@
 package cm.android.util;
 
+import android.annotation.TargetApi;
 import android.view.KeyEvent;
 
 /**
@@ -80,6 +81,7 @@ public class ExitHelper {
          * @param event
          * @return
          */
+        @TargetApi(5)
         public boolean dispatchKeyEvent(KeyEvent event) {
             int keyCode = event.getKeyCode();
             switch (keyCode) {

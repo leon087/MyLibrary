@@ -1,17 +1,19 @@
-package cm.android.framework.manager;
+package cm.android.framework.core.manager;
 
 import android.content.Context;
-import cm.android.util.MyLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manager基类
  */
 public abstract class BaseManager implements IManager {
     private volatile boolean isStart = false;
+    private static final Logger logger = LoggerFactory.getLogger(BaseManager.class);
 
     @Override
     public final synchronized void create(Context context) {
-        MyLog.i("isStart = " + isStart);
+        logger.info("isStart = " + isStart);
         if (isStart) {
             return;
         }
@@ -22,7 +24,7 @@ public abstract class BaseManager implements IManager {
 
     @Override
     public final synchronized void destroy() {
-        MyLog.i("isStart = " + isStart);
+        logger.info("isStart = " + isStart);
         if (!isStart) {
             return;
         }

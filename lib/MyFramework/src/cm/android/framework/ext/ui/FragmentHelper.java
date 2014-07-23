@@ -1,4 +1,4 @@
-package cm.android.framework.ui;
+package cm.android.framework.ext.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FragmentManager包装类
@@ -13,6 +15,8 @@ import android.support.v4.app.FragmentTransaction;
 public class FragmentHelper {
 
     private FragmentManager mFragmentManager;
+    private static final Logger logger = LoggerFactory.getLogger(FragmentHelper.class);
+
 
     public FragmentHelper(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
@@ -91,7 +95,6 @@ public class FragmentHelper {
      * @param arguments
      * @param resId
      * @param fragment
-     * @param backStackName
      */
     public void add(Bundle arguments, int resId, Fragment fragment) {
         String tag = fragment.getClass().getName();
@@ -231,7 +234,6 @@ public class FragmentHelper {
     /**
      * 根据Tag查找Fragment
      *
-     * @param resId
      * @return
      */
     public android.support.v4.app.Fragment findFragmentByTag(

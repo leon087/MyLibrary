@@ -1,4 +1,4 @@
-package cm.android.framework.manager;
+package cm.android.framework.core.manager;
 
 import java.util.HashMap;
 
