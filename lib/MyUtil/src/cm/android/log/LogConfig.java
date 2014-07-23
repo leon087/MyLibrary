@@ -32,6 +32,8 @@ public class LogConfig {
     }
 
     private static volatile boolean configFlag = false;
+    private static final String PATTERN_LOGCAT = "[%logger:%thread:%file:%method:%line] %msg%n";
+    private static final String PATTERN_FILE = "%date %-5level [%logger:%thread:%file:%method:%line] - %msg%n";
 
     public static void configLogback(Level level, File logDir) {
         if (configFlag) {
@@ -65,7 +67,7 @@ public class LogConfig {
         PatternLayoutEncoder encoder1 = new PatternLayoutEncoder();
         encoder1.setContext(lc);
 
-        encoder1.setPattern("%date %-5level [%thread:%logger:%method:%line] - %msg%n");
+        encoder1.setPattern(PATTERN_FILE);
         encoder1.start();
 
         RollingFileAppender<ILoggingEvent> fileAppender = new RollingFileAppender<ILoggingEvent>();
@@ -93,7 +95,7 @@ public class LogConfig {
         // setup LogcatAppender
         PatternLayoutEncoder encoder2 = new PatternLayoutEncoder();
         encoder2.setContext(lc);
-        encoder2.setPattern("[%thread:%logger:%method:%line] %msg%n");
+        encoder2.setPattern(PATTERN_LOGCAT);
         encoder2.start();
 
         LogcatAppender logcatAppender = new LogcatAppender();
@@ -110,7 +112,7 @@ public class LogConfig {
 
                 "<appender name='LOGCAT' class='ch.qos.logback.classic.android.LogcatAppender'>" +
                 "<encoder>" +
-                "<pattern>[%thread:%logger:%method:%line] %msg%n</pattern>" +
+                "<pattern>" + PATTERN_LOGCAT + "</pattern>" +
                 "</encoder>" +
                 "</appender>" +
 
@@ -153,7 +155,7 @@ public class LogConfig {
                 "</rollingPolicy>" +
 
                 "<encoder>" +
-                "<pattern>%date %-5level [%thread:%logger:%method:%line] - %msg%n</pattern>" +
+                "<pattern>" + PATTERN_FILE + "</pattern>" +
                 "</encoder>" +
 
                 "</appender>";
