@@ -1,10 +1,12 @@
 package cm.android.common.http;
 
-import cm.android.util.MyLog;
 import cm.android.util.Utils;
 import org.apache.http.Header;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
+    private static final Logger logger = LoggerFactory.getLogger("HTTP");
     private String url;
     private HttpListener<T> httpListener;
 
@@ -17,8 +19,8 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
     public void onFinish() {
         super.onFinish();
         httpListener.onFinish();
-        if (MyLog.isDebug()) {
-            MyLog.d("url = " + url);
+        if (logger.isDebugEnabled()) {
+            logger.debug("url = " + url);
         }
     }
 
@@ -26,23 +28,23 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
     public void onStart() {
         super.onStart();
         httpListener.onStart();
-        if (MyLog.isDebug()) {
-            MyLog.d("url = " + url);
+        if (logger.isDebugEnabled()) {
+            logger.debug("url = " + url);
         }
     }
 
     @Override
     public void onSuccess(int statusCode, Header[] headers,
                           byte[] responseBytes, T response) {
-        MyLog.i("statusCode = " + statusCode);
-        if (MyLog.isDebug()) {
-            MyLog.d("header:----------------------------------------");
+        logger.info("statusCode = " + statusCode);
+        if (logger.isDebugEnabled()) {
+            logger.debug("header:----------------------------------------");
             for (Header header : headers) {
-                MyLog.d(header.getName() + ":" + header.getValue());
+                logger.debug(header.getName() + ":" + header.getValue());
             }
-            MyLog.d("responseBody:----------------------------------------");
+            logger.debug("responseBody:----------------------------------------");
             String responseBody = Utils.getString(responseBytes, getCharset());
-            MyLog.d(responseBody);
+            logger.debug(responseBody);
         }
 
         httpListener.onSuccess(statusCode, headers, responseBytes, response);
@@ -53,7 +55,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
                           Throwable throwable, byte[] responseBytes, T errorResponse) {
         httpListener.onFailure(throwable, errorResponse);
         String responseBody = Utils.getString(responseBytes, getCharset());
-        MyLog.e(responseBody, throwable);
+        logger.error(responseBody, throwable);
     }
 
     @Override

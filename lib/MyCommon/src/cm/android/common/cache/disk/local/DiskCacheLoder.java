@@ -2,13 +2,16 @@ package cm.android.common.cache.disk.local;
 
 import cm.android.common.cache.core.ILocalCache;
 import cm.android.util.IoUtil;
-import cm.android.util.MyLog;
 import com.jakewharton.disklrucache.DiskLruCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
+    private static final Logger logger = LoggerFactory.getLogger(DiskCacheLoder.class);
+
     // HttpResponseCache的使用 缓存 cache,Caches HTTP and HTTPS responses to the
     // filesystem so they may be reused, saving time and bandwidth. This class
     // supports HttpURLConnection and HttpsURLConnection; there is no
@@ -27,7 +30,7 @@ public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
             cache.flush();
             cache.close();
         } catch (IOException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         IoUtil.closeQuietly(cache);
     }
@@ -54,7 +57,7 @@ public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
                 editor.abort();
             }
         } catch (IOException ignored) {
-            MyLog.e(ignored);
+            logger.error("", ignored);
         }
     }
 
@@ -63,7 +66,7 @@ public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
         try {
             cache.remove(key);
         } catch (IOException e) {
-            MyLog.e(e);
+            logger.error("key = " + key, e);
         }
     }
 
@@ -79,7 +82,7 @@ public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
             return readFrom(snapshot);
         } catch (IOException e) {
             // Give up because the cache cannot be read.
-            MyLog.e(e);
+            logger.error("key = " + key, e);
             return null;
         }
     }
@@ -89,7 +92,7 @@ public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
         try {
             cache.delete();
         } catch (IOException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
     }
 

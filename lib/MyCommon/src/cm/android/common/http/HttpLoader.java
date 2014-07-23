@@ -5,9 +5,10 @@ import cm.android.common.cache.core.LocalCache;
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
 import cm.android.common.cache.disk.local.HttpCacheLoder;
 import cm.android.util.EnvironmentInfo;
-import cm.android.util.MyLog;
 import cm.android.util.Utils;
 import org.apache.http.Header;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +19,8 @@ import java.util.Set;
  * 带有缓存的数据请求接口
  */
 public class HttpLoader {
+    private static final Logger logger = LoggerFactory.getLogger("HTTP");
+
     // 后续会替换掉
     // public static GuavaCache<HttpCacheEntry> guavaCache;
     public static LocalCache localCache;
@@ -29,7 +32,7 @@ public class HttpLoader {
         try {
             cacheLoder = new HttpCacheLoder(cacheDir, byteSize);
         } catch (IOException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         localCache = new LocalCache(cacheLoder);
     }
@@ -65,22 +68,22 @@ public class HttpLoader {
                             httpHandler.onSuccess(200, entry.getHeaders(),
                                     responseMap);
                             // log
-                            if (MyLog.isDebug()) {
-                                MyLog.d("header:----------------------------------------");
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("header:----------------------------------------");
                                 Set<Entry<String, String>> entrySet = entry
                                         .getHeaders().entrySet();
                                 for (Entry<String, String> mapEntry : entrySet) {
-                                    MyLog.d(mapEntry.getKey() + ":"
+                                    logger.debug(mapEntry.getKey() + ":"
                                             + mapEntry.getValue());
                                 }
-                                MyLog.d("responseBody:----------------------------------------");
-                                MyLog.d(String.valueOf(responseMap));
+                                logger.debug("responseBody:----------------------------------------");
+                                logger.debug(String.valueOf(responseMap));
                             }
                             return;
                         }
                     }
                 } catch (Throwable e) {
-                    MyLog.e(e);
+                    logger.error("", e);
                 }
             }
         }

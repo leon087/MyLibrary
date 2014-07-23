@@ -1,7 +1,6 @@
 package cm.android.common.http;
 
 import android.content.Context;
-import cm.android.util.MyLog;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
@@ -9,8 +8,12 @@ import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import org.apache.http.client.CookieStore;
 import org.apache.http.entity.ByteArrayEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class HttpUtil {
+    private static final Logger logger = LoggerFactory.getLogger("HTTP");
+
     private final static AsyncHttpClient client = new AsyncHttpClient();
 
     private HttpUtil() {
@@ -85,7 +88,7 @@ public final class HttpUtil {
 
     public static void exec(Context context, String url, Header[] headers,
                             RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        MyLog.i("RequestParams = " + params);
+        logger.info("RequestParams = " + params);
         // Header[] headers = HttpUtil.genHeader(headerMap);
         if (params == null) {
             client.get(context, url, headers, null, responseHandler);
@@ -154,7 +157,7 @@ public final class HttpUtil {
         /**
          * 初始化HttpClient配置信息
          *
-         * @param httpClient
+         * @param asyncHttpClient
          */
         public static void initConfig(AsyncHttpClient asyncHttpClient) {
             // 设置线程

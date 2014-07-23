@@ -7,8 +7,9 @@ import cm.android.applications.AppUtil;
 import cm.android.cmd.ShellUtil;
 import cm.android.cmd.ShellUtil.CommandResult;
 import cm.android.util.IntentUtil;
-import cm.android.util.MyLog;
 import cm.android.util.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -16,26 +17,27 @@ import java.io.File;
  * PackageUtil
  * <ul>
  * <strong>Install package</strong>
- * <li>{@link PackageUtils#installNormal(Context, String)}</li>
- * <li>{@link PackageUtils#installSilent(Context, String)}</li>
- * <li>{@link PackageUtils#install(Context, String)}</li>
+ * <li>{@link PackageUtil#installNormal(Context, String)}</li>
+ * <li>{@link PackageUtil#installSilent(Context, String)}</li>
+ * <li>{@link PackageUtil#install(Context, String)}</li>
  * </ul>
  * <ul>
  * <strong>Uninstall package</strong>
- * <li>{@link PackageUtils#uninstallNormal(Context, String)}</li>
- * <li>{@link PackageUtils#uninstallSilent(Context, String)}</li>
- * <li>{@link PackageUtils#uninstall(Context, String)}</li>
+ * <li>{@link PackageUtil#uninstallNormal(Context, String)}</li>
+ * <li>{@link PackageUtil#uninstallSilent(Context, String)}</li>
+ * <li>{@link PackageUtil#uninstall(Context, String)}</li>
  * </ul>
  * <ul>
  * <strong>Is system application</strong>
- * <li>{@link PackageUtils#isSystemApplication(Context)}</li>
- * <li>{@link PackageUtils#isSystemApplication(Context, String)}</li>
- * <li>{@link PackageUtils#isSystemApplication(PackageManager, String)}</li>
+ * <li>{@link PackageUtil#isSystemApplication(Context)}</li>
+ * <li>{@link PackageUtil#isSystemApplication(Context, String)}</li>
  * </ul>
  *
  * @author <a href="http://www.trinea.cn" target="_blank">Trinea</a> 2013-5-15
  */
 public class PackageUtil {
+    private static final Logger logger = LoggerFactory.getLogger("PM");
+
     public static final int INSTALL_DELETE_NORMAL = Integer.MAX_VALUE;
     /**
      * Installation return code<br/>
@@ -314,8 +316,8 @@ public class PackageUtil {
      *
      * @param context
      * @param filePath file path of package
-     * @return {@link PackageUtils#INSTALL_SUCCEEDED} means install success,
-     * other means failed. details see {@link PackageUtils}
+     * @return {@link PackageUtil#INSTALL_SUCCEEDED} means install success,
+     * other means failed. details see {@link PackageUtil}
      * .INSTALL_FAILED_*. same to {@link PackageManager}.INSTALL_*
      */
     public static int installSilent(Context context, String filePath) {
@@ -346,7 +348,7 @@ public class PackageUtil {
             return INSTALL_SUCCEEDED;
         }
 
-        MyLog.e(new StringBuilder().append("installSilent successMsg:")
+        logger.error(new StringBuilder().append("installSilent successMsg:")
                 .append(commandResult.successMsg).append(", ErrorMsg:")
                 .append(commandResult.errorMsg).toString());
         if (commandResult.errorMsg == null) {
@@ -566,7 +568,7 @@ public class PackageUtil {
                 .contains("success"))) {
             return DELETE_SUCCEEDED;
         }
-        MyLog.e(new StringBuilder().append("uninstallSilent successMsg:")
+        logger.error(new StringBuilder().append("uninstallSilent successMsg:")
                 .append(commandResult.successMsg).append(", ErrorMsg:")
                 .append(commandResult.errorMsg).toString());
         if (commandResult.errorMsg == null) {

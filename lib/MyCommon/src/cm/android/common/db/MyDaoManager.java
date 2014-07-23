@@ -1,10 +1,11 @@
 package cm.android.common.db;
 
 import android.content.Context;
-import cm.android.util.MyLog;
 import cm.android.util.ObjectUtil;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.Map;
 /**
  */
 public class MyDaoManager {
+    private static final Logger logger = LoggerFactory.getLogger("DB");
+
     public final Map<Class<?>, BaseDao<?>> daoMap = ObjectUtil.newHashMap();
     private final Map<Class<?>, MyDao> myDaoMap = ObjectUtil.newHashMap();
     private volatile OrmDatabaseHelper helper;
@@ -67,7 +70,7 @@ public class MyDaoManager {
             constructor.setAccessible(true);
             dao = (T) constructor.newInstance();
         } catch (Exception e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
 
         if (dao != null) {

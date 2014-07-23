@@ -1,18 +1,21 @@
 package cm.android.common.db;
 
-import cm.android.util.MyLog;
 import cm.android.util.ObjectUtil;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 public class MyDao<T, K> {
+    private static final Logger logger = LoggerFactory.getLogger("DB");
+
     protected static final int ERROR = -1;
     protected Dao<T, K> dao;
 
@@ -63,9 +66,9 @@ public class MyDao<T, K> {
             // dao.createIfNotExists(bean);
             return dao.create(bean);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
 
         return ERROR;
@@ -75,9 +78,9 @@ public class MyDao<T, K> {
         try {
             return dao.createOrUpdate(bean);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
 
         return new CreateOrUpdateStatus(false, false, ERROR);
@@ -111,9 +114,9 @@ public class MyDao<T, K> {
         try {
             return dao.delete(bean);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         return ERROR;
     }
@@ -122,9 +125,9 @@ public class MyDao<T, K> {
         try {
             return dao.delete(queryAll());
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         return ERROR;
     }
@@ -135,9 +138,9 @@ public class MyDao<T, K> {
             deleteBuilder.where().eq(fieldName, value);
             return deleteBuilder.delete();
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("fieldName = " + fieldName, e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("fieldName = " + fieldName, e);
         }
         return ERROR;
     }
@@ -146,9 +149,9 @@ public class MyDao<T, K> {
         try {
             return dao.queryForAll();
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         return ObjectUtil.newArrayList();
     }
@@ -157,9 +160,9 @@ public class MyDao<T, K> {
         try {
             return dao.queryForFieldValues(map);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         return ObjectUtil.newArrayList();
     }
@@ -174,9 +177,9 @@ public class MyDao<T, K> {
             // .eq(Account.PASSWORD_FIELD_NAME, "qwerty").prepare());
             return dao.queryForEq(fieldName, value);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("fieldName = " + fieldName, e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("fieldName = " + fieldName, e);
         }
         return ObjectUtil.newArrayList();
     }
@@ -188,9 +191,9 @@ public class MyDao<T, K> {
             PreparedQuery<T> pq = queryBuilder.prepare();
             return dao.queryForFirst(pq);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("columnName = " + columnName, e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("columnName = " + columnName, e);
         }
 
         return null;
@@ -200,9 +203,9 @@ public class MyDao<T, K> {
         try {
             return dao.queryForId(key);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         return null;
     }
@@ -211,9 +214,9 @@ public class MyDao<T, K> {
         try {
             return dao.countOf();
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         } catch (NullPointerException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
         return 0;
     }

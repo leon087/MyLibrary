@@ -1,13 +1,16 @@
 package cm.android.common.cache.core;
 
 import cm.android.util.ByteUtil;
-import cm.android.util.MyLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @SuppressWarnings("unchecked")
 public class LocalCache {
+    private static final Logger logger = LoggerFactory.getLogger("CACHE");
+
     @SuppressWarnings("rawtypes")
     private ILocalCache localCache;
 
@@ -37,7 +40,7 @@ public class LocalCache {
             return null;
         } else {
             V value = (V) localCache.get(key);
-            MyLog.i("key = " + key + ",value = " + value);
+            logger.info("key = {},value = {}", key, value);
             return value;
         }
     }
@@ -48,7 +51,7 @@ public class LocalCache {
         }
 
         key = toKey(key);
-        MyLog.i("key = " + key + ",value = " + value);
+        logger.info("key = {},value = {}", key, value);
         // 写入本地
         localCache.put(key, value);
     }
@@ -60,7 +63,7 @@ public class LocalCache {
             return ByteUtil.bytesToHexString(md5bytes, false);
         } catch (NoSuchAlgorithmException e) {
             // throw new AssertionError(e);
-            MyLog.e(e);
+            logger.error("uri = " + uri, e);
             return String.valueOf(uri.hashCode());
         }
     }

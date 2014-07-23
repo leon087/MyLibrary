@@ -3,12 +3,13 @@ package cm.android.common.db;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import cm.android.util.MyLog;
 import cm.android.util.ObjectUtil;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Set;
@@ -17,6 +18,7 @@ import java.util.Set;
  * 数据库包装类
  */
 final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
+    private static final Logger logger = LoggerFactory.getLogger("DB");
     private final static Set<Class<? extends BaseBean>> sTables = ObjectUtil
             .newHashSet();
 
@@ -26,7 +28,7 @@ final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
         if (DatabaseConfig.TABLE_LIST != null) {
             sTables.addAll(DatabaseConfig.TABLE_LIST);
         }
-        MyLog.i("version = " + DatabaseConfig.DB_VERSION);
+        logger.info("version = " + DatabaseConfig.DB_VERSION);
     }
 
     @Override
@@ -37,7 +39,7 @@ final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
                 TableUtils.createTable(connectionSource, clazz);
             }
         } catch (java.sql.SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
         }
     }
 
@@ -55,7 +57,7 @@ final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private void updateDatabase(SQLiteDatabase database,
                                 ConnectionSource connectionSource, int oldVersion, int newVersion) {
-        MyLog.i("newVersion = " + newVersion + ",oldVersion = " + oldVersion);
+        logger.info("newVersion = {},oldVersion = {}", newVersion, oldVersion);
         if (newVersion != oldVersion) {
             try {
                 for (Class<?> clazz : sTables) {
@@ -63,7 +65,7 @@ final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
                     TableUtils.createTable(connectionSource, clazz);
                 }
             } catch (java.sql.SQLException e) {
-                MyLog.e(e);
+                logger.error("", e);
             }
             // onCreate(database, connectionSource);
         }
@@ -79,7 +81,7 @@ final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             return super.getDao(beanClazz);
         } catch (SQLException e) {
-            MyLog.e(e);
+            logger.error("", e);
             return null;
         }
     }

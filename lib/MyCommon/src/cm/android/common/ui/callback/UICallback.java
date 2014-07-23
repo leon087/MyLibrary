@@ -6,8 +6,6 @@ package cm.android.common.ui.callback;
 public interface UICallback {
     /**
      * 通知UI
-     *
-     * @param msg
      */
     public void notifyUI(int what, Object obj);
 }

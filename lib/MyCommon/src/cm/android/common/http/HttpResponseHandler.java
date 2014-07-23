@@ -1,13 +1,14 @@
 package cm.android.common.http;
 
-import android.util.Log;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class HttpResponseHandler<DATA_TYPE> extends
         AsyncHttpResponseHandler {
-    private static final String LOG_TAG = "MyResponseHandler";
+    private static final Logger logger = LoggerFactory.getLogger("HTTP");
 
     public abstract void onSuccess(int statusCode, Header[] headers,
                                    byte[] responseBytes, DATA_TYPE response);
@@ -33,7 +34,7 @@ public abstract class HttpResponseHandler<DATA_TYPE> extends
                             }
                         });
                     } catch (final Throwable t) {
-                        Log.d(LOG_TAG, "parseResponse thrown an problem", t);
+                        logger.debug("parseResponse thrown an problem", t);
                         postRunnable(new Runnable() {
                             @Override
                             public void run() {
@@ -67,7 +68,7 @@ public abstract class HttpResponseHandler<DATA_TYPE> extends
                             }
                         });
                     } catch (Throwable t) {
-                        Log.d(LOG_TAG, "parseResponse thrown an problem", t);
+                        logger.debug("parseResponse thrown an problem", t);
                         postRunnable(new Runnable() {
                             @Override
                             public void run() {
