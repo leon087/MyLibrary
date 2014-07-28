@@ -92,7 +92,7 @@ android {
 
     /*//	设置不同包名的包
      productFlavors {
-     full {  packageName='com.nbtstatx.mycommondemo'  }
+     full {  applicationId 'com.nbtstatx.mycommondemo'  }
      }*/
 
 }
