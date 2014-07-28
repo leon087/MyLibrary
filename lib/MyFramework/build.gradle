@@ -9,13 +9,13 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.android.tools.build:gradle:+'
     }
 }
 
 tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 android {
     packagingOptions {
