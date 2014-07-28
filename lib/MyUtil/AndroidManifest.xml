@@ -1,9 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="cm.android.framework"
+          package="cm.android.util"
           android:versionCode="1"
           android:versionName="1.0">
 
-    <application android:allowBackup="true">
-    </application>
+    <application/>
 
 </manifest>

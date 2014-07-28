@@ -23,10 +23,10 @@ dependencies {
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-	compile project(':lib:MyCommon')
-	compile project(':lib:MyFramework')
-	compile project(':lib:MyCommonUI')
-	compile project(':lib:DownloadProvider-master')
+    compile project(':lib:MyCommon')
+    compile project(':lib:MyFramework')
+    compile project(':lib:MyCommonUI')
+    compile project(':lib:DownloadProvider-master')
 }
 
 android {
@@ -77,39 +77,39 @@ android {
         debug { storeFile file("keystore/debug.keystore") }
     }
 
-	buildTypes {
-		release {
-			signingConfig  signingConfigs.nbtstatx
-			runProguard true
-			proguardFile getDefaultProguardFile('proguard-android.txt')
-			proguardFile new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.txt')
-			proguardFile new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.txt')
-			proguardFile 'proguard-rules.txt'
-		}
+    buildTypes {
+        release {
+            signingConfig signingConfigs.nbtstatx
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.txt'),
+                    new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.txt'),
+                    'proguard-rules.txt'
+        }
 
-		debug {
-			signingConfig  signingConfigs.debug
-			runProguard false
-		}
-	}
+        debug {
+            signingConfig signingConfigs.debug
+            runProguard false
+        }
+    }
 
-	/*//	设置不同包名的包
-	 productFlavors {
-	 original {  packageName='com.nbtstatx.mycommondemo'  }
-	 //自定义渠道
-	 //		testPlay {
-	 //			packageName='com.testplay'
-	 //			//name=testPlay
-	 //			//minSdkVersion=8
-	 //			//targetSdkVersion=10
-	 //			//renderscriptTargetApi=18
-	 //			//versionCode=1
-	 //			//versionName=1.0
-	 //			//testPackageName=null
-	 //			//testInstrumentationRunner=null
-	 //			//signingConfig=signingConfigs.wondertek
-	 //		}
-	 }*/
+    /*//	设置不同包名的包
+     productFlavors {
+     full {  packageName='com.nbtstatx.mycommondemo'  }
+     //自定义渠道
+     //		testPlay {
+     //			packageName='com.testplay'
+     //			//name=testPlay
+     //			//minSdkVersion=8
+     //			//targetSdkVersion=10
+     //			//renderscriptTargetApi=18
+     //			//versionCode=1
+     //			//versionName=1.0
+     //			//testPackageName=null
+     //			//testInstrumentationRunner=null
+     //			//signingConfig=signingConfigs.wondertek
+     //		}
+     }*/
 
     sourceSets {
         main {
