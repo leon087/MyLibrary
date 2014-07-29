@@ -3,7 +3,7 @@
           android:versionCode="1"
           android:versionName="1.0">
 
-    <permission android:name="cm.android.framework"/>
+    <permission android:name="cm.android.framework" android:protectionLevel="signature"/>
 
     <uses-permission android:name="cm.android.framework"/>
 
