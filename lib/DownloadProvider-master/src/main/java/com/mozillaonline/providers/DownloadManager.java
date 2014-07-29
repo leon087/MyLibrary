@@ -260,6 +260,7 @@ public class DownloadManager {
     private ContentResolver mResolver;
     private String mPackageName;
     private Uri mBaseUri = Downloads.CONTENT_URI;
+
     /**
      * @hide
      */

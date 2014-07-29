@@ -125,6 +125,7 @@ public final class DownloadProvider extends ContentProvider {
             sAppReadableColumnsSet.add(sAppReadableColumnsArray[i]);
         }
     }
+
     SystemFacade mSystemFacade;
     /**
      * The database that lies underneath this content provider

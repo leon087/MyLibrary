@@ -3,6 +3,13 @@
           android:versionCode="1"
           android:versionName="1.0">
 
-    <application/>
+    <permission android:name="cm.android.framework"/>
+
+    <uses-permission android:name="cm.android.framework"/>
+
+    <application>
+        <service android:name="cm.android.framework.core.CoreService" android:exported="false"
+                 android:permission="cm.android.framework"/>
+    </application>
 
 </manifest>

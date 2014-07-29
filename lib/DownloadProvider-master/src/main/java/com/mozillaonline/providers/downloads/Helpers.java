@@ -573,7 +573,7 @@ public class Helpers {
      * Delete the given file from device and delete its row from the downloads
      * database.
      */
-	/* package */
+    /* package */
     static void deleteFile(ContentResolver resolver, long id,
                            String path, String mimeType) {
         try {

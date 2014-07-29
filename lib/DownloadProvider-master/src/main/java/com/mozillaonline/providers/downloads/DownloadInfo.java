@@ -101,6 +101,7 @@ public class DownloadInfo {
     private List<Pair<String, String>> mRequestHeaders = new ArrayList<Pair<String, String>>();
     private SystemFacade mSystemFacade;
     private Context mContext;
+
     private DownloadInfo(Context context, SystemFacade systemFacade) {
         mContext = context;
         mSystemFacade = systemFacade;

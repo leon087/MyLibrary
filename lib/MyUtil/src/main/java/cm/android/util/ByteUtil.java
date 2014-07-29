@@ -53,6 +53,7 @@ public class ByteUtil {
     private static final char SPACE_CH = ' ';
     private static final char HEX_DIGITS[] = {'0', '1', '2', '3', '4', '5',
             '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
     /**
      * 私有构造函数，不允许实例化该类
      */

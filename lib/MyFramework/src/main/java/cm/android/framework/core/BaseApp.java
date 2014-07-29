@@ -1,12 +1,12 @@
 package cm.android.framework.core;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.manager.BaseManager;
 import cm.android.util.ActivityStack;
 import cm.android.util.EnvironmentInfo;
-import cm.android.util.MyLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,6 @@ public abstract class BaseApp extends Application implements IApp {
         sApp = this;
         initConfig().init(this);
         disableConnectionReuseIfNecessary();
-        MyLog.initialize(this.getPackageName());
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 this.getPackageManager(), this.getPackageName());
         logger.info("versionCode = {},versionName = {}", packageInfo.versionCode
@@ -63,6 +62,7 @@ public abstract class BaseApp extends Application implements IApp {
         logger.info("isInit = " + isInit);
         isInit = true;
 
+        this.startService(new Intent(this, CoreService.class));
         if (mServiceManager == null) {
             mServiceManager = initServiceManager();
             if (mServiceManager != null) {
@@ -80,6 +80,7 @@ public abstract class BaseApp extends Application implements IApp {
         isInit = false;
         ActivityStack.getInstance().finishAll();
 
+        stopService(new Intent(this, CoreService.class));
         if (null != mServiceManager) {
             mServiceManager.destroy();
             // 置null，以使得虚拟机主动回收该对象中资源
