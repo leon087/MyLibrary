@@ -4,25 +4,25 @@ import cm.android.common.db.BaseBean;
 import com.j256.ormlite.field.DatabaseField;
 
 public class TestBean extends BaseBean {
-	@DatabaseField
-	private String userName;
-	@DatabaseField
-	private int age;
+    @DatabaseField
+    private String userName;
+    @DatabaseField
+    private int age;
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
 }

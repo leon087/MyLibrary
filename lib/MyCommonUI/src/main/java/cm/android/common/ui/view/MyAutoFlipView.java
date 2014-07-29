@@ -52,6 +52,7 @@ public class MyAutoFlipView extends Gallery {
             }
         }
     };
+
     public MyAutoFlipView(Context context) {
         super(context);
         init();

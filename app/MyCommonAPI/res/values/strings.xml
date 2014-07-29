@@ -12,7 +12,7 @@
     <string name="loading">加载中...</string>
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
-    
+
     <string name="image_load">加载图片</string>
     <string name="get_data">获取数据</string>
     <string name="clear_cache">清空缓存</string>

@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import cm.android.example.apis.fragment.itemlist.dummy.DummyContent;
-import cm.android.wdcommondapi.R;
 
 /**
  * A list fragment representing a list of Items. This fragment also supports

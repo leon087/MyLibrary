@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme is the default theme. -->
-    <style name="Theme" parent="android:Theme" />
+    <style name="Theme" parent="android:Theme"/>
 
     <!-- 自定义activity主题 -->
     <style name="Theme_Activity">

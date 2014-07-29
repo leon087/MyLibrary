@@ -18,54 +18,54 @@ import cm.android.wdcommondapi.R;
 import java.util.Properties;
 
 public class MyServiceManager extends CommonBaseManager {
-	private Context mContext;
+    private Context mContext;
 
-	MyServiceManager() {
-	}
+    MyServiceManager() {
+    }
 
-	private ExternalStorageListener externalStorageListener = new ExternalStorageListener() {
+    private ExternalStorageListener externalStorageListener = new ExternalStorageListener() {
 
-		@Override
-		public void onMediaMounted() {
-			ServiceHolder.getService(DirData.class).initWorkDir(mContext);
-		}
+        @Override
+        public void onMediaMounted() {
+            ServiceHolder.getService(DirData.class).initWorkDir(mContext);
+        }
 
-		@Override
-		public void onMediaRemoved() {
-			ServiceHolder.getService(DirData.class).initWorkDir(mContext);
-		}
-	};
+        @Override
+        public void onMediaRemoved() {
+            ServiceHolder.getService(DirData.class).initWorkDir(mContext);
+        }
+    };
 
-	@Override
-	protected void onCreate(Context context) {
-		super.onCreate(context);
+    @Override
+    protected void onCreate(Context context) {
+        super.onCreate(context);
 
-		addService(new MyDaoManager().init(context));
-		HttpLoader.init(context);
-		mContext = context;
-		// // 初始化存储路径，该对象无须释放资源
-		DirData dirData = new DirData(context);
-		addService(dirData);
+        addService(new MyDaoManager().init(context));
+        HttpLoader.init(context);
+        mContext = context;
+        // // 初始化存储路径，该对象无须释放资源
+        DirData dirData = new DirData(context);
+        addService(dirData);
 
-		ImageManager imageManager = new ImageManager();
-		imageManager.init(context, null, R.drawable.default_bg);
-		addService(imageManager);
-		addService(new ExternalStorageReceiver(context, externalStorageListener));
+        ImageManager imageManager = new ImageManager();
+        imageManager.init(context, null, R.drawable.default_bg);
+        addService(imageManager);
+        addService(new ExternalStorageReceiver(context, externalStorageListener));
 
-		Properties properties = Utils.loadProperties(context, Tag.CONFIG);
-		MyManager.putData(Tag.CONFIG, properties);
+        Properties properties = Utils.loadProperties(context, Tag.CONFIG);
+        MyManager.putData(Tag.CONFIG, properties);
 
-		HttpManager.initHeader();
-	}
+        HttpManager.initHeader();
+    }
 
-	@Override
-	protected void onDestroy() {
-		HttpUtil.cancel(mContext);
+    @Override
+    protected void onDestroy() {
+        HttpUtil.cancel(mContext);
 
-		ServiceHolder.getService(ImageManager.class).deInit();
-		ServiceHolder.getService(ExternalStorageReceiver.class).release();
-		ServiceHolder.getService(MyDaoManager.class).deInit();
-		super.onDestroy();
-	}
+        ServiceHolder.getService(ImageManager.class).deInit();
+        ServiceHolder.getService(ExternalStorageReceiver.class).release();
+        ServiceHolder.getService(MyDaoManager.class).deInit();
+        super.onDestroy();
+    }
 
 }

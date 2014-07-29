@@ -11,15 +11,21 @@
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
     <string name="what_206">wifi连接提示</string>
-    <string name="what_wifi_206">您现在连接的wifi热点可能是机场、餐厅、商场、或者是电信运营商提供的的wifi热点，需要您退出并向提供者询问正确的用户名和密码，成功连接之后再使用客户端哦，或者可以切换使用其他wifi热点</string>
+    <string name="what_wifi_206">
+        您现在连接的wifi热点可能是机场、餐厅、商场、或者是电信运营商提供的的wifi热点，需要您退出并向提供者询问正确的用户名和密码，成功连接之后再使用客户端哦，或者可以切换使用其他wifi热点
+    </string>
     <string name="wifi_http_failed">当前wifi网络连接异常</string>
     <string name="close_channel">服务暂时无法使用，请稍后再试</string>
 
     <!-- 影片详情页 -->
     <string name="movie_hot">热度：</string>
     <string name="movie_play">播放</string>
-    <string name="movie_name"><Data><![CDATA[ <font color="#1E1E1E">片名：</font><font color="#646464">%1$s</font> ]]></Data></string>
-    <string name="movie_length"><Data><![CDATA[ <font color="#1E1E1E">片长：</font><font color="#646464">%1$s</font> ]]></Data></string>
+    <string name="movie_name">
+        <Data><![CDATA[ <font color="#1E1E1E">片名：</font><font color="#646464">%1$s</font> ]]></Data>
+    </string>
+    <string name="movie_length">
+        <Data><![CDATA[ <font color="#1E1E1E">片长：</font><font color="#646464">%1$s</font> ]]></Data>
+    </string>
 
     <!-- 升级 -->
     <string name="upgrade_download_title">正在升级</string>

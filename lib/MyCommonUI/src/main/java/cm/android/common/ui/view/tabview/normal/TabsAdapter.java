@@ -24,6 +24,7 @@ public class TabsAdapter extends android.support.v4.app.FragmentPagerAdapter
     private android.support.v4.app.FragmentManager mFragmentManager;
     private OnTabPageChangeListener onTabPageChangeListener;
     private int prevPosition;
+
     public TabsAdapter(FragmentActivity activity, ViewPager pager,
                        OnTabPageChangeListener onTabPageChangeListener) {
         super(activity.getSupportFragmentManager());

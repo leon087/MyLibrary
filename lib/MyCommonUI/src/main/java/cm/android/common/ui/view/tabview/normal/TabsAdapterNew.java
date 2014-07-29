@@ -24,6 +24,7 @@ public class TabsAdapterNew extends FragmentPagerAdapter implements
     ActionBar mMainActionBar;
     Context mContext;
     ViewPager mPager;
+
     public TabsAdapterNew(Activity activity, ViewPager pager) {
         super(activity.getFragmentManager());
         mContext = activity;

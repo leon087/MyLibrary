@@ -1622,7 +1622,7 @@ public class LazyViewPager extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-		/*
+        /*
 		 * This method JUST determines whether we want to intercept the motion.
 		 * If we return true, onMotionEvent will be called and we do the actual
 		 * scrolling there.

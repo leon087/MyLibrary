@@ -1,4 +1,3 @@
-
 package cm.android.example.apis.fragment;
 
 import android.app.Fragment;
