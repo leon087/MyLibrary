@@ -3,7 +3,7 @@ package cm.android.util;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public class ReflectionUtil {
+public class ReflectUtil {
     /**
      * 通过反射,获得定义Class时声明的父类的范型参数的类型. 如public BookManager extends
      * GenricManager<Book>
