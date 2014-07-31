@@ -503,7 +503,7 @@ public class Utils {
      */
     public static Bundle generateBundle(String key, Object object) {
         Bundle bundle = new Bundle();
-        MyParcelable<Object> parcelable = ObjectUtil.newParcelable();
+        MyParcelable<Object> parcelable = MyParcelable.newParcelable();
         parcelable.setValue(object);
         bundle.putParcelable(key, parcelable);
         return bundle;

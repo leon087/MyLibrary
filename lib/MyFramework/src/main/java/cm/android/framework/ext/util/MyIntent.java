@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import cm.android.framework.ext.global.CommonTag;
 import cm.android.global.MyParcelable;
-import cm.android.util.ObjectUtil;
 
 /**
  * 封装了一些Intent操作
@@ -111,7 +110,7 @@ public class MyIntent {
      */
     public static <T> Intent setData(Intent intent, T data) {
         if (data != null) {
-            MyParcelable<T> parcelable = ObjectUtil.newParcelable();
+            MyParcelable<T> parcelable = MyParcelable.newParcelable();
             parcelable.setValue(data);
             intent.putExtra(CommonTag.INTENT_PAGE, parcelable);
         }
@@ -128,7 +127,7 @@ public class MyIntent {
      */
     public static <T> Bundle setData(Bundle bundle, T data) {
         if (data != null) {
-            MyParcelable<T> parcelable = ObjectUtil.newParcelable();
+            MyParcelable<T> parcelable = MyParcelable.newParcelable();
             parcelable.setValue(data);
             bundle.putParcelable(CommonTag.INTENT_PAGE, parcelable);
         }

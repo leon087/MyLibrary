@@ -5,21 +5,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
-import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 
 public class EnvironmentInfo {
     private static final long REMAIN_SPACE = 5 * 1024 * 1024;
@@ -35,32 +28,6 @@ public class EnvironmentInfo {
         TelephonyManager tm = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);
         return tm.getNetworkType();
-    }
-
-    /**
-     * 获取IMEI
-     *
-     * @param context
-     * @return
-     */
-    public static String getIMEI(Context context) {
-        TelephonyManager tm = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        String imei = tm.getDeviceId();
-        return imei;
-    }
-
-    /**
-     * 获取IMSI
-     *
-     * @param context
-     * @return
-     */
-    public static String getIMSI(Context context) {
-        TelephonyManager tm = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        String imsi = tm.getSubscriberId();
-        return imsi;
     }
 
     /**
@@ -188,17 +155,6 @@ public class EnvironmentInfo {
     }
 
     /**
-     * 获取设备号
-     *
-     * @return
-     */
-    @TargetApi(3)
-    public static String getAndroidId(Context context) {
-        return Secure
-                .getString(context.getContentResolver(), Secure.ANDROID_ID);
-    }
-
-    /**
      * 判断是否有足够的空间
      *
      * @param file
@@ -317,45 +273,6 @@ public class EnvironmentInfo {
     // return addresses;
     // }
 
-    /**
-     * 获取Mac地址
-     *
-     * @param context
-     * @return
-     */
-    public static String getLocalMacAddress(Context context) {
-        WifiManager wifi = (WifiManager) context
-                .getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = wifi.getConnectionInfo();
-        if (null != info) {
-            return info.getMacAddress();
-        }
-        return null;
-    }
-
-    /**
-     * 获取IP地址
-     *
-     * @return
-     */
-    public static String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface
-                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf
-                        .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            logger.error("", ex);
-        }
-        return null;
-    }
 
     // @TargetApi(11)
     // public static void enableStrictMode() {

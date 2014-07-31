@@ -1,6 +1,6 @@
 package cm.android.common.http;
 
-import cm.android.util.GenericsUtil;
+import cm.android.util.ReflectionUtil;
 import cm.android.util.Utils;
 import com.alibaba.fastjson.JSON;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -14,7 +14,7 @@ public abstract class MyJsonHttpListener<T> extends HttpListener<T> {
      */
     @SuppressWarnings("unchecked")
     public MyJsonHttpListener() {
-        this.clazz = (Class<T>) GenericsUtil
+        this.clazz = (Class<T>) ReflectionUtil
                 .getSuperClassGenricType(getClass());
     }
 

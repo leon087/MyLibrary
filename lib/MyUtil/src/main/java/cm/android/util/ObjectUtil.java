@@ -1,7 +1,5 @@
 package cm.android.util;
 
-import cm.android.global.MyParcelable;
-
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -44,7 +42,7 @@ public class ObjectUtil {
      * <p/>
      * <p/>
      * <b>Note:</b> if you only need an <i>immutable</i> empty List, use
-     * {@link Collections#emptyList} instead.
+     * {@link java.util.Collections#emptyList} instead.
      *
      * @return a newly-created, initially-empty {@code ArrayList}
      */
@@ -81,19 +79,11 @@ public class ObjectUtil {
         return list;
     }
 
-    /**
-     * 创建一个{@code MyParcelable}对象
-     *
-     * @return
-     */
-    public static <E> MyParcelable<E> newParcelable() {
-        return new MyParcelable<E>();
-    }
-
     public static <T> T[] toArray(Class<?> cls, ArrayList<T> items) {
         if (items == null || items.size() == 0) {
             return (T[]) Array.newInstance(cls, 0);
         }
         return items.toArray((T[]) Array.newInstance(cls, items.size()));
     }
+
 }
