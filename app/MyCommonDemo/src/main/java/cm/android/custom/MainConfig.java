@@ -34,7 +34,7 @@ public class MainConfig extends MyAppConfig {
         /**
          * 测试
          */
-        private static final String WONDER_TEST_OUT = "http://192.168.1.72:8080";
+        private static final String TEST = "http://192.168.1.72:8080";
         /**
          * 正式环境
          */
@@ -44,6 +44,6 @@ public class MainConfig extends MyAppConfig {
     /**
      * IP
      */
-    public static String SERVER_ROOT = StoreRoot.WONDER_TEST_OUT;
+    public static String SERVER_ROOT = StoreRoot.TEST;
 
 }
