@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
-import cm.android.util.EnvironmentInfo;
+import cm.android.util.EnvironmentUtil;
 
 public class DeviceLocker {
     private WindowManager mWindowManager;
@@ -35,7 +35,7 @@ public class DeviceLocker {
 
     @TargetApi(11)
     private void setViewActivated(View view) {
-        if (EnvironmentInfo.SdkUtil.hasHoneycomb()) {
+        if (EnvironmentUtil.SdkUtil.hasHoneycomb()) {
             view.setActivated(true);
         }
     }

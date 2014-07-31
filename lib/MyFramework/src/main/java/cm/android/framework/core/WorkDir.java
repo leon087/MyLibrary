@@ -1,7 +1,7 @@
 package cm.android.framework.core;
 
 import android.content.Context;
-import cm.android.util.EnvironmentInfo;
+import cm.android.util.EnvironmentUtil;
 import cm.android.util.IoUtil;
 import cm.android.util.ObjectUtil;
 import org.slf4j.Logger;
@@ -42,11 +42,11 @@ public class WorkDir {
 
     private File getRootDir(Context context) {
         File rootDir = new File(context.getFilesDir(), WORK_PATH);
-        if (EnvironmentInfo.isExternalStorageUsable()) {
+        if (EnvironmentUtil.isExternalStorageUsable()) {
             // 删除files目录下文件
             IoUtil.deleteFiles(rootDir);
-            // rootPath = EnvironmentInfo.getExternalStorageDirectory();
-            rootDir = EnvironmentInfo.getExternalFilesDir(context, WORK_PATH);
+            // rootPath = EnvironmentUtil.getExternalStorageDirectory();
+            rootDir = EnvironmentUtil.getExternalFilesDir(context, WORK_PATH);
         }
         return rootDir;
     }

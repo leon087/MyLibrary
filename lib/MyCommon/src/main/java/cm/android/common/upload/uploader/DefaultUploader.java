@@ -74,7 +74,7 @@ public class DefaultUploader implements IUploader<UploadTask> {
     @Override
     public boolean upload(UploadTask task,
                           IUploadListener<UploadTask> iUploadListener) throws UploadException {
-        // if (!EnvironmentInfo.isExternalStorageUsable()) {
+        // if (!EnvironmentUtil.isExternalStorageUsable()) {
         // throw new UploadException(
         // UploadException.EXTERNAL_STORAGE_USABLE_ERROR);
         // }

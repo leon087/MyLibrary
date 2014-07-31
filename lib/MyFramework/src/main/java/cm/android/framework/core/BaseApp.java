@@ -6,7 +6,7 @@ import android.content.pm.PackageInfo;
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.manager.BaseManager;
 import cm.android.util.ActivityStack;
-import cm.android.util.EnvironmentInfo;
+import cm.android.util.EnvironmentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +49,7 @@ public abstract class BaseApp extends Application implements IApp {
      */
     private void disableConnectionReuseIfNecessary() {
         // HTTP connection reuse which was buggy pre-froyo
-        if (!EnvironmentInfo.SdkUtil.hasFroyo()) {
+        if (!EnvironmentUtil.SdkUtil.hasFroyo()) {
             System.setProperty("http.keepAlive", "false");
         }
     }

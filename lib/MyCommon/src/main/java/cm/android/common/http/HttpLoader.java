@@ -4,7 +4,7 @@ import android.content.Context;
 import cm.android.common.cache.core.LocalCache;
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
 import cm.android.common.cache.disk.local.HttpCacheLoder;
-import cm.android.util.EnvironmentInfo;
+import cm.android.util.EnvironmentUtil;
 import cm.android.util.Utils;
 import org.apache.http.Header;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class HttpLoader {
     public static LocalCache localCache;
 
     public static void init(Context context) {
-        File cacheDir = EnvironmentInfo.getDiskCacheDir(context, "http");
+        File cacheDir = EnvironmentUtil.getDiskCacheDir(context, "http");
         long byteSize = 10 * 1024 * 1024L;
         HttpCacheLoder cacheLoder = null;
         try {

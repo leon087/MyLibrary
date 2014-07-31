@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class EnvironmentInfo {
+public class EnvironmentUtil {
     private static final long REMAIN_SPACE = 5 * 1024 * 1024;
-    private static final Logger logger = LoggerFactory.getLogger(EnvironmentInfo.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnvironmentUtil.class);
 
-    private EnvironmentInfo() {
+    private EnvironmentUtil() {
     }
 
     /**

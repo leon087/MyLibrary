@@ -4,7 +4,7 @@ import android.net.Uri;
 import android.os.Handler;
 import cm.android.common.http.HttpUtil;
 import cm.android.framework.core.BaseApp;
-import cm.android.util.EnvironmentInfo;
+import cm.android.util.EnvironmentUtil;
 import cm.android.util.IntentUtil;
 import cm.android.util.MyLog;
 import cm.android.util.Utils;
@@ -145,8 +145,8 @@ public class UpgradeManager {
      * @return
      */
     private boolean checkSpace() {
-        File file = EnvironmentInfo.getDataStorageDirectory(BaseApp.getApp());
-        if (EnvironmentInfo.hasEnoughSpace(file)) {
+        File file = EnvironmentUtil.getDataStorageDirectory(BaseApp.getApp());
+        if (EnvironmentUtil.hasEnoughSpace(file)) {
             return true;
         } else {
             return false;

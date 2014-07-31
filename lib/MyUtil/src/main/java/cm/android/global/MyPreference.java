@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import cm.android.util.EnvironmentInfo.SdkUtil;
+import cm.android.util.EnvironmentUtil.SdkUtil;
 import cm.android.util.ObjectUtil;
 
 import java.util.Set;
