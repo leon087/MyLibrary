@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * @param <T> 保存的Object对象数据类型
  */
 public class MyParcelable<T> implements Parcelable {
-    public static final Creator<MyParcelable> CREATOR = new Creator<MyParcelable>() {
+    public static final Parcelable.Creator<MyParcelable> CREATOR = new Creator<MyParcelable>() {
         @Override
         public MyParcelable[] newArray(int size) {
             return new MyParcelable[size];

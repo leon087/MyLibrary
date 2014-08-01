@@ -102,13 +102,13 @@ public class SystemInfoUtil {
     }
 
     public static String getVersionInfo() {
-        String[] args = {"/system/bin/cat", "/proc/version"};
-        return CmdExecute.run(args, "/system/bin/");
+        String args = "cat /proc/version";
+        return CmdExecute.exec(args);
     }
 
-    public static String getCPUInfo() {
-        String[] args = {"/system/bin/cat", "/proc/cpuinfo"};
-        return CmdExecute.run(args, "/system/bin/");
+    public static String getCpuInfo() {
+        String args = "cat /proc/cpuinfo";
+        return CmdExecute.exec(args);
     }
 
     public static String getDiskInfo() {

@@ -40,4 +40,28 @@ public class CmdExecute {
             }
         }
     }
+
+    public static String exec(String cmd) {
+        ByteArrayOutputStream outputStream = null;
+        InputStream inputStream = null;
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec(cmd);
+            inputStream = new BufferedInputStream(process.getInputStream());
+            outputStream = new ByteArrayOutputStream();
+            IoUtil.write(inputStream, outputStream);
+            byte[] bytes = outputStream.toByteArray();
+            return new String(bytes);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            IoUtil.closeQuietly(inputStream);
+            IoUtil.closeQuietly(outputStream);
+            if (null != process) {
+                process.destroy();
+                process = null;
+            }
+        }
+    }
 }

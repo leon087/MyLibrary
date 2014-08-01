@@ -15,6 +15,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.UUID;
 
 public class DeviceUtil {
     private static final Logger logger = LoggerFactory.getLogger(DeviceUtil.class);
@@ -24,51 +25,83 @@ public class DeviceUtil {
 
     public static String getDeviceFeatures(Context ctx) {
         return getIdentifiers(ctx) + getSystemFeatures()
-                + getScreenFeatures(ctx);
+                + getScreenFeatures(ctx) + getTele(ctx);
     }
 
     public static String getIdentifiers(Context ctx) {
         StringBuilder sb = new StringBuilder();
-        sb.append(getPair("serial", Build.SERIAL));
-        sb.append(getPair("android_id", getAndroidId(ctx)));
+        sb.append(getPair("\nserial", Build.SERIAL));
+        sb.append(getPair("\nandroid_id", getAndroidId(ctx)));
         TelephonyManager tel = (TelephonyManager) ctx
                 .getSystemService(Context.TELEPHONY_SERVICE);
-        sb.append(getPair("sim_country_iso", tel.getSimCountryIso()));
-        sb.append(getPair("network_operator_name", tel.getNetworkOperatorName()));
+        sb.append(getPair("\nsim_country_iso", tel.getSimCountryIso()));
+        sb.append(getPair("\nnetwork_operator_name", tel.getNetworkOperatorName()));
         // sb.append(getPair("unique_id", Crypto.md5(sb.toString())));
+        return sb.toString();
+    }
+
+    public static String getTele(Context context) {
+        StringBuilder sb = new StringBuilder();
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        sb.append(getPair("getPhoneType", tm.getPhoneType() + ""));
+        sb.append(getPair("getDeviceSoftwareVersion", tm.getDeviceSoftwareVersion() + ""));
+        sb.append(getPair("getSimOperator", tm.getSimOperator() + ""));
+        sb.append(getPair("getSimOperatorName", tm.getSimOperatorName() + ""));
+        sb.append(getPair("getSimSerialNumber", tm.getSimSerialNumber() + ""));
+        sb.append(getPair("getVoiceMailNumber", tm.getVoiceMailNumber() + ""));
+
         return sb.toString();
     }
 
     public static String getSystemFeatures() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getPair("android_release", Build.VERSION.RELEASE));
-        sb.append(getPair("android_sdk_int", "" + Build.VERSION.SDK_INT));
-        sb.append(getPair("device_cpu_abi", Build.CPU_ABI));
-        sb.append(getPair("device_model", Build.MODEL));
-        sb.append(getPair("device_manufacturer", Build.MANUFACTURER));
-        sb.append(getPair("device_board", Build.BOARD));
-        sb.append(getPair("device_fingerprint", Build.FINGERPRINT));
-        sb.append(getPair("device_cpu_feature", CPU.getFeatureString()));
+
+        sb.append(getPair("\nMODEL", Build.MODEL));
+        sb.append(getPair("\nMANUFACTURER", Build.MANUFACTURER));//api:4
+        sb.append(getPair("\nBOARD", Build.BOARD));
+        sb.append(getPair("\nFINGERPRINT", Build.FINGERPRINT));
+
+        sb.append(getPair("\nBOOTLOADER", Build.BOOTLOADER));//api:8
+        sb.append(getPair("\nBRAND", Build.BRAND));
+        sb.append(getPair("\nCPU_ABI", Build.CPU_ABI));//api:4
+        sb.append(getPair("\nCPU_ABI2", Build.CPU_ABI2));//api:8
+        sb.append(getPair("\nDEVICE", Build.DEVICE));
+        sb.append(getPair("\nDISPLAY", Build.DISPLAY));//api:3
+        //sb.append(getPair("\ndevice_cpu_feature", Build.getRadioVersion()));//API:14
+        sb.append(getPair("\nHARDWARE", Build.HARDWARE));//API:8
+        sb.append(getPair("\nHOST", Build.HOST));
+        sb.append(getPair("\nID", Build.ID));
+        sb.append(getPair("\nPRODUCT", Build.PRODUCT));
+        sb.append(getPair("\nSERIAL", Build.SERIAL));//api:9
+        sb.append(getPair("\nTAGS", Build.TAGS));
+        sb.append(getPair("\nTYPE", Build.TYPE));
+        sb.append(getPair("\nUSER", Build.USER));
+        sb.append(getPair("\nTIME", Build.TIME + ""));
+
+        sb.append(getPair("\nVERSION.SDK_INT", "" + Build.VERSION.SDK_INT));//api:4
+        sb.append(getPair("\nVERSION.CODENAME", Build.VERSION.CODENAME));//api:4
+        sb.append(getPair("\nVERSION.RELEASE", Build.VERSION.RELEASE));
+        sb.append(getPair("\nVERSION.INCREMENTAL", Build.VERSION.INCREMENTAL));
         return sb.toString();
     }
 
     public static String getScreenFeatures(Context ctx) {
         StringBuilder sb = new StringBuilder();
         DisplayMetrics disp = ctx.getResources().getDisplayMetrics();
-        sb.append(getPair("screen_density", "" + disp.density));
-        sb.append(getPair("screen_density_dpi", "" + disp.densityDpi));
-        sb.append(getPair("screen_height_pixels", "" + disp.heightPixels));
-        sb.append(getPair("screen_width_pixels", "" + disp.widthPixels));
-        sb.append(getPair("screen_scaled_density", "" + disp.scaledDensity));
-        sb.append(getPair("screen_xdpi", "" + disp.xdpi));
-        sb.append(getPair("screen_ydpi", "" + disp.ydpi));
+        sb.append(getPair("\nscreen_density", "" + disp.density));
+        sb.append(getPair("\nscreen_density_dpi", "" + disp.densityDpi));
+        sb.append(getPair("\nscreen_height_pixels", "" + disp.heightPixels));
+        sb.append(getPair("\nscreen_width_pixels", "" + disp.widthPixels));
+        sb.append(getPair("\nscreen_scaled_density", "" + disp.scaledDensity));
+        sb.append(getPair("\nscreen_xdpi", "" + disp.xdpi));
+        sb.append(getPair("\nscreen_ydpi", "" + disp.ydpi));
         return sb.toString();
     }
 
     private static String getPair(String key, String value) {
         key = key == null ? "" : key.trim();
         value = value == null ? "" : value.trim();
-        return "&" + key + "=" + value;
+        return "\n" + key + "=" + value;
     }
 
     public static int getSdkInt() {
@@ -86,6 +119,44 @@ public class DeviceUtil {
         return 2;
     }
 
+    @TargetApi(8)
+    public static String getBootloader() {
+        if (EnvironmentUtil.SdkUtil.hasFroyo()) {
+            return Build.BOOTLOADER;
+        }
+        return "";
+    }
+
+    @TargetApi(8)
+    public static String getCpuAbi2() {
+        try {
+            String cpuAbi2 = (String) Build.class.getField("CPU_ABI2").get(new Build());
+            return cpuAbi2;
+        } catch (Exception e1) {
+            return "";
+        }
+    }
+
+    @TargetApi(8)
+    public static String getHardware() {
+        try {
+            String hardware = ReflectUtil.getFieldValue(new Build(), "HARDWARE");
+            return hardware;
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    @TargetApi(9)
+    public static String getSerial() {
+        try {
+            String serial = ReflectUtil.getFieldValue(new Build(), "SERIAL");
+            return serial;
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     /**
      * 获取设备号
      *
@@ -97,20 +168,48 @@ public class DeviceUtil {
                 .getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
+    public static UUID getUUID(Context context) {
+        //需要通信模块
+        String imei = getIMEI(context);
+
+        String macAddress = getMacAddress(context);
+
+        //可能为垃圾数据
+        String androidId = getAndroidId(context);
+
+        //可能相同或为null
+        String serial = getSerial();
+
+        int imeiHashCode = Math.abs(imei.hashCode());
+        int macAddressHashCode = macAddress.hashCode();
+        int androidIdHashCode = Math.abs(androidId.hashCode());
+        int serialHashCode = Math.abs(serial.hashCode());
+
+        long mostSigBits = ((long) imeiHashCode) << 32 | macAddressHashCode;
+        long leastSigBits = ((long) androidIdHashCode) << 32 | serialHashCode;
+        UUID deviceUuid = new UUID(mostSigBits, leastSigBits);
+        return deviceUuid;
+    }
+
     /**
      * 获取Mac地址
      *
      * @param context
      * @return
      */
-    public static String getLocalMacAddress(Context context) {
-        WifiManager wifi = (WifiManager) context
-                .getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = wifi.getConnectionInfo();
-        if (null != info) {
-            return info.getMacAddress();
+    public static String getMacAddress(Context context) {
+        try {
+            WifiManager wifi = (WifiManager) context
+                    .getSystemService(Context.WIFI_SERVICE);
+            WifiInfo info = wifi.getConnectionInfo();
+            if (null != info) {
+                return info.getMacAddress();
+            }
+            return "";
+        } catch (Exception e) {
+            logger.error("", e);
+            return "";
         }
-        return null;
     }
 
     /**
@@ -118,7 +217,7 @@ public class DeviceUtil {
      *
      * @return
      */
-    public static String getLocalIpAddress() {
+    public static String getIpAddress() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface
                     .getNetworkInterfaces(); en.hasMoreElements(); ) {
@@ -144,10 +243,14 @@ public class DeviceUtil {
      * @return
      */
     public static String getIMEI(Context context) {
-        TelephonyManager tm = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        String imei = tm.getDeviceId();
-        return imei;
+        try {
+            TelephonyManager tm = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            String imei = tm.getDeviceId();
+            return imei;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**

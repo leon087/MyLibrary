@@ -42,4 +42,9 @@ public class ReflectUtil {
         }
         return params[index];
     }
+
+    public static <T> T getFieldValue(Object object, String fieldName) throws Exception {
+        T value = (T) object.getClass().getField(fieldName).get(object);
+        return value;
+    }
 }
