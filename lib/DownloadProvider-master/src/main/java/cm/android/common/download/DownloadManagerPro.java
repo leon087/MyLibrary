@@ -67,8 +67,8 @@ public class DownloadManagerPro {
                 context.getPackageName());
         downloadManager.setAccessAllDownloads(false);
         startDownloadService(context);
-        downloadReceiver = new DownloadReceiver(context);
-        downloadReceiver.registerReceiver();
+        downloadReceiver = new DownloadReceiver();
+        downloadReceiver.registerReceiver(context);
 
         isInit = true;
     }
@@ -243,10 +243,6 @@ public class DownloadManagerPro {
     }
 
     private class DownloadReceiver extends BaseBroadcastReceiver {
-
-        public DownloadReceiver(Context context) {
-            super(context);
-        }
 
         @Override
         public void onReceive(Context context, Intent intent) {

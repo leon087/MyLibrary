@@ -10,16 +10,13 @@ import android.content.IntentFilter;
 public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     protected Context context;
 
-    public BaseBroadcastReceiver(Context context) {
-        this.context = context;
-    }
-
     /**
      * 注册Intent
      */
-    public void registerReceiver() {
+    public void registerReceiver(Context context) {
         IntentFilter intentFilter = createIntentFilter();
         context.registerReceiver(this, intentFilter);
+        this.context = context;
     }
 
     public void registerReceiver(IntentFilter intentFilter) {

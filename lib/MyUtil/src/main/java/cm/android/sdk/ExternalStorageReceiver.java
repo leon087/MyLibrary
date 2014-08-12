@@ -18,9 +18,8 @@ public class ExternalStorageReceiver extends BaseBroadcastReceiver {
      */
     public ExternalStorageReceiver(Context context,
                                    ExternalStorageListener listener) {
-        super(context);
         externalStorageListener = listener;
-        registerReceiver();
+        registerReceiver(context);
     }
 
     /**

@@ -5,8 +5,6 @@ import cm.android.app.global.UrlData;
 import cm.android.common.image.ImageManager;
 import cm.android.framework.core.global.GlobalData;
 import cm.android.framework.core.manager.ServiceHolder;
-import cm.android.framework.ext.global.AccountData;
-import cm.android.framework.ext.global.CommonTag;
 import cm.android.global.MyPreference;
 
 public class MyManager {
@@ -30,10 +28,6 @@ public class MyManager {
     // public static <T, K> MyDao<T, K> getMyDao(Class<T> beanClazz) {
     // return BaseManager.getService(MyDaoManager.class).getMyDao(beanClazz);
     // }
-
-    public static AccountData getAccountData() {
-        return getData(CommonTag.ACCOUNT_DATA);
-    }
 
     public static <T> T getData(String tag) {
         return ServiceHolder.getService(GlobalData.class).getData(tag);
