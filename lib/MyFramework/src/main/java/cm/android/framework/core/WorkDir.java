@@ -4,10 +4,12 @@ import android.content.Context;
 import cm.android.util.EnvironmentUtil;
 import cm.android.util.IoUtil;
 import cm.android.util.ObjectUtil;
+import cm.android.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -69,5 +71,16 @@ public class WorkDir {
             file.mkdirs();
             mDirs.put(dir, file);
         }
+    }
+
+    public void bindDir(String tag, File dir) {
+        if (Utils.isEmpty(tag)) {
+            tag = dir.getName();
+        }
+        mDirs.put(tag, dir);
+    }
+
+    public Collection<File> getDirs() {
+        return mDirs.values();
     }
 }

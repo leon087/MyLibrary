@@ -20,12 +20,12 @@ public class WifiStateChanged {
     private NetworkConnectChangedReceiver wifiReceiver = new NetworkConnectChangedReceiver();
     private IWifiStateListener wifiListener;
 
-    public WifiStateChanged(Context context, IWifiStateListener wifiListener) {
-        mContext = context;
+    public WifiStateChanged(IWifiStateListener wifiListener) {
         this.wifiListener = wifiListener;
     }
 
-    public void register() {
+    public void register(Context context) {
+        this.mContext = context;
         // WIFI状态接收器
         IntentFilter filter = new IntentFilter();
         // filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -38,17 +38,17 @@ public class WifiStateChanged {
         mContext.unregisterReceiver(wifiReceiver);
     }
 
-    private void handleWifiStateChanged(int state) {
+    private void handleWifiStateChanged(int state, Context context, Intent intent) {
         switch (state) {
             case WifiManager.WIFI_STATE_ENABLING:
                 break;
             case WifiManager.WIFI_STATE_ENABLED:
-                wifiListener.onConnected();
+                wifiListener.onConnected(context, intent);
                 break;
             case WifiManager.WIFI_STATE_DISABLING:
                 break;
             case WifiManager.WIFI_STATE_DISABLED:
-                wifiListener.onDisConnected();
+                wifiListener.onDisConnected(context, intent);
                 break;
             default:
                 break;
@@ -56,9 +56,9 @@ public class WifiStateChanged {
     }
 
     public interface IWifiStateListener {
-        void onConnected();
+        void onConnected(Context context, Intent intent);
 
-        void onDisConnected();
+        void onDisConnected(Context context, Intent intent);
     }
 
     private class NetworkConnectChangedReceiver extends BroadcastReceiver {
@@ -74,9 +74,9 @@ public class WifiStateChanged {
                     NetworkInfo networkInfo = (NetworkInfo) parcelableExtra;
                     State state = networkInfo.getState();
                     if (state == State.CONNECTED) {
-                        wifiListener.onConnected();
+                        wifiListener.onConnected(context, intent);
                     } else {
-                        wifiListener.onDisConnected();
+                        wifiListener.onDisConnected(context, intent);
                     }
                 }
             }
@@ -102,7 +102,7 @@ public class WifiStateChanged {
                     .getAction())) {
                 handleWifiStateChanged(intent.getIntExtra(
                         WifiManager.EXTRA_WIFI_STATE,
-                        WifiManager.WIFI_STATE_UNKNOWN));
+                        WifiManager.WIFI_STATE_UNKNOWN), context, intent);
             }
         }
     }

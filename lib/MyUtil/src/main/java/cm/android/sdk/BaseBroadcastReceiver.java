@@ -35,7 +35,7 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
      *
      * @return
      */
-    protected IntentFilter createIntentFilter() {
+    public IntentFilter createIntentFilter() {
         return new IntentFilter();
     }
 

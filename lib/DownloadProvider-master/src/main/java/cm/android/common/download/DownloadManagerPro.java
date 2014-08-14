@@ -274,7 +274,7 @@ public class DownloadManagerPro {
         }
 
         @Override
-        protected IntentFilter createIntentFilter() {
+        public IntentFilter createIntentFilter() {
             IntentFilter filter = super.createIntentFilter();
             // 监听下载完成（包括成功或失败）
             filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);

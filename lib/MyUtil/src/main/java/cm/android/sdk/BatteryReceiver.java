@@ -47,7 +47,7 @@ public class BatteryReceiver extends BaseBroadcastReceiver {
     }
 
     @Override
-    protected IntentFilter createIntentFilter() {
+    public IntentFilter createIntentFilter() {
         IntentFilter intentFilter = super.createIntentFilter();
         intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
         return intentFilter;

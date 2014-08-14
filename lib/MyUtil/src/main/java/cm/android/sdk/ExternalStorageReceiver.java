@@ -30,7 +30,7 @@ public class ExternalStorageReceiver extends BaseBroadcastReceiver {
     }
 
     @Override
-    protected IntentFilter createIntentFilter() {
+    public IntentFilter createIntentFilter() {
         IntentFilter intentFilter = super.createIntentFilter();
         intentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         intentFilter.addAction(Intent.ACTION_MEDIA_SCANNER_STARTED);

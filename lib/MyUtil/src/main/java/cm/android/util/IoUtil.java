@@ -3,6 +3,7 @@ package cm.android.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.StatFs;
+import cm.android.cmd.CmdExecute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -223,7 +224,7 @@ public class IoUtil {
 
         boolean isSucceed = true;
         for (File file : dir.listFiles()) {
-            isSucceed &= deleteFiles(file);
+            isSucceed &= deleteDir(file);
         }
         return isSucceed;
     }
@@ -235,9 +236,17 @@ public class IoUtil {
      * @return
      */
     public static boolean deleteDir(File dir) {
-        boolean isSucceed = deleteFiles(dir);
-        isSucceed &= dir.delete();
-        return isSucceed;
+        if (!dir.exists()) {
+            return true;
+        }
+
+        try {
+            CmdExecute.exec("rm -fr " + dir.getAbsolutePath());
+            return true;
+        } catch (SecurityException e) {
+            logger.error("dir = " + dir.getAbsolutePath(), e);
+            return false;
+        }
     }
 
     /**

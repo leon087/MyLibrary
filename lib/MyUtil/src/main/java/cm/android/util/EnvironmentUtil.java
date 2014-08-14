@@ -154,6 +154,14 @@ public class EnvironmentUtil {
         return dir;
     }
 
+    public static File getExternalDir(Context context) {
+        // Before Froyo we need to construct the external cache dir ourselves
+        final String filesDir = "/Android/data/" + context.getPackageName();
+        File externalFilesDir = new File(
+                Environment.getExternalStorageDirectory(), filesDir);
+        return externalFilesDir;
+    }
+
     /**
      * 判断是否有足够的空间
      *
