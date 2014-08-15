@@ -6,10 +6,18 @@
     <permission android:name="cm.android.framework" android:protectionLevel="signature"/>
 
     <uses-permission android:name="cm.android.framework"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
 
     <application>
-        <service android:name="cm.android.framework.core.CoreService" android:exported="false"
+        <service android:name="cm.android.framework.core.CoreService" android:exported="false" android:persistent="true"
                  android:permission="cm.android.framework"/>
+
+        <receiver android:name="cm.android.framework.core.CoreReceiver">
+            <intent-filter>
+                <action android:name="cm.android.framework.ACTION_ALARM_WAKE_UP"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

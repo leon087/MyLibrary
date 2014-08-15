@@ -65,6 +65,8 @@ public abstract class BaseApp extends Application implements IApp {
         isInit = true;
 
         this.startService(new Intent(this, CoreService.class));
+        DaemonManager.getInstance().startDaemon(this);
+        
         if (mServiceManager == null) {
             mServiceManager = initServiceManager();
             if (mServiceManager != null) {
@@ -81,6 +83,7 @@ public abstract class BaseApp extends Application implements IApp {
         logger.info("isInit = " + isInit);
         isInit = false;
         ActivityStack.getInstance().finishAll();
+        DaemonManager.getInstance().stopDaemon(this);
 
         stopService(new Intent(this, CoreService.class));
         if (null != mServiceManager) {

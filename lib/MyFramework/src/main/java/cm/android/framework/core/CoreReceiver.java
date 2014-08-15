@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import cm.android.sdk.BaseBroadcastReceiver;
 
 public class CoreReceiver extends BaseBroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
         context.startService(new Intent(context, CoreService.class));
@@ -14,8 +15,7 @@ public class CoreReceiver extends BaseBroadcastReceiver {
     @Override
     public IntentFilter createIntentFilter() {
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
-        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(DaemonManager.ACTION_ALARM_WAKE_UP);
         return filter;
     }
 }
