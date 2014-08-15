@@ -61,19 +61,19 @@ public class UserDataCleaner {
      * @param context
      */
     public static void cleanExternalCache(Context context) {
-        if (EnvironmentUtil.isExternalStorageUsable()) {
+        if (EnvironmentUtil.isExternalStorageWritable()) {
             deleteFilesByDirectory(EnvironmentUtil.getExternalCacheDir(context));
         }
     }
 
     public static void cleanExternalFiles(Context context) {
-        if (EnvironmentUtil.isExternalStorageUsable()) {
+        if (EnvironmentUtil.isExternalStorageWritable()) {
             deleteFilesByDirectory(EnvironmentUtil.getExternalFilesDir(context, null));
         }
     }
 
     public static void cleanExternalDir(Context context) {
-        if (EnvironmentUtil.isExternalStorageUsable()) {
+        if (EnvironmentUtil.isExternalStorageWritable()) {
             deleteFilesByDirectory(EnvironmentUtil.getExternalDir(context));
         }
     }

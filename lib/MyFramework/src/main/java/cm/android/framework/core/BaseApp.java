@@ -1,5 +1,7 @@
 package cm.android.framework.core;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -89,7 +91,14 @@ public abstract class BaseApp extends Application implements IApp {
         }
     }
 
+    @TargetApi(8)
     public void exitAppProcess() {
+        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        if (EnvironmentUtil.SdkUtil.hasFroyo()) {
+            am.killBackgroundProcesses(this.getPackageName());
+        } else {
+            am.restartPackage(this.getPackageName());
+        }
         // 退出，由于android不建议直接结束进程，故此处只做辅助用
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);

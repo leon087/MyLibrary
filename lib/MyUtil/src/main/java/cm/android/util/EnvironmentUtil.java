@@ -58,13 +58,20 @@ public class EnvironmentUtil {
         return true;
     }
 
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 判断外部存储是否可用
      *
      * @return
      */
-    public static boolean isExternalStorageUsable() {
-        // return isExternalStorageMounted() || !isExternalStorageRemovable();
+    public static boolean isExternalStorageWritable() {
         return isExternalStorageMounted();
     }
 
@@ -80,6 +87,19 @@ public class EnvironmentUtil {
      */
     public static File getExternalStorageDirectory() {
         return Environment.getExternalStorageDirectory();
+    }
+
+    @TargetApi(8)
+    public static File getExternalStoragePublicDirectory(String type) {
+        if (!EnvironmentUtil.SdkUtil.hasFroyo()) {
+            File file = new File(EnvironmentUtil.getExternalStorageDirectory(), type);
+            file.mkdirs();
+            return file;
+        }
+
+        File file = Environment.getExternalStoragePublicDirectory(type);
+        file.mkdirs();
+        return file;
     }
 
     /**
@@ -114,7 +134,7 @@ public class EnvironmentUtil {
         // Check if media is mounted or storage is built-in, if so, try and use
         // external cache dir
         // otherwise use internal cache dir
-        final File cachePathFile = isExternalStorageUsable() ? getExternalCacheDir(context)
+        final File cachePathFile = isExternalStorageWritable() ? getExternalCacheDir(context)
                 : context.getCacheDir();
         File uniqueCacheDir = new File(cachePathFile, uniqueName);
         uniqueCacheDir.mkdirs();

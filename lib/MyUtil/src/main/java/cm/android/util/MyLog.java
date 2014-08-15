@@ -340,7 +340,7 @@ class FileLogger extends BaseLogger {
         }
 
         logFile = Environment.getExternalStorageDirectory();
-        if (!EnvironmentUtil.isExternalStorageUsable()) {
+        if (!EnvironmentUtil.isExternalStorageWritable()) {
             logFile = null;
         }
 
