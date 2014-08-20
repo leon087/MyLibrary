@@ -1,4 +1,4 @@
-package cm.android.app.sample;
+package cm.android.app;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import cm.android.app.sample.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
