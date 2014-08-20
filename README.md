@@ -1,9 +1,7 @@
 MyCommon
 ========
-android library+gradle+混淆<br/>
-MyCommonAPI为demo演示代码，MyCommonDemo为快速开发框架基础代码，library中为common代码。
 
-library说明:
+lib说明:
 -----------------------------------
 MyUtil：封装了util类，作为所有project的基础library;<br/>
 MyFramework：快速开发框架，构建了程序的最基本结构;<br/>
