@@ -6,8 +6,8 @@ import cm.android.common.http.HttpUtil;
 import cm.android.framework.core.WorkDir;
 import cm.android.framework.core.manager.CommonBaseManager;
 import cm.android.framework.core.manager.ServiceHolder;
-import cm.android.sdk.ExternalStorageReceiver;
-import cm.android.sdk.ExternalStorageReceiver.ExternalStorageListener;
+import cm.android.sdk.content.ExternalStorageReceiver;
+import cm.android.sdk.content.ExternalStorageReceiver.ExternalStorageListener;
 
 public class MyServiceManager extends CommonBaseManager {
     private Context mContext;

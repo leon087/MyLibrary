@@ -3,7 +3,7 @@ package cm.android.framework.core;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import cm.android.sdk.BaseBroadcastReceiver;
+import cm.android.sdk.content.BaseBroadcastReceiver;
 
 public class CoreReceiver extends BaseBroadcastReceiver {
 

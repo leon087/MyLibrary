@@ -1,4 +1,4 @@
-package cm.android.sdk;
+package cm.android.sdk.content;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

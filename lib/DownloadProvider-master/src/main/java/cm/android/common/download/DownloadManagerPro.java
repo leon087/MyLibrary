@@ -6,7 +6,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import cm.android.sdk.BaseBroadcastReceiver;
+import cm.android.sdk.content.BaseBroadcastReceiver;
 import cm.android.util.MyLog;
 import cm.android.util.ObjectUtil;
 import com.mozillaonline.providers.DownloadManager;

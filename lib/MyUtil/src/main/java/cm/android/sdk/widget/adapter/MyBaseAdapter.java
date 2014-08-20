@@ -1,4 +1,4 @@
-package cm.android.framework.widget.adapter;
+package cm.android.sdk.widget.adapter;
 
 import android.content.Context;
 import android.view.View;
