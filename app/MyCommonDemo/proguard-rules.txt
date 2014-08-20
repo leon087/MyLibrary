@@ -1,6 +1,0 @@
-
-#================================自定义======================================
--keepnames class cm.android.common.image.ImageManager
--keepnames class cm.android.common.download.ApkDownloadManager
-
-#================================自定义======================================
