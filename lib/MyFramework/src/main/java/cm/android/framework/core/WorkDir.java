@@ -25,42 +25,33 @@ public class WorkDir {
     private WorkDir() {
     }
 
-    private static final class Singleton {
-        private static final WorkDir SINGLETON = new WorkDir();
-    }
-
-    public static WorkDir getInstance() {
-        return Singleton.SINGLETON;
-    }
-
-    public void initWorkDir(Context context, String... dirNames) {
+    public static void initWorkDir(Context context, String... dirNames) {
         privateWorkDir.initWorkDir(context, dirNames);
     }
 
-    public void initPublicWorkDir(Context context, String... dirNames) {
+    public static void initPublicWorkDir(Context context, String... dirNames) {
         publicWorkDir.initWorkDir(context, dirNames);
     }
 
-    public File getDir(String dir) {
+    public static File getDir(String dir) {
         return privateWorkDir.getDir(dir);
     }
 
-    public File getPublicDir(String dir) {
+    public static File getPublicDir(String dir) {
         return publicWorkDir.getDir(dir);
     }
 
-    public Collection<File> getDirs() {
+    public static Collection<File> getDirs() {
         return privateWorkDir.getDirs();
     }
 
-    public Collection<File> getPublicDirs() {
+    public static Collection<File> getPublicDirs() {
         return publicWorkDir.getDirs();
     }
 
-    public void bindPublicDir(String tag, File dir) {
+    public static void bindPublicDir(String tag, File dir) {
         publicWorkDir.bindDir(tag, dir);
     }
-
 
     private static abstract class BaseWorkDir {
         private final HashMap<String, File> dirs = ObjectUtil.newHashMap();

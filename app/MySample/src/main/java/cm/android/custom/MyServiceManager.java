@@ -19,12 +19,12 @@ public class MyServiceManager extends CommonBaseManager {
 
         @Override
         public void onMediaMounted() {
-            WorkDir.getInstance().initWorkDir(mContext);
+            WorkDir.initWorkDir(mContext);
         }
 
         @Override
         public void onMediaRemoved() {
-            WorkDir.getInstance().initWorkDir(mContext);
+            WorkDir.initWorkDir(mContext);
         }
     };
 

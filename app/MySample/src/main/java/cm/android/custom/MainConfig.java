@@ -22,12 +22,12 @@ public class MainConfig extends MyAppConfig {
 
     @Override
     public void initWorkDir(Context context) {
-        WorkDir.getInstance().initWorkDir(context, DOWNLOAD, LOG_DIR);
+        WorkDir.initWorkDir(context, DOWNLOAD, LOG_DIR);
     }
 
     @Override
     public void initLog() {
-        LogConfig.configLogback(Level.ALL, WorkDir.getInstance().getDir(LOG_DIR));
+        LogConfig.configLogback(Level.ALL, WorkDir.getDir(LOG_DIR));
     }
 
     private static final class StoreRoot {
