@@ -53,10 +53,10 @@ android {
     }
 
     defaultConfig {
-//        minSdkVersion 8
-//        targetSdkVersion 19
-//        versionCode 1
-//        versionName "1.0"
+        minSdkVersion 16
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
     }
 }
 
