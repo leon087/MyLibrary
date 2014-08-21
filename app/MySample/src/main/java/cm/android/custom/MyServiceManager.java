@@ -2,7 +2,7 @@ package cm.android.custom;
 
 import android.content.Context;
 import cm.android.common.http.HttpLoader;
-import cm.android.common.http.HttpUtil;
+import cm.android.common.http.MyHttp;
 import cm.android.framework.core.WorkDir;
 import cm.android.framework.core.manager.CommonBaseManager;
 import cm.android.framework.core.manager.ServiceHolder;
@@ -36,13 +36,13 @@ public class MyServiceManager extends CommonBaseManager {
         HttpLoader.init(context);
         mContext = context;
 
+        addService(new MyHttp(context));
         addService(new ExternalStorageReceiver(context, externalStorageListener));
     }
 
     @Override
     protected void onDestroy() {
-        HttpUtil.cancel(mContext);
-
+        ServiceHolder.getService(MyHttp.class).cancel();
         ServiceHolder.getService(ExternalStorageReceiver.class).release();
         super.onDestroy();
 

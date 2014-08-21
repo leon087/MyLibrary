@@ -1,5 +1,6 @@
 package cm.android.custom;
 
+import cm.android.common.http.MyHttp;
 import cm.android.common.image.ImageManager;
 import cm.android.framework.core.global.GlobalData;
 import cm.android.framework.core.manager.ServiceHolder;
@@ -26,6 +27,10 @@ public class MyManager {
     // public static <T, K> MyDao<T, K> getMyDao(Class<T> beanClazz) {
     // return BaseManager.getService(MyDaoManager.class).getMyDao(beanClazz);
     // }
+
+    public static MyHttp getHttp() {
+        return ServiceHolder.getService(MyHttp.class);
+    }
 
     public static <T> T getData(String tag) {
         return ServiceHolder.getService(GlobalData.class).getData(tag);
