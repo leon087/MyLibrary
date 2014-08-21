@@ -30,6 +30,7 @@ android {
     }
 
     lintOptions {
+        xmlReport false
         abortOnError false
         quiet false
         showAll true
