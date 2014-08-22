@@ -43,8 +43,8 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion Integer.parseInt(project.compileSdkVersion)
+    buildToolsVersion project.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -52,10 +52,10 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion Integer.parseInt(project.minSdkVersion)
+        targetSdkVersion Integer.parseInt(project.targetSdkVersion)
+        versionCode Integer.parseInt(project.versionCode)
+        versionName project.versionName
     }
 }
 
@@ -76,5 +76,5 @@ artifacts {
     archives androidSourcesJar
 }
 
-version = '1.0'
+version = project.versionName
 

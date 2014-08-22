@@ -17,9 +17,4 @@ allprojects {
     }
 }
 
-ext {
-    compileSdkVersion = 19
-    buildToolsVersion = "20"
-}
-
 task wrapper(type: Wrapper) { gradleVersion = '1.12' }
