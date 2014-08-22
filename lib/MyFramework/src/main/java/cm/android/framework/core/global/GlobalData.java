@@ -10,10 +10,18 @@ import java.util.Map;
 public class GlobalData {
     private Map<String, Object> mData = ObjectUtil.newHashMap();
 
-    public GlobalData() {
+    private GlobalData() {
     }
 
-    public void release() {
+    private static final class Singleton {
+        private static final GlobalData INSTANCE = new GlobalData();
+    }
+
+    public static GlobalData getInstance() {
+        return Singleton.INSTANCE;
+    }
+
+    public void reset() {
         mData.clear();
     }
 

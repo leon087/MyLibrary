@@ -3,12 +3,12 @@ package cm.android.framework.core.manager;
 import android.content.Context;
 
 public interface IManager {
+    void init(Context context);
+
     /**
      * 创建服务
-     *
-     * @param context
      */
-    public void create(Context context);
+    public void create();
 
     /**
      * 销毁服务

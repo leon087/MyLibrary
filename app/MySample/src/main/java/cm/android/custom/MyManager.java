@@ -4,20 +4,15 @@ import cm.android.common.http.MyHttp;
 import cm.android.common.image.ImageManager;
 import cm.android.framework.core.global.GlobalData;
 import cm.android.framework.core.manager.ServiceHolder;
-import cm.android.global.MyPreference;
 
 public class MyManager {
 
     public static GlobalData getGlobalData() {
-        return ServiceHolder.getService(GlobalData.class);
+        return GlobalData.getInstance();
     }
 
     public static ImageManager getAsyncImageManager() {
         return ServiceHolder.getService(ImageManager.class);
-    }
-
-    public static MyPreference getMyPreference() {
-        return ServiceHolder.getService(MyPreference.class);
     }
 
     // public static <T extends BaseDao<?>> T getDao(Class<T> daoClazz) {
@@ -33,11 +28,11 @@ public class MyManager {
     }
 
     public static <T> T getData(String tag) {
-        return ServiceHolder.getService(GlobalData.class).getData(tag);
+        return GlobalData.getInstance().getData(tag);
     }
 
     public static <T> void putData(String tag, T value) {
-        ServiceHolder.getService(GlobalData.class).putData(tag, value);
+        GlobalData.getInstance().putData(tag, value);
     }
 
     // public static ThreadPool getThreadPool() {

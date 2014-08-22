@@ -9,7 +9,6 @@ public class MainApp extends BaseApp {
     @Override
     public void onCreate() {
         super.onCreate();
-        MainApp.getApp().initApp();
     }
 
     @Override

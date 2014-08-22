@@ -39,6 +39,7 @@ public abstract class BaseApp extends Application implements IApp {
         super.onCreate();
         sApp = this;
         initConfig().init(this);
+        appInit();
         disableConnectionReuseIfNecessary();
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 this.getPackageManager(), this.getPackageName());
@@ -57,6 +58,19 @@ public abstract class BaseApp extends Application implements IApp {
     }
 
     /**
+     * app初始化，跟随application生命周期，初始化不释放的资源
+     */
+    @Override
+    public void appInit() {
+        if (mServiceManager == null) {
+            mServiceManager = initServiceManager();
+            if (mServiceManager != null) {
+                mServiceManager.init(sApp);
+            }
+        }
+    }
+
+    /**
      * 在假设Application不释放的情况下，进入app业务态，初始化资源
      */
     @Override
@@ -66,12 +80,9 @@ public abstract class BaseApp extends Application implements IApp {
 
         this.startService(new Intent(this, CoreService.class));
         DaemonManager.getInstance().startDaemon(this);
-        
-        if (mServiceManager == null) {
-            mServiceManager = initServiceManager();
-            if (mServiceManager != null) {
-                mServiceManager.create(sApp);
-            }
+
+        if (mServiceManager != null) {
+            mServiceManager.create();
         }
     }
 
@@ -89,7 +100,6 @@ public abstract class BaseApp extends Application implements IApp {
         if (null != mServiceManager) {
             mServiceManager.destroy();
             // 置null，以使得虚拟机主动回收该对象中资源
-            mServiceManager = null;
             System.gc();
         }
     }

@@ -12,14 +12,20 @@ public abstract class BaseManager implements IManager {
     private static final Logger logger = LoggerFactory.getLogger(BaseManager.class);
 
     @Override
-    public final synchronized void create(Context context) {
+    public final synchronized void init(Context context) {
+        ServiceHolder.resetAppService();
+        onInit(context);
+    }
+
+    @Override
+    public final synchronized void create() {
         logger.info("isStart = " + isStart);
         if (isStart) {
             return;
         }
         isStart = true;
-        ServiceHolder.clear();
-        onCreate(context);
+        ServiceHolder.resetService();
+        onCreate();
     }
 
     @Override
@@ -30,15 +36,15 @@ public abstract class BaseManager implements IManager {
         }
         isStart = false;
         onDestroy();
-        ServiceHolder.clear();
+        ServiceHolder.resetService();
     }
+
+    protected abstract void onInit(Context context);
 
     /**
      * 初始化资源
-     *
-     * @param context
      */
-    protected abstract void onCreate(Context context);
+    protected abstract void onCreate();
 
     /**
      * 与onCreate对应，释放资源
@@ -50,6 +56,10 @@ public abstract class BaseManager implements IManager {
      *
      * @param manager
      */
+    protected final void addAppService(Object manager) {
+        ServiceHolder.addAppService(manager);
+    }
+
     protected final void addService(Object manager) {
         ServiceHolder.addService(manager);
     }

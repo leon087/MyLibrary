@@ -4,14 +4,18 @@ import android.content.Context;
 import cm.android.framework.core.global.GlobalData;
 
 public class CommonBaseManager extends BaseManager {
+    @Override
+    protected void onInit(Context context) {
+        
+    }
 
     @Override
-    protected void onCreate(Context context) {
-        addService(new GlobalData());
+    protected void onCreate() {
+        GlobalData.getInstance().reset();
     }
 
     @Override
     protected void onDestroy() {
-        ServiceHolder.getService(GlobalData.class).release();
+        GlobalData.getInstance().reset();
     }
 }

@@ -3,7 +3,6 @@ package cm.android.custom;
 import android.content.Context;
 import cm.android.common.http.HttpLoader;
 import cm.android.common.http.MyHttp;
-import cm.android.framework.core.WorkDir;
 import cm.android.framework.core.manager.CommonBaseManager;
 import cm.android.framework.core.manager.ServiceHolder;
 import cm.android.sdk.content.ExternalStorageReceiver;
@@ -19,25 +18,30 @@ public class MyServiceManager extends CommonBaseManager {
 
         @Override
         public void onMediaMounted() {
-            WorkDir.initWorkDir(mContext);
+            //WorkDir.initWorkDir(mContext);
         }
 
         @Override
         public void onMediaRemoved() {
-            WorkDir.initWorkDir(mContext);
+            //WorkDir.initWorkDir(mContext);
         }
     };
 
     @Override
-    protected void onCreate(Context context) {
-        // addService(new MyDaoManager().init(context));
-        super.onCreate(context);
-
-        HttpLoader.init(context);
+    protected void onInit(Context context) {
+        super.onInit(context);
         mContext = context;
+        addAppService(new MyHttp(mContext));
+    }
 
-        addService(new MyHttp(context));
-        addService(new ExternalStorageReceiver(context, externalStorageListener));
+    @Override
+    protected void onCreate() {
+        // addService(new MyDaoManager().init(context));
+        super.onCreate();
+
+        HttpLoader.init(mContext);
+
+        addService(new ExternalStorageReceiver(mContext, externalStorageListener));
     }
 
     @Override

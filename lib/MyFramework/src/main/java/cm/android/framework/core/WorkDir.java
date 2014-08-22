@@ -3,7 +3,6 @@ package cm.android.framework.core;
 import android.annotation.TargetApi;
 import android.content.Context;
 import cm.android.util.EnvironmentUtil;
-import cm.android.util.IoUtil;
 import cm.android.util.ObjectUtil;
 import cm.android.util.Utils;
 import org.slf4j.Logger;
@@ -105,8 +104,7 @@ public class WorkDir {
             File rootDir = new File(context.getFilesDir(), WORK_PATH);
             if (EnvironmentUtil.isExternalStorageWritable()) {
                 // 删除files目录下文件
-                IoUtil.deleteFiles(rootDir);
-                // rootPath = EnvironmentUtil.getExternalStorageDirectory();
+                //IoUtil.deleteFiles(rootDir);
                 rootDir = EnvironmentUtil.getExternalFilesDir(context, WORK_PATH);
             }
             return rootDir;
