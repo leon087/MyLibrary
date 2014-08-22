@@ -1,4 +1,4 @@
-package cm.android.global;
+package cm.android.sdk;
 
 import android.os.Parcel;
 import android.os.Parcelable;

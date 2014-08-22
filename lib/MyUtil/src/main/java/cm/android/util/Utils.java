@@ -8,7 +8,7 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import cm.android.applications.AppUtil;
-import cm.android.global.MyParcelable;
+import cm.android.sdk.MyParcelable;
 import com.alibaba.fastjson.JSON;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
