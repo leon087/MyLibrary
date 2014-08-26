@@ -1,4 +1,4 @@
-package cm.android.framework.ext.ui;
+package cm.android.framework.ext.ui.v4;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;

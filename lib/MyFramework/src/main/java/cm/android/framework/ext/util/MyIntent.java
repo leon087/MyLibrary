@@ -11,6 +11,7 @@ import cm.android.sdk.MyParcelable;
  * 封装了一些Intent操作
  */
 public class MyIntent {
+    private static final String BUNDLE_INSTANCESTATE = "InstanceState";
 
     /**
      * 跳转Activity，有返回值，参考{@link Activity#startActivityForResult}
@@ -84,8 +85,7 @@ public class MyIntent {
     /**
      * 获取Bundle中数据
      *
-     * @param <T>
-     * @param bunlde
+     * @param bundle
      * @return
      */
     public static <T> T getData(Bundle bundle) {
@@ -145,5 +145,22 @@ public class MyIntent {
         Intent intent = new Intent(action);
         setData(intent, data);
         context.sendBroadcast(intent);
+    }
+
+    public static void backup(Bundle outState, Bundle bundleBak) {
+        outState.putBundle(BUNDLE_INSTANCESTATE, bundleBak);
+    }
+
+    public static void restore(Bundle savedInstanceState, Bundle bundleBak) {
+        bundleBak.clear();
+
+        if (null == savedInstanceState) {
+            return;
+        }
+
+        Bundle bundle = savedInstanceState.getBundle(BUNDLE_INSTANCESTATE);
+        if (bundle != null) {
+            bundleBak.putAll(bundle);
+        }
     }
 }
