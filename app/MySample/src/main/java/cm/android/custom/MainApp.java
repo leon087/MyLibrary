@@ -21,8 +21,4 @@ public class MainApp extends BaseApp {
         return new MainConfig();
     }
 
-    @Override
-    public synchronized void exitApp() {
-        super.exitApp();
-    }
 }
