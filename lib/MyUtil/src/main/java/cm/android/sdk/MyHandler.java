@@ -23,6 +23,10 @@ public abstract class MyHandler {
         return handler.obtainMessage(what);
     }
 
+    public Message obtainMessage(int what, Object obj) {
+        return handler.obtainMessage(what, obj);
+    }
+
     public void sendEmptyMessage(int what) {
         handler.sendEmptyMessage(what);
     }
