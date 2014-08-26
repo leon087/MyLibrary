@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.TextView;
 import cm.android.framework.ext.ui.v4.BaseActivity.KeyEventListener;
-import cm.android.framework.ext.ui.IFragment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

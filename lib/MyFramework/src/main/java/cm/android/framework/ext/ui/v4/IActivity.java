@@ -2,7 +2,6 @@ package cm.android.framework.ext.ui.v4;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import cm.android.framework.ext.ui.IUiInterface;
 
 /**
  * Activity抽象接口
