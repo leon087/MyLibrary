@@ -3,7 +3,9 @@ package cm.android.framework.core;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.manager.BaseManager;
@@ -23,6 +25,22 @@ public abstract class BaseApp extends Application implements IApp {
             return false;
         }
         return sApp.isInit;
+    }
+
+    private boolean isStateInit() {
+        return readState();
+    }
+
+    private void writeState(boolean state) {
+        SharedPreferences preferences = this.getSharedPreferences("app_status", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("state", state);
+        editor.commit();
+    }
+
+    private boolean readState() {
+        SharedPreferences preferences = this.getSharedPreferences("app_status", Context.MODE_PRIVATE);
+        return preferences.getBoolean("state", false);
     }
 
     /**
@@ -45,6 +63,11 @@ public abstract class BaseApp extends Application implements IApp {
                 this.getPackageManager(), this.getPackageName());
         logger.info("versionCode = {},versionName = {}", packageInfo.versionCode
                 , packageInfo.versionName);
+
+        //状态恢复
+        if (readState()) {
+            initApp();
+        }
     }
 
     /**
@@ -74,9 +97,10 @@ public abstract class BaseApp extends Application implements IApp {
      * 在假设Application不释放的情况下，进入app业务态，初始化资源
      */
     @Override
-    public synchronized void initApp() {
+    public final synchronized void initApp() {
         logger.info("isInit = " + isInit);
         isInit = true;
+        writeState(isInit);
 
         this.startService(new Intent(this, CoreService.class));
         DaemonManager.getInstance().startDaemon(this);
@@ -90,9 +114,10 @@ public abstract class BaseApp extends Application implements IApp {
      * 退出app业务态，释放资源（注：结束进程只做辅助用）
      */
     @Override
-    public synchronized void exitApp() {
+    public final synchronized void exitApp() {
         logger.info("isInit = " + isInit);
         isInit = false;
+        writeState(isInit);
         ActivityStack.getInstance().finishAll();
         DaemonManager.getInstance().stopDaemon(this);
 
