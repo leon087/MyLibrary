@@ -65,7 +65,7 @@ public abstract class BaseApp extends Application implements IApp {
                 , packageInfo.versionName);
 
         //状态恢复
-        if (readState()) {
+        if (isStateInit()) {
             initApp();
         }
     }
@@ -84,7 +84,7 @@ public abstract class BaseApp extends Application implements IApp {
      * app初始化，跟随application生命周期，初始化不释放的资源
      */
     @Override
-    public void appInit() {
+    public final void appInit() {
         if (mServiceManager == null) {
             mServiceManager = initServiceManager();
             if (mServiceManager != null) {
@@ -130,7 +130,7 @@ public abstract class BaseApp extends Application implements IApp {
     }
 
     @TargetApi(8)
-    public void exitAppProcess() {
+    public final void exitAppProcess() {
         ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
         if (EnvironmentUtil.SdkUtil.hasFroyo()) {
             am.killBackgroundProcesses(this.getPackageName());
