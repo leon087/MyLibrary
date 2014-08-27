@@ -396,5 +396,10 @@ public class EnvironmentUtil {
             return Build.VERSION.SDK_INT >= 16;
             // return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
         }
+
+        public static boolean hasJellyBeanMr1() {
+            return Build.VERSION.SDK_INT >= 17;
+//            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+        }
     }
 }

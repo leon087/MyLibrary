@@ -1,7 +1,5 @@
 package cm.android.codec;
 
-import cm.android.util.Base64Util;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -15,21 +13,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
 /**
- * 对称加密算法：基于口令加密-PBE算法实现 使用java6提供的PBEWITHMD5andDES算法进行展示
+ * 对称加密算法：基于口令加密-PBE算法实现
  */
 public class PBECoder {
     private static final int KEY_SIZE = 256;
     // change to SC if using Spongycastle crypto libraries
     public static final String PROVIDER = "BC";
 
-    /**
-     * JAVA6支持以下任意一种算法<br>
-     * PBEWITHMD5ANDDES<br>
-     * PBEWITHMD5ANDTRIPLEDES<br>
-     * PBEWITHSHAANDDESEDE<br>
-     * PBEWITHSHA1ANDRC2_40<br>
-     * PBKDF2WITHHMACSHA1<br>
-     */
     private static final String PRIMARY_PBE_KEY_ALG = "PBKDF2WithHmacSHA1";
     private static final String BACKUP_PBE_KEY_ALG = "PBEWithMD5AndDES";
     private static final int ITERATIONS = 2000;
@@ -146,30 +136,5 @@ public class PBECoder {
         cipher.init(Cipher.DECRYPT_MODE, key, paramSpec);
         // 执行操作
         return cipher.doFinal(data);
-    }
-
-    /**
-     * 使用PBE算法对数据进行加解密
-     *
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        // 待加密数据
-        String str = "PBE";
-        // 设定的口令密码
-        String password = "azsxdc";
-
-        System.out.println("原文：\t" + str);
-        System.out.println("密码：\t" + password);
-
-        // 初始化盐
-        byte[] salt = PBECoder.initSalt();
-        System.out.println("盐：\t" + Base64Util.encodeBase64String(salt));
-        // 加密数据
-        byte[] data = PBECoder.encrypt(str.getBytes(), password.toCharArray(), salt);
-        System.out.println("加密后：\t" + Base64Util.encodeBase64String(data));
-        // 解密数据
-        data = PBECoder.decrypt(data, password.toCharArray(), salt);
-        System.out.println("解密后：\t" + new String(data));
     }
 }
