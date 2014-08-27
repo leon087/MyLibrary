@@ -7,77 +7,17 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 
 /**
  * 对称加密算法：基于口令加密-PBE算法实现
  */
 public class PBECoder {
-    private static final int KEY_SIZE = 256;
     // change to SC if using Spongycastle crypto libraries
     public static final String PROVIDER = "BC";
 
-    private static final String PRIMARY_PBE_KEY_ALG = "PBKDF2WithHmacSHA1";
     private static final String BACKUP_PBE_KEY_ALG = "PBEWithMD5AndDES";
     private static final int ITERATIONS = 2000;
-
-    public static byte[] initSalt() {
-        // 实例化安全随机数
-        SecureRandom random = new SecureRandom();
-        // 产出盐
-        return random.generateSeed(8);
-    }
-
-    public static SecretKey genHashKey(char[] password, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException,
-            NoSuchProviderException {
-        SecretKey key;
-        try {
-            // TODO: what if there's an OS upgrade and now supports the primary PBE
-            key = generatePBEKey(password, salt,
-                    PRIMARY_PBE_KEY_ALG, ITERATIONS, KEY_SIZE);
-        } catch (NoSuchAlgorithmException e) {
-            // older devices may not support the have the implementation try with a weaker algorthm
-            key = generatePBEKey(password, salt,
-                    BACKUP_PBE_KEY_ALG, ITERATIONS, KEY_SIZE);
-        }
-        return key;
-    }
-
-    /**
-     * Derive a secure key based on the passphraseOrPin
-     *
-     * @param passphraseOrPin
-     * @param salt
-     * @param algorthm        - which PBE algorthm to use. some <4.0 devices don;t support
-     *                        the prefered PBKDF2WithHmacSHA1
-     * @param iterations      - Number of PBKDF2 hardening rounds to use. Larger values
-     *                        increase computation time (a good thing), defaults to 1000 if
-     *                        not set.
-     * @param keyLength
-     * @return Derived Secretkey
-     * @throws java.security.NoSuchAlgorithmException
-     * @throws java.security.spec.InvalidKeySpecException
-     * @throws java.security.NoSuchProviderException
-     */
-    private static SecretKey generatePBEKey(char[] passphraseOrPin,
-                                            byte[] salt, String algorthm, int iterations, int keyLength)
-            throws NoSuchAlgorithmException, InvalidKeySpecException,
-            NoSuchProviderException {
-
-        if (iterations == 0) {
-            iterations = 1000;
-        }
-
-        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(
-                algorthm, PROVIDER);
-        KeySpec keySpec = new PBEKeySpec(passphraseOrPin, salt, iterations,
-                keyLength);
-        SecretKey secretKey = secretKeyFactory.generateSecret(keySpec);
-        return secretKey;
-    }
 
     public static Key toKey(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         // 密钥彩礼转换

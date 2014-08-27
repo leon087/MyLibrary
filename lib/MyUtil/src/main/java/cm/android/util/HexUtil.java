@@ -1,15 +1,7 @@
 package cm.android.util;
 
 public class HexUtil {
-    public static String toHex(String txt) {
-        return toHex(txt.getBytes());
-    }
-
-    public static String fromHex(String hex) {
-        return new String(toByte(hex));
-    }
-
-    public static byte[] toByte(String hexString) {
+    public static byte[] fromHex(String hexString) {
         int len = hexString.length() / 2;
         byte[] result = new byte[len];
         for (int i = 0; i < len; i++)
