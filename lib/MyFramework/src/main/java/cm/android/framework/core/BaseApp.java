@@ -99,6 +99,10 @@ public abstract class BaseApp extends Application implements IApp {
     @Override
     public final synchronized void initApp() {
         logger.info("isInit = " + isInit);
+        if (isInit) {
+            return;
+        }
+
         isInit = true;
         writeState(isInit);
 
@@ -116,6 +120,10 @@ public abstract class BaseApp extends Application implements IApp {
     @Override
     public final synchronized void exitApp() {
         logger.info("isInit = " + isInit);
+        if (!isInit) {
+            return;
+        }
+        
         isInit = false;
         writeState(isInit);
         ActivityStack.getInstance().finishAll();
