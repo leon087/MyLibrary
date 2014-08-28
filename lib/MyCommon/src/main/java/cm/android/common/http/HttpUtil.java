@@ -23,11 +23,12 @@ public final class HttpUtil {
         HttpConfig.initConfig(client);
     }
 
-    /**
-     * JSON数据请求
-     */
     public static void cancel(Context context) {
         client.cancelRequests(context, true);
+    }
+
+    public static void cancelAll() {
+        client.cancelAllRequests(true);
     }
 
     /**
