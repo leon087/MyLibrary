@@ -9,10 +9,14 @@ import cm.android.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -327,6 +331,19 @@ public class AppUtil {
         } catch (NameNotFoundException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static void parseSignature(byte[] signature) {
+        try {
+            CertificateFactory certFactory = CertificateFactory
+                    .getInstance("X.509");
+            X509Certificate cert = (X509Certificate) certFactory
+                    .generateCertificate(new ByteArrayInputStream(signature));
+            String pubKey = cert.getPublicKey().toString();
+            String signNumber = cert.getSerialNumber().toString();
+        } catch (CertificateException e) {
+            e.printStackTrace();
         }
     }
 
