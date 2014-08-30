@@ -5,7 +5,7 @@ import android.os.IBinder;
 import cm.android.sdk.PersistentService;
 
 public class CoreService extends PersistentService {
-    private CoreReceiver coreReceiver = null;
+    private final CoreReceiver coreReceiver = new CoreReceiver();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -20,7 +20,6 @@ public class CoreService extends PersistentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        coreReceiver = new CoreReceiver();
         coreReceiver.registerReceiver(this);
     }
 
