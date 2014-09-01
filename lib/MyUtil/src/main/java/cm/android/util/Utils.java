@@ -60,6 +60,14 @@ public class Utils {
         return TextUtils.isEmpty(str);
     }
 
+    public static boolean isEmpty(Bundle bundle) {
+        if (bundle == null || bundle.isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static <K, V> boolean isEmpty(Map<K, V> map) {
         if (map == null || map.isEmpty()) {
             return true;

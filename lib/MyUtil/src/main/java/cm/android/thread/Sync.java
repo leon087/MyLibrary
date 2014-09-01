@@ -15,7 +15,7 @@ public class Sync<T> extends Object {
         // + Thread.currentThread().getName());
     }
 
-    public T get() {
+    public T get(long time) {
         // log.d("sync.get() called from " + Thread.currentThread().getName());
         while (!completed) {
             try {
@@ -23,7 +23,7 @@ public class Sync<T> extends Object {
                 // + Thread.currentThread().getName());
                 synchronized (this) {
                     if (!completed)
-                        wait();
+                        wait(time);
                 }
                 // log.d("sync.get() after wait wait "
                 // + Thread.currentThread().getName());
