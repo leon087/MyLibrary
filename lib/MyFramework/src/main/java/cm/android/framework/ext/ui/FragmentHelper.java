@@ -1,17 +1,18 @@
-package cm.android.framework.ext.ui.v4;
+package cm.android.framework.ext.ui;
 
+import android.annotation.TargetApi;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentManager.BackStackEntry;
-import android.support.v4.app.FragmentTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * FragmentManager包装类
  */
+@TargetApi(11)
 public class FragmentHelper {
 
     private FragmentManager mFragmentManager;
@@ -45,7 +46,7 @@ public class FragmentHelper {
      * @param position
      * @return
      */
-    public BackStackEntry getBackStackEntry(int position) {
+    public FragmentManager.BackStackEntry getBackStackEntry(int position) {
         int count = mFragmentManager.getBackStackEntryCount();
         if (count == 0) {
             return null;
@@ -183,10 +184,10 @@ public class FragmentHelper {
      * @param clazz
      * @return
      */
-    public android.support.v4.app.Fragment findFragment(
-            Class<? extends android.support.v4.app.Fragment> clazz) {
+    public Fragment findFragment(
+            Class<? extends Fragment> clazz) {
         String tag = clazz.getName();
-        android.support.v4.app.Fragment fragment = mFragmentManager
+        Fragment fragment = mFragmentManager
                 .findFragmentByTag(tag);
         if (fragment == null) {
             // 创建
@@ -194,7 +195,7 @@ public class FragmentHelper {
             try {
                 Fragment f = (Fragment) clazz.newInstance();
                 return f;
-            } catch (java.lang.InstantiationException e) {
+            } catch (InstantiationException e) {
                 e.printStackTrace();
                 // throw new java.lang.InstantiationException(
                 // "Unable to instantiate fragment "
@@ -224,8 +225,8 @@ public class FragmentHelper {
      * @param resId
      * @return
      */
-    public android.support.v4.app.Fragment findFragmentById(int resId) {
-        android.support.v4.app.Fragment fragment = mFragmentManager
+    public Fragment findFragmentById(int resId) {
+        Fragment fragment = mFragmentManager
                 .findFragmentById(resId);
         return fragment;
     }
@@ -235,10 +236,10 @@ public class FragmentHelper {
      *
      * @return
      */
-    public android.support.v4.app.Fragment findFragmentByTag(
-            Class<? extends android.support.v4.app.Fragment> clazz) {
+    public Fragment findFragmentByTag(
+            Class<? extends Fragment> clazz) {
         String tag = clazz.getName();
-        android.support.v4.app.Fragment fragment = mFragmentManager
+        Fragment fragment = mFragmentManager
                 .findFragmentByTag(tag);
         return fragment;
     }
