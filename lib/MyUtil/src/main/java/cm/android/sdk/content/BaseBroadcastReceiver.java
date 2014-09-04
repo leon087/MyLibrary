@@ -19,7 +19,8 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
         this.context = context;
     }
 
-    public void registerReceiver(IntentFilter intentFilter) {
+    public void registerReceiver(Context context, IntentFilter intentFilter) {
+        this.context = context;
         context.registerReceiver(this, intentFilter);
     }
 
@@ -28,6 +29,7 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
      */
     public void unRegisterReceiver() {
         context.unregisterReceiver(this);
+        context = null;
     }
 
     /**
