@@ -1,17 +1,16 @@
 package cm.android.common.http;
 
-import cm.android.util.Utils;
 import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cm.android.util.Utils;
+
 public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
     private static final Logger logger = LoggerFactory.getLogger("HTTP");
-    private String url;
     private HttpListener<T> httpListener;
 
-    public MyDataResponseHandler(String url, HttpListener<T> httpListener) {
-        this.url = url;
+    public MyDataResponseHandler(HttpListener<T> httpListener) {
         this.httpListener = httpListener;
     }
 
@@ -20,7 +19,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
         super.onFinish();
         httpListener.onFinish();
         if (logger.isDebugEnabled()) {
-            logger.debug("url = " + url);
+            logger.debug("url = " + getRequestURI());
         }
     }
 
@@ -29,7 +28,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
         super.onStart();
         httpListener.onStart();
         if (logger.isDebugEnabled()) {
-            logger.debug("url = " + url);
+            logger.debug("url = " + getRequestURI());
         }
     }
 

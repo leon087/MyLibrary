@@ -1,10 +1,12 @@
 package cm.android.common.http;
 
 import android.content.Context;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
+
 import org.apache.http.Header;
 import org.apache.http.client.CookieStore;
 import org.apache.http.entity.ByteArrayEntity;
@@ -68,8 +70,7 @@ public final class HttpUtil {
      */
     public static <T> void exec(String url, Header[] headers,
                                 RequestParams params, HttpListener<T> httpListener) {
-        MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(
-                url, httpListener);
+        MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
         exec(url, headers, params, responseHandler);
     }
 
