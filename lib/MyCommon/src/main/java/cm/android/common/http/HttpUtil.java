@@ -151,7 +151,7 @@ public final class HttpUtil {
      */
     public static class HttpConfig {
         private static final int DEFAULT_MAX_CONNECTIONS = 3;
-        private static final int DEFAULT_SOCKET_TIMEOUT = 20 * 1000;
+        private static final int DEFAULT_SOCKET_TIMEOUT = 10 * 1000;
         private static final int DEFAULT_MAX_RETRIES = 2;
         private static final int DEFAULT_RETRY_SLEEP_TIME_MILLIS = 200;
 
