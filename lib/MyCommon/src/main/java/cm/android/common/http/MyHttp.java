@@ -1,8 +1,10 @@
 package cm.android.common.http;
 
 import android.content.Context;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
 import org.apache.http.Header;
 
 import java.lang.ref.WeakReference;
@@ -60,8 +62,7 @@ public class MyHttp {
      */
     public <T> void exec(String url, Header[] headers, RequestParams params,
                          HttpListener<T> httpListener) {
-        MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(
-                url, httpListener);
+        MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
         exec(url, headers, params, responseHandler);
     }
 
