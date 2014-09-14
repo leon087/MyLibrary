@@ -7,9 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.text.TextUtils;
-import cm.android.applications.AppUtil;
-import cm.android.sdk.MyParcelable;
+
 import com.alibaba.fastjson.JSON;
+
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHeader;
@@ -17,19 +17,34 @@ import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import cm.android.applications.AppUtil;
+import cm.android.sdk.MyParcelable;
 
 /**
  * 常用工具类
@@ -544,5 +559,13 @@ public class Utils {
         ObjectInputStream in = new ObjectInputStream(byteIn);
 
         return in.readObject();
+    }
+
+    public static String encodeBase64(byte[] input) {
+        return Base64.encodeToString(input, Base64.NO_PADDING | Base64.NO_WRAP | Base64.URL_SAFE);
+    }
+
+    public static byte[] decodeBase64(String input) {
+        return Base64.decode(input, Base64.NO_PADDING | Base64.NO_WRAP | Base64.URL_SAFE);
     }
 }
