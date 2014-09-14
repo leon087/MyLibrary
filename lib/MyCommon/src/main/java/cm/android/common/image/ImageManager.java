@@ -3,8 +3,8 @@ package cm.android.common.image;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
-import cm.android.util.Utils;
-import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiscCache;
+
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,10 +18,12 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
 
+import cm.android.util.Utils;
+
 public class ImageManager {
     public static final int CLEAR_CACHE_ALL = 0x01;
     public static final int CLEAR_CACHE_MEMORY = CLEAR_CACHE_ALL + 1;
-    public static final int CLEAR_CACHE_DISC = CLEAR_CACHE_ALL + 2;
+    public static final int CLEAR_CACHE_DISK = CLEAR_CACHE_ALL + 2;
     private DisplayImageOptions options;
     private ImageLoader imageLoader;
     private int maxImageWidthForMemoryCache = 0;
@@ -109,7 +111,7 @@ public class ImageManager {
         // builder.discCache(new TotalSizeLimitedDiscCache(cacheDir,
         // new Md5FileNameGenerator(), 100 * 1024 * 1024));
         // 缓存保存5天
-        builder.diskCache(new LimitedAgeDiscCache(cacheDir, reserveCacheDir,
+        builder.diskCache(new LimitedAgeDiskCache(cacheDir, reserveCacheDir,
                 new Md5FileNameGenerator(), 24 * 60 * 60 * 5));
         builder.tasksProcessingOrder(QueueProcessingType.LIFO);
         builder.threadPriority(Thread.NORM_PRIORITY);
@@ -129,7 +131,7 @@ public class ImageManager {
     public void clearCache(int flag) {
         if (flag == CLEAR_CACHE_MEMORY) {
             imageLoader.clearMemoryCache();
-        } else if (flag == CLEAR_CACHE_DISC) {
+        } else if (flag == CLEAR_CACHE_DISK) {
             imageLoader.clearDiskCache();
         } else {
             imageLoader.clearMemoryCache();
