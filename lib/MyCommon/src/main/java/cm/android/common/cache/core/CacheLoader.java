@@ -8,13 +8,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @SuppressWarnings("unchecked")
-public class LocalCache {
+public class CacheLoader {
     private static final Logger logger = LoggerFactory.getLogger("CACHE");
 
     @SuppressWarnings("rawtypes")
-    private ILocalCache localCache;
+    private ICache localCache;
 
-    public <V> LocalCache(ILocalCache<String, V> localCache) {
+    public <V> CacheLoader(ICache<String, V> localCache) {
         this.localCache = localCache;
     }
 

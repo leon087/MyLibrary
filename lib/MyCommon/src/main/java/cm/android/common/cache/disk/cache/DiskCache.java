@@ -1,16 +1,18 @@
-package cm.android.common.cache.disk.local;
+package cm.android.common.cache.disk.cache;
 
-import cm.android.common.cache.core.ILocalCache;
-import cm.android.util.IoUtil;
 import com.jakewharton.disklrucache.DiskLruCache;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
-public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
-    private static final Logger logger = LoggerFactory.getLogger(DiskCacheLoder.class);
+import cm.android.common.cache.core.ICache;
+import cm.android.util.IoUtil;
+
+public abstract class DiskCache<V> implements ICache<String, V> {
+    private static final Logger logger = LoggerFactory.getLogger(DiskCache.class);
 
     // HttpResponseCache的使用 缓存 cache,Caches HTTP and HTTPS responses to the
     // filesystem so they may be reused, saving time and bandwidth. This class
@@ -21,7 +23,7 @@ public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
     private static final int ENTRY_COUNT = 1;
     protected final DiskLruCache cache;
 
-    public DiskCacheLoder(File directory, long maxSize) throws IOException {
+    public DiskCache(File directory, long maxSize) throws IOException {
         cache = DiskLruCache.open(directory, VERSION, ENTRY_COUNT, maxSize);
     }
 
@@ -94,6 +96,16 @@ public abstract class DiskCacheLoder<V> implements ILocalCache<String, V> {
         } catch (IOException e) {
             logger.error("", e);
         }
+    }
+
+    @Override
+    public long size() {
+        return cache.size();
+    }
+
+    @Override
+    public long getMaxSize() {
+        return cache.getMaxSize();
     }
 
     public abstract void writeTo(V value, DiskLruCache.Editor editor)

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-public class HttpCacheEntry extends CacheEntry {
+public class HttpCacheEntry extends DiskCacheEntry {
     private String uri;
     private String time;
     private Map<String, String> headers;

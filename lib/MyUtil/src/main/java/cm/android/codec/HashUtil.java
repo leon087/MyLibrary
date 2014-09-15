@@ -2,14 +2,15 @@ package cm.android.codec;
 
 import android.os.Build;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
-public class HashUtil {
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+public final class HashUtil {
     private static final String ALG_PBK_LOW = "PBKDF2WithHmacSHA1And8bit";
     private static final String ALG_PBK = "PBKDF2WithHmacSHA1";
 
@@ -20,6 +21,9 @@ public class HashUtil {
 
     private static final int ITERATIONS = 1000;
     private static final int KEY_SIZE = 256;
+
+    private HashUtil() {
+    }
 
     public static SecretKey generateHash(char[] password, byte[] salt, int iterationCount) throws InvalidKeySpecException, NoSuchAlgorithmException {
         SecretKey key;

@@ -7,10 +7,10 @@ import com.jakewharton.disklrucache.DiskLruCache;
 
 import java.io.*;
 
-public abstract class CacheEntry {
+public abstract class DiskCacheEntry {
     private int entry = 0;
 
-    public CacheEntry(int entry) {
+    public DiskCacheEntry(int entry) {
         this.entry = entry;
     }
 

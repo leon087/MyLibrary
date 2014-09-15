@@ -1,6 +1,6 @@
 package cm.android.common.cache.core;
 
-public interface ILocalCache<K, V> {
+public interface ICache<K, V> {
     void put(K key, V value);
 
     V get(K key);
@@ -11,4 +11,7 @@ public interface ILocalCache<K, V> {
 
     boolean isExpire(K key);
 
+    long size();
+
+    long getMaxSize();
 }

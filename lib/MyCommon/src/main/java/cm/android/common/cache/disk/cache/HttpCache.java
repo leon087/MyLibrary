@@ -1,4 +1,4 @@
-package cm.android.common.cache.disk.local;
+package cm.android.common.cache.disk.cache;
 
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
 import com.jakewharton.disklrucache.DiskLruCache.Editor;
@@ -7,13 +7,13 @@ import com.jakewharton.disklrucache.DiskLruCache.Snapshot;
 import java.io.File;
 import java.io.IOException;
 
-public class HttpCacheLoder extends DiskCacheLoder<HttpCacheEntry> {
+public class HttpCache extends DiskCache<HttpCacheEntry> {
     // HttpResponseCache的使用 缓存 cache,Caches HTTP and HTTPS responses to the
     // filesystem so they may be reused, saving time and bandwidth. This class
     // supports HttpURLConnection and HttpsURLConnection; there is no
     // platform-provided cache for DefaultHttpClient or AndroidHttpClient.
 
-    public HttpCacheLoder(File directory, long maxSize) throws IOException {
+    public HttpCache(File directory, long maxSize) throws IOException {
         super(directory, maxSize);
     }
 

@@ -1,9 +1,10 @@
 package cm.android.common.http;
 
 import android.content.Context;
-import cm.android.common.cache.core.LocalCache;
+
+import cm.android.common.cache.core.CacheLoader;
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
-import cm.android.common.cache.disk.local.HttpCacheLoder;
+import cm.android.common.cache.disk.cache.HttpCache;
 import cm.android.util.EnvironmentUtil;
 import cm.android.util.Utils;
 import org.apache.http.Header;
@@ -23,18 +24,18 @@ public class HttpLoader {
 
     // 后续会替换掉
     // public static GuavaCache<HttpCacheEntry> guavaCache;
-    public static LocalCache localCache;
+    public static CacheLoader localCache;
 
     public static void init(Context context) {
         File cacheDir = EnvironmentUtil.getDiskCacheDir(context, "http");
         long byteSize = 10 * 1024 * 1024L;
-        HttpCacheLoder cacheLoder = null;
+        HttpCache cacheLoder = null;
         try {
-            cacheLoder = new HttpCacheLoder(cacheDir, byteSize);
+            cacheLoder = new HttpCache(cacheDir, byteSize);
         } catch (IOException e) {
             logger.error("", e);
         }
-        localCache = new LocalCache(cacheLoder);
+        localCache = new CacheLoader(cacheLoder);
     }
 
     public static <T> void load(String url, CacheHttpListener<T> httpHandler) {
