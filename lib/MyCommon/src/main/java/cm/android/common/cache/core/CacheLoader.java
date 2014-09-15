@@ -1,59 +1,50 @@
 package cm.android.common.cache.core;
 
-import cm.android.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-@SuppressWarnings("unchecked")
+import cm.android.util.ByteUtil;
+
 public class CacheLoader {
     private static final Logger logger = LoggerFactory.getLogger("CACHE");
 
-    @SuppressWarnings("rawtypes")
-    private ICache localCache;
+    private ICache cache;
 
-    public <V> CacheLoader(ICache<String, V> localCache) {
-        this.localCache = localCache;
+    public <V> CacheLoader(ICache<String, V> cache) {
+        if (cache == null) {
+            throw new NullPointerException("cache = null");
+        }
+        this.cache = cache;
     }
 
     public void release() {
+        cache = null;
     }
 
     public void clear() {
-        if (null == localCache) {
-            return;
-        }
-
-        localCache.clear();
+        cache.clear();
     }
 
     public <V> V get(String key) {
-        if (null == localCache) {
-            return null;
-        }
-
         key = toKey(key);
-        if (localCache.isExpire(key)) {
-            localCache.delete(key);
+        if (cache.isExpire(key)) {
+            cache.delete(key);
             return null;
         } else {
-            V value = (V) localCache.get(key);
+            V value = (V) cache.get(key);
             logger.info("key = {},value = {}", key, value);
             return value;
         }
     }
 
     public <V> void put(String key, V value) {
-        if (null == localCache) {
-            return;
-        }
-
         key = toKey(key);
         logger.info("key = {},value = {}", key, value);
         // 写入本地
-        localCache.put(key, value);
+        cache.put(key, value);
     }
 
     private String toKey(String uri) {
