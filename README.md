@@ -1,5 +1,6 @@
 MyCommon
 ========
+gradle+Proguard+TestCase
 
 lib说明:
 -----------------------------------
