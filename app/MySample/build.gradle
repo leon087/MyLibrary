@@ -65,18 +65,18 @@ android {
     }
 
     signingConfigs {
-        nbtstatx {
-            storeFile file("keystore/nbtstatx.keystore")
-            storePassword "nbtstatx"
-            keyAlias "nbtstatx"
-            keyPassword "nbtstatx"
+        release {
+            storeFile file(project.storeFile)
+            storePassword project.storePassword
+            keyAlias project.keyAlias
+            keyPassword project.keyPassword
         }
         debug { storeFile file("keystore/debug.keystore") }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.nbtstatx
+            signingConfig signingConfigs.release
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.txt'),
@@ -87,6 +87,11 @@ android {
         debug {
             signingConfig signingConfigs.debug
             runProguard false
+        }
+
+        beta {
+            signingConfig signingConfigs.release
+            debuggable true
         }
     }
 

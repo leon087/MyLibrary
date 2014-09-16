@@ -11,6 +11,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 public final class HashUtil {
+    private HashUtil() {
+    }
+
     private static final String ALG_PBK_LOW = "PBKDF2WithHmacSHA1And8bit";
     private static final String ALG_PBK = "PBKDF2WithHmacSHA1";
 
@@ -21,9 +24,6 @@ public final class HashUtil {
 
     private static final int ITERATIONS = 1000;
     private static final int KEY_SIZE = 256;
-
-    private HashUtil() {
-    }
 
     public static SecretKey generateHash(char[] password, byte[] salt, int iterationCount) throws InvalidKeySpecException, NoSuchAlgorithmException {
         SecretKey key;
@@ -40,6 +40,11 @@ public final class HashUtil {
             }
         }
         return key;
+    }
+
+    public static SecretKey generateHash(char[] password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        byte[] salt = SecureUtil.SALT_DEF;
+        return generateHash(password, salt, ITERATIONS);
     }
 
     public static SecretKey generateHash(char[] password, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
