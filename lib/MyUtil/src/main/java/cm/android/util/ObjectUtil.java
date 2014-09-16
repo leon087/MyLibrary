@@ -1,7 +1,11 @@
 package cm.android.util;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * 泛型对象创建器
@@ -17,6 +21,10 @@ public class ObjectUtil {
      */
     public static <K, V> HashMap<K, V> newHashMap() {
         return new HashMap<K, V>();
+    }
+
+    public static <K, V> HashMap<K, V> newHashMap(int capacity) {
+        return new HashMap<K, V>(capacity);
     }
 
     /**

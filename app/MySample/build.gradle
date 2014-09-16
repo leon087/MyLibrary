@@ -24,6 +24,8 @@ dependencies {
     compile project(':lib:MyFramework')
     compile project(':lib:MyCommonUI')
     compile project(':lib:DownloadProvider-master')
+
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
 }
 
 android {
