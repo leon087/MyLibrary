@@ -80,6 +80,10 @@ public class MyHttp {
         HttpUtil.exec(context.get(), url, headers, params, responseHandler);
     }
 
+    public static <T> void exec(String url, byte[] b, HttpListener<T> httpListener) {
+        HttpUtil.exec(url, b, httpListener);
+    }
+
     public void exec(String url, byte[] b,
                      AsyncHttpResponseHandler responseHandler) {
         HttpUtil.exec(context.get(), url, null, b, responseHandler);

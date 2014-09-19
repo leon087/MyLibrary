@@ -99,6 +99,11 @@ public final class HttpUtil {
         }
     }
 
+    public static <T> void exec(String url, byte[] b, HttpListener<T> httpListener) {
+        MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
+        exec(url, b, responseHandler);
+    }
+
     public static void exec(String url, byte[] b,
                             AsyncHttpResponseHandler responseHandler) {
         exec(null, url, null, b, responseHandler);

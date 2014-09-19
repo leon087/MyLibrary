@@ -30,6 +30,8 @@ dependencies {
 
 android {
     packagingOptions {
+//        pickFirst 'META-INF/foo.txt'
+
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
@@ -87,13 +89,15 @@ android {
         }
 
         debug {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             runProguard false
+            versionNameSuffix ".debug"
         }
 
         beta {
             signingConfig signingConfigs.release
             debuggable true
+            versionNameSuffix ".beta"
         }
     }
 
