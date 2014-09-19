@@ -91,13 +91,13 @@ android {
         debug {
             signingConfig signingConfigs.release
             runProguard false
-            versionNameSuffix ".debug"
+            versionNameSuffix ".debug." + buildTime()
         }
 
         beta {
             signingConfig signingConfigs.release
             debuggable true
-            versionNameSuffix ".beta"
+            versionNameSuffix ".beta." + buildTime()
         }
     }
 
@@ -106,4 +106,10 @@ android {
      full {  applicationId 'com.nbtstatx.mycommondemo'  }
      }*/
 
+}
+
+def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHH')
+    return formattedDate
 }
