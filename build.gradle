@@ -1,7 +1,6 @@
 buildscript {
     repositories {
-        //从中央库里面获取依赖
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -13,7 +12,7 @@ allprojects {
     tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
     repositories {
-        mavenCentral()
+        jcenter()
     }
 }
 
