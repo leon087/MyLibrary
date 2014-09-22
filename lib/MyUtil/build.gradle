@@ -12,10 +12,6 @@ tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
 
-repositories {
-    jcenter()
-}
-
 android {
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
