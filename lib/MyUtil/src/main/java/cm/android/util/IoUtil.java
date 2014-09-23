@@ -3,17 +3,32 @@ package cm.android.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.StatFs;
-import cm.android.cmd.CmdExecute;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import cm.android.cmd.CmdExecute;
 
 /**
  * IO读写Util类
@@ -236,7 +251,7 @@ public class IoUtil {
      * @return
      */
     public static boolean deleteDir(File dir) {
-        if (!dir.exists()) {
+        if (dir == null || !dir.exists()) {
             return true;
         }
 

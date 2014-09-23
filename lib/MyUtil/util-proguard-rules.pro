@@ -162,6 +162,21 @@
 
 #================================框架======================================
 
+# Keep our interfaces so they can be used by other ProGuard rules.
+-keep,allowobfuscation @interface cm.android.proguard.annotations.Keep
+-keep,allowobfuscation @interface cm.android.proguard.annotations.KeepGettersAndSetters
+
+# Do not strip any method/class that is annotated with @DoNotStrip
+-keep @cm.android.proguard.annotations.Keep class *
+-keepclassmembers class * {
+    @cm.android.proguard.annotations.Keep *;
+}
+
+-keepclassmembers @cm.android.proguard.annotations.KeepGettersAndSetters class * {
+  void set*(***);
+  *** get*();
+}
+
 #保留class名字的时候同时混淆该class
 -keepnames class cm.android.thread.ThreadPool
 
