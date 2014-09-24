@@ -19,45 +19,6 @@ public class MyFormatter {
             "yyyyMMddHHmmss");
 
     /**
-     * 格式化byte
-     *
-     * @param i
-     * @return
-     */
-    public static String FormatDec(Byte i) {
-        String r = null;
-        char a;
-        if (i >= 10) {
-            a = ff[i - 10];
-            r = "" + a;
-        } else {
-            r = i.toString();
-        }
-        return r;
-    }
-
-    public static String FormatToString(byte b) {
-        String s = null;
-        byte h = (byte) ((b & 0x00F0) >> 4);
-        byte l = (byte) ((b & (byte) 0x0F));
-
-        s = FormatDec(h) + FormatDec(l);
-        return s;
-    }
-
-    public static String FormatToString(byte src[]) {
-        StringBuilder b = new StringBuilder();
-
-        for (int i = 0; i < src.length; i++) {
-            b.append("0X");
-            b.append(FormatToString(src[i]));
-            b.append(" ");
-        }
-
-        return b.toString();
-    }
-
-    /**
      * 格式化文件大小
      *
      * @param fileLength

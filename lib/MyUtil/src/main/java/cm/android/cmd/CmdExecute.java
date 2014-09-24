@@ -1,13 +1,17 @@
 package cm.android.cmd;
 
-import cm.android.util.IoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
-public class CmdExecute {
+import cm.android.util.IoUtil;
+
+public final class CmdExecute {
+    private static final Logger logger = LoggerFactory.getLogger("cmd");
 
     public static String run(String[] cmd, String workdirectory) {
         if (null == workdirectory) {
@@ -28,15 +32,14 @@ public class CmdExecute {
             IoUtil.write(inputStream, outputStream);
             byte[] bytes = outputStream.toByteArray();
             return new String(bytes);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             return null;
         } finally {
             IoUtil.closeQuietly(inputStream);
             IoUtil.closeQuietly(outputStream);
             if (null != process) {
                 process.destroy();
-                process = null;
             }
         }
     }
@@ -52,15 +55,14 @@ public class CmdExecute {
             IoUtil.write(inputStream, outputStream);
             byte[] bytes = outputStream.toByteArray();
             return new String(bytes);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             return null;
         } finally {
             IoUtil.closeQuietly(inputStream);
             IoUtil.closeQuietly(outputStream);
             if (null != process) {
                 process.destroy();
-                process = null;
             }
         }
     }

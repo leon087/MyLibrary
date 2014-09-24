@@ -7,8 +7,8 @@ import java.util.LinkedList;
 /**
  * Activity栈
  */
-public class ActivityStack {
-    private LinkedList<Activity> activityList = ObjectUtil.newLinkedList();
+public final class ActivityStack {
+    private static final LinkedList<Activity> activityList = ObjectUtil.newLinkedList();
 
     private ActivityStack() {
     }
