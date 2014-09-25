@@ -568,4 +568,12 @@ public class Utils {
     public static byte[] decodeBase64(String input) {
         return Base64.decode(input, Base64.NO_PADDING | Base64.NO_WRAP | Base64.URL_SAFE);
     }
+
+    public static String trimString(String str) {
+        if (isEmpty(str)) {
+            return "";
+        }
+
+        return str.trim();
+    }
 }
