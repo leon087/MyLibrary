@@ -2,19 +2,24 @@ package cm.android.common.upload.group;
 
 import android.content.Context;
 import android.os.Message;
+
+import java.util.Iterator;
+import java.util.List;
+
 import cm.android.common.db.MyDaoManager;
 import cm.android.common.ui.callback.UICallback;
 import cm.android.common.ui.callback.UIObserver;
-import cm.android.common.upload.*;
+import cm.android.common.upload.IUpload;
+import cm.android.common.upload.IUploadListener;
+import cm.android.common.upload.UploadException;
+import cm.android.common.upload.UploadItem;
+import cm.android.common.upload.UploadStatus;
 import cm.android.common.upload.db.GroupUploadBean;
 import cm.android.common.upload.db.GroupUploadDao;
 import cm.android.thread.LooperHandler;
 import cm.android.thread.ThreadPool;
 import cm.android.thread.ThreadUtil;
 import cm.android.util.ObjectUtil;
-
-import java.util.Iterator;
-import java.util.List;
 
 public class GroupUploadManager implements UIObserver {
     private int activeCount;
@@ -54,6 +59,20 @@ public class GroupUploadManager implements UIObserver {
 
     private void init() {
         // 从数据库中读取数据进行初始化
+        looperHandler.initialize(new android.os.Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case UPLOAD_COMPLETE:
+                        UploadItem item = (UploadItem) msg.obj;
+                        item.upload.onUploadComplete(item.uploadBean);
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     public long getActiveCount() {
@@ -184,20 +203,5 @@ public class GroupUploadManager implements UIObserver {
 
     private static final int UPLOAD_COMPLETE = 0x01;
 
-    private LooperHandler looperHandler = new LooperHandler(
-            new android.os.Handler.Callback() {
-                @Override
-                public boolean handleMessage(Message msg) {
-                    switch (msg.what) {
-                        case UPLOAD_COMPLETE:
-                            UploadItem item = (UploadItem) msg.obj;
-                            item.upload.onUploadComplete(item.uploadBean);
-                            break;
-                        default:
-                            break;
-                    }
-                    return false;
-                }
-            });
-
+    private LooperHandler looperHandler = new LooperHandler();
 }

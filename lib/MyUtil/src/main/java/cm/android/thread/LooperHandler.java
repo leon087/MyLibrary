@@ -16,16 +16,8 @@ public class LooperHandler {
 
     /**
      * 创建一个Loop线程对象
-     *
-     * @param handler
      */
-    public LooperHandler(android.os.Handler.Callback callback) {
-        // this.callback = callback;
-        StackTraceElement stackTraceElement = Thread.currentThread()
-                .getStackTrace()[3];
-        mHandlerThread = new MyHandlerThread(generateTag(stackTraceElement));
-        mHandlerThread.start();
-        mTaskExecutor = new MyHandler(mHandlerThread.getLooper(), callback);
+    public LooperHandler() {
     }
 
     private static String generateTag(StackTraceElement caller) {
@@ -35,12 +27,23 @@ public class LooperHandler {
         return tag;
     }
 
+    public void initialize(android.os.Handler.Callback callback) {
+        // this.callback = callback;
+        StackTraceElement stackTraceElement = Thread.currentThread()
+                .getStackTrace()[3];
+        mHandlerThread = new MyHandlerThread(generateTag(stackTraceElement));
+        mHandlerThread.start();
+        mTaskExecutor = new MyHandler(mHandlerThread.getLooper(), callback);
+    }
+
     /**
      * 释放资源
      */
     public void release() {
         mTaskExecutor.removeCallbacks(mHandlerThread);
         mTaskExecutor.getLooper().quit();
+        mTaskExecutor = null;
+        mHandlerThread = null;
         // callback = null;
     }
 
