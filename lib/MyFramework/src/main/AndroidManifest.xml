@@ -15,7 +15,7 @@
 
         <receiver android:name="cm.android.framework.core.CoreReceiver">
             <intent-filter>
-                <action android:name="cm.android.framework.ACTION_ALARM_WAKE_UP"/>
+                <action android:name="cm.android.framework.intent.action.ALARM_WAKE_UP"/>
             </intent-filter>
         </receiver>
     </application>
