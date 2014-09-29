@@ -1,6 +1,7 @@
 package cm.android.common.http;
 
 import android.content.Context;
+import android.util.Patterns;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -91,6 +92,12 @@ public final class HttpUtil {
     public static void exec(Context context, String url, Header[] headers,
                             RequestParams params, AsyncHttpResponseHandler responseHandler) {
         logger.info("RequestParams = " + params);
+        if (!Patterns.WEB_URL.matcher(url).matches()) {
+            logger.error("url = " + url);
+            responseHandler.onFailure(0, null, null, new IllegalArgumentException("url = " + url));
+            return;
+        }
+
         // Header[] headers = HttpUtil.genHeader(headerMap);
         if (params == null) {
             client.get(context, url, headers, null, responseHandler);
@@ -116,6 +123,12 @@ public final class HttpUtil {
 
     public static void exec(Context context, String url, Header[] header,
                             byte[] b, AsyncHttpResponseHandler responseHandler) {
+        if (!Patterns.WEB_URL.matcher(url).matches()) {
+            logger.error("url = " + url);
+            responseHandler.onFailure(0, null, null, new IllegalArgumentException("url = " + url));
+            return;
+        }
+
         // client.post(null, url, header, RequestParams, String,
         // ResponseHandlerInterface);
         ByteArrayEntity entity = new ByteArrayEntity(b);
