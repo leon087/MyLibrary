@@ -4,12 +4,18 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.TextUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 桌面快捷方式有关的工具类
@@ -99,12 +105,18 @@ public class ShortcutUtil {
      * @throws android.content.pm.PackageManager.NameNotFoundException
      */
     public static boolean hasShortcut(Context context) {
-        String AUTHORITY = "com.android.launcher2.settings";
+        String PERMISSIONS = "com.android.launcher.permission.READ_SETTINGS";
+        String authority = "com.android.launcher2.settings";
         if (!EnvironmentUtil.SdkUtil.hasFroyo()) {
-            AUTHORITY = "com.android.launcher.settings";
+            authority = "com.android.launcher.settings";
         }
 
-        Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/favorites?notify=true");
+        authority = getAuthorityFromPermission(context, PERMISSIONS);
+        if (authority == null) {
+            return false;
+        }
+
+        Uri CONTENT_URI = Uri.parse("content://" + authority + "/favorites?notify=true");
         String appName = null;
         try {
             appName = obtatinAppName(context);
@@ -116,6 +128,28 @@ public class ShortcutUtil {
             return true;
         }
         return false;
+    }
+
+
+    private static String getAuthorityFromPermission(Context context, String permission) {
+        if (TextUtils.isEmpty(permission)) {
+            return null;
+        }
+        List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+        if (packs == null) {
+            return null;
+        }
+        for (PackageInfo pack : packs) {
+            ProviderInfo[] providers = pack.providers;
+            if (providers != null) {
+                for (ProviderInfo provider : providers) {
+                    if (permission.equals(provider.readPermission) || permission.equals(provider.writePermission)) {
+                        return provider.authority;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
