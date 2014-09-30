@@ -89,8 +89,8 @@ public class ShortcutUtil {
         } catch (NameNotFoundException e) {
             logger.error("", e);
         }
-        // 快捷方式名称
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, appName);
+        // 快捷方式名称
         Intent shortcutIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         context.sendBroadcast(shortcut);
