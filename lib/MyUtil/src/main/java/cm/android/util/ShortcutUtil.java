@@ -22,6 +22,7 @@ import java.util.List;
  */
 public class ShortcutUtil {
     private static final Logger logger = LoggerFactory.getLogger(ShortcutUtil.class);
+    //private static final String HTC = "HTC";
 
     /**
      * 快捷方式添加的action
@@ -89,9 +90,12 @@ public class ShortcutUtil {
         } catch (NameNotFoundException e) {
             logger.error("", e);
         }
-        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, appName);
         // 快捷方式名称
-        Intent shortcutIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, appName);
+        //Intent shortcutIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        Intent shortcutIntent = new Intent();
+        shortcutIntent.setAction(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+                .setClass(context, context.getClass());
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         context.sendBroadcast(shortcut);
     }
@@ -105,18 +109,24 @@ public class ShortcutUtil {
      * @throws android.content.pm.PackageManager.NameNotFoundException
      */
     public static boolean hasShortcut(Context context) {
+
         String PERMISSIONS = "com.android.launcher.permission.READ_SETTINGS";
-        String authority = "com.android.launcher2.settings";
+        //String HTC_PERMISSIONS = "com.htc.launcher.permission.READ_SETTINGS";
+        String AUTHORITY = "com.android.launcher2.settings";
         if (!EnvironmentUtil.SdkUtil.hasFroyo()) {
-            authority = "com.android.launcher.settings";
+            AUTHORITY = "com.android.launcher.settings";
         }
 
-        authority = getAuthorityFromPermission(context, PERMISSIONS);
-        if (authority == null) {
-            return false;
+        /*
+        String mobileVersion = Build.MODEL;
+        if (mobileVersion.toUpperCase().contains(HTC)) {
+            AUTHORITY = getAuthorityFromPermission(context, HTC_PERMISSIONS);
+        } else {
+            AUTHORITY = getAuthorityFromPermission(context, PERMISSIONS);
         }
-
-        Uri CONTENT_URI = Uri.parse("content://" + authority + "/favorites?notify=true");
+        */
+        AUTHORITY = getAuthorityFromPermission(context, PERMISSIONS);
+        Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/favorites?notify=true");
         String appName = null;
         try {
             appName = obtatinAppName(context);
@@ -165,5 +175,4 @@ public class ShortcutUtil {
         return context.getApplicationInfo().loadLabel(context.getPackageManager()).toString();
 //        return packageManager.getApplicationLabel(packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)).toString();
     }
-
 }
