@@ -43,8 +43,13 @@ public class ReflectUtil {
         return params[index];
     }
 
-    public static <T> T getFieldValue(Object object, String fieldName) throws Exception {
+    public static <T> T getFieldValue(Object object, String fieldName) throws NoSuchFieldException, IllegalAccessException {
         T value = (T) object.getClass().getField(fieldName).get(object);
+        return value;
+    }
+
+    public static <T> T getStaticFieldValue(Class clazz, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        T value = (T) clazz.getField(fieldName).get(null);
         return value;
     }
 }
