@@ -27,8 +27,6 @@ import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
@@ -49,7 +47,7 @@ import cm.android.sdk.MyParcelable;
 /**
  * 常用工具类
  */
-public class Utils {
+public final class Utils {
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
     private Utils() {
@@ -179,42 +177,6 @@ public class Utils {
     }
 
     /**
-     * 获取图片名字
-     * http://192.168.1.151:8080/image/service/201211151529828/logo.png?t=
-     * 1352966417700&start=40
-     *
-     * @param url
-     * @return
-     * @throws IndexOutOfBoundsException
-     * @throws URISyntaxException
-     */
-    public static String getImgName(String url) {
-
-        String imageName = "";
-
-        try {
-            imageName = new URI(url).getPath();
-            imageName = imageName.replace('/', '_');
-
-            // 在图片名称前加时间戳
-            Pattern mPattern = Pattern.compile("\\?t=([\\d]*)");
-            Matcher matcher = mPattern.matcher(url);
-            if (matcher.find()) {
-                imageName = matcher.group(1) + imageName;
-            }
-            // Log.d("", "-----ImagePath = " + imageName);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        // int i = url.lastIndexOf("/");
-        // String imgName = url.substring(i);
-        if ("".equals(imageName)) {
-            logger.error("url = " + url);
-        }
-        return imageName;
-    }
-
-    /**
      * check the http response data
      *
      * @param response
@@ -258,7 +220,7 @@ public class Utils {
         // TODO:
         if (stubMap == null) {
             logger.error("stubMap = null");
-            stubMap = ObjectUtil.newHashMap();
+            return ObjectUtil.newHashMap();
         }
         return stubMap;
     }
@@ -315,7 +277,7 @@ public class Utils {
         return lineCount;
     }
 
-    public static String encodeUTF(String str, String defaultValue) {
+    public static String encodeURL(String str, String defaultValue) {
         try {
             return URLEncoder.encode(str, HTTP.UTF_8);
         } catch (Exception e) {
@@ -324,7 +286,7 @@ public class Utils {
         }
     }
 
-    public static String decodeUTF(String str, String defaultValue) {
+    public static String decodeURL(String str, String defaultValue) {
         try {
             return URLDecoder.decode(str, HTTP.UTF_8);
         } catch (Exception e) {
@@ -454,21 +416,19 @@ public class Utils {
     @TargetApi(8)
     public static long getDexCrc(Context context) {
         long crc = 0;
-        ZipFile zf;
         try {
-            zf = new ZipFile(context.getApplicationContext()
-                    .getPackageCodePath());
+            ZipFile zf = new ZipFile(context.getApplicationContext().getPackageCodePath());
             ZipEntry ze = zf.getEntry("classes.dex");
             crc = ze.getCrc();
-        } catch (Exception e) {
-            e.printStackTrace();
+            return crc;
+        } catch (IOException e) {
+            logger.error("", e);
         }
-        return crc;
+        return 0;
     }
 
     public static boolean isDebuggable(ApplicationInfo applicationInfo) {
         if ((applicationInfo.flags &= ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
-            // android.os.Process.killProcess(android.os.Process.myPid());
             return true;
         }
         return false;
@@ -529,36 +489,32 @@ public class Utils {
         return bundle;
     }
 
-    @TargetApi(4)
-    public static boolean isDebuggable(Context context) {
-        if ((context.getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
-            return true;
+    public static Object cloneObject(Object obj) {
+        if (obj == null) {
+            return null;
         }
 
-        return false;
-    }
-
-    @TargetApi(8)
-    public static long getCrc(Context context) {
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
         try {
-            ZipFile zipFile = new ZipFile(context.getApplicationContext().getPackageCodePath());
-            ZipEntry zipEntry = zipFile.getEntry("classes.dex");
-            return zipEntry.getCrc();
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            out = new ObjectOutputStream(byteOut);
+            out.writeObject(obj);
+
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+            in = new ObjectInputStream(byteIn);
+            Object o = in.readObject();
+            return o;
+        } catch (ClassNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            return null;
         } catch (IOException e) {
-            logger.error("", e);
-            return 0;
+            logger.error(e.getMessage(), e);
+            return null;
+        } finally {
+            IoUtil.closeQuietly(out);
+            IoUtil.closeQuietly(in);
         }
-    }
-
-    public static Object cloneObject(Object obj) throws Exception {
-        ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(byteOut);
-        out.writeObject(obj);
-
-        ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(byteIn);
-
-        return in.readObject();
     }
 
     public static String encodeBase64(byte[] input) {
