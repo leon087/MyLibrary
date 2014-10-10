@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.manager.BaseManager;
 import cm.android.util.ActivityStack;
+import cm.android.util.BuildConfigUtil;
 import cm.android.util.EnvironmentUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class BaseApp extends Application implements IApp {
     private static BaseApp sApp = null;
@@ -25,6 +28,13 @@ public abstract class BaseApp extends Application implements IApp {
             return false;
         }
         return sApp.isInit;
+    }
+
+    public static boolean isDebug() {
+        if (sApp == null) {
+            return false;
+        }
+        return BuildConfigUtil.isDebug(sApp);
     }
 
     private boolean isStateInit() {
@@ -123,7 +133,7 @@ public abstract class BaseApp extends Application implements IApp {
         if (!isInit) {
             return;
         }
-        
+
         isInit = false;
         writeState(isInit);
         ActivityStack.getInstance().finishAll();

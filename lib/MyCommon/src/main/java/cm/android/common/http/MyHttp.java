@@ -19,60 +19,18 @@ public class MyHttp {
         this.context = new WeakReference<Context>(context);
     }
 
-    /**
-     * JSON数据请求
-     */
     public void cancel() {
         HttpUtil.cancel(context.get());
     }
 
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     */
-    public <T> void exec(String url, HttpListener<T> httpHandler) {
-        exec(url, null, null, httpHandler);
-    }
-
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     */
-    public <T> void exec(String url, Header[] headers,
-                         HttpListener<T> httpHandler) {
-        exec(url, headers, null, httpHandler);
-    }
-
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     */
     public <T> void exec(String url, RequestParams params,
                          HttpListener<T> httpHandler) {
         exec(url, null, params, httpHandler);
     }
 
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     */
     public <T> void exec(String url, Header[] headers, RequestParams params,
                          HttpListener<T> httpListener) {
-        MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
-        exec(url, headers, params, responseHandler);
-    }
-
-    public void exec(String url, AsyncHttpResponseHandler responseHandler) {
-        exec(url, null, (RequestParams) null, responseHandler);
-    }
-
-    public void exec(String url, RequestParams params,
-                     AsyncHttpResponseHandler responseHandler) {
-        exec(url, null, params, responseHandler);
+        HttpUtil.exec(context.get(), url, headers, params, httpListener);
     }
 
     public void exec(String url, Header[] headers, RequestParams params,
@@ -80,17 +38,16 @@ public class MyHttp {
         HttpUtil.exec(context.get(), url, headers, params, responseHandler);
     }
 
-    public static <T> void exec(String url, byte[] b, HttpListener<T> httpListener) {
-        HttpUtil.exec(url, b, httpListener);
+    public <T> void exec(String url, byte[] data, HttpListener<T> httpListener) {
+        exec(url, null, data, httpListener);
     }
 
-    public void exec(String url, byte[] b,
-                     AsyncHttpResponseHandler responseHandler) {
-        HttpUtil.exec(context.get(), url, null, b, responseHandler);
+    public <T> void exec(String url, Header[] header, byte[] data, HttpListener<T> httpListener) {
+        HttpUtil.exec(context.get(), url, header, data, httpListener);
     }
 
-    public void exec(String url, Header[] header, byte[] b,
+    public void exec(String url, Header[] header, byte[] data,
                      AsyncHttpResponseHandler responseHandler) {
-        HttpUtil.exec(context.get(), url, header, b, responseHandler);
+        HttpUtil.exec(context.get(), url, header, data, responseHandler);
     }
 }

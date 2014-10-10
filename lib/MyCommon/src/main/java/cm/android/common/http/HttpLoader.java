@@ -2,11 +2,8 @@ package cm.android.common.http;
 
 import android.content.Context;
 
-import cm.android.common.cache.core.CacheLoader;
-import cm.android.common.cache.disk.entry.HttpCacheEntry;
-import cm.android.common.cache.disk.cache.HttpCache;
-import cm.android.util.EnvironmentUtil;
-import cm.android.util.Utils;
+import com.loopj.android.http.RequestParams;
+
 import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import cm.android.common.cache.core.CacheLoader;
+import cm.android.common.cache.disk.cache.HttpCache;
+import cm.android.common.cache.disk.entry.HttpCacheEntry;
+import cm.android.util.EnvironmentUtil;
+import cm.android.util.Utils;
 
 /**
  * 带有缓存的数据请求接口
@@ -89,7 +92,7 @@ public class HttpLoader {
             }
         }
 
-        HttpUtil.exec(url, header, httpHandler);
+        HttpUtil.exec(null, url, header, (RequestParams) null, httpHandler);
     }
 
     public static void saveCache(String key, HttpCacheEntry value) {

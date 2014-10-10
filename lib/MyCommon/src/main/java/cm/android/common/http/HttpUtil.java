@@ -9,6 +9,7 @@ import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.CookieStore;
 import org.apache.http.entity.ByteArrayEntity;
 import org.slf4j.Logger;
@@ -34,59 +35,10 @@ public final class HttpUtil {
         client.cancelAllRequests(true);
     }
 
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     */
-    public static <T> void exec(String url, HttpListener<T> httpHandler) {
-        exec(url, null, null, httpHandler);
-    }
-
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     */
-    public static <T> void exec(String url, Header[] headers,
-                                HttpListener<T> httpHandler) {
-        exec(url, headers, null, httpHandler);
-    }
-
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     * @param <T>
-     */
-    public static <T> void exec(String url, RequestParams params,
-                                HttpListener<T> httpHandler) {
-        exec(url, null, params, httpHandler);
-    }
-
-    /**
-     * JSON数据请求
-     *
-     * @param <T>
-     */
-    public static <T> void exec(String url, Header[] headers,
+    public static <T> void exec(Context context, String url, Header[] headers,
                                 RequestParams params, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
-        exec(url, headers, params, responseHandler);
-    }
-
-    public static void exec(String url, AsyncHttpResponseHandler responseHandler) {
-        exec(url, null, (RequestParams) null, responseHandler);
-    }
-
-    public static void exec(String url, RequestParams params,
-                            AsyncHttpResponseHandler responseHandler) {
-        exec(url, null, params, responseHandler);
-    }
-
-    public static void exec(String url, Header[] headers, RequestParams params,
-                            AsyncHttpResponseHandler responseHandler) {
-        exec(null, url, headers, params, responseHandler);
+        exec(context, url, headers, params, responseHandler);
     }
 
     public static void exec(Context context, String url, Header[] headers,
@@ -106,33 +58,26 @@ public final class HttpUtil {
         }
     }
 
-    public static <T> void exec(String url, byte[] b, HttpListener<T> httpListener) {
+    public static <T> void exec(Context context, String url, Header[] header,
+                                byte[] data, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
-        exec(url, b, responseHandler);
-    }
-
-    public static void exec(String url, byte[] b,
-                            AsyncHttpResponseHandler responseHandler) {
-        exec(null, url, null, b, responseHandler);
-    }
-
-    public static void exec(String url, Header[] header, byte[] b,
-                            AsyncHttpResponseHandler responseHandler) {
-        exec(null, url, header, b, responseHandler);
+        exec(context, url, header, data, responseHandler);
     }
 
     public static void exec(Context context, String url, Header[] header,
-                            byte[] b, AsyncHttpResponseHandler responseHandler) {
+                            byte[] data, AsyncHttpResponseHandler responseHandler) {
         if (!Patterns.WEB_URL.matcher(url).matches()) {
             logger.error("url = " + url);
             responseHandler.onFailure(0, null, null, new IllegalArgumentException("url = " + url));
             return;
         }
 
-        // client.post(null, url, header, RequestParams, String,
-        // ResponseHandlerInterface);
-        ByteArrayEntity entity = new ByteArrayEntity(b);
-        client.post(context, url, header, entity, null, responseHandler);
+        if (null == data) {
+            client.post(context, url, header, (HttpEntity) null, null, responseHandler);
+        } else {
+            ByteArrayEntity entity = new ByteArrayEntity(data);
+            client.post(context, url, header, entity, null, responseHandler);
+        }
     }
 
     /**
