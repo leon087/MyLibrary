@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import cm.android.framework.ext.global.CommonTag;
 import cm.android.sdk.MyParcelable;
 
@@ -161,6 +162,13 @@ public class MyIntent {
         Bundle bundle = savedInstanceState.getBundle(BUNDLE_INSTANCESTATE);
         if (bundle != null) {
             bundleBak.putAll(bundle);
+        }
+    }
+
+    public static void transferData(Intent srcIntent, Intent destIntent) {
+        Bundle bundle = srcIntent.getExtras();
+        if (bundle != null) {
+            destIntent.putExtras(bundle);
         }
     }
 }

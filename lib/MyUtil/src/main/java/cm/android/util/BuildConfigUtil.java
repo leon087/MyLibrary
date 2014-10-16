@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 public class BuildConfigUtil {
     private static final Logger logger = LoggerFactory.getLogger(BuildConfigUtil.class);
 
-    public static <T> T getBuildConfigValue(Context context, String fieldName) {
+    public static Object getBuildConfigValue(Context context, String fieldName) {
         try {
             Class<?> clazz = Class.forName(context.getPackageName() + ".BuildConfig");
             return ReflectUtil.getStaticFieldValue(clazz, fieldName);
@@ -24,7 +24,10 @@ public class BuildConfigUtil {
     }
 
     public static boolean isDebug(Context context) {
-        boolean debug = getBuildConfigValue(context, "DEBUG");
-        return debug;
+        Object obj = getBuildConfigValue(context, "DEBUG");
+        if (obj == null) {
+            return false;
+        }
+        return (Boolean) obj;
     }
 }

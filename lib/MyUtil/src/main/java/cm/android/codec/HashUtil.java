@@ -2,6 +2,9 @@ package cm.android.codec;
 
 import android.os.Build;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -69,5 +72,22 @@ public final class HashUtil {
         KeySpec keySpec = new PBEKeySpec(password, salt, iterations, keyLength);
         SecretKey secretKey = secretKeyFactory.generateSecret(keySpec);
         return secretKey;
+    }
+
+    public static String getSha256(final String string) {
+        if (null == string) {
+            throw new IllegalArgumentException("string cannot be null");
+        }
+
+        try {
+            final MessageDigest md = MessageDigest.getInstance("SHA-256");
+            final byte[] digest = md.digest(string.getBytes("UTF-8"));
+            final BigInteger hashedNumber = new BigInteger(1, digest);
+            return hashedNumber.toString(16);
+        } catch (final NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (final UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

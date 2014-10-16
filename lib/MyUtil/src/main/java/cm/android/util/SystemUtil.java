@@ -210,4 +210,14 @@ public class SystemUtil {
         return (ActivityManager.RunningTaskInfo) localList.get(0);
     }
 
+    public static String getTopActivityName(Context context) {
+        List<ActivityManager.RunningTaskInfo> taskInfos;
+        // 判断程序是否处于桌面
+        ActivityManager am = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        taskInfos = am.getRunningTasks(1);
+        String activityName = taskInfos.get(0).topActivity.getClassName();
+        return activityName;
+    }
+
 }
