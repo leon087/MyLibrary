@@ -10,6 +10,8 @@ dependencies {
     compile project(':lib:DownloadProvider-master')
 
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
+
+    provided fileTree(dir: 'user_libs', include: ['*.jar'])
 }
 
 android {

@@ -1,6 +1,9 @@
 package cm.android.custom;
 
 import android.content.Context;
+
+import com.android.server.am.ActivityManagerService;
+
 import cm.android.common.http.HttpLoader;
 import cm.android.common.http.MyHttp;
 import cm.android.framework.core.manager.CommonBaseManager;
@@ -42,6 +45,8 @@ public class MyServiceManager extends CommonBaseManager {
         HttpLoader.init(mContext);
 
         addService(new ExternalStorageReceiver(mContext, externalStorageListener));
+
+        ActivityManagerService ams = ActivityManagerService.self();
     }
 
     @Override
