@@ -17,9 +17,11 @@ import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -375,6 +377,21 @@ public final class Utils {
             // e.printStackTrace();
         }
         return props;
+    }
+
+    public static Properties loadProperties(File file) {
+        Properties properties = new Properties();
+        InputStream is = null;
+        try {
+            is = new BufferedInputStream(new FileInputStream(file));
+            properties.load(is);
+            return properties;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return properties;
+        } finally {
+            IoUtil.closeQuietly(is);
+        }
     }
 
     public static int convertToInt(String str) throws NumberFormatException {
