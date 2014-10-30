@@ -8,6 +8,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -198,18 +199,21 @@ public class DeviceUtil {
      * @return
      */
     public static String getMacAddress(Context context) {
+        String macAddr = "";
         try {
             WifiManager wifi = (WifiManager) context
                     .getSystemService(Context.WIFI_SERVICE);
             WifiInfo info = wifi.getConnectionInfo();
             if (null != info) {
-                return info.getMacAddress();
+                String mac = info.getMacAddress();
+                if (!Utils.isEmpty(mac)) {
+                    macAddr = mac;
+                }
             }
-            return "";
         } catch (Exception e) {
             logger.error("", e);
-            return "";
         }
+        return macAddr;
     }
 
     /**

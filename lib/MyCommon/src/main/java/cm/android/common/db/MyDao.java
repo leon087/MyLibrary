@@ -1,17 +1,21 @@
 package cm.android.common.db;
 
-import cm.android.util.ObjectUtil;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.UpdateBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import cm.android.util.ObjectUtil;
 
 public class MyDao<T, K> {
     private static final Logger logger = LoggerFactory.getLogger("DB");
@@ -86,18 +90,20 @@ public class MyDao<T, K> {
         return new CreateOrUpdateStatus(false, false, ERROR);
     }
 
-    // public int update(String fieldName, Object value) {
-    // try {
-    // UpdateBuilder<T, K> updateBuilder = dao.updateBuilder();
-    // updateBuilder.where().eq(fieldName, value);
-    // return updateBuilder.update();
-    // } catch (SQLException e) {
-    // MyLog.e(e);
-    // } catch (NullPointerException e) {
-    // MyLog.e(e);
-    // }
-    // return ERROR;
-    // }
+//    public int update(String fieldName, Object value) {
+//        try {
+//            UpdateBuilder<T, K> updateBuilder = dao.updateBuilder();
+//            updateBuilder.where().eq(fieldName, value);
+//            PreparedUpdate preparedUpdate = updateBuilder.prepare();
+//            return dao.update(preparedUpdate);
+//
+//        } catch (SQLException e) {
+//            logger.error("", e);
+//        } catch (NullPointerException e) {
+//            logger.error("", e);
+//        }
+//        return ERROR;
+//    }
 
     // public int update(T bean) {
     // try {
