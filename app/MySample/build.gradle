@@ -66,6 +66,10 @@ android {
 
     buildTypes {
         release {
+//            minifyEnabled true
+//            shrinkResources true
+//            zipAlignEnabled true
+
             signingConfig signingConfigs.release
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
@@ -76,11 +80,14 @@ android {
 
         debug {
             signingConfig signingConfigs.release
-            runProguard false
+//            minifyEnabled false
             versionNameSuffix ".debug." + buildTime()
         }
 
         beta {
+//            minifyEnabled true
+//            shrinkResources true
+//            zipAlignEnabled true
             signingConfig signingConfigs.release
             debuggable true
             versionNameSuffix ".beta." + buildTime()
