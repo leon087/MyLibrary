@@ -27,6 +27,10 @@ public final class HttpUtil {
         HttpConfig.initConfig(client);
     }
 
+    public static void setURLEncodingEnabled(boolean enable) {
+        client.setURLEncodingEnabled(enable);
+    }
+
     public static void cancel(Context context) {
         client.cancelRequests(context, true);
     }
@@ -115,7 +119,7 @@ public final class HttpUtil {
      */
     public static class HttpConfig {
         private static final int DEFAULT_MAX_CONNECTIONS = 3;
-        private static final int DEFAULT_SOCKET_TIMEOUT = 10 * 1000;
+        private static final int DEFAULT_TIMEOUT = 15 * 1000;
         private static final int DEFAULT_MAX_RETRIES = 2;
         private static final int DEFAULT_RETRY_SLEEP_TIME_MILLIS = 200;
 
@@ -129,7 +133,7 @@ public final class HttpUtil {
             // asyncHttpClient.setThreadPool((ThreadPoolExecutor) Executors
             // .newFixedThreadPool(DEFAULT_MAX_CONNECTIONS));
             asyncHttpClient.setMaxConnections(DEFAULT_MAX_CONNECTIONS);
-            asyncHttpClient.setTimeout(DEFAULT_SOCKET_TIMEOUT);
+            asyncHttpClient.setTimeout(DEFAULT_TIMEOUT);
             asyncHttpClient.setMaxRetriesAndTimeout(DEFAULT_MAX_RETRIES,
                     DEFAULT_RETRY_SLEEP_TIME_MILLIS);
 

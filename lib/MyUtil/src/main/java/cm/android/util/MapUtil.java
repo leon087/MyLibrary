@@ -26,18 +26,22 @@ public class MapUtil {
      * @return
      */
     public static <K, V> String getString(Map<K, V> map, K key) {
+        return getString(map, key, DEF_VALUE_STRING);
+    }
+
+    public static <K, V> String getString(Map<K, V> map, K key, String defaultValue) {
         if (map == null) {
-            return DEF_VALUE_STRING;
+            return defaultValue;
         }
         V value = map.get(key);
         if (value == null) {
-            return DEF_VALUE_STRING;
+            return defaultValue;
         }
 
         if (value instanceof String) {
             return (String) value;
         } else {
-            return value.toString();
+            return defaultValue;
         }
     }
 
@@ -49,12 +53,16 @@ public class MapUtil {
      * @return
      */
     public static <K, V> boolean getBoolean(Map<K, V> map, K key) {
+        return getBoolean(map, key, DEF_VALUE_BOOLEAN);
+    }
+
+    public static <K, V> boolean getBoolean(Map<K, V> map, K key, boolean defaultValue) {
         if (map == null) {
-            return DEF_VALUE_BOOLEAN;
+            return defaultValue;
         }
         V value = map.get(key);
         if (value == null) {
-            return DEF_VALUE_BOOLEAN;
+            return defaultValue;
         }
 
         if (value instanceof Boolean) {
@@ -66,7 +74,7 @@ public class MapUtil {
                 return Boolean.valueOf(value.toString());
             } catch (NumberFormatException e) {
                 logger.error("value = " + value, e);
-                return DEF_VALUE_BOOLEAN;
+                return defaultValue;
             }
         }
     }
@@ -79,12 +87,16 @@ public class MapUtil {
      * @return
      */
     public static <K, V> long getLong(Map<K, V> map, K key) {
+        return getLong(map, key, DEF_VALUE_INT);
+    }
+
+    public static <K, V> long getLong(Map<K, V> map, K key, long defaultValue) {
         if (map == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
         V value = map.get(key);
         if (value == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
 
         if (value instanceof Long) {
@@ -94,7 +106,7 @@ public class MapUtil {
                 return Long.valueOf(value.toString());
             } catch (NumberFormatException e) {
                 logger.error("value = " + value, e);
-                return DEF_VALUE_INT;
+                return defaultValue;
             }
         }
     }
@@ -107,12 +119,16 @@ public class MapUtil {
      * @return
      */
     public static <K, V> int getInt(Map<K, V> map, K key) {
+        return getInt(map, key, DEF_VALUE_INT);
+    }
+
+    public static <K, V> int getInt(Map<K, V> map, K key, int defaultValue) {
         if (map == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
         V value = map.get(key);
         if (value == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
 
         if (value instanceof Integer) {
@@ -122,7 +138,7 @@ public class MapUtil {
                 return Integer.valueOf(value.toString());
             } catch (NumberFormatException e) {
                 logger.error("value = " + value, e);
-                return DEF_VALUE_INT;
+                return defaultValue;
             }
         }
     }
@@ -135,12 +151,16 @@ public class MapUtil {
      * @return
      */
     public static <K, V> double getDouble(Map<K, V> map, K key) {
+        return getDouble(map, key, DEF_VALUE_INT);
+    }
+
+    public static <K, V> double getDouble(Map<K, V> map, K key, double defaultValue) {
         if (map == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
         V value = map.get(key);
         if (value == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
 
         if (value instanceof Double) {
@@ -150,7 +170,7 @@ public class MapUtil {
                 return Double.valueOf(value.toString());
             } catch (NumberFormatException e) {
                 logger.error("value = " + value, e);
-                return DEF_VALUE_INT;
+                return defaultValue;
             }
         }
     }
@@ -163,12 +183,16 @@ public class MapUtil {
      * @return
      */
     public static <K, V> float getFloat(Map<K, V> map, K key) {
+        return getFloat(map, key, DEF_VALUE_INT);
+    }
+
+    public static <K, V> float getFloat(Map<K, V> map, K key, float defaultValue) {
         if (map == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
         V value = map.get(key);
         if (value == null) {
-            return DEF_VALUE_INT;
+            return defaultValue;
         }
 
         if (value instanceof Float) {
@@ -178,7 +202,7 @@ public class MapUtil {
                 return Float.valueOf(value.toString());
             } catch (NumberFormatException e) {
                 logger.error("value = " + value, e);
-                return DEF_VALUE_INT;
+                return defaultValue;
             }
         }
     }
