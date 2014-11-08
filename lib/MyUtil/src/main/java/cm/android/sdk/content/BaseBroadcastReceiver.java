@@ -15,8 +15,7 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
      */
     public void registerReceiver(Context context) {
         IntentFilter intentFilter = createIntentFilter();
-        context.registerReceiver(this, intentFilter);
-        this.context = context;
+        registerReceiver(context, intentFilter);
     }
 
     public void registerReceiver(Context context, IntentFilter intentFilter) {
