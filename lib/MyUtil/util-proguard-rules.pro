@@ -72,9 +72,12 @@
    public void *(android.view.MenuItem);  
 }
 
-# For native methods, see http://proguard.sourceforge.net/manual/examples.html#native
--keepclasseswithmembernames class * {
-   # 所有native的方法不能去混淆. 
+# For nativeimpl methods, see http://proguard.sourceforge.net/manual/examples.html#nativeimpl
+#-keepclasseswithmembernames class * {
+#   # 所有native的方法不能去混淆.
+#    native <methods>;
+#}
+-keepclasseswithmembernames,includedescriptorclasses class * {
     native <methods>;
 }
 
@@ -92,14 +95,17 @@
 
 # For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
 #保留枚举类型成员的方法：
--keepclassmembers enum * {
-    #枚举类不能去混淆 
+#-keepclassmembers enum * {
+#    #枚举类不能去混淆
+#    public static **[] values();
+#    public static ** valueOf(java.lang.String);
+#}
+-keepclassmembers,allowoptimization enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
 }
 
 -keep class * implements android.os.Parcelable {
-  #aidl文件不能去混淆
   public static final android.os.Parcelable$Creator *;
 }
 
