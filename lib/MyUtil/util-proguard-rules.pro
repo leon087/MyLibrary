@@ -73,11 +73,7 @@
 }
 
 # For nativeimpl methods, see http://proguard.sourceforge.net/manual/examples.html#nativeimpl
-#-keepclasseswithmembernames class * {
-#   # 所有native的方法不能去混淆.
-#    native <methods>;
-#}
--keepclasseswithmembernames,includedescriptorclasses class * {
+-keepclasseswithmembernames class * {
     native <methods>;
 }
 
@@ -95,11 +91,6 @@
 
 # For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
 #保留枚举类型成员的方法：
-#-keepclassmembers enum * {
-#    #枚举类不能去混淆
-#    public static **[] values();
-#    public static ** valueOf(java.lang.String);
-#}
 -keepclassmembers,allowoptimization enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
