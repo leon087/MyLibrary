@@ -17,12 +17,12 @@ public class NetworkStateChanged {
     private NetworkChangeObserver observer = defNetworkChangeObserver;
 
     public void init(Context context, NetworkChangeObserver observer) {
-        receiver.registerReceiver(context);
+        receiver.register(context);
         registerObserver(observer);
     }
 
     public void deInit() {
-        receiver.unRegisterReceiver();
+        receiver.unregister();
         observer = null;
     }
 

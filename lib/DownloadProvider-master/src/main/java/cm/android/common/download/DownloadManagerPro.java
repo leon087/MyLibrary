@@ -6,15 +6,17 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import cm.android.sdk.content.BaseBroadcastReceiver;
-import cm.android.util.MyLog;
-import cm.android.util.ObjectUtil;
+
 import com.mozillaonline.providers.DownloadManager;
 import com.mozillaonline.providers.DownloadManager.Query;
 import com.mozillaonline.providers.DownloadManager.Request;
 import com.mozillaonline.providers.downloads.DownloadService;
 
 import java.util.Set;
+
+import cm.android.sdk.content.BaseBroadcastReceiver;
+import cm.android.util.MyLog;
+import cm.android.util.ObjectUtil;
 
 public class DownloadManagerPro {
     private DownloadManager downloadManager;
@@ -68,7 +70,7 @@ public class DownloadManagerPro {
         downloadManager.setAccessAllDownloads(false);
         startDownloadService(context);
         downloadReceiver = new DownloadReceiver();
-        downloadReceiver.registerReceiver(context);
+        downloadReceiver.register(context);
 
         isInit = true;
     }
@@ -81,7 +83,7 @@ public class DownloadManagerPro {
 
         clearListener();
         stopDownloadService(context);
-        downloadReceiver.unRegisterReceiver();
+        downloadReceiver.unregister();
         context = null;
     }
 

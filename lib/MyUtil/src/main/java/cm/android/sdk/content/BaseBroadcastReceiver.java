@@ -3,22 +3,20 @@ package cm.android.sdk.content;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
-/**
- * BroadcastReceiver包装类，增加了注册和去注册方法
- */
 public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     protected Context context;
 
     /**
-     * 注册Intent
+     * 注册
      */
-    public void registerReceiver(Context context) {
+    public void register(Context context) {
         IntentFilter intentFilter = createIntentFilter();
-        registerReceiver(context, intentFilter);
+        register(context, intentFilter);
     }
 
-    public void registerReceiver(Context context, IntentFilter intentFilter) {
+    public void register(Context context, IntentFilter intentFilter) {
         this.context = context;
         context.registerReceiver(this, intentFilter);
     }
@@ -26,9 +24,22 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     /**
      * 去注册
      */
-    public void unRegisterReceiver() {
+    public void unregister() {
         context.unregisterReceiver(this);
         context = null;
+    }
+
+    public void registerLocal(Context context, IntentFilter intentFilter) {
+        LocalBroadcastManager.getInstance(context).registerReceiver(this, intentFilter);
+    }
+
+    public void registerLocal(Context context) {
+        IntentFilter intentFilter = createIntentFilter();
+        registerLocal(context, intentFilter);
+    }
+
+    public void unregisterLocal(Context context) {
+        LocalBroadcastManager.getInstance(context).registerReceiver(this, this.createIntentFilter());
     }
 
     /**

@@ -20,12 +20,12 @@ public class CoreService extends PersistentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        coreReceiver.registerReceiver(this);
+        coreReceiver.register(this);
     }
 
     @Override
     public void onDestroy() {
-        coreReceiver.unRegisterReceiver();
+        coreReceiver.unregister();
         super.onDestroy();
     }
 }
