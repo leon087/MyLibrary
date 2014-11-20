@@ -170,24 +170,23 @@ public class DeviceUtil {
     }
 
     public static UUID getUUID(Context context) {
+        String appTag = "111";
+
         //需要通信模块
         String imei = getIMEI(context);
 
         String macAddress = getMacAddress(context);
 
-        //可能为垃圾数据
-        String androidId = getAndroidId(context);
-
         //可能相同或为null
         String serial = getSerial();
 
+        int appTagHashCode = Math.abs(appTag.hashCode());
         int imeiHashCode = Math.abs(imei.hashCode());
-        int macAddressHashCode = macAddress.hashCode();
-        int androidIdHashCode = Math.abs(androidId.hashCode());
+        int macAddressHashCode = Math.abs(macAddress.hashCode());
         int serialHashCode = Math.abs(serial.hashCode());
 
-        long mostSigBits = ((long) imeiHashCode) << 32 | macAddressHashCode;
-        long leastSigBits = ((long) androidIdHashCode) << 32 | serialHashCode;
+        long mostSigBits = ((long) appTagHashCode) << 32 | imeiHashCode;
+        long leastSigBits = ((long) macAddressHashCode) << 32 | serialHashCode;
         UUID deviceUuid = new UUID(mostSigBits, leastSigBits);
         return deviceUuid;
     }

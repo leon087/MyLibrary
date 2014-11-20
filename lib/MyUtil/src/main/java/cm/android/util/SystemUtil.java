@@ -11,8 +11,13 @@ import android.content.pm.ResolveInfo;
 import android.os.Debug;
 import android.text.TextUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,9 @@ import java.util.List;
  * 系统环境Util类
  */
 public class SystemUtil {
+    private static final Logger logger = LoggerFactory.getLogger(SystemUtil.class);
+
+
     /**
      * 判断进程是否正在运行
      *
@@ -164,31 +172,69 @@ public class SystemUtil {
         return null;
     }
 
-    public boolean isRunningInEmulator() {
-        boolean qemuKernel = false;
+    public static boolean isRunningInEmulator() {
         Process process = null;
         DataOutputStream os = null;
         try {
-            process = Runtime.getRuntime().exec("get prop ro.kernel.qemu");
+            process = Runtime.getRuntime().exec("getprop ro.kernel.qemu");
             os = new DataOutputStream(process.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    process.getInputStream(), "GBK"));
+            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();
-            qemuKernel = (Integer.valueOf(in.readLine()) == 1);
+            // getprop ro.kernel.qemu == 1  在模拟器
+            // getprop ro.product.model == "sdk"  在模拟器
+            // getprop ro.build.tags == "test-keys"  在模拟器
+            boolean qemuKernel = (Integer.valueOf(in.readLine()) != 0);
+            return qemuKernel;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+            return true;
         } finally {
-            try {
-                if (os != null) {
-                    os.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            IoUtil.closeQuietly(os);
+            if (process != null) {
+                process.destroy();
             }
         }
-        return qemuKernel;
+    }
+
+    /**
+     * 判断手机是否root，不弹出root请求框<br/>
+     */
+    public static boolean isRoot() {
+        String binPath = "/system/bin/su";
+        String xBinPath = "/system/xbin/su";
+        if (new File(binPath).exists() && isExecutable(binPath)) {
+            return true;
+        }
+        if (new File(xBinPath).exists() && isExecutable(xBinPath)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isExecutable(String filePath) {
+        Process p = null;
+        try {
+            p = Runtime.getRuntime().exec("ls -l " + filePath);
+            // 获取返回内容
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    p.getInputStream()));
+            String str = in.readLine();
+            logger.info("str = " + str);
+            if (str != null && str.length() >= 4) {
+                char flag = str.charAt(3);
+                if (flag == 's' || flag == 'x')
+                    return true;
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (p != null) {
+                p.destroy();
+            }
+        }
+        return false;
     }
 
     public static boolean isAppForeground(Context paramContext, String paramString) {
