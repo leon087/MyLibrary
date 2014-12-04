@@ -48,4 +48,8 @@ public final class ServiceHolder {
     static void resetAppService() {
         appService.clear();
     }
+
+    public static boolean isEmpty() {
+        return mServices.isEmpty() && appService.isEmpty();
+    }
 }
