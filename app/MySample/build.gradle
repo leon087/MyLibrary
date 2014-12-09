@@ -66,12 +66,11 @@ android {
 
     buildTypes {
         release {
-//            minifyEnabled true
-//            shrinkResources true
-//            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
 
             signingConfig signingConfigs.release
-            runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.pro'),
                     new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.pro'),
@@ -79,18 +78,25 @@ android {
         }
 
         debug {
+            zipAlignEnabled true
+
             signingConfig signingConfigs.release
-//            minifyEnabled false
             versionNameSuffix ".debug." + buildTime()
         }
 
         beta {
-//            minifyEnabled true
-//            shrinkResources true
-//            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+
             signingConfig signingConfigs.release
             debuggable true
             versionNameSuffix ".beta." + buildTime()
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.pro'),
+                    new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.pro'),
+                    'proguard-rules.pro'
         }
     }
 
