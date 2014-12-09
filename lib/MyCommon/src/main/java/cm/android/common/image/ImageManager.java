@@ -10,8 +10,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.imageaware.ImageAware;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
@@ -24,10 +22,10 @@ public class ImageManager {
     public static final int CLEAR_CACHE_ALL = 0x01;
     public static final int CLEAR_CACHE_MEMORY = CLEAR_CACHE_ALL + 1;
     public static final int CLEAR_CACHE_DISK = CLEAR_CACHE_ALL + 2;
-    private DisplayImageOptions options;
-    private ImageLoader imageLoader;
-    private int maxImageWidthForMemoryCache = 0;
-    private int maxImageHeightForMemoryCache = 0;
+    private static int maxImageWidthForMemoryCache = 0;
+    private static int maxImageHeightForMemoryCache = 0;
+
+    private static int resId;
 
     public static final DisplayImageOptions.Builder getDefaultOptionsBuilder(
             int imageResOnLoading, int imageResForEmptyUri, int imageResOnFail) {
@@ -64,35 +62,24 @@ public class ImageManager {
         return builder.build();
     }
 
-    public void init(Context context, String cacheDirPath, int defRedIs) {
-        options = getOptions(defRedIs);
-
-        // This configuration tuning is custom. You can tune every option, you
-        // may tune some of them,
-        // or you can create default configuration by
-        // ImageLoaderConfiguration.createDefault(this);
-        // method.
-        ImageLoaderConfiguration defaultConfig = getConfiguration(context,
-                cacheDirPath);
-
-        // Initialize ImageLoader with configuration
-        imageLoader = ImageLoader.getInstance();
-        imageLoader.init(defaultConfig);
+    public static void init(Context context, String cacheDirPath, int defResId) {
+        resId = defResId;
+        ImageLoaderConfiguration defaultConfig = getConfiguration(context, cacheDirPath);
+        ImageLoader.getInstance().init(defaultConfig);
     }
 
-    public void deInit() {
-        imageLoader.destroy();
-        options = null;
+    public static void deInit() {
+        clearCache(CLEAR_CACHE_MEMORY);
+        ImageLoader.getInstance().destroy();
     }
 
-    private ImageLoaderConfiguration getConfiguration(Context context,
-                                                      String cacheDirPath) {
+    private static ImageLoaderConfiguration getConfiguration(Context context, String cacheDirPath) {
         ImageLoaderConfiguration.Builder builder = getDefaultConfigurationBuilder(
                 context, cacheDirPath);
         return builder.build();
     }
 
-    public ImageLoaderConfiguration.Builder getDefaultConfigurationBuilder(
+    public static ImageLoaderConfiguration.Builder getDefaultConfigurationBuilder(
             Context context, String cacheDirPath) {
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
                 context);
@@ -100,8 +87,7 @@ public class ImageManager {
         // builder.denyCacheImageMultipleSizesInMemory();
         builder.diskCacheFileCount(100);
         File cacheDir = null;
-        File reserveCacheDir = StorageUtils
-                .getIndividualCacheDirectory(context);
+        File reserveCacheDir = StorageUtils.getIndividualCacheDirectory(context);
         if (Utils.isEmpty(cacheDirPath)) {
             cacheDir = reserveCacheDir;
         } else {
@@ -128,14 +114,14 @@ public class ImageManager {
      *
      * @param flag
      */
-    public void clearCache(int flag) {
+    public static void clearCache(int flag) {
         if (flag == CLEAR_CACHE_MEMORY) {
-            imageLoader.clearMemoryCache();
+            ImageLoader.getInstance().clearMemoryCache();
         } else if (flag == CLEAR_CACHE_DISK) {
-            imageLoader.clearDiskCache();
+            ImageLoader.getInstance().clearDiskCache();
         } else {
-            imageLoader.clearMemoryCache();
-            imageLoader.clearDiskCache();
+            ImageLoader.getInstance().clearMemoryCache();
+            ImageLoader.getInstance().clearDiskCache();
         }
     }
 
@@ -144,32 +130,17 @@ public class ImageManager {
      *
      * @param uri
      */
-    public void clearCache(String uri) {
-        MemoryCacheUtils.removeFromCache(uri, imageLoader.getMemoryCache());
-        DiskCacheUtils.removeFromCache(uri, imageLoader.getDiskCache());
+    public static void clearCache(String uri) {
+        MemoryCacheUtils.removeFromCache(uri, ImageLoader.getInstance().getMemoryCache());
+        DiskCacheUtils.removeFromCache(uri, ImageLoader.getInstance().getDiskCache());
     }
 
-    public void loadImage(String uri, ImageView imageView) {
-        loadImage(uri, imageView, options);
+    public static void display(String uri, ImageView imageView, int defResId) {
+        ImageLoader.getInstance().displayImage(uri, imageView, getOptions(defResId));
     }
 
-    public void loadImage(String uri, ImageView imageView, int defResId) {
-        imageLoader.displayImage(uri, imageView, getOptions(defResId));
-    }
-
-    public void loadImage(String uri, ImageView imageView,
-                          ImageLoadingListener listener) {
-        imageLoader.displayImage(uri, imageView, options, listener);
-    }
-
-    public void loadImage(String uri, ImageAware imageAware) {
-        imageLoader.displayImage(uri, imageAware, options);
-    }
-
-    public void loadImage(String uri, ImageView imageView,
-                          DisplayImageOptions options) {
-        // 默认是ScaleType.FIT_CENTER，点9图片需要设置成fit_XY
-        imageLoader.displayImage(uri, imageView, options);
+    public static void display(String uri, ImageView imageView) {
+        ImageLoader.getInstance().displayImage(uri, imageView, getOptions(resId));
     }
 
 }
