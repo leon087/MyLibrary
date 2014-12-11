@@ -11,6 +11,8 @@ import android.content.pm.PackageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.manager.BaseManager;
 import cm.android.util.ActivityStack;
@@ -19,7 +21,7 @@ import cm.android.util.EnvironmentUtil;
 
 public abstract class BaseApp extends Application implements IApp {
     private static BaseApp sApp = null;
-    private volatile boolean isInit = false;
+    private final AtomicBoolean isInitAtomic = new AtomicBoolean(false);
     private BaseManager mServiceManager;
     private static final Logger logger = LoggerFactory.getLogger(BaseApp.class);
 
@@ -27,7 +29,7 @@ public abstract class BaseApp extends Application implements IApp {
         if (sApp == null) {
             return false;
         }
-        return sApp.isInit;
+        return sApp.isInitAtomic.get();
     }
 
     public static boolean isDebug() {
@@ -108,13 +110,13 @@ public abstract class BaseApp extends Application implements IApp {
      */
     @Override
     public final synchronized void initApp() {
-        logger.info("isInit = " + isInit);
-        if (isInit) {
+        logger.info("isInit = " + isInitAtomic.get());
+
+        if (!isInitAtomic.compareAndSet(false, true)) {
             return;
         }
 
-        isInit = true;
-        writeState(isInit);
+        writeState(true);
 
         this.startService(new Intent(this, CoreService.class));
         DaemonManager.getInstance().startDaemon(this);
@@ -129,13 +131,12 @@ public abstract class BaseApp extends Application implements IApp {
      */
     @Override
     public final synchronized void exitApp() {
-        logger.info("isInit = " + isInit);
-        if (!isInit) {
+        logger.info("isInit = " + isInitAtomic.get());
+        if (!isInitAtomic.compareAndSet(true, false)) {
             return;
         }
 
-        isInit = false;
-        writeState(isInit);
+        writeState(false);
         ActivityStack.getInstance().finishAll();
         DaemonManager.getInstance().stopDaemon(this);
 

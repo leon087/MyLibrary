@@ -100,11 +100,6 @@ android {
         }
     }
 
-    /*//	设置不同包名的包
-     productFlavors {
-     full {  applicationId 'com.nbtstatx.mycommondemo'  }
-     }*/
-
 }
 
 def buildTime() {

@@ -27,6 +27,9 @@ public class ImageManager {
 
     private static int resId;
 
+    private ImageManager() {
+    }
+
     public static final DisplayImageOptions.Builder getDefaultOptionsBuilder(
             int imageResOnLoading, int imageResForEmptyUri, int imageResOnFail) {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
