@@ -12,13 +12,21 @@ import android.widget.GridView;
  * @author Administrator
  */
 public class MyGridView extends GridView {
+
     public final static int SCROOL_UNKNOW = 0;
+
     public final static int SCROOL_UP = SCROOL_UNKNOW + 1;
+
     public final static int SCROOL_DOWN = SCROOL_UP + 1;
+
     public final static int SCROOL_LEFT = SCROOL_DOWN + 1;
+
     public final static int SCROOL_RIGHT = SCROOL_LEFT + 1;
+
     private int scrollDirctionX = SCROOL_UNKNOW;
+
     private int scrollDirctionY = SCROOL_UNKNOW;
+
     private GestureDetector gestureDetector = new GestureDetector(
             new GestureDetector.SimpleOnGestureListener() {
                 public boolean onDown(MotionEvent arg0) {
@@ -29,14 +37,14 @@ public class MyGridView extends GridView {
 
                 @Override
                 public boolean onFling(MotionEvent e1, MotionEvent e2,
-                                       float velocityX, float velocityY) {
+                        float velocityX, float velocityY) {
 
                     return super.onFling(e1, e2, velocityX, velocityY);
                 }
 
                 @Override
                 public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                                        float distanceX, float distanceY) {
+                        float distanceX, float distanceY) {
 
                     if (distanceY > 0) {
                         scrollDirctionY = SCROOL_UP;
@@ -53,7 +61,9 @@ public class MyGridView extends GridView {
                 }
 
             });
+
     private boolean allowScrollYAxis = true;
+
     private boolean allowScroll = true;
 
     public MyGridView(Context context, AttributeSet attrs, int defStyle) {

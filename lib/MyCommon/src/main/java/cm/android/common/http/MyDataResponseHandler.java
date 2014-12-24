@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import cm.android.util.Utils;
 
 public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
+
     private static final Logger logger = LoggerFactory.getLogger("HTTP");
+
     private HttpListener<T> httpListener;
 
     public MyDataResponseHandler(HttpListener<T> httpListener) {
@@ -34,7 +36,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
 
     @Override
     public void onSuccess(int statusCode, Header[] headers,
-                          byte[] responseBytes, T response) {
+            byte[] responseBytes, T response) {
         logger.info("statusCode = " + statusCode);
         if (logger.isDebugEnabled()) {
             logger.debug("header:----------------------------------------");
@@ -51,7 +53,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
 
     @Override
     public void onFailure(int statusCode, Header[] headers,
-                          Throwable throwable, byte[] responseBytes, T errorResponse) {
+            Throwable throwable, byte[] responseBytes, T errorResponse) {
         httpListener.onFailure(throwable, errorResponse);
         String responseBody = Utils.getString(responseBytes, getCharset());
         logger.error(responseBody, throwable);
@@ -59,7 +61,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
 
     @Override
     protected T parseResponse(Header[] headers, byte[] responseBytes,
-                              boolean isFailure) throws Throwable {
+            boolean isFailure) throws Throwable {
         return httpListener.parseResponse(headers, responseBytes);
     }
 }

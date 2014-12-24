@@ -1,10 +1,11 @@
 package cm.android.common.upload;
 
-import cm.android.common.upload.db.UploadBean;
-
 import java.util.Map;
 
+import cm.android.common.upload.db.UploadBean;
+
 public interface IUpload {
+
     /**
      * 请求上传url地址
      */

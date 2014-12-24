@@ -18,7 +18,13 @@ package cm.android.util;
 
 import android.annotation.TargetApi;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 /**
@@ -43,10 +49,13 @@ import java.nio.charset.Charset;
  * US_ASCII.
  */
 public class StrictLineReader implements Closeable {
+
     private static final byte CR = (byte) '\r';
+
     private static final byte LF = (byte) '\n';
 
     private final InputStream in;
+
     private final Charset charset;
 
     /*
@@ -57,7 +66,9 @@ public class StrictLineReader implements Closeable {
      * {@code IOException}, end may remain as either pos or -1.
      */
     private byte[] buf;
+
     private int pos;
+
     private int end;
 
     /**

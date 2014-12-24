@@ -1,17 +1,20 @@
 package cm.android.util;
 
 public class HexUtil {
+
     public static byte[] fromHex(String hexString) {
         int len = hexString.length() / 2;
         byte[] result = new byte[len];
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++) {
             result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2), 16).byteValue();
+        }
         return result;
     }
 
     public static String toHex(byte[] buf) {
-        if (buf == null)
+        if (buf == null) {
             return "";
+        }
         StringBuffer result = new StringBuffer(2 * buf.length);
         for (int i = 0; i < buf.length; i++) {
             appendHex(result, buf[i]);

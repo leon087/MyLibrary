@@ -3,6 +3,7 @@ package cm.android.custom;
 import android.test.InstrumentationTestCase;
 
 public class MainAppTest extends InstrumentationTestCase {
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();

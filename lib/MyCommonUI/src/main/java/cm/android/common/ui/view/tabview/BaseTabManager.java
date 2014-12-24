@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseTabManager {
+
     protected ViewPager mViewPager;
+
     protected FragmentActivity mActivity;
+
     protected int mSelectedTab = 0;
 
     protected List<BaseTabHolder> mTabHolders;
@@ -26,13 +29,16 @@ public abstract class BaseTabManager {
     }
 
     public static interface OnTabPageChangeListener {
+
         public void onPageSelected(int selectedPosition,
-                                   android.support.v4.app.Fragment selectedFragment,
-                                   android.support.v4.app.Fragment prevFragment);
+                android.support.v4.app.Fragment selectedFragment,
+                android.support.v4.app.Fragment prevFragment);
     }
 
     public static class BaseTabHolder {
+
         public Class<? extends android.support.v4.app.Fragment> fragmentClazz = null; // Tab
+
         public CharSequence titleCharSequence;
     }
 }

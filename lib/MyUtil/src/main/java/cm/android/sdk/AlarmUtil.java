@@ -11,7 +11,8 @@ public class AlarmUtil {
     private AlarmUtil() {
     }
 
-    public static void start(Context context, Intent broadcastIntent, int requestCode, long period) {
+    public static void start(Context context, Intent broadcastIntent, int requestCode,
+            long period) {
         PendingIntent sender = genPendingBroadcast(context, requestCode, broadcastIntent);
         long firstime = SystemClock.elapsedRealtime();
         AlarmManager am = (AlarmManager) context
@@ -29,7 +30,8 @@ public class AlarmUtil {
         am.cancel(sender);
     }
 
-    private static PendingIntent genPendingBroadcast(Context context, int requestCode, Intent broadcastIntent) {
+    private static PendingIntent genPendingBroadcast(Context context, int requestCode,
+            Intent broadcastIntent) {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode,
                 broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;

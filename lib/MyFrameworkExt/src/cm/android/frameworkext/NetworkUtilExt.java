@@ -42,18 +42,21 @@ public class NetworkUtilExt {
     }
 
     private static String formatIpAddresses(LinkProperties prop) {
-        if (prop == null)
+        if (prop == null) {
             return null;
+        }
         Iterator<InetAddress> iter = prop.getAddresses().iterator();
         // If there are no entries, return null
-        if (!iter.hasNext())
+        if (!iter.hasNext()) {
             return null;
+        }
         // Concatenate all available addresses, comma separated
         String addresses = "";
         while (iter.hasNext()) {
             addresses += iter.next().getHostAddress();
-            if (iter.hasNext())
+            if (iter.hasNext()) {
                 addresses += ", ";
+            }
         }
         return addresses;
     }

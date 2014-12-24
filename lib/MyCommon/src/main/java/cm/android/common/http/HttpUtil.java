@@ -1,8 +1,5 @@
 package cm.android.common.http;
 
-import android.content.Context;
-import android.util.Patterns;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
@@ -15,7 +12,11 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.content.Context;
+import android.util.Patterns;
+
 public final class HttpUtil {
+
     private static final Logger logger = LoggerFactory.getLogger("HTTP");
 
     private final static AsyncHttpClient client = new AsyncHttpClient();
@@ -40,13 +41,13 @@ public final class HttpUtil {
     }
 
     public static <T> void exec(Context context, String url, Header[] headers,
-                                RequestParams params, HttpListener<T> httpListener) {
+            RequestParams params, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
         exec(context, url, headers, params, responseHandler);
     }
 
     public static void exec(Context context, String url, Header[] headers,
-                            RequestParams params, AsyncHttpResponseHandler responseHandler) {
+            RequestParams params, AsyncHttpResponseHandler responseHandler) {
         logger.info("RequestParams = " + params);
         if (!Patterns.WEB_URL.matcher(url).matches()) {
             logger.error("url = " + url);
@@ -63,13 +64,13 @@ public final class HttpUtil {
     }
 
     public static <T> void exec(Context context, String url, Header[] header,
-                                byte[] data, HttpListener<T> httpListener) {
+            byte[] data, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
         exec(context, url, header, data, responseHandler);
     }
 
     public static void exec(Context context, String url, Header[] header,
-                            byte[] data, AsyncHttpResponseHandler responseHandler) {
+            byte[] data, AsyncHttpResponseHandler responseHandler) {
         if (!Patterns.WEB_URL.matcher(url).matches()) {
             logger.error("url = " + url);
             responseHandler.onFailure(0, null, null, new IllegalArgumentException("url = " + url));
@@ -86,8 +87,6 @@ public final class HttpUtil {
 
     /**
      * 设置Cookie，之后从Server获取到的cookies将被保存至PersistentCookieStore
-     *
-     * @param context
      */
     public static void setCookieStore(Context context) {
         PersistentCookieStore myCookieStore = new PersistentCookieStore(context);
@@ -118,15 +117,17 @@ public final class HttpUtil {
      * 配置HttpClient
      */
     public static class HttpConfig {
+
         private static final int DEFAULT_MAX_CONNECTIONS = 3;
+
         private static final int DEFAULT_TIMEOUT = 15 * 1000;
+
         private static final int DEFAULT_MAX_RETRIES = 2;
+
         private static final int DEFAULT_RETRY_SLEEP_TIME_MILLIS = 200;
 
         /**
          * 初始化HttpClient配置信息
-         *
-         * @param asyncHttpClient
          */
         public static void initConfig(AsyncHttpClient asyncHttpClient) {
             // 设置线程

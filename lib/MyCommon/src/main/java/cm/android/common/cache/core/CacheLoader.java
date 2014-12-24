@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import cm.android.util.ByteUtil;
 
 public class CacheLoader {
+
     private static final Logger logger = LoggerFactory.getLogger("CACHE");
 
     private ICache cache;

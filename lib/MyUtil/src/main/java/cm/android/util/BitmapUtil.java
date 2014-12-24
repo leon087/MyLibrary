@@ -1,21 +1,38 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Camera;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.View;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class BitmapUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(BitmapUtil.class);
 
     private BitmapUtil() {
@@ -26,7 +43,6 @@ public class BitmapUtil {
      *
      * @param bmp    要旋转的图片
      * @param degree 图片旋转的角度，负值为逆时针旋转，正值为顺时针旋转
-     * @return
      */
     public static Bitmap rotateBitmap(Bitmap bmp, float degree) {
         Matrix matrix = new Matrix();
@@ -38,9 +54,7 @@ public class BitmapUtil {
     /**
      * 图片缩放
      *
-     * @param bm
      * @param scale 值小于则为缩小，否则为放大
-     * @return
      */
     public static Bitmap resizeBitmap(Bitmap bm, float scale) {
         Matrix matrix = new Matrix();
@@ -52,9 +66,7 @@ public class BitmapUtil {
     /**
      * 图片反转
      *
-     * @param bmp
      * @param flag 0为水平反转，1为垂直反转
-     * @return
      */
     public static Bitmap reverseBitmap(Bitmap bmp, int flag) {
         float[] floats = null;
@@ -82,7 +94,6 @@ public class BitmapUtil {
      *
      * @param bm  原图片
      * @param res 边框资源
-     * @return
      */
     public static Bitmap addBigFrame(Context context, Bitmap bm, int res) {
         Bitmap bitmap = decodeBitmap(context, res);
@@ -96,9 +107,6 @@ public class BitmapUtil {
 
     /**
      * 将Drawable转换成Bitmap
-     *
-     * @param drawable
-     * @return
      */
     private static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = Bitmap
@@ -120,7 +128,6 @@ public class BitmapUtil {
      *
      * @param bm  原图片
      * @param res 边框资源
-     * @return
      */
     private static Bitmap combinateFrame(Context context, Bitmap bm, int[] res) {
         Bitmap bmp = decodeBitmap(context, res[0]);
@@ -215,9 +222,7 @@ public class BitmapUtil {
     /**
      * 将图片内容解析成字节数组
      *
-     * @param inStream
      * @return byte[]
-     * @throws Exception
      */
     public static byte[] readStream(InputStream inStream) throws Exception {
         byte[] buffer = new byte[1024];
@@ -235,19 +240,18 @@ public class BitmapUtil {
     /**
      * 将字节数组转换Bitmap
      *
-     * @param bytes
-     * @param opts
      * @return Bitmap
      */
     public static Bitmap getPicFromBytes(byte[] bytes,
-                                         BitmapFactory.Options opts) {
-        if (bytes != null)
+            BitmapFactory.Options opts) {
+        if (bytes != null) {
             if (opts != null) {
                 return BitmapFactory.decodeByteArray(bytes, 0, bytes.length,
                         opts);
             } else {
                 return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             }
+        }
         return null;
     }
 
@@ -282,14 +286,9 @@ public class BitmapUtil {
 
     /**
      * 根据File返回Bitmap
-     *
-     * @param imgFile
-     * @param displayWidth
-     * @param displayHeight
-     * @return
      */
     public static Bitmap decodeBitmap(File imgFile, int displayWidth,
-                                      int displayHeight) throws OutOfMemoryError {
+            int displayHeight) throws OutOfMemoryError {
         if (imgFile == null) {
             return null;
         }
@@ -329,14 +328,9 @@ public class BitmapUtil {
 
     /**
      * 解析图片
-     *
-     * @param path
-     * @param displayWidth
-     * @param displayHeight
-     * @return
      */
     public static Bitmap decodeBitmap(String path, int displayWidth,
-                                      int displayHeight) throws OutOfMemoryError {
+            int displayHeight) throws OutOfMemoryError {
         BitmapFactory.Options op = getOptions(path, displayWidth, displayHeight);
         InputStream is = null;
         try {
@@ -364,7 +358,7 @@ public class BitmapUtil {
      * 读取Assets资源Drawable/AssetManager
      */
     public static Bitmap readAssetsBitmap(Context context, String path,
-                                          int displayWidth, int displayHeight) throws OutOfMemoryError {
+            int displayWidth, int displayHeight) throws OutOfMemoryError {
         Bitmap bitmap = null;
         InputStream is = null;
         try {
@@ -382,11 +376,6 @@ public class BitmapUtil {
 
     /**
      * 解析assets目录下文件
-     *
-     * @param context
-     * @param path
-     * @return
-     * @throws OutOfMemoryError
      */
     public static Bitmap readAssetsBitmap(Context context, String path)
             throws OutOfMemoryError {
@@ -395,24 +384,15 @@ public class BitmapUtil {
 
     /**
      * 解析图片（待测试）
-     *
-     * @param is
-     * @param displayWidth
-     * @param displayHeight
-     * @return
      */
     public static Bitmap decodeBitmap(InputStream is, int displayWidth,
-                                      int displayHeight) throws OutOfMemoryError {
+            int displayHeight) throws OutOfMemoryError {
         BitmapFactory.Options op = getOptions(is, displayWidth, displayHeight);
         return BitmapFactory.decodeStream(is, null, op);
     }
 
     /**
      * 以最省内存的方式读取本地资源的图片
-     *
-     * @param context
-     * @param resId
-     * @return
      */
     public static Bitmap decodeBitmap(Context context, int resId)
             throws OutOfMemoryError {
@@ -442,7 +422,7 @@ public class BitmapUtil {
      * 获得设置信息
      */
     public static BitmapFactory.Options getOptions(InputStream is,
-                                                   int displayWidth, int displayHeight) {
+            int displayWidth, int displayHeight) {
         BitmapFactory.Options op = new BitmapFactory.Options();
         op.inJustDecodeBounds = true;// 只读取Bitmap的宽高等信息，不读取像素。
         BitmapFactory.decodeStream(is, null, op); // 获取尺寸信息
@@ -473,7 +453,7 @@ public class BitmapUtil {
      * 获得设置信息
      */
     public static BitmapFactory.Options getOptions(String path,
-                                                   int displayWidth, int displayHeight) {
+            int displayWidth, int displayHeight) {
         BitmapFactory.Options op = new BitmapFactory.Options();
         op.inJustDecodeBounds = true;// 只读取Bitmap的宽高等信息，不读取像素。
         BitmapFactory.decodeFile(path, op); // 获取尺寸信息
@@ -582,7 +562,7 @@ public class BitmapUtil {
      * @return The value to be used for inSampleSize
      */
     public static int calculateInSampleSize(BitmapFactory.Options options,
-                                            int reqWidth, int reqHeight) {
+            int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int width = options.outWidth;
         final int height = options.outHeight;
@@ -626,13 +606,11 @@ public class BitmapUtil {
     /**
      * 创建带有倒影效果的bitmap（canvas中直接画上原bitmap和倒影图片）
      *
-     * @param srcBitmap
      * @param reflectionHeight 倒影高
      * @param reflectionGap    原图与倒影之间的间距
-     * @return
      */
     public static Bitmap createBitmapWithReflection2(Bitmap srcBitmap,
-                                                     int reflectionHeight, int reflectionGap) {
+            int reflectionHeight, int reflectionGap) {
         // 原始宽高
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
@@ -664,7 +642,7 @@ public class BitmapUtil {
      * 创建带有渐变效果的bitmap（canva中先画好原bitmap和反转bitmap后再处理渐变），推荐使用
      */
     public static Bitmap createBitmapWithReflection(Bitmap srcBitmap,
-                                                    int reflectionHeight, int reflectionGap) {
+            int reflectionHeight, int reflectionGap) {
         // 原始宽高
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
@@ -702,7 +680,7 @@ public class BitmapUtil {
      * @param reflectionHeight 倒影高
      */
     public static Bitmap createReflectionBitmapWithGradient(Bitmap srcBitmap,
-                                                            int reflectionHeight) {
+            int reflectionHeight) {
         Bitmap reflectionBitmap = createReflectionBitmap(srcBitmap,
                 reflectionHeight);
         return createLinearGradient(reflectionBitmap);
@@ -712,7 +690,7 @@ public class BitmapUtil {
      * 创建倒影图片（无渐变）
      */
     public static Bitmap createReflectionBitmap(Bitmap srcBitmap,
-                                                int reflectionHeight) {
+            int reflectionHeight) {
         // 原始宽高
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
@@ -745,7 +723,7 @@ public class BitmapUtil {
      * 竖直方向渐变
      */
     public static void processLinearGradient(Canvas canvas, float top,
-                                             float width, float bottom) {
+            float width, float bottom) {
         /**
          * 渐变<br>
          * 参数一：为渐变起点坐标的x轴位置.<br>
@@ -802,9 +780,6 @@ public class BitmapUtil {
 
     /**
      * 从view 得到图片
-     *
-     * @param view
-     * @return
      */
     @TargetApi(4)
     public static Bitmap getBitmapFromView(View view) {

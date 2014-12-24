@@ -2,9 +2,11 @@ package cm.android.framework.core;
 
 import android.content.Intent;
 import android.os.IBinder;
+
 import cm.android.sdk.PersistentService;
 
 public class CoreService extends PersistentService {
+
     private final CoreReceiver coreReceiver = new CoreReceiver();
 
     @Override

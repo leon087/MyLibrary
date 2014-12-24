@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -9,9 +12,6 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import java.util.UUID;
 
 public class DeviceUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(DeviceUtil.class);
 
     private DeviceUtil() {
@@ -43,7 +44,8 @@ public class DeviceUtil {
 
     public static String getTele(Context context) {
         StringBuilder sb = new StringBuilder();
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager tm = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
         sb.append(getPair("getPhoneType", tm.getPhoneType() + ""));
         sb.append(getPair("getDeviceSoftwareVersion", tm.getDeviceSoftwareVersion() + ""));
         sb.append(getPair("getSimOperator", tm.getSimOperator() + ""));
@@ -160,8 +162,6 @@ public class DeviceUtil {
 
     /**
      * 获取设备号
-     *
-     * @return
      */
     @TargetApi(3)
     public static String getAndroidId(Context context) {
@@ -193,9 +193,6 @@ public class DeviceUtil {
 
     /**
      * 获取Mac地址
-     *
-     * @param context
-     * @return
      */
     public static String getMacAddress(Context context) {
         String macAddr = "";
@@ -217,8 +214,6 @@ public class DeviceUtil {
 
     /**
      * 获取IP地址
-     *
-     * @return
      */
     public static String getIpAddress() {
         try {
@@ -241,9 +236,6 @@ public class DeviceUtil {
 
     /**
      * 获取IMEI
-     *
-     * @param context
-     * @return
      */
     public static String getIMEI(Context context) {
         try {
@@ -258,9 +250,6 @@ public class DeviceUtil {
 
     /**
      * 获取IMSI
-     *
-     * @param context
-     * @return
      */
     public static String getIMSI(Context context) {
         TelephonyManager tm = (TelephonyManager) context

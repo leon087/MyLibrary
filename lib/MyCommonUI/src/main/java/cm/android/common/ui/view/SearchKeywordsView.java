@@ -7,60 +7,88 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.view.animation.*;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import cm.android.util.MyLog;
 
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
 
+import cm.android.util.MyLog;
+
 public class SearchKeywordsView extends FrameLayout implements
         OnGlobalLayoutListener {
+
     public static final int IDX_X = 0;
+
     public static final int IDX_Y = 1;
+
     public static final int IDX_TXT_LENGTH = 2;
+
     public static final int IDX_DIS_Y = 3;
+
     /**
      * 由外至内的动画。
      */
     public static final int ANIMATION_IN = 1;
+
     /**
      * 由内至外的动画。
      */
     public static final int ANIMATION_OUT = 2;
+
     /**
      * 位移动画类型：从外围移动到坐标点。
      */
     public static final int OUTSIDE_TO_LOCATION = 1;
+
     /**
      * 位移动画类型：从坐标点移动到外围。
      */
     public static final int LOCATION_TO_OUTSIDE = 2;
+
     /**
      * 位移动画类型：从中心点移动到坐标点。
      */
     public static final int CENTER_TO_LOCATION = 3;
+
     /**
      * 位移动画类型：从坐标点移动到中心点。
      */
     public static final int LOCATION_TO_CENTER = 4;
+
     public static final long ANIM_DURATION = 8001;
+
     public static final int MAX = 14;
+
     public static final int TEXT_SIZE_MAX = 25;
+
     public static final int TEXT_SIZE_MIN = 20;
+
     private static Interpolator interpolator;
+
     private static AlphaAnimation animAlpha2Opaque;
+
     private static AlphaAnimation animAlpha2Transparent;
+
     private static ScaleAnimation animScaleLarge2Normal, animScaleNormal2Large,
             animScaleZero2Normal, animScaleNormal2Zero;
+
     private OnClickListener itemClickListener;
+
     /**
      * 存储显示的关键字。
      */
     private Vector<String> vecKeywords;
+
     private int width, height;
+
     /**
      * go2Show()中被赋值为true，标识开发人员触发其开始动画显示。<br/>
      * 本标识的作用是防止在填充keywrods未完成的过程中获取到width和height后提前启动动画。<br/>
@@ -68,7 +96,9 @@ public class SearchKeywordsView extends FrameLayout implements
      * 真正能够动画显示的另一必要条件：width 和 height不为0。<br/>
      */
     private boolean enableShow;
+
     private Random random;
+
     /**
      * @see ANIMATION_IN
      * @see ANIMATION_OUT
@@ -78,10 +108,12 @@ public class SearchKeywordsView extends FrameLayout implements
      * @see CENTER_TO_LOCATION
      */
     private int txtAnimInType, txtAnimOutType;
+
     /**
      * 最近一次启动动画显示的时间。
      */
     private long lastStartAnimationTime;
+
     /**
      * 动画运行时间。
      */
@@ -207,7 +239,8 @@ public class SearchKeywordsView extends FrameLayout implements
                     "--------------------------width=" + width + " height="
                             + height + "  xItem=" + xItem + " yItem=" + yItem
                             + "---------------------------");
-            LinkedList<Integer> listX = new LinkedList<Integer>(), listY = new LinkedList<Integer>();
+            LinkedList<Integer> listX = new LinkedList<Integer>(), listY
+                    = new LinkedList<Integer>();
             for (int i = 0; i < size; i++) {
                 // 准备随机候选数，分别对应x/y轴位置
                 listX.add(i * xItem);
@@ -270,7 +303,7 @@ public class SearchKeywordsView extends FrameLayout implements
      * 修正TextView的Y坐标将将其添加到容器上。
      */
     private void attach2Screen(LinkedList<TextView> listTxt, int xCenter,
-                               int yCenter, int yItem) {
+            int yCenter, int yItem) {
         int size = listTxt.size();
         sortXYList(listTxt, size);
         for (int i = 0; i < size; i++) {
@@ -333,7 +366,7 @@ public class SearchKeywordsView extends FrameLayout implements
     }
 
     public AnimationSet getAnimationSet(int[] xy, int xCenter, int yCenter,
-                                        int type) {
+            int type) {
         AnimationSet animSet = new AnimationSet(true);
         animSet.setInterpolator(interpolator);
         if (type == OUTSIDE_TO_LOCATION) {
@@ -405,7 +438,7 @@ public class SearchKeywordsView extends FrameLayout implements
     }
 
     private int[] randomXY(Random ran, LinkedList<Integer> listX,
-                           LinkedList<Integer> listY, int xItem) {
+            LinkedList<Integer> listY, int xItem) {
         int[] arr = new int[4];
         arr[IDX_X] = listX.remove(ran.nextInt(listX.size()));
         arr[IDX_Y] = listY.remove(ran.nextInt(listY.size()));

@@ -7,10 +7,11 @@ import android.view.MotionEvent;
 import android.widget.HorizontalScrollView;
 
 public class MyHorizontalScrollView extends HorizontalScrollView {
+
     private ViewPager viewPager;
 
     public MyHorizontalScrollView(Context context, AttributeSet attrs,
-                                  int defStyle) {
+            int defStyle) {
         super(context, attrs, defStyle);
     }
 

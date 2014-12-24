@@ -1,9 +1,10 @@
 package cm.android.common.http;
 
-import cm.android.util.Utils;
 import org.apache.http.Header;
 
 import java.util.Map;
+
+import cm.android.util.Utils;
 
 public abstract class HttpListener<T> {
 
@@ -17,10 +18,10 @@ public abstract class HttpListener<T> {
     }
 
     protected abstract void onSuccess(int statusCode,
-                                      Map<String, String> headers, T responseMap);
+            Map<String, String> headers, T responseMap);
 
     void onSuccess(int statusCode, Header[] headers, byte[] responseBytes,
-                   T responseMap) {
+            T responseMap) {
         Map<String, String> headMap = Utils.genHeaderMap(headers);
         onSuccess(statusCode, headMap, responseMap);
     }

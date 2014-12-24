@@ -1,21 +1,28 @@
 package cm.android.framework.ext.ui.v4;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.MyDialogFragment;
-import android.view.*;
+import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
 import cm.android.framework.ext.ui.v4.BaseActivity.KeyEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class BaseDialogFragment extends MyDialogFragment implements
         IFragment, KeyEventListener {
 
     protected BaseActivity mActivity;
+
     private static final Logger logger = LoggerFactory.getLogger(BaseDialogFragment.class);
 
     @Override
@@ -32,7 +39,7 @@ public abstract class BaseDialogFragment extends MyDialogFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle bundle) {
+            Bundle bundle) {
         int layoutResID = getRootViewId();
         View fragmentView = null;
         if (layoutResID > 0) {
@@ -118,7 +125,7 @@ public abstract class BaseDialogFragment extends MyDialogFragment implements
      * 设置Fragment主题
      */
     private LayoutInflater getThemeLayoutInflater(LayoutInflater inflater,
-                                                  int themeStyle) {
+            int themeStyle) {
         if (themeStyle <= 0) {
             return inflater;
         }

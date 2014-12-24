@@ -12,12 +12,9 @@ import java.io.File;
 import java.lang.reflect.Method;
 
 public class AppInfoHelpeExt {
+
     /**
      * 查询应用大小
-     *
-     * @param context
-     * @param pkgName
-     * @throws Exception
      */
     public static void queryPacakgeSize(Context context, String pkgName)
             throws Exception {
@@ -49,9 +46,6 @@ public class AppInfoHelpeExt {
 
     /**
      * 获取PackageParser.Package对象
-     *
-     * @param apkFilePath
-     * @return
      */
     public static PackageParser.Package getPackage(String apkFilePath) {
         // 这是一个Package 解释器, 是隐藏的
@@ -74,7 +68,9 @@ public class AppInfoHelpeExt {
      * aidl文件形成的Bindler机制服务类
      */
     public static class PackageStatsObserver extends IPackageStatsObserver.Stub {
+
         private volatile boolean mIsFinished = false;
+
         private PackageStats mPackageStats = null;
 
         public boolean isFinished() {

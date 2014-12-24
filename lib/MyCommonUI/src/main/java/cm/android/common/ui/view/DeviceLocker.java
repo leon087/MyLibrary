@@ -9,12 +9,17 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.ImageView;
+
 import cm.android.util.EnvironmentUtil;
 
 public class DeviceLocker {
+
     private WindowManager mWindowManager;
+
     private View mLockView;
+
     private LayoutParams mLockViewLayoutParams;
+
     private boolean isLocked = false;
 
     public DeviceLocker(Context context, View lockView) {

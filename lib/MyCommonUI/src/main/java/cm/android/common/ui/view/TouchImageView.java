@@ -24,20 +24,34 @@ public class TouchImageView extends ImageView {
 
     // We can be in one of these 3 states
     static final int NONE = 0;
+
     int mode = NONE;
+
     static final int DRAG = 1;
+
     static final int ZOOM = 2;
+
     static final int CLICK = 3;
+
     protected float origWidth, origHeight;
+
     Matrix matrix;
+
     // Remember some things for zooming
     PointF last = new PointF();
+
     PointF start = new PointF();
+
     float minScale = 1f;
+
     float maxScale = 3f;
+
     float[] m;
+
     int viewWidth, viewHeight;
+
     float saveScale = 1f;
+
     int oldMeasuredWidth, oldMeasuredHeight;
 
     ScaleGestureDetector mScaleDetector;
@@ -95,8 +109,9 @@ public class TouchImageView extends ImageView {
                         mode = NONE;
                         int xDiff = (int) Math.abs(curr.x - start.x);
                         int yDiff = (int) Math.abs(curr.y - start.y);
-                        if (xDiff < CLICK && yDiff < CLICK)
+                        if (xDiff < CLICK && yDiff < CLICK) {
                             performClick();
+                        }
                         break;
 
                     case MotionEvent.ACTION_POINTER_UP:
@@ -125,8 +140,9 @@ public class TouchImageView extends ImageView {
         float fixTransY = getFixTrans(transY, viewHeight, origHeight
                 * saveScale);
 
-        if (fixTransX != 0 || fixTransY != 0)
+        if (fixTransX != 0 || fixTransY != 0) {
             matrix.postTranslate(fixTransX, fixTransY);
+        }
     }
 
     float getFixTrans(float trans, float viewSize, float contentSize) {
@@ -140,10 +156,12 @@ public class TouchImageView extends ImageView {
             maxTrans = 0;
         }
 
-        if (trans < minTrans)
+        if (trans < minTrans) {
             return -trans + minTrans;
-        if (trans > maxTrans)
+        }
+        if (trans > maxTrans) {
             return -trans + maxTrans;
+        }
         return 0;
     }
 
@@ -164,8 +182,9 @@ public class TouchImageView extends ImageView {
         // Rescales image on rotation
         //
         if (oldMeasuredHeight == viewWidth && oldMeasuredHeight == viewHeight
-                || viewWidth == 0 || viewHeight == 0)
+                || viewWidth == 0 || viewHeight == 0) {
             return;
+        }
         oldMeasuredHeight = viewHeight;
         oldMeasuredWidth = viewWidth;
 
@@ -175,8 +194,9 @@ public class TouchImageView extends ImageView {
 
             Drawable drawable = getDrawable();
             if (drawable == null || drawable.getIntrinsicWidth() == 0
-                    || drawable.getIntrinsicHeight() == 0)
+                    || drawable.getIntrinsicHeight() == 0) {
                 return;
+            }
             int bmWidth = drawable.getIntrinsicWidth();
             int bmHeight = drawable.getIntrinsicHeight();
 
@@ -206,6 +226,7 @@ public class TouchImageView extends ImageView {
 
     private class ScaleListener extends
             ScaleGestureDetector.SimpleOnScaleGestureListener {
+
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
             mode = ZOOM;
@@ -226,12 +247,13 @@ public class TouchImageView extends ImageView {
             }
 
             if (origWidth * saveScale <= viewWidth
-                    || origHeight * saveScale <= viewHeight)
+                    || origHeight * saveScale <= viewHeight) {
                 matrix.postScale(mScaleFactor, mScaleFactor, viewWidth / 2,
                         viewHeight / 2);
-            else
+            } else {
                 matrix.postScale(mScaleFactor, mScaleFactor,
                         detector.getFocusX(), detector.getFocusY());
+            }
 
             fixTrans();
             return true;

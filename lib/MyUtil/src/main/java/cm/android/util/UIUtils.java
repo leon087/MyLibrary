@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextPaint;
@@ -12,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 
@@ -21,7 +22,9 @@ import java.lang.reflect.Method;
  * UI Util类
  */
 public class UIUtils {
+
     private static Toast mToast = null;
+
     private static final Logger logger = LoggerFactory.getLogger(UIUtils.class);
 
     public static void cancel() {
@@ -47,10 +50,6 @@ public class UIUtils {
 
     /**
      * 自适应高度
-     *
-     * @param view
-     * @param heightMeasureSpec
-     * @return
      */
     public static int getHeightSpec(View view, int heightMeasureSpec) {
         int heightSpec = 0;
@@ -117,9 +116,6 @@ public class UIUtils {
 
     /**
      * 精确获取屏幕尺寸（例如：3.5、4.0、5.0寸屏幕）
-     *
-     * @param ctx
-     * @return
      */
     public static double getScreenPhysicalSize(Activity ctx) {
         DisplayMetrics dm = new DisplayMetrics();
@@ -131,10 +127,6 @@ public class UIUtils {
 
     /**
      * dip转px
-     *
-     * @param ctx
-     * @param dip
-     * @return
      */
     public static int dipToPx(final Context ctx, float dip) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,

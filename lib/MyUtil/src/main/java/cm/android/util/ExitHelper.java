@@ -12,6 +12,7 @@ public class ExitHelper {
      * 退出操作接口
      */
     public static interface IExitInterface {
+
         /**
          * 显示退出提示
          */
@@ -27,16 +28,15 @@ public class ExitHelper {
      * 按两次返回键退出
      */
     public static class TwicePressHolder {
+
         private long lastTime = 0;
+
         private IExitInterface iExitInterface;
 
         private int delay = 1000;
 
         /**
          * 按两次返回键退出
-         *
-         * @param iExitInterface
-         * @param delay
          */
         public TwicePressHolder(IExitInterface iExitInterface, int delay) {
             this.iExitInterface = iExitInterface;
@@ -45,10 +45,6 @@ public class ExitHelper {
 
         /**
          * 在onKeyDown()中调用，返回false则说明未处理
-         *
-         * @param keyCode
-         * @param event
-         * @return
          */
         public boolean onKeyDown(int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_BACK
@@ -69,6 +65,7 @@ public class ExitHelper {
      * 长按返回键退出
      */
     public static class LongPressHolder {
+
         private IExitInterface iExitInterface;
 
         public LongPressHolder(IExitInterface iExitInterface) {
@@ -77,9 +74,6 @@ public class ExitHelper {
 
         /**
          * 在dispatchKeyEvent()中调用，返回false则说明未处理
-         *
-         * @param event
-         * @return
          */
         @TargetApi(5)
         public boolean dispatchKeyEvent(KeyEvent event) {

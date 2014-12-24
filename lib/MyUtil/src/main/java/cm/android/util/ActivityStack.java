@@ -8,6 +8,7 @@ import java.util.LinkedList;
  * Activity栈
  */
 public final class ActivityStack {
+
     private static final LinkedList<Activity> activityList = ObjectUtil.newLinkedList();
 
     private ActivityStack() {
@@ -22,8 +23,6 @@ public final class ActivityStack {
 
     /**
      * 添加Activity到栈中中
-     *
-     * @param activity
      */
     public synchronized void addActivity(Activity activity) {
         activityList.addFirst(activity);
@@ -31,8 +30,6 @@ public final class ActivityStack {
 
     /**
      * 从栈中移除Activity
-     *
-     * @param activity
      */
     public synchronized void removeActivity(Activity activity) {
         activityList.remove(activity);
@@ -59,6 +56,7 @@ public final class ActivityStack {
     }
 
     private static final class ActivityStackHolder {
+
         private static final ActivityStack INSTANCE = new ActivityStack();
     }
 }

@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
@@ -10,9 +13,6 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Debug;
 import android.text.TextUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -26,15 +26,14 @@ import java.util.List;
  * 系统环境Util类
  */
 public class SystemUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(SystemUtil.class);
 
 
     /**
      * 判断进程是否正在运行
      *
-     * @param ctx
      * @param name 运行的进程名
-     * @return
      */
     @TargetApi(3)
     public static boolean isProcessRunning(Context ctx, String name) {
@@ -55,8 +54,9 @@ public class SystemUtil {
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> list = am
                 .getRunningAppProcesses();
-        if (list != null && list.isEmpty())
+        if (list != null && list.isEmpty()) {
             return false;
+        }
         for (ActivityManager.RunningAppProcessInfo process : list) {
             if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
                     && process.processName.equals(ctx.getPackageName())) {
@@ -69,20 +69,19 @@ public class SystemUtil {
     /**
      * 判断Service是否正在运行
      *
-     * @param ctx
      * @param serviceName service名
      * @param processName 该service所在进程名
-     * @return
      */
     public static boolean isServiceRunning(Context ctx, String serviceName,
-                                           String processName) {
+            String processName) {
         ActivityManager manager = (ActivityManager) ctx
                 .getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager
                 .getRunningServices(Integer.MAX_VALUE)) {
             if (serviceName.equals(service.service.getClassName())
-                    && processName.equals(service.process))
+                    && processName.equals(service.process)) {
                 return true;
+            }
         }
         return false;
     }
@@ -102,9 +101,6 @@ public class SystemUtil {
 
     /**
      * 获取正在运行的进程列表
-     *
-     * @param ctx
-     * @return
      */
     @TargetApi(3)
     public static List<RunningAppProcessInfo> getRunningProcess(Context ctx) {
@@ -116,9 +112,6 @@ public class SystemUtil {
 
     /**
      * 获取应用下所有Activity
-     *
-     * @param ctx
-     * @return
      */
     @TargetApi(4)
     public static ArrayList<String> getActivities(Context ctx) {
@@ -134,7 +127,7 @@ public class SystemUtil {
 
     @TargetApi(5)
     public static Debug.MemoryInfo getRunningProcessMemoryInfo(Context context,
-                                                               String packageName) {
+            String packageName) {
         ActivityManager am = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningAppProcessInfo> list2 = am.getRunningAppProcesses();
@@ -155,8 +148,6 @@ public class SystemUtil {
 
     /**
      * 根据processName获得RunningAppProcessInfo
-     *
-     * @return
      */
     @TargetApi(3)
     public static RunningAppProcessInfo getRunningAppProcessInfo(
@@ -178,7 +169,8 @@ public class SystemUtil {
         try {
             process = Runtime.getRuntime().exec("getprop ro.kernel.qemu");
             os = new DataOutputStream(process.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(process.getInputStream(), "UTF-8"));
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();
@@ -224,8 +216,9 @@ public class SystemUtil {
             logger.info("str = " + str);
             if (str != null && str.length() >= 4) {
                 char flag = str.charAt(3);
-                if (flag == 's' || flag == 'x')
+                if (flag == 's' || flag == 'x') {
                     return true;
+                }
             }
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
@@ -238,8 +231,11 @@ public class SystemUtil {
     }
 
     public static boolean isAppForeground(Context paramContext, String paramString) {
-        if (TextUtils.isEmpty(paramString)) ;
-        ActivityManager.RunningTaskInfo localRunningTaskInfo = getFirstRunningTaskInfo(paramContext);
+        if (TextUtils.isEmpty(paramString)) {
+            ;
+        }
+        ActivityManager.RunningTaskInfo localRunningTaskInfo = getFirstRunningTaskInfo(
+                paramContext);
 
         if (localRunningTaskInfo == null) {
             return false;
@@ -249,7 +245,8 @@ public class SystemUtil {
     }
 
     public static ActivityManager.RunningTaskInfo getFirstRunningTaskInfo(Context paramContext) {
-        List localList = ((ActivityManager) paramContext.getSystemService(Context.ACTIVITY_SERVICE)).getRunningTasks(1);
+        List localList = ((ActivityManager) paramContext.getSystemService(Context.ACTIVITY_SERVICE))
+                .getRunningTasks(1);
         if ((Utils.isEmpty(localList))) {
             return null;
         }

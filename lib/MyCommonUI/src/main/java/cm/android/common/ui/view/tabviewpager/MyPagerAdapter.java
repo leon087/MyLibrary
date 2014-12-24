@@ -8,6 +8,7 @@ import android.view.View;
 import java.util.List;
 
 public class MyPagerAdapter extends PagerAdapter {
+
     public List<View> mListViews;
 
     public MyPagerAdapter(List<View> mListViews) {

@@ -9,6 +9,7 @@ import java.util.List;
 import cm.android.util.ObjectUtil;
 
 public class MyValidate {
+
     private static final Logger logger = LoggerFactory.getLogger("validate");
 
     private List<BaseValidator> mValidators = ObjectUtil.newArrayList();

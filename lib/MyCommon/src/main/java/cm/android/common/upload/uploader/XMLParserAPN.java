@@ -1,17 +1,19 @@
 package cm.android.common.upload.uploader;
 
-import cm.android.util.MyLog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import cm.android.util.MyLog;
 
 public class XMLParserAPN {
 
@@ -23,8 +25,9 @@ public class XMLParserAPN {
      * @param is The XML content InputStream.
      */
     public XMLParserAPN(InputStream is) {
-        if (is == null)
+        if (is == null) {
             return;
+        }
 
         DocumentBuilder docBuilder;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -44,8 +47,9 @@ public class XMLParserAPN {
      * @param data The XML data.
      */
     public XMLParserAPN(byte[] data) {
-        if (data == null)
+        if (data == null) {
             return;
+        }
 
         ByteArrayInputStream bais = new ByteArrayInputStream(data);
         DocumentBuilder docBuilder;
@@ -63,11 +67,13 @@ public class XMLParserAPN {
 
     // <item>value</item>
     public String getValueByTag(String tagName) {
-        if (root == null)
+        if (root == null) {
             return null;
+        }
         NodeList list = root.getElementsByTagName(tagName);
-        if (list == null || list.getLength() == 0)
+        if (list == null || list.getLength() == 0) {
             return null;
+        }
 
         Node node = list.item(0).getFirstChild();
         if (node == null) {
@@ -78,8 +84,9 @@ public class XMLParserAPN {
     }
 
     public Map<String, String> getDataByTag(String tag) {
-        if (root == null)
+        if (root == null) {
             return null;
+        }
         Map<String, String> dataMap = new HashMap<String, String>();
         NodeList nodeList = root.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {

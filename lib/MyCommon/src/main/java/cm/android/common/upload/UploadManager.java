@@ -1,6 +1,11 @@
 package cm.android.common.upload;
 
 import android.content.Context;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import cm.android.common.db.MyDaoManager;
 import cm.android.common.ui.callback.UICallback;
 import cm.android.common.upload.db.UploadBean;
@@ -9,28 +14,30 @@ import cm.android.thread.ThreadPool;
 import cm.android.thread.ThreadUtil;
 import cm.android.util.ObjectUtil;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 public class UploadManager {
+
     private static final int MAX_ACTIVECOUNT = 5;
+
     private int activeCount = MAX_ACTIVECOUNT;
+
     private ThreadPool threadPool = null;
     // private Map<UploadQueue, UploadQueueTask> uploadMap = Collections
     // .synchronizedMap(new LinkedHashMap<UploadQueue, UploadQueueTask>());
 
     private List<UploadItem> uploadList = ObjectUtil.newArrayList();
+
     private UploadDao uploadDao = null;
+
     private MyDaoManager daoManager = null;
+
     private List<UICallback> mUICallbacks = new ArrayList<UICallback>();
+
     private IUpload upload;
 
     /**
      * 初始化
      *
      * @param activeCount 允许同时进行任务数
-     * @param context
      */
     public UploadManager(int activeCount, Context context, IUpload upload) {
         daoManager = new MyDaoManager().init(context);

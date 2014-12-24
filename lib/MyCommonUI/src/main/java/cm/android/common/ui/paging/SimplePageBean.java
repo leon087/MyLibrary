@@ -4,6 +4,7 @@ package cm.android.common.ui.paging;
  * 简单分页对象
  */
 public class SimplePageBean {
+
     /**
      * 索引从1开始
      */
@@ -27,9 +28,6 @@ public class SimplePageBean {
 
     /**
      * 跳转到指定页数
-     *
-     * @param pageIndex
-     * @return
      */
     public int toPage(int pageIndex) {
         currentPage = pageIndex;
@@ -38,8 +36,6 @@ public class SimplePageBean {
 
     /**
      * 重置当前页到首页
-     *
-     * @return
      */
     public int reset() {
         return toPage(FIRST_PAGE_INDEX);
@@ -47,8 +43,6 @@ public class SimplePageBean {
 
     /**
      * 下一页
-     *
-     * @return
      */
     public int nextPage() {
         currentPage++;
@@ -57,8 +51,6 @@ public class SimplePageBean {
 
     /**
      * 上一页
-     *
-     * @return
      */
     public int prevPage() {
         if (currentPage > FIRST_PAGE_INDEX) {
@@ -69,8 +61,6 @@ public class SimplePageBean {
 
     /**
      * 获取当前页
-     *
-     * @return
      */
     public int getCurrentPage() {
         return currentPage;
@@ -78,8 +68,6 @@ public class SimplePageBean {
 
     /**
      * 获取每页个数
-     *
-     * @return
      */
     public int getPageItemCount() {
         return pageItemCount;

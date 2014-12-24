@@ -1,11 +1,12 @@
 package cm.android.common.cache.disk.cache;
 
-import cm.android.common.cache.disk.entry.HttpCacheEntry;
 import com.jakewharton.disklrucache.DiskLruCache.Editor;
 import com.jakewharton.disklrucache.DiskLruCache.Snapshot;
 
 import java.io.File;
 import java.io.IOException;
+
+import cm.android.common.cache.disk.entry.HttpCacheEntry;
 
 public class HttpCache extends DiskCache<HttpCacheEntry> {
     // HttpResponseCache的使用 缓存 cache,Caches HTTP and HTTPS responses to the

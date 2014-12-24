@@ -14,10 +14,6 @@ public class LibLoader {
 
     /**
      * 拷贝so文件并加载至内存
-     *
-     * @param context
-     * @param soFileName
-     * @param entryName
      */
     @TargetApi(8)
     public static void load(Context context, String soFileName, String entryName) {
@@ -42,8 +38,6 @@ public class LibLoader {
     /**
      * 拷贝so文件并加载至内存
      *
-     * @param klass
-     * @param libFileName
      * @deprecated
      */
     @Deprecated

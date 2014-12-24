@@ -1,6 +1,12 @@
 package cm.android.thread;
 
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 线程池 <br>
@@ -10,10 +16,15 @@ import java.util.concurrent.*;
  * Executors.newSingleThreadExecutor()（单个后台线程），它们均为大多数使用场景预定义了设置。”
  */
 public class ThreadPool {
+
     private final ThreadPoolExecutor executor;
+
     private final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>();
+
     private int CORE_POOL_SIZE = 5;
+
     private int MAX_POOL_SIZE = 5;
+
     private int KEEP_ALIVE_TIME = 2; // 10 seconds
 
     public ThreadPool(int corePoolSize, int maximumPoolSize) {
@@ -26,7 +37,8 @@ public class ThreadPool {
         sb.append(":");
         sb.append(stackTraceElement.getLineNumber());
 
-        RejectedExecutionHandler rejectedExecutionHandler = new ThreadPoolExecutor.CallerRunsPolicy();
+        RejectedExecutionHandler rejectedExecutionHandler
+                = new ThreadPoolExecutor.CallerRunsPolicy();
         ThreadFactory threadFactory = new PriorityThreadFactory(sb.toString(),
                 android.os.Process.THREAD_PRIORITY_LOWEST);
         executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
@@ -40,8 +52,6 @@ public class ThreadPool {
 
     /**
      * 执行一个task
-     *
-     * @param worker
      */
     public void execute(Runnable worker) {
         executor.execute(worker);
@@ -49,8 +59,6 @@ public class ThreadPool {
 
     /**
      * 获取正在执行的task数量
-     *
-     * @return
      */
     public long getActiveCount() {
         return executor.getActiveCount();
@@ -67,8 +75,6 @@ public class ThreadPool {
 
     /**
      * 移除task
-     *
-     * @param task
      */
     public void remove(Runnable task) {
         executor.remove(task);

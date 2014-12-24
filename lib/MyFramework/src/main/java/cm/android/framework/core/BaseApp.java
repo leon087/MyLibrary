@@ -1,5 +1,8 @@
 package cm.android.framework.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Application;
@@ -7,9 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -20,9 +20,13 @@ import cm.android.util.BuildConfigUtil;
 import cm.android.util.EnvironmentUtil;
 
 public abstract class BaseApp extends Application implements IApp {
+
     private static BaseApp sApp = null;
+
     private final AtomicBoolean isInitAtomic = new AtomicBoolean(false);
+
     private BaseManager mServiceManager;
+
     private static final Logger logger = LoggerFactory.getLogger(BaseApp.class);
 
     public static boolean isInit() {
@@ -44,14 +48,16 @@ public abstract class BaseApp extends Application implements IApp {
     }
 
     private void writeState(boolean state) {
-        SharedPreferences preferences = this.getSharedPreferences("app_status", Context.MODE_PRIVATE);
+        SharedPreferences preferences = this
+                .getSharedPreferences("app_status", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("state", state);
         editor.commit();
     }
 
     private boolean readState() {
-        SharedPreferences preferences = this.getSharedPreferences("app_status", Context.MODE_PRIVATE);
+        SharedPreferences preferences = this
+                .getSharedPreferences("app_status", Context.MODE_PRIVATE);
         return preferences.getBoolean("state", false);
     }
 
@@ -163,8 +169,6 @@ public abstract class BaseApp extends Application implements IApp {
 
     /**
      * 初始化服务
-     *
-     * @return
      */
     protected abstract BaseManager initServiceManager();
 

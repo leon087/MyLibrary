@@ -11,13 +11,12 @@ import java.util.LinkedList;
  * 泛型对象创建器
  */
 public class ObjectUtil {
+
     private ObjectUtil() {
     }
 
     /**
      * 创建一个{@code HashMap}对象
-     *
-     * @return
      */
     public static <K, V> HashMap<K, V> newHashMap() {
         return new HashMap<K, V>();
@@ -29,8 +28,6 @@ public class ObjectUtil {
 
     /**
      * 创建一个{@code LinkedList}对象
-     *
-     * @return
      */
     public static <E> LinkedList<E> newLinkedList() {
         return new LinkedList<E>();
@@ -38,8 +35,6 @@ public class ObjectUtil {
 
     /**
      * 创建一个{@code HashSet}对象
-     *
-     * @return
      */
     public static <E> HashSet<E> newHashSet() {
         return new HashSet<E>();

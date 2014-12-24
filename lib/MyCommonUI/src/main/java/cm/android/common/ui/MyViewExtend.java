@@ -6,7 +6,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class MyViewExtend {
+
     public static interface IRefreshListener {
+
         public static final int LOAD_PREV = 0x01;
         public static final int LOAD_NEXT = 0x02;
 
@@ -14,6 +16,7 @@ public class MyViewExtend {
     }
 
     public static interface OnAtEndListener {
+
         public static final int TYPE_KEY_UP = 0x0001;
         public static final int TYPE_KEY_DOWN = 0x0010;
         public static final int TYPE_KEY_LEFT = 0x0100;
@@ -23,18 +26,21 @@ public class MyViewExtend {
     }
 
     public static interface OnItemCheckedListener {
+
         void onItemChecked(AdapterView<?> adapterView, View view, int position,
-                           boolean checked);
+                boolean checked);
     }
 
     public static abstract class MyOnItemSelectedListener implements
             OnItemSelectedListener, OnItemCheckedListener {
+
         private int last = -1;
+
         private View lastView = null;
 
         @Override
         public final void onItemSelected(AdapterView<?> adapterView, View view,
-                                         int position, long id) {
+                int position, long id) {
             if (last != -1) {
                 onItemChecked(adapterView, lastView, last, false);
             }
@@ -53,11 +59,13 @@ public class MyViewExtend {
 
     public static class MyOnFocusChangeListener implements
             OnFocusChangeListener {
+
         private OnFocusChangeListener listener;
+
         private AdapterView<?> adapterView;
 
         public MyOnFocusChangeListener(AdapterView<?> adapterView,
-                                       OnFocusChangeListener listener) {
+                OnFocusChangeListener listener) {
             this.listener = listener;
             this.adapterView = adapterView;
         }

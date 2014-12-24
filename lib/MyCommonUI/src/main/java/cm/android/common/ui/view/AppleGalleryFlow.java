@@ -9,6 +9,7 @@ import android.view.animation.Transformation;
 import android.widget.Gallery;
 
 public class AppleGalleryFlow extends Gallery {
+
     /**
      * The camera class is used to 3D transformation matrix.
      */
@@ -106,7 +107,8 @@ public class AppleGalleryFlow extends Gallery {
             transformImageBitmap(child, t, 0);
         } else {
             // Calculate the rotation angle.
-            rotationAngle = (int) (((float) (mCoveflowCenter - childCenter) / childWidth) * mMaxRotationAngle);
+            rotationAngle = (int) (((float) (mCoveflowCenter - childCenter) / childWidth)
+                    * mMaxRotationAngle);
 
             // Make the angle is not bigger than maximum.
             if (Math.abs(rotationAngle) > mMaxRotationAngle) {
@@ -126,7 +128,7 @@ public class AppleGalleryFlow extends Gallery {
     }
 
     private void transformImageBitmap(View child, Transformation t,
-                                      int rotationAngle) {
+            int rotationAngle) {
         mCamera.save();
 
         final Matrix imageMatrix = t.getMatrix();

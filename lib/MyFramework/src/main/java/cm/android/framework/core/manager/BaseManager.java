@@ -1,14 +1,17 @@
 package cm.android.framework.core.manager;
 
-import android.content.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import android.content.Context;
 
 /**
  * Manager基类
  */
 public abstract class BaseManager implements IManager {
+
     private volatile boolean isStart = false;
+
     private static final Logger logger = LoggerFactory.getLogger(BaseManager.class);
 
     @Override
@@ -53,8 +56,6 @@ public abstract class BaseManager implements IManager {
 
     /**
      * 初始化管理模块
-     *
-     * @param manager
      */
     protected final void addAppService(Object manager) {
         ServiceHolder.addAppService(manager);

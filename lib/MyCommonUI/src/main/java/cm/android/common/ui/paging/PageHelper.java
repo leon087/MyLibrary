@@ -1,17 +1,20 @@
 package cm.android.common.ui.paging;
 
-import cm.android.util.MyLog;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import cm.android.util.MyLog;
+
 public class PageHelper {
+
     private List<Object> totalItems = new ArrayList<Object>();
+
     private int eachRequestCount = 48;
+
     private int requestStartIndex = 0;
 
     public PageHelper(List<Object> totalItems, int requestStartIndex,
-                      int eachRequestCount) {
+            int eachRequestCount) {
         if (null != totalItems) {
             this.totalItems = totalItems;
         }

@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 
 public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
+
     protected Context context;
 
     /**
@@ -39,13 +40,11 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     }
 
     public void unregisterLocal(Context context) {
-        LocalBroadcastManager.getInstance(context).registerReceiver(this, this.createIntentFilter());
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
     }
 
     /**
      * 创建IntentFilter
-     *
-     * @return
      */
     public IntentFilter createIntentFilter() {
         return new IntentFilter();

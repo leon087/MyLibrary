@@ -1,5 +1,8 @@
 package cm.android.net;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +12,15 @@ import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.Parcelable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class WifiStateChanged {
 
     private static final Logger logger = LoggerFactory.getLogger(WifiStateChanged.class);
 
     private Context mContext;
+
     private NetworkConnectChangedReceiver wifiReceiver = new NetworkConnectChangedReceiver();
+
     private IWifiStateListener wifiListener;
 
     public WifiStateChanged(IWifiStateListener wifiListener) {
@@ -56,12 +59,14 @@ public class WifiStateChanged {
     }
 
     public interface IWifiStateListener {
+
         void onConnected(Context context, Intent intent);
 
         void onDisConnected(Context context, Intent intent);
     }
 
     private class NetworkConnectChangedReceiver extends BroadcastReceiver {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             logger.info("intent.getAction() = " + intent.getAction());

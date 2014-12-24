@@ -20,6 +20,7 @@ public class ByteUtil {
             '7', '7', '7', '7', '7', '7', '7', '7', '8', '8', '8', '8', '8',
             '8', '8', '8', '8', '8', '9', '9', '9', '9', '9', '9', '9', '9',
             '9', '9'};
+
     /**
      * Ones [i] contains the tens digit of the number i, 0 <= i <= 99.
      */
@@ -32,6 +33,7 @@ public class ByteUtil {
             '2', '3', '4', '5', '6', '7', '8', '9', '0', '1', '2', '3', '4',
             '5', '6', '7', '8', '9', '0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9',};
+
     /**
      * Table for MOD / DIV 10 computation described in Section 10-21 of Hank
      * Warren's "Hacker's Delight" online addendum.
@@ -39,6 +41,7 @@ public class ByteUtil {
      */
     private static final char[] MOD_10_TABLE = {0, 1, 2, 2, 3, 3, 4, 5, 5, 6,
             7, 7, 8, 8, 9, 0};
+
     /**
      * The digits for every supported radix.
      */
@@ -46,11 +49,14 @@ public class ByteUtil {
             '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
             'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
             'x', 'y', 'z'};
+
     private static final char[] UPPER_CASE_DIGITS = {'0', '1', '2', '3', '4',
             '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
             'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
             'V', 'W', 'X', 'Y', 'Z'};
+
     private static final char SPACE_CH = ' ';
+
     private static final char HEX_DIGITS[] = {'0', '1', '2', '3', '4', '5',
             '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
@@ -455,11 +461,6 @@ public class ByteUtil {
 
     /**
      * 返回一个字符串，从指定位置，直到指定的结束字符
-     *
-     * @param b
-     * @param pos
-     * @param until
-     * @return
      */
     public static String toStringUntil(byte[] b, int pos, byte until) {
         StringBuilder str = new StringBuilder();
@@ -486,7 +487,7 @@ public class ByteUtil {
      * 从指定位置开始，返回指定的第N个字符串，字符串之间以空格作为间隔符 最后一个字符串可能以length处为结束 index：从0开始计数
      */
     public static String indexStringDevidedBySpace(byte[] b, int pos,
-                                                   int length, int index) {
+            int length, int index) {
         StringBuilder str = new StringBuilder();
 
         int spaceNum = 0;
@@ -523,9 +524,6 @@ public class ByteUtil {
 
     /**
      * 转换成十六进制字符串
-     *
-     * @param buf
-     * @return
      */
     public static String toHex(byte[] buf) {
         StringBuffer strbuf = new StringBuffer(buf.length * 2);
@@ -546,9 +544,6 @@ public class ByteUtil {
 
     /**
      * 转换成十六进制字符串
-     *
-     * @param b
-     * @return
      */
     public static String toHexString(byte[] b) {
         StringBuilder sb = new StringBuilder(b.length * 2);

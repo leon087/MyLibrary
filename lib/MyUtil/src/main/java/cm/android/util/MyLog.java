@@ -1,14 +1,15 @@
 package cm.android.util;
 
 import android.os.Environment;
-import cm.android.util.MyLog.MyLogManager;
-import cm.android.util.MyLog.MyLogManager.Level;
-import cm.android.util.MyLog.MyLogManager.LogMode;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
+
+import cm.android.util.MyLog.MyLogManager;
+import cm.android.util.MyLog.MyLogManager.Level;
+import cm.android.util.MyLog.MyLogManager.LogMode;
 
 /**
  * android Log的Adapter类，打印调试信息。
@@ -20,8 +21,6 @@ public class MyLog {
 
     /**
      * 设置日志级别
-     *
-     * @param level
      */
     public static void setLogLevel(Level level) {
         MyLogManager.getLogger().logLevel = level;
@@ -29,8 +28,6 @@ public class MyLog {
 
     /**
      * 设置日志记录模式
-     *
-     * @param mode
      */
     public static void setLogMode(LogMode mode) {
         if (mode != null) {
@@ -40,8 +37,6 @@ public class MyLog {
 
     /**
      * 初始化
-     *
-     * @param traceTag
      */
     public static void initialize(String traceTag) {
         MyLogManager.getLogger().init(traceTag);
@@ -56,8 +51,6 @@ public class MyLog {
 
     /**
      * 打印{@link Level#DEBUG}级别的日志
-     *
-     * @param msg
      */
     public static void d(String msg) {
         MyLogManager.getLogger().log(Level.DEBUG, msg);
@@ -69,8 +62,6 @@ public class MyLog {
 
     /**
      * 打印{@link Level#INFO}级别的日志
-     *
-     * @param msg
      */
     public static void i(String msg) {
         MyLogManager.getLogger().log(Level.INFO, msg);
@@ -78,8 +69,6 @@ public class MyLog {
 
     /**
      * 打印{@link Level#ERROR}级别的日志
-     *
-     * @param msg
      */
     public static void e(String msg) {
         MyLogManager.getLogger().log(Level.ERROR, msg);
@@ -87,8 +76,6 @@ public class MyLog {
 
     /**
      * 打印{@link Level#ERROR}级别的日志
-     *
-     * @param tr
      */
     public static void e(Throwable tr) {
         MyLogManager.getLogger().log(Level.ERROR,
@@ -97,8 +84,6 @@ public class MyLog {
 
     /**
      * 打印{@link Level#ERROR}级别的日志
-     *
-     * @param msg
      */
     public static void e(String msg, Throwable tr) {
         MyLogManager.getLogger().log(
@@ -120,12 +105,17 @@ public class MyLog {
      * 日志管理类
      */
     public static class MyLogManager {
+
         static volatile String MY_TRACE = "MY_TRACE: ";
+
         // 可配参数
         Level logLevel = Level.MAX;
+
         LogMode logMode = LogMode.LOGCAT;
+
         // logger
         private LogcatLogger logcatLogger = new LogcatLogger();
+
         private FileLogger fileLogger = new FileLogger(logcatLogger);
 
         private MyLogManager() {
@@ -208,6 +198,7 @@ public class MyLog {
             MAX("", Integer.MAX_VALUE);
 
             private String tag = null;
+
             private int level = 0;
 
             private Level(String tag, int level) {
@@ -225,6 +216,7 @@ public class MyLog {
         }
 
         private static final class SingletonHolder {
+
             private static final MyLogManager INSTANCE = new MyLogManager();
         }
     }
@@ -232,6 +224,7 @@ public class MyLog {
 }
 
 abstract class BaseLogger {
+
     private static String generateTag(StackTraceElement caller) {
         String tag = "[ %s:%s:%s():%d ]";
         String callerFileName = caller.getFileName();
@@ -293,6 +286,7 @@ abstract class BaseLogger {
 }
 
 class LogcatLogger extends BaseLogger {
+
     @Override
     public void log(Level level, String msg) {
         String tag = getTag();
@@ -314,11 +308,17 @@ class LogcatLogger extends BaseLogger {
 }
 
 class FileLogger extends BaseLogger {
+
     private static final int BUFFER_SIZE = 1024 * 100;
+
     private static final String FILE_EXT = ".log";
+
     private volatile boolean initSdcardSuccess = false;
+
     private File logFile;
+
     private BufferedOutputStream outputStream = null;
+
     private StringBuilder builder = new StringBuilder();
 
     private LogcatLogger logcatLogger;

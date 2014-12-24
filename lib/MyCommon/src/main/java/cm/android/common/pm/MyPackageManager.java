@@ -3,10 +3,11 @@ package cm.android.common.pm;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import cm.android.applications.AppUtil;
-import cm.android.thread.ThreadUtil;
 
 import java.util.concurrent.ExecutorService;
+
+import cm.android.applications.AppUtil;
+import cm.android.thread.ThreadUtil;
 
 /**
  * PackageManager适配器，添加了静默卸载安装功能（该功能需要系统权限签名）
@@ -23,7 +24,7 @@ final class MyPackageManager {
     }
 
     void installPackage(final Uri packageURI,
-                        final PackageInstallObserver observer) {
+            final PackageInstallObserver observer) {
         threadPool.submit(new Runnable() {
             @Override
             public void run() {
@@ -46,7 +47,7 @@ final class MyPackageManager {
     }
 
     void deletePackage(final String packageName,
-                       final PackageDeleteObserver observer) {
+            final PackageDeleteObserver observer) {
         threadPool.submit(new Runnable() {
             @Override
             public void run() {
@@ -60,9 +61,11 @@ final class MyPackageManager {
 }
 
 abstract class PackageInstallObserver {
+
     public abstract void packageInstalled(String packageName, int returnCode);
 }
 
 abstract class PackageDeleteObserver {
+
     public abstract void packageDeleted(String packageName, int returnCode);
 }

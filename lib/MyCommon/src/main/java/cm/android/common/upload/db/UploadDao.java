@@ -1,17 +1,16 @@
 package cm.android.common.upload.db;
 
-import cm.android.common.db.BaseDao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
+
+import cm.android.common.db.BaseDao;
 
 /**
  * 上传数据DAO
  */
 public class UploadDao extends BaseDao<UploadBean> {
+
     /**
      * 更新数据
-     *
-     * @param model
-     * @return
      */
     public CreateOrUpdateStatus saveOrUpdate(UploadBean model) {
         // String querySql = "uploadFilePath='" + model.getUploadFilePath() +
@@ -22,9 +21,6 @@ public class UploadDao extends BaseDao<UploadBean> {
 
     /**
      * 删除数据
-     *
-     * @param model
-     * @return
      */
     public int delete(UploadBean model) {
         // String querySql = "uploadFilePath='" + model.getUploadFilePath() +

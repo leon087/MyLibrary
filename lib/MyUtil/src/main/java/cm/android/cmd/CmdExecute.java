@@ -11,6 +11,7 @@ import java.io.InputStream;
 import cm.android.util.IoUtil;
 
 public final class CmdExecute {
+
     private static final Logger logger = LoggerFactory.getLogger("cmd");
 
     public static String run(String[] cmd, String workdirectory) {

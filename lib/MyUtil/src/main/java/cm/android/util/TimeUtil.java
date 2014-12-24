@@ -12,18 +12,21 @@ import java.util.TimeZone;
  * 时间Util类
  */
 public class TimeUtil {
+
     public static final int ONE_SECOND = 1000;
+
     private static final SimpleDateFormat format1 = new SimpleDateFormat(
             "yyyy-MM-dd HH.mm.ss.SSS");
+
     private static final SimpleDateFormat format2 = new SimpleDateFormat(
             "yyyyMMdd");
+
     private static final long MS_OF_ONE_DAY = (24 * 60 * 60 * 1000);
 
     /**
      * 获取当前日期并转换成字符串
      *
      * @param formart 转换格式
-     * @return
      */
     public static String getDate2String(String formart) {
         return getDate2String(new Date(), formart);
@@ -46,8 +49,6 @@ public class TimeUtil {
 
     /**
      * 获取当前日期并转换成YYYY-MM-dd HH:mm:ss 格式的字符串
-     *
-     * @return
      */
     public static String getDate2String() {
         return getDate2String(new Date());
@@ -58,7 +59,6 @@ public class TimeUtil {
      *
      * @param date    转换日期
      * @param formart 转换格式
-     * @return
      */
     public static String getDate2String(Date date, String formart) {
         SimpleDateFormat sdf = new SimpleDateFormat(formart);
@@ -69,7 +69,6 @@ public class TimeUtil {
      * 将日期转换成YYYY-MM-dd HH:mm:ss 格式的字符串
      *
      * @param date 转换日期
-     * @return
      */
     public static String getDate2String(Date date) {
         return getDate2String(date, "yyyy-MM-dd HH:mm:ss");
@@ -77,8 +76,6 @@ public class TimeUtil {
 
     /**
      * 获取但前日期月份
-     *
-     * @return
      */
     public static int getMonth() {
         return getMonth(new Date());
@@ -86,9 +83,6 @@ public class TimeUtil {
 
     /**
      * 获取日期月份
-     *
-     * @param date
-     * @return
      */
     public static int getMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -98,8 +92,6 @@ public class TimeUtil {
 
     /**
      * 获取日期年份
-     *
-     * @return
      */
     public static int getYear() {
         return getYear(new Date());
@@ -107,9 +99,6 @@ public class TimeUtil {
 
     /**
      * 获取日期年份
-     *
-     * @param date
-     * @return
      */
     public static int getYear(Date date) {
         Calendar c = Calendar.getInstance();
@@ -119,8 +108,6 @@ public class TimeUtil {
 
     /**
      * 获取当前日期在月中的天数
-     *
-     * @return
      */
     public static int getDayOfMonth() {
         return getDayOfMonth(new Date());
@@ -128,9 +115,6 @@ public class TimeUtil {
 
     /**
      * 获取日期在月份中的天数
-     *
-     * @param date
-     * @return
      */
     public static int getDayOfMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -140,8 +124,6 @@ public class TimeUtil {
 
     /**
      * 获取当前日期的的星期数
-     *
-     * @return
      */
     public static int getDayOfWeek() {
         return getDayOfWeek(new Date());
@@ -149,9 +131,6 @@ public class TimeUtil {
 
     /**
      * 获取日期的星期数
-     *
-     * @param date
-     * @return
      */
     public static int getDayOfWeek(Date date) {
         Calendar c = Calendar.getInstance();
@@ -161,8 +140,6 @@ public class TimeUtil {
 
     /**
      * 获取当前日期是一年中第几天
-     *
-     * @return
      */
     public static int getDayOfYear() {
         return getDayOfYear(new Date());
@@ -170,9 +147,6 @@ public class TimeUtil {
 
     /**
      * 获取日期在一年中的天数
-     *
-     * @param date
-     * @return
      */
     public static int getDayOfYear(Date date) {
         Calendar c = Calendar.getInstance();
@@ -182,8 +156,6 @@ public class TimeUtil {
 
     /**
      * 获取下一个月
-     *
-     * @return
      */
     public static int getNextMonth() {
         return getNextMonth(new Date());
@@ -191,9 +163,6 @@ public class TimeUtil {
 
     /**
      * 获取下一个月
-     *
-     * @param date
-     * @return
      */
     public static int getNextMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -204,9 +173,6 @@ public class TimeUtil {
 
     /**
      * 获取上一个月
-     *
-     * @param date
-     * @return
      */
     public static int getUpMonth(Date date) {
         Calendar c = Calendar.getInstance();
@@ -217,8 +183,6 @@ public class TimeUtil {
 
     /**
      * 获取上一个月
-     *
-     * @return
      */
     public static int getUpMonth() {
         return getUpMonth(new Date());
@@ -226,9 +190,6 @@ public class TimeUtil {
 
     /**
      * 获取一周的开始日期
-     *
-     * @param date
-     * @return
      */
     public static int getFirstDayOfWeek(Date date) {
         int n = getDayOfWeek(date);
@@ -240,9 +201,6 @@ public class TimeUtil {
 
     /**
      * 获取一周的最后一天
-     *
-     * @param date
-     * @return
      */
     public static int getLastDayOfWeek(Date date) {
         int n = getDayOfWeek(date);
@@ -255,10 +213,6 @@ public class TimeUtil {
 
     /**
      * 在日期上加days天
-     *
-     * @param date
-     * @param days
-     * @return
      */
     public static Date addDay(Date date, int days) {
         return add(date, Calendar.DAY_OF_MONTH, days);
@@ -266,9 +220,6 @@ public class TimeUtil {
 
     /**
      * 获取明天日期
-     *
-     * @param date
-     * @return
      */
     public static Date getTomorrow(Date date) {
         return addDay(date, 1);
@@ -276,8 +227,6 @@ public class TimeUtil {
 
     /**
      * 获取明天日期
-     *
-     * @return
      */
     public static Date getTomorrow() {
         return getTomorrow(new Date());
@@ -285,9 +234,6 @@ public class TimeUtil {
 
     /**
      * 获取昨天日期
-     *
-     * @param date
-     * @return
      */
     public static Date getYestoday(Date date) {
         return addDay(date, -1);
@@ -295,8 +241,6 @@ public class TimeUtil {
 
     /**
      * 获取昨天日期
-     *
-     * @return
      */
     public static Date getYestoday() {
         return getYestoday(new Date());
@@ -304,10 +248,6 @@ public class TimeUtil {
 
     /**
      * 获取两日期之间相差的天数
-     *
-     * @param starDate
-     * @param endDate
-     * @return
      */
     public static long getDiffOfDays(Date starDate, Date endDate) {
         return getDiffOfHours(starDate, endDate) / 24;
@@ -315,10 +255,6 @@ public class TimeUtil {
 
     /**
      * 获取两日期之间相差的小时
-     *
-     * @param starDate
-     * @param endDate
-     * @return
      */
     public static long getDiffOfHours(Date starDate, Date endDate) {
         return getDiffOfMinute(starDate, endDate) / 60;
@@ -344,10 +280,6 @@ public class TimeUtil {
 
     /**
      * 获取量日期之间相差的月数
-     *
-     * @param starDate
-     * @param endDate
-     * @return
      */
     public static int getDiffOfMonth(Date starDate, Date endDate) {
         Calendar start = Calendar.getInstance();
@@ -362,10 +294,6 @@ public class TimeUtil {
 
     /**
      * 获取两日期间相差的年数
-     *
-     * @param starDate
-     * @param endDate
-     * @return
      */
     public static int getDiffOfYears(Date starDate, Date endDate) {
         Calendar star = Calendar.getInstance();
@@ -378,9 +306,6 @@ public class TimeUtil {
 
     /**
      * 获取月中的天数
-     *
-     * @param date
-     * @return
      */
     public static int getMonthDays(Date date) {
         Calendar c = Calendar.getInstance();
@@ -390,8 +315,6 @@ public class TimeUtil {
 
     /**
      * 获取月中的天数
-     *
-     * @return
      */
     public static int getMonthDays() {
         return getMonthDays(new Date());
@@ -399,9 +322,6 @@ public class TimeUtil {
 
     /**
      * 获取下月天数
-     *
-     * @param date
-     * @return
      */
     public static int getNextMonthDays(Date date) {
         Calendar c = Calendar.getInstance();
@@ -412,8 +332,6 @@ public class TimeUtil {
 
     /**
      * 获取下月天数
-     *
-     * @return
      */
     public static int getNextMonthDays() {
         return getNextMonthDays(new Date());
@@ -421,9 +339,6 @@ public class TimeUtil {
 
     /**
      * 获取上月天数
-     *
-     * @param date
-     * @return
      */
     public static int getUpMonthDays(Date date) {
         Calendar c = Calendar.getInstance();
@@ -434,8 +349,6 @@ public class TimeUtil {
 
     /**
      * 获取上月天数
-     *
-     * @return
      */
     public static int getUpMonthDays() {
         return getUpMonthDays(new Date());
@@ -443,11 +356,6 @@ public class TimeUtil {
 
     /**
      * 把时间字符串转换成Date
-     *
-     * @param date
-     * @param datePartten
-     * @return
-     * @throws ParseException
      */
     public static Date parseDate(String date, String datePartten)
             throws ParseException {
@@ -458,10 +366,6 @@ public class TimeUtil {
 
     /**
      * 把时间字符串转换成Date
-     *
-     * @param date
-     * @return
-     * @throws Exception
      */
     public static Date parseDate(String date) throws Exception {
         String[] datePartten = {"yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd",
@@ -472,11 +376,6 @@ public class TimeUtil {
 
     /**
      * 把时间字符串转换成Date
-     *
-     * @param date
-     * @param dateParttens
-     * @return
-     * @throws Exception
      */
     public static Date parseDate(String date, String[] dateParttens)
             throws Exception {
@@ -502,10 +401,7 @@ public class TimeUtil {
     /**
      * 是时间的基础上+
      *
-     * @param date
-     * @param field  请使用Calendar的常量
-     * @param amount
-     * @return
+     * @param field 请使用Calendar的常量
      */
     public static Date add(Date date, int field, int amount) {
         Calendar c = Calendar.getInstance();
@@ -516,8 +412,6 @@ public class TimeUtil {
 
     /**
      * UTC日期时间
-     *
-     * @return
      */
     public static String getCurrentUtcTime() {
         Date l_datetime = new Date();
@@ -537,9 +431,6 @@ public class TimeUtil {
 
     /**
      * yyyy-MM-dd HH:mm:ss
-     *
-     * @param c
-     * @return
      */
     public static String getFormatTime1(Calendar c) {
         if (null == c) {
@@ -558,9 +449,6 @@ public class TimeUtil {
 
     /**
      * yyyyMMddHHmmss
-     *
-     * @param time
-     * @return
      */
     public static String getFormatTime2(long time) {
         Calendar c = Calendar.getInstance();
@@ -571,9 +459,6 @@ public class TimeUtil {
 
     /**
      * yyyyMMddHHmmss
-     *
-     * @param c
-     * @return
      */
     public static String getFormatTime3(Calendar c) {
         DecimalFormat df = new DecimalFormat("00");

@@ -4,6 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public class ReflectUtil {
+
     /**
      * 通过反射,获得定义Class时声明的父类的范型参数的类型. 如public BookManager extends
      * GenricManager<Book>
@@ -43,12 +44,14 @@ public class ReflectUtil {
         return params[index];
     }
 
-    public static <T> T getFieldValue(Object object, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+    public static <T> T getFieldValue(Object object, String fieldName)
+            throws NoSuchFieldException, IllegalAccessException {
         T value = (T) object.getClass().getField(fieldName).get(object);
         return value;
     }
 
-    public static <T> T getStaticFieldValue(Class clazz, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+    public static <T> T getStaticFieldValue(Class clazz, String fieldName)
+            throws NoSuchFieldException, IllegalAccessException {
         T value = (T) clazz.getField(fieldName).get(null);
         return value;
     }

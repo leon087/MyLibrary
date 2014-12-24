@@ -1,5 +1,8 @@
 package cm.android.framework.ext.ui.v4;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -7,24 +10,26 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
+
+import java.util.Set;
+
 import cm.android.framework.ext.util.MyIntent;
 import cm.android.util.ActivityStack;
 import cm.android.util.ObjectUtil;
 import cm.android.util.UIUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Set;
 
 /**
  * android.support.v4.app.FragmentActivity的包装类
  */
 public abstract class BaseActivity extends FragmentActivity implements
         IActivity {
+
     protected final Bundle bundleBak = new Bundle();
 
     protected FragmentHelper mFragmentHelper;
+
     private Set<KeyEventListener> mKeyEventListener = ObjectUtil.newHashSet();
+
     private static final Logger logger = LoggerFactory.getLogger(BaseActivity.class);
 
     @Override
@@ -105,8 +110,6 @@ public abstract class BaseActivity extends FragmentActivity implements
 
     /**
      * 注册按键监听事件
-     *
-     * @param listener
      */
     public void registerKeyEventListener(KeyEventListener listener) {
         synchronized (mKeyEventListener) {
@@ -116,8 +119,6 @@ public abstract class BaseActivity extends FragmentActivity implements
 
     /**
      * 去除按键监听事件
-     *
-     * @param listener
      */
     public void unRegisterKeyEventListener(KeyEventListener listener) {
         synchronized (mKeyEventListener) {
@@ -147,12 +148,9 @@ public abstract class BaseActivity extends FragmentActivity implements
      * 按键监听器
      */
     public static interface KeyEventListener {
+
         /**
          * key被按下时调用
-         *
-         * @param keyCode
-         * @param event
-         * @return
          */
         boolean onKeyDown(int keyCode, KeyEvent event);
     }

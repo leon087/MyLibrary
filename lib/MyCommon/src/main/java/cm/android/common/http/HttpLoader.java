@@ -1,12 +1,12 @@
 package cm.android.common.http;
 
-import android.content.Context;
-
 import com.loopj.android.http.RequestParams;
 
 import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import android.content.Context;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import cm.android.util.Utils;
  * 带有缓存的数据请求接口
  */
 public class HttpLoader {
+
     private static final Logger logger = LoggerFactory.getLogger("HTTP");
 
     // 后续会替换掉
@@ -46,12 +47,12 @@ public class HttpLoader {
     }
 
     public static <T> void load(String url, Header[] header,
-                                CacheHttpListener<T> httpHandler) {
+            CacheHttpListener<T> httpHandler) {
         load(url, header, httpHandler, true);
     }
 
     public static <T> void load(final String url, final Header[] header,
-                                final CacheHttpListener<T> httpHandler, boolean cacheFlag) {
+            final CacheHttpListener<T> httpHandler, boolean cacheFlag) {
         // 如果有缓存，并且缓存未失效，则返回成功，否则http请求
         // 要确保url和参数都一致!!把post参数与url合并
 
@@ -80,7 +81,8 @@ public class HttpLoader {
                                     logger.debug(mapEntry.getKey() + ":"
                                             + mapEntry.getValue());
                                 }
-                                logger.debug("responseBody:----------------------------------------");
+                                logger.debug(
+                                        "responseBody:----------------------------------------");
                                 logger.debug(String.valueOf(responseMap));
                             }
                             return;

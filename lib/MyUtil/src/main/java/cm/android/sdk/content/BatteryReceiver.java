@@ -54,19 +54,30 @@ public class BatteryReceiver extends BaseBroadcastReceiver {
     }
 
     public static interface BetteryChangedListener {
+
         public void betteryChanged(BetteryInfo betteryInfo);
     }
 
     public static class BetteryInfo {
+
         public int status;
+
         public int health;
+
         public boolean present;
+
         public int level;
+
         public int scale;
+
         public int icon_small;
+
         public int plugged;
+
         public int voltage;
+
         public int temperature;
+
         public String technology;
     }
 

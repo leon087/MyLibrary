@@ -3,6 +3,7 @@ package cm.android.framework.core.manager;
 import android.content.Context;
 
 public interface IManager {
+
     void init(Context context);
 
     /**

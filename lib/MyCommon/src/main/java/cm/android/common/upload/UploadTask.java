@@ -5,8 +5,11 @@ import cm.android.common.upload.uploader.DefaultUploader;
 import cm.android.util.MyLog;
 
 public class UploadTask implements Runnable {
+
     private UploadItem uploadItem;
+
     private IUploadListener<UploadTask> iUploadListener;
+
     private UploadDao uploadDao;
 
     // public RandomAccessFile randomFile;
@@ -15,8 +18,8 @@ public class UploadTask implements Runnable {
     private IUploader<UploadTask> uploader;
 
     public UploadTask(UploadItem item,
-                      IUploadListener<UploadTask> iUploadListener, UploadDao uploadDao,
-                      IUploader<UploadTask> uploader) {
+            IUploadListener<UploadTask> iUploadListener, UploadDao uploadDao,
+            IUploader<UploadTask> uploader) {
         uploadItem = item;
         this.iUploadListener = iUploadListener;
         this.uploadDao = uploadDao;

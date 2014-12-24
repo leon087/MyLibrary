@@ -1,10 +1,11 @@
 package cm.android.common.http;
 
-import cm.android.common.cache.disk.entry.HttpCacheEntry;
-import cm.android.util.Utils;
 import org.apache.http.Header;
 
 import java.util.Map;
+
+import cm.android.common.cache.disk.entry.HttpCacheEntry;
+import cm.android.util.Utils;
 
 public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
 
@@ -23,7 +24,7 @@ public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
 
     @Override
     final void onSuccess(int statusCode, Header[] headers,
-                         byte[] responseBytes, T responseMap) {
+            byte[] responseBytes, T responseMap) {
         // Map<String, Object> responseMap = JSON.parseObject(
         // responseBody.getBytes(), Map.class);
 
@@ -36,6 +37,7 @@ public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
     }
 
     private static class CacheHolder {
+
         private HttpCacheEntry entry = null;
 
         private void saveCache(Map<String, String> headers, byte[] responseBytes) {

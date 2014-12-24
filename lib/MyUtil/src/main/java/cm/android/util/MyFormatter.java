@@ -11,7 +11,9 @@ import java.util.Date;
  * 格式化工具
  */
 public class MyFormatter {
+
     private static char ff[] = {'A', 'B', 'C', 'D', 'E', 'F'};
+
     private static SimpleDateFormat mDateFormat = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss");
 
@@ -20,9 +22,6 @@ public class MyFormatter {
 
     /**
      * 格式化文件大小
-     *
-     * @param fileLength
-     * @return
      */
     public static String formatFileSize(long fileLength) {
         int sub_index = 0;
@@ -50,10 +49,6 @@ public class MyFormatter {
 
     /**
      * 系统函数，字符串转换 long -String (kb)
-     *
-     * @param context
-     * @param size
-     * @return
      */
     @TargetApi(3)
     public static String formateFileSize(Context context, long size) {
@@ -62,9 +57,6 @@ public class MyFormatter {
 
     /**
      * 格式化日期成"yyyy-MM-dd HH:mm:ss"
-     *
-     * @param time
-     * @return
      */
     public static String formatDate(long time) {
         // 2009-10-09 10:15:55
@@ -73,9 +65,6 @@ public class MyFormatter {
 
     /**
      * 格式化日期成"yyyyMMddHHmmss"
-     *
-     * @param time
-     * @return
      */
     public static String formatDate2(long time) {
         // 2009-10-09 10:15:55
@@ -84,10 +73,6 @@ public class MyFormatter {
 
     /**
      * 按自定义格式格式化时间
-     *
-     * @param formatStr
-     * @param time
-     * @return
      */
     public static String formatDate(String formatStr, long time) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(formatStr);

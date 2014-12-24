@@ -8,9 +8,13 @@ import android.widget.TextView;
 public class MyTextView extends TextView {
 
     public static final int TYPE_MARQUEE = 0x01;
+
     public static final int TYPE_END = TYPE_MARQUEE + 1;
+
     public static final int TYPE_DEFAULT = TYPE_MARQUEE + 2;
+
     private int type = TYPE_MARQUEE;
+
     private boolean isFocused = true;
 
     public MyTextView(Context context, AttributeSet attrs, int defStyle) {

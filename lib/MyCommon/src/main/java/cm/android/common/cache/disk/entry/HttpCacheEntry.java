@@ -1,17 +1,21 @@
 package cm.android.common.cache.disk.entry;
 
-import cm.android.util.ObjectUtil;
-import cm.android.util.StrictLineReader;
-import cm.android.util.Utils;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
+import cm.android.util.ObjectUtil;
+import cm.android.util.StrictLineReader;
+import cm.android.util.Utils;
+
 public class HttpCacheEntry extends DiskCacheEntry {
+
     private String uri;
+
     private String time;
+
     private Map<String, String> headers;
+
     private String content;
 
     public HttpCacheEntry() {

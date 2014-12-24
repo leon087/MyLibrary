@@ -1,10 +1,11 @@
 package cm.android.app;
 
-import android.test.ActivityInstrumentationTestCase2;
-
 import com.robotium.solo.Solo;
 
+import android.test.ActivityInstrumentationTestCase2;
+
 public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+
     private Solo solo;
 
     public MainActivityTest() {

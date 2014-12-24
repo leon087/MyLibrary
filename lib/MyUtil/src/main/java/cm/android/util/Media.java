@@ -21,7 +21,9 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public final class Media {
+
     public static final String[] EXTENSIONS;
+
     // http://www.fileinfo.com/filetypes/video
     public static final String[] VIDEO_EXTENSIONS = {"\\.264", "\\.3g2",
             "\\.3gp", "\\.3gp2", "\\.3gpp", "\\.3gpp2", "\\.3mm", "\\.3p2",
@@ -68,6 +70,7 @@ public final class Media {
             "\\.wcp", "\\.webm", "\\.wm", "\\.wmd", "\\.wmmp", "\\.wmv",
             "\\.wmx", "\\.wp3", "\\.wpl", "\\.wtv", "\\.wvx", "\\.xfl",
             "\\.xvid", "\\.yuv", "\\.zm1", "\\.zm2", "\\.zm3", "\\.zmv"};
+
     // http://www.fileinfo.com/filetypes/audio
     public static final String[] AUDIO_EXTENSIONS = {"\\.4mp", "\\.669",
             "\\.6cm", "\\.8cm", "\\.8med", "\\.8svx", "\\.a2m", "\\.aa",
@@ -134,11 +137,16 @@ public final class Media {
             "\\.wvc", "\\.wve", "\\.wwu", "\\.xa", "\\.xa", "\\.xfs", "\\.xi",
             "\\.xm", "\\.xmf", "\\.xmi", "\\.xmz", "\\.xp", "\\.xrns",
             "\\.xsb", "\\.xspf", "\\.xt", "\\.xwb", "\\.ym", "\\.zvd", "\\.zvr"};
+
     public static final String[] SUBTRACK_EXTENSIONS = {".srt", ".ssa",
             ".smi", ".txt", ".sub", ".ass", ".webvtt"};
+
     public static final Pattern VIDEO_EXTENSIONS_PATTERN;
+
     public static final Pattern AUDIO_EXTENSIONS_PATTERN;
+
     public static final Pattern EXTENSIONS_PATTERN;
+
     public static final Pattern SUBTRACK_EXTENSIONS_PATTERN;
 
     static {
@@ -188,8 +196,9 @@ public final class Media {
     private static Pattern generatePattern(String[] args) {
         StringBuffer sb = new StringBuffer();
         for (String ext : args) {
-            if (sb.length() > 0)
+            if (sb.length() > 0) {
                 sb.append("|");
+            }
             sb.append(ext);
         }
         return Pattern.compile("(" + sb.toString() + ")$",

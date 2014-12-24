@@ -9,7 +9,9 @@ import android.os.Message;
  * Looper线程
  */
 public class LooperHandler {
+
     private Handler mTaskExecutor;
+
     private MyHandlerThread mHandlerThread;
 
     // private android.os.Handler.Callback callback;
@@ -49,8 +51,6 @@ public class LooperHandler {
 
     /**
      * 在Loop线程中执行task
-     *
-     * @param task
      */
     public void post(Runnable task) {
         mTaskExecutor.post(task);
@@ -58,9 +58,6 @@ public class LooperHandler {
 
     /**
      * 在Loop线程中延迟执行task
-     *
-     * @param task
-     * @param delayMillis
      */
     public void postDelayed(Runnable task, long delayMillis) {
         mTaskExecutor.postDelayed(task, delayMillis);
@@ -68,9 +65,6 @@ public class LooperHandler {
 
     /**
      * 向loop线程中发送消息
-     *
-     * @param what
-     * @param object
      */
     public void sendMessage(int what, Object object) {
         Message msg = mTaskExecutor.obtainMessage(what, object);
@@ -79,8 +73,6 @@ public class LooperHandler {
 
     /**
      * 向loop线程发送空消息
-     *
-     * @param what
      */
     public void sendEmptyMessage(int what) {
         mTaskExecutor.removeMessages(what);
@@ -89,9 +81,6 @@ public class LooperHandler {
 
     /**
      * 延迟发送空消息
-     *
-     * @param what
-     * @param delayMillis
      */
     public void sendEmptyMessageDelayed(int what, long delayMillis) {
         mTaskExecutor.sendEmptyMessageDelayed(what, delayMillis);
@@ -99,9 +88,6 @@ public class LooperHandler {
 
     /**
      * 延迟发送消息
-     *
-     * @param what
-     * @param delayMillis
      */
     public void sendMessageDelayed(int what, Object obj, long delayMillis) {
         Message msg = mTaskExecutor.obtainMessage(what, obj);
@@ -110,8 +96,6 @@ public class LooperHandler {
 
     /**
      * 移除消息
-     *
-     * @param what
      */
     public void removeMessages(int what) {
         mTaskExecutor.removeMessages(what);
@@ -135,6 +119,7 @@ public class LooperHandler {
     }
 
     private class MyHandler extends Handler {
+
         private MyHandler(Looper looper, Callback callback) {
             super(looper, callback);
         }

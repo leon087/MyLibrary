@@ -15,26 +15,32 @@ import android.provider.MediaStore;
  * <uses-permission android:name="android.permission.CAMERA" />
  */
 public class CameraUtil {
+
     /**
      * 调用系统照相机拍摄照片
      */
     public static final int REQUEST_CODE_TAKE_PHOTO = 0xF1;
+
     /**
      * 调用系统照相机摄像
      */
     public static final int REQUEST_CODE_TAKE_VIDEO = REQUEST_CODE_TAKE_PHOTO + 1;
+
     /**
      * 调用系统应用录音
      */
     public static final int RESULT_CAPTURE_RECORDER_SOUND = REQUEST_CODE_TAKE_PHOTO + 2;
+
     /**
      * 从相册中选择一张图片
      */
     public static final int REQUEST_CODE_PICK_PHOTO = REQUEST_CODE_TAKE_PHOTO + 3;
+
     /**
      * 从视频库中选择视频
      */
     public static final int REQUEST_CODE_PICK_VIDEO = REQUEST_CODE_TAKE_PHOTO + 4;
+
     /**
      * 裁剪图片
      */
@@ -92,7 +98,7 @@ public class CameraUtil {
     }
 
     private static Intent cropImageIntent(Uri uri, Uri outputUri, int width,
-                                          int height) {
+            int height) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
@@ -120,7 +126,8 @@ public class CameraUtil {
      */
     public static Uri takePhoto(Activity activity) {
         // 执行拍照前，应该先判断SD卡是否存在
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// "android.media.action.IMAGE_CAPTURE"
+        Intent intent = new Intent(
+                MediaStore.ACTION_IMAGE_CAPTURE);// "android.media.action.IMAGE_CAPTURE"
         /***
          * 需要说明一下，以下操作使用照相机拍照，拍照后的图片会存放在相册中的 这里使用的这种方式有一个好处就是获取的图片是拍照后的原图
          * 如果不实用ContentValues存放照片路径的话，拍照后获取的图片为缩略图不清晰
@@ -166,7 +173,8 @@ public class CameraUtil {
 
     public static Uri takePhoto(android.support.v4.app.Fragment fragment) {
         // 执行拍照前，应该先判断SD卡是否存在
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);// "android.media.action.IMAGE_CAPTURE"
+        Intent intent = new Intent(
+                MediaStore.ACTION_IMAGE_CAPTURE);// "android.media.action.IMAGE_CAPTURE"
         /***
          * 需要说明一下，以下操作使用照相机拍照，拍照后的图片会存放在相册中的 这里使用的这种方式有一个好处就是获取的图片是拍照后的原图
          * 如果不实用ContentValues存放照片路径的话，拍照后获取的图片为缩略图不清晰
@@ -200,13 +208,13 @@ public class CameraUtil {
     // ////////////////////////////////
 
     public static void cropImage(Uri uri, int width, int height,
-                                 Activity activity) {
+            Activity activity) {
         Intent intent = cropImageIntent(uri, width, height);
         activity.startActivityForResult(intent, REQUEST_CODE_CROP);
     }
 
     public static void cropImage(Uri uri, int width, int height,
-                                 android.support.v4.app.Fragment fragment) {
+            android.support.v4.app.Fragment fragment) {
         Intent intent = cropImageIntent(uri, width, height);
         fragment.startActivityForResult(intent, REQUEST_CODE_CROP);
     }

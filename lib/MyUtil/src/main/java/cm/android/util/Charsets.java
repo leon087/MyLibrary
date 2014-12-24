@@ -28,6 +28,7 @@ import java.nio.charset.Charset;
  * @hide internal use only
  */
 public final class Charsets {
+
     /**
      * A cheap and type-safe constant for the ISO-8859-1 Charset.
      */
@@ -52,7 +53,7 @@ public final class Charsets {
      * by (byte) '?'.
      */
     public static native byte[] toAsciiBytes(char[] chars, int offset,
-                                             int length);
+            int length);
 
     /**
      * Returns a new byte array containing the bytes corresponding to the given
@@ -60,7 +61,7 @@ public final class Charsets {
      * replaced by (byte) '?'.
      */
     public static native byte[] toIsoLatin1Bytes(char[] chars, int offset,
-                                                 int length);
+            int length);
 
     /**
      * Returns a new byte array containing the bytes corresponding to the given
@@ -74,7 +75,7 @@ public final class Charsets {
      * UTF-16BE.
      */
     public static byte[] toBigEndianUtf16Bytes(char[] chars, int offset,
-                                               int length) {
+            int length) {
         byte[] result = new byte[length * 2];
         int end = offset + length;
         int resultIndex = 0;
@@ -94,7 +95,7 @@ public final class Charsets {
      * 0xff); value[i] = (ch <= 0x7f) ? ch : REPLACEMENT_CHAR; }
      */
     public static native void asciiBytesToChars(byte[] bytes, int offset,
-                                                int length, char[] chars);
+            int length, char[] chars);
 
     /**
      * Decodes the given ISO-8859-1 bytes into the given char[]. Equivalent to
@@ -104,5 +105,5 @@ public final class Charsets {
      * 0xff); }
      */
     public static native void isoLatin1BytesToChars(byte[] bytes, int offset,
-                                                    int length, char[] chars);
+            int length, char[] chars);
 }

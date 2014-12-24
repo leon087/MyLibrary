@@ -1,12 +1,14 @@
 package cm.android.frameworkext.pm;
 
 import android.os.RemoteException;
+
 import cm.android.frameworkext.pm.PackageInstaller.IPackageLisntener;
 
 /**
  * 安装/卸载监听器创建工厂
  */
 final class PackageInstallerFactory {
+
     static PackageInstallObserver createInstallObserver(
             IPackageLisntener iPackageLisntener) {
         if (null == iPackageLisntener) {
@@ -24,6 +26,7 @@ final class PackageInstallerFactory {
     }
 
     private static class InstallObserver extends PackageInstallObserver {
+
         private PackageInstaller.IPackageLisntener iPackageLisntener = null;
 
         InstallObserver(PackageInstaller.IPackageLisntener iPackageLisntener) {
@@ -45,6 +48,7 @@ final class PackageInstallerFactory {
     }
 
     private static class DeleteObserver extends PackageDeleteObserver {
+
         private PackageInstaller.IPackageLisntener iPackageLisntener = null;
 
         DeleteObserver(IPackageLisntener iPackageLisntener) {

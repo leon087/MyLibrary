@@ -13,6 +13,7 @@ public class MyLinearLayout extends LinearLayout {
     private FocusFinder mFocusFinder = FocusFinder.getInstance();
 
     private OnSlidingAtEndListener onSlidingAtEndListener;
+
     private int keyType = OnSlidingAtEndListener.TYPE_KEY_UP
             | OnSlidingAtEndListener.TYPE_KEY_DOWN
             | OnSlidingAtEndListener.TYPE_KEY_LEFT
@@ -101,26 +102,30 @@ public class MyLinearLayout extends LinearLayout {
     }
 
     public void selectLeft(View lastFocus, View nextFocus, boolean animation) {
-        if (lastFocus == null || nextFocus == null)
+        if (lastFocus == null || nextFocus == null) {
             return;
+        }
         // nextFocus.requestFocus();
     }
 
     public void selectRight(View lastFocus, View nextFocus, boolean animation) {
-        if (lastFocus == null || nextFocus == null)
+        if (lastFocus == null || nextFocus == null) {
             return;
+        }
         // nextFocus.requestFocus();
     }
 
     public void selectUp(View lastFocus, View nextFocus, boolean animation) {
-        if (lastFocus == null || nextFocus == null)
+        if (lastFocus == null || nextFocus == null) {
             return;
+        }
         // nextFocus.requestFocus();
     }
 
     public void selectDown(View lastFocus, View nextFocus, boolean animation) {
-        if (lastFocus == null || nextFocus == null)
+        if (lastFocus == null || nextFocus == null) {
             return;
+        }
         // nextFocus.requestFocus();
     }
 
@@ -129,6 +134,7 @@ public class MyLinearLayout extends LinearLayout {
     }
 
     public interface OnSlidingAtEndListener {
+
         public static final int TYPE_KEY_UP = 0x0001;
         public static final int TYPE_KEY_DOWN = 0x0010;
         public static final int TYPE_KEY_LEFT = 0x0100;

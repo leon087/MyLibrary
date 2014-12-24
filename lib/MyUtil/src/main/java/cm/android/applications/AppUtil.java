@@ -1,13 +1,16 @@
 package cm.android.applications;
 
-import android.content.Intent;
-import android.content.pm.*;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.util.DisplayMetrics;
-import cm.android.util.ObjectUtil;
-import cm.android.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
+import android.content.pm.Signature;
+import android.util.DisplayMetrics;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -22,7 +25,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import cm.android.util.ObjectUtil;
+import cm.android.util.Utils;
+
 public class AppUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(AppUtil.class);
 
     public static final AppFilter THIRD_PARTY_FILTER = new AppFilter() {
@@ -39,16 +46,19 @@ public class AppUtil {
             return false;
         }
     };
+
     /**
      * 用户应用
      */
     public static final int APP_USER = 0;
 
     ;
+
     /**
      * 系统应用
      */
     public static final int APP_SYSTEM = 1;
+
     /**
      * 所有应用（用户+系统）
      */
@@ -57,12 +67,11 @@ public class AppUtil {
     /**
      * 获取已安装的应用
      *
-     * @param pm
      * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
      * @return PackageInfo列表
      */
     public static List<PackageInfo> getInstalledPackages(PackageManager pm,
-                                                         int flag) {
+            int flag) {
         List<PackageInfo> packages = getInstalledPackages(pm);
 
         List<PackageInfo> appList = new ArrayList<PackageInfo>();
@@ -107,12 +116,11 @@ public class AppUtil {
     /**
      * 获取已安装的应用
      *
-     * @param pm
      * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
      * @return ApplicationInfo列表
      */
     public static List<ApplicationInfo> getInstalledApps(PackageManager pm,
-                                                         int flag) {
+            int flag) {
         List<ApplicationInfo> apps = getInstalledApplications(pm);
         List<ApplicationInfo> appList = ObjectUtil.newArrayList();
 
@@ -140,9 +148,7 @@ public class AppUtil {
     /**
      * 获取已安装的应用
      *
-     * @param pm
      * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
-     * @return
      */
     public static Map<String, ApplicationInfo> getInstalledAppsMap(
             PackageManager pm, int flag) {
@@ -176,9 +182,7 @@ public class AppUtil {
     /**
      * 获取已安装的应用
      *
-     * @param pm
      * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
-     * @return
      */
     public static Map<String, PackageInfo> getInstalledPackagesMap(
             PackageManager pm, int flag) {
@@ -211,13 +215,9 @@ public class AppUtil {
 
     /**
      * 同时获取用户应用和系统应用
-     *
-     * @param pm
-     * @param userAppList
-     * @param sysAppList
      */
     public static void getPackages(PackageManager pm,
-                                   List<PackageInfo> userAppList, List<PackageInfo> sysAppList) {
+            List<PackageInfo> userAppList, List<PackageInfo> sysAppList) {
         List<PackageInfo> packages = getInstalledPackages(pm);
 
         if (null != userAppList) {
@@ -245,11 +245,10 @@ public class AppUtil {
     /**
      * 获取未安装的APK信息
      *
-     * @param pm
      * @param archiveFilePath APK文件的路径。如：/sdcard /download/XX.apk
      */
     public static PackageInfo getUninatllAppInfo(PackageManager pm,
-                                                 String archiveFilePath) {
+            String archiveFilePath) {
         PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath,
                 PackageManager.GET_ACTIVITIES);
         return info;
@@ -257,9 +256,6 @@ public class AppUtil {
 
     /**
      * 获取拥有应用入口的应用列表
-     *
-     * @param pm
-     * @return
      */
     // 获得所有启动Activity的信息，类似于Launch界面
     public static List<ResolveInfo> getLunchAppInfo(PackageManager pm) {
@@ -299,13 +295,9 @@ public class AppUtil {
 
     /**
      * 获取应用PackageInfo信息
-     *
-     * @param pm
-     * @param packageName
-     * @return
      */
     public static PackageInfo getPackageInfo(PackageManager pm,
-                                             String packageName) {
+            String packageName) {
         try {
             PackageInfo packageInfo = pm.getPackageInfo(packageName,
                     PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
@@ -317,10 +309,6 @@ public class AppUtil {
 
     /**
      * 获取应用签名
-     *
-     * @param pm
-     * @param packageName
-     * @return
      */
     public static android.content.pm.Signature[] getSignature(
             PackageManager pm, String packageName) {
@@ -349,10 +337,6 @@ public class AppUtil {
 
     /**
      * 获取签名hash
-     *
-     * @param pm
-     * @param packageName
-     * @return
      */
     public static int getSignatureHashCode(PackageManager pm, String packageName) {
         int sig = 0;
@@ -368,9 +352,6 @@ public class AppUtil {
 
     /**
      * 获取未安装应用签名
-     *
-     * @param apkPath
-     * @return
      */
     public static String showUninstallAPKSignatures(String apkPath) {
         String PATH_PackageParser = "android.content.pm.PackageParser";
@@ -429,9 +410,6 @@ public class AppUtil {
 
     /**
      * 判断应用是否为系统应用
-     *
-     * @param applicationInfo
-     * @return
      */
     public static boolean isSystemApp(ApplicationInfo applicationInfo) {
         if (applicationInfo == null) {
@@ -445,7 +423,7 @@ public class AppUtil {
     }
 
     public static boolean isSystemApp(PackageManager packageManager,
-                                      String packageName) {
+            String packageName) {
         if (Utils.isEmpty(packageName)) {
             return false;
         }
@@ -461,17 +439,19 @@ public class AppUtil {
     }
 
     public static boolean isPackageUnavailable(PackageManager pm,
-                                               String packageName) {
+            String packageName) {
         return getPackageInfo(pm, packageName) == null;
     }
 
     public static interface AppFilter {
+
         public void init();
 
         public boolean filterApp(ApplicationInfo info);
     }
 
     public static class AppFilterExcludeSelf implements AppFilter {
+
         private String packageName;
 
         public AppFilterExcludeSelf(String packageName) {

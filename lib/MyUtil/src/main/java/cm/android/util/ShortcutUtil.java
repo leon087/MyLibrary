@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -12,42 +15,41 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 /**
  * 桌面快捷方式有关的工具类
  */
 public class ShortcutUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(ShortcutUtil.class);
     //private static final String HTC = "HTC";
 
     /**
      * 快捷方式添加的action
      */
-    private final static String SHORTCUT_ADD_ACTION = "com.android.launcher.action.INSTALL_SHORTCUT";
+    private final static String SHORTCUT_ADD_ACTION
+            = "com.android.launcher.action.INSTALL_SHORTCUT";
+
     /**
      * 快捷方式删除的action
      */
-    private final static String SHORTCUT_DEL_ACTION = "com.android.launcher.action.UNINSTALL_SHORTCUT";
+    private final static String SHORTCUT_DEL_ACTION
+            = "com.android.launcher.action.UNINSTALL_SHORTCUT";
+
     /**
      * 读取数据库需要的权限
      */
-    private final static String READ_SETTINGS_PERMISSION = "com.android.launcher.permission.READ_SETTINGS";
+    private final static String READ_SETTINGS_PERMISSION
+            = "com.android.launcher.permission.READ_SETTINGS";
 
 
     /**
      * 添加快捷方式到桌面，添加快捷方式需要添加用户权限
      * <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-     *
-     * @param context
-     * @param shortCutName
-     * @param resourceId
-     * @param cls
      */
-    public static void addShortCut(Context context, String shortCutName, int resourceId, Class<?> cls) {
+    public static void addShortCut(Context context, String shortCutName, int resourceId,
+            Class<?> cls) {
         Intent shortCutIntent = new Intent(SHORTCUT_ADD_ACTION);
         //添加快捷方式的名字
         shortCutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortCutName);
@@ -69,7 +71,8 @@ public class ShortcutUtil {
 
     @TargetApi(4)
     public static void addAppShortcut(Context context, Class<?> cls) {
-        String label = context.getApplicationInfo().loadLabel(context.getPackageManager()).toString();
+        String label = context.getApplicationInfo().loadLabel(context.getPackageManager())
+                .toString();
         int iconRes = context.getApplicationInfo().icon;
         addShortCut(context.getApplicationContext(), label, iconRes, cls);
     }
@@ -77,8 +80,6 @@ public class ShortcutUtil {
     /**
      * 删除桌面上的快捷方式，需要添加权限
      * <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
-     *
-     * @param context
      */
     @TargetApi(3)
     public static void delShortcut(Context context) {
@@ -103,10 +104,6 @@ public class ShortcutUtil {
     /**
      * 判断桌面上是否有快捷方式，调用此方法需要添加权限
      * <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-     *
-     * @param context
-     * @return
-     * @throws android.content.pm.PackageManager.NameNotFoundException
      */
     public static boolean hasShortcut(Context context) {
 
@@ -133,7 +130,8 @@ public class ShortcutUtil {
         } catch (NameNotFoundException e) {
             logger.error("", e);
         }
-        Cursor c = context.getContentResolver().query(CONTENT_URI, new String[]{"title"}, "title=?", new String[]{appName}, null);
+        Cursor c = context.getContentResolver()
+                .query(CONTENT_URI, new String[]{"title"}, "title=?", new String[]{appName}, null);
         if (c != null && c.getCount() > 0) {
             return true;
         }
@@ -145,7 +143,8 @@ public class ShortcutUtil {
         if (TextUtils.isEmpty(permission)) {
             return null;
         }
-        List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(PackageManager.GET_PROVIDERS);
+        List<PackageInfo> packs = context.getPackageManager()
+                .getInstalledPackages(PackageManager.GET_PROVIDERS);
         if (packs == null) {
             return null;
         }
@@ -153,7 +152,8 @@ public class ShortcutUtil {
             ProviderInfo[] providers = pack.providers;
             if (providers != null) {
                 for (ProviderInfo provider : providers) {
-                    if (permission.equals(provider.readPermission) || permission.equals(provider.writePermission)) {
+                    if (permission.equals(provider.readPermission) || permission
+                            .equals(provider.writePermission)) {
                         return provider.authority;
                     }
                 }
@@ -164,10 +164,6 @@ public class ShortcutUtil {
 
     /**
      * 获取应用的名称
-     *
-     * @param context
-     * @return
-     * @throws android.content.pm.PackageManager.NameNotFoundException
      */
     @TargetApi(4)
     private static String obtatinAppName(Context context) throws NameNotFoundException {

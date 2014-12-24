@@ -20,9 +20,13 @@ public class TabsAdapterNew extends FragmentPagerAdapter implements
         ActionBar.TabListener, ViewPager.OnPageChangeListener {
 
     private static final String KEY_TAB_POSITION = "tab_position";
+
     private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+
     ActionBar mMainActionBar;
+
     Context mContext;
+
     ViewPager mPager;
 
     public TabsAdapterNew(Activity activity, ViewPager pager) {
@@ -58,7 +62,7 @@ public class TabsAdapterNew extends FragmentPagerAdapter implements
 
     @Override
     public void onPageScrolled(int position, float positionOffset,
-                               int positionOffsetPixels) {
+            int positionOffsetPixels) {
         // Do nothing
     }
 
@@ -90,7 +94,9 @@ public class TabsAdapterNew extends FragmentPagerAdapter implements
     }
 
     final class TabInfo {
+
         private final Class<?> clss;
+
         private final Bundle args;
 
         TabInfo(Class<?> _class, int position) {

@@ -6,12 +6,15 @@ import android.content.Intent;
 import cm.android.sdk.AlarmUtil;
 
 public class DaemonManager {
-    public static final String ACTION_ALARM_WAKE_UP = "cm.android.framework.intent.action.ALARM_WAKE_UP";
+
+    public static final String ACTION_ALARM_WAKE_UP
+            = "cm.android.framework.intent.action.ALARM_WAKE_UP";
 
     private DaemonManager() {
     }
 
     private static final class Singleton {
+
         private static final DaemonManager INSTANCE = new DaemonManager();
     }
 

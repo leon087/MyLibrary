@@ -3,20 +3,23 @@ package cm.android.common.ui.view.tabview.slidetabview;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import cm.android.common.ui.view.tabview.BaseTabManager.BaseTabHolder;
-import cm.android.common.ui.view.tabview.slidetabview.SlideTabManager.SlideTabHolder;
 
 import java.util.List;
+
+import cm.android.common.ui.view.tabview.BaseTabManager.BaseTabHolder;
+import cm.android.common.ui.view.tabview.slidetabview.SlideTabManager.SlideTabHolder;
 
 public class SlideTabPagerAdapter extends
         android.support.v4.app.FragmentPagerAdapter {
 
     private List<BaseTabHolder> holders;
+
     private android.support.v4.app.FragmentManager mFragmentManager;
+
     private FragmentActivity mActivity;
 
     public SlideTabPagerAdapter(FragmentActivity activity,
-                                List<BaseTabHolder> holders) {
+            List<BaseTabHolder> holders) {
         super(activity.getSupportFragmentManager());
         mActivity = activity;
         mFragmentManager = activity.getSupportFragmentManager();
@@ -53,13 +56,9 @@ public class SlideTabPagerAdapter extends
 
     /**
      * 根据position获取Fragment
-     *
-     * @param container
-     * @param position
-     * @return
      */
     public android.support.v4.app.Fragment getFragment(View container,
-                                                       int position) {
+            int position) {
         position = position % holders.size();
         final long itemId = getItemId(position);
         // Do we already have this fragment?

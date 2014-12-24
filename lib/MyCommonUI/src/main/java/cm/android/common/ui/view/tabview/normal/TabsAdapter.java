@@ -9,24 +9,32 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
-import cm.android.common.ui.view.tabview.BaseTabManager.OnTabPageChangeListener;
 
 import java.util.ArrayList;
+
+import cm.android.common.ui.view.tabview.BaseTabManager.OnTabPageChangeListener;
 
 public class TabsAdapter extends android.support.v4.app.FragmentPagerAdapter
         implements ActionBar.TabListener, ViewPager.OnPageChangeListener {
 
     private static final String KEY_TAB_POSITION = "tab_position";
+
     private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+
     ActionBar mMainActionBar;
+
     Context mContext;
+
     ViewPager mPager;
+
     private android.support.v4.app.FragmentManager mFragmentManager;
+
     private OnTabPageChangeListener onTabPageChangeListener;
+
     private int prevPosition;
 
     public TabsAdapter(FragmentActivity activity, ViewPager pager,
-                       OnTabPageChangeListener onTabPageChangeListener) {
+            OnTabPageChangeListener onTabPageChangeListener) {
         super(activity.getSupportFragmentManager());
         mContext = activity;
         mMainActionBar = activity.getActionBar();
@@ -94,7 +102,7 @@ public class TabsAdapter extends android.support.v4.app.FragmentPagerAdapter
 
     @Override
     public void onPageScrolled(int position, float positionOffset,
-                               int positionOffsetPixels) {
+            int positionOffsetPixels) {
         // Do nothing
     }
 
@@ -135,13 +143,9 @@ public class TabsAdapter extends android.support.v4.app.FragmentPagerAdapter
 
     /**
      * 根据position获取Fragment
-     *
-     * @param container
-     * @param position
-     * @return
      */
     public android.support.v4.app.Fragment getFragment(View container,
-                                                       int position) {
+            int position) {
         final long itemId = getItemId(position);
         // Do we already have this fragment?
         String name = makeFragmentName(container.getId(), itemId);
@@ -151,7 +155,9 @@ public class TabsAdapter extends android.support.v4.app.FragmentPagerAdapter
     }
 
     final class TabInfo {
+
         private final Class<?> clss;
+
         private final Bundle args;
 
         TabInfo(Class<?> _class, int position) {

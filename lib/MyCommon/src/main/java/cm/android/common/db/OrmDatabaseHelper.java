@@ -1,24 +1,29 @@
 package cm.android.common.db;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import cm.android.util.ObjectUtil;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.sql.SQLException;
 import java.util.Set;
+
+import cm.android.util.ObjectUtil;
 
 /**
  * 数据库包装类
  */
 final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
+
     private static final Logger logger = LoggerFactory.getLogger("DB");
+
     private final static Set<Class<? extends BaseBean>> sTables = ObjectUtil
             .newHashSet();
 
@@ -33,7 +38,7 @@ final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database,
-                         ConnectionSource connectionSource) {
+            ConnectionSource connectionSource) {
         try {
             for (Class<?> clazz : sTables) {
                 TableUtils.createTable(connectionSource, clazz);
@@ -45,18 +50,18 @@ final class OrmDatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     @TargetApi(11)
     public void onDowngrade(SQLiteDatabase database, int oldVersion,
-                            int newVersion) {
+            int newVersion) {
         updateDatabase(database, connectionSource, oldVersion, newVersion);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database,
-                          ConnectionSource connectionSource, int oldVersion, int newVersion) {
+            ConnectionSource connectionSource, int oldVersion, int newVersion) {
         updateDatabase(database, connectionSource, oldVersion, newVersion);
     }
 
     private void updateDatabase(SQLiteDatabase database,
-                                ConnectionSource connectionSource, int oldVersion, int newVersion) {
+            ConnectionSource connectionSource, int oldVersion, int newVersion) {
         logger.info("newVersion = {},oldVersion = {}", newVersion, oldVersion);
         if (newVersion != oldVersion) {
             try {

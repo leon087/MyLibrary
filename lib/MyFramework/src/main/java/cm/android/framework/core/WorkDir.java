@@ -1,22 +1,26 @@
 package cm.android.framework.core;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import cm.android.util.EnvironmentUtil;
-import cm.android.util.ObjectUtil;
-import cm.android.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import android.annotation.TargetApi;
+import android.content.Context;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 
+import cm.android.util.EnvironmentUtil;
+import cm.android.util.ObjectUtil;
+import cm.android.util.Utils;
+
 /**
  * 目录管理基类
  */
 public class WorkDir {
+
     private static final PrivateWorkDir privateWorkDir = new PrivateWorkDir();
+
     private static final PublicWorkDir publicWorkDir = new PublicWorkDir();
 
     private static final Logger logger = LoggerFactory.getLogger(WorkDir.class);
@@ -53,7 +57,9 @@ public class WorkDir {
     }
 
     private static abstract class BaseWorkDir {
+
         private final HashMap<String, File> dirs = ObjectUtil.newHashMap();
+
         protected File workDir = null;
 
         protected void initWorkDir(Context context, String... dirNames) {
@@ -66,9 +72,6 @@ public class WorkDir {
 
         /**
          * 获取目录
-         *
-         * @param dir
-         * @return
          */
         public File getDir(String dir) {
             // return new File(workDir, mDirs.get(dir)).getAbsolutePath()
@@ -97,6 +100,7 @@ public class WorkDir {
     }
 
     private static class PrivateWorkDir extends BaseWorkDir {
+
         public static final String WORK_PATH = "workpath";
 
         @Override

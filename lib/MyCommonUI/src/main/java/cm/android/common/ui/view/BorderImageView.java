@@ -1,14 +1,21 @@
 package cm.android.common.ui.view;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class BorderImageView extends ImageView {
+
     private String namespace = "http://schemas.nbtstatx.com/android";
+
     private int color = 0;
+
     private float borderWidth = 0;
 
     public BorderImageView(Context context, AttributeSet attrs) {

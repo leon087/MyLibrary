@@ -1,16 +1,18 @@
 package cm.android.common.db;
 
-import cm.android.util.ObjectUtil;
-
 import java.util.Collection;
 import java.util.Set;
 
+import cm.android.util.ObjectUtil;
+
 public class DatabaseConfig {
+
     /**
      * 数据库表集合
      */
     static final Set<Class<? extends BaseBean>> TABLE_LIST = ObjectUtil
             .newHashSet();
+
     /**
      * 数据库版本号
      */
@@ -29,13 +31,13 @@ public class DatabaseConfig {
      * @param beanClazzs table集合
      */
     public static void initDatabase(int version,
-                                    Collection<Class<? extends BaseBean>> beanClazzs) {
+            Collection<Class<? extends BaseBean>> beanClazzs) {
         initVersion(version);
         TABLE_LIST.addAll(beanClazzs);
     }
 
     public static void initDatabase(int version,
-                                    Class<? extends BaseBean> beanClazzs) {
+            Class<? extends BaseBean> beanClazzs) {
         initVersion(version);
         TABLE_LIST.add(beanClazzs);
     }

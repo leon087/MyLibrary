@@ -1,17 +1,22 @@
 package cm.android.net;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+
 import cm.android.sdk.content.BaseBroadcastReceiver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class NetworkStateChanged {
+
     private static final Logger logger = LoggerFactory.getLogger(NetworkStateReceiver.class);
 
-    private static final NetworkChangeObserver defNetworkChangeObserver = new NetworkChangeObserver();
+    private static final NetworkChangeObserver defNetworkChangeObserver
+            = new NetworkChangeObserver();
+
     private NetworkStateReceiver receiver = new NetworkStateReceiver();
 
     private NetworkChangeObserver observer = defNetworkChangeObserver;
@@ -36,7 +41,8 @@ public class NetworkStateChanged {
         this.observer = observer;
     }
 
-    private synchronized void notifyObserver(boolean isNetworkAvailable, NetworkUtil.NetType netType) {
+    private synchronized void notifyObserver(boolean isNetworkAvailable,
+            NetworkUtil.NetType netType) {
         if (isNetworkAvailable) {
             observer.onConnect(netType);
         } else {
@@ -45,7 +51,9 @@ public class NetworkStateChanged {
     }
 
     public class NetworkStateReceiver extends BaseBroadcastReceiver {
-        private final static String ANDROID_NET_CHANGE_ACTION = ConnectivityManager.CONNECTIVITY_ACTION;
+
+        private final static String ANDROID_NET_CHANGE_ACTION
+                = ConnectivityManager.CONNECTIVITY_ACTION;
 
         @Override
         public IntentFilter createIntentFilter() {
@@ -71,6 +79,7 @@ public class NetworkStateChanged {
     }
 
     public static class NetworkChangeObserver {
+
         /**
          * 网络连接连接时调用
          */

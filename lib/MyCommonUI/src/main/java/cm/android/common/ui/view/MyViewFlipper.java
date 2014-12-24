@@ -9,6 +9,7 @@ import android.widget.AdapterViewFlipper;
 
 @TargetApi(12)
 public class MyViewFlipper extends AdapterViewFlipper {
+
     private static final int ANIMATOR_DURATION = 300;
 
     public MyViewFlipper(Context context) {
@@ -54,7 +55,9 @@ public class MyViewFlipper extends AdapterViewFlipper {
     }
 
     private static class AnimatorHolder {
+
         private ObjectAnimator in;
+
         private ObjectAnimator out;
 
         public static AnimatorHolder next(View target) {

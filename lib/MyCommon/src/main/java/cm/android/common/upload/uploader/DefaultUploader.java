@@ -1,21 +1,34 @@
 package cm.android.common.upload.uploader;
 
-import cm.android.common.upload.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
+
+import cm.android.common.upload.IUpload;
+import cm.android.common.upload.IUploadListener;
+import cm.android.common.upload.IUploader;
+import cm.android.common.upload.UploadException;
+import cm.android.common.upload.UploadItem;
+import cm.android.common.upload.UploadStatus;
+import cm.android.common.upload.UploadTask;
 import cm.android.util.IoUtil;
 import cm.android.util.MapUtil;
 import cm.android.util.MyLog;
 import cm.android.util.Utils;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Map;
-
 public class DefaultUploader implements IUploader<UploadTask> {
+
     private static final int BUFFER = 1024 * 32;
+
     private static final int RETRY = 5;
 
     private IUpload upload;
+
     public RandomAccessFile randomFile;
 
     /**
@@ -29,7 +42,7 @@ public class DefaultUploader implements IUploader<UploadTask> {
 
     // 封装一个Http连接
     public HttpURLConnection getUploadConnection(String reqUrl,
-                                                 Map<String, String> parameters) throws UploadException {
+            Map<String, String> parameters) throws UploadException {
         if (MyLog.isDebug()) {
             MyLog.d(reqUrl);
         }
@@ -68,12 +81,10 @@ public class DefaultUploader implements IUploader<UploadTask> {
 
     /**
      * 读取文件，分段读取，读一段，上传一段，把一段文件数据扔到upload()核心方法中上传
-     *
-     * @param fileUrl
      */
     @Override
     public boolean upload(UploadTask task,
-                          IUploadListener<UploadTask> iUploadListener) throws UploadException {
+            IUploadListener<UploadTask> iUploadListener) throws UploadException {
         // if (!EnvironmentUtil.isExternalStorageUsable()) {
         // throw new UploadException(
         // UploadException.EXTERNAL_STORAGE_USABLE_ERROR);

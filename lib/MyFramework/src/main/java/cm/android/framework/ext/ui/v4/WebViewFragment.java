@@ -6,13 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+
 import cm.android.util.EnvironmentUtil.SdkUtil;
 
 /**
  * A copy of Honeycomb's {@link android.webkit.WebViewFragment}.
  */
 public class WebViewFragment extends Fragment {
+
     private WebView mWebView;
+
     private boolean mIsWebViewAvailable;
 
     public WebViewFragment() {
@@ -23,7 +26,7 @@ public class WebViewFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         if (mWebView != null) {
             mWebView.destroy();
         }

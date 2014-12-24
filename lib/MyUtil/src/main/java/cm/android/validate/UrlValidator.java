@@ -5,6 +5,7 @@ import android.util.Patterns;
 import java.util.regex.Pattern;
 
 public class UrlValidator extends BaseValidator {
+
     private static final Pattern WEB_URL_PATTERN = Patterns.WEB_URL;
 
     @Override

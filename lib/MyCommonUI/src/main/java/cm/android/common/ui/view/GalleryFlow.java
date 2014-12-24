@@ -11,8 +11,11 @@ import android.widget.Gallery;
 public class GalleryFlow extends Gallery {
 
     private Camera mCamera = new Camera();
+
     private int mMaxRotationAngle = 60;
+
     private int mMaxZoom = -120;
+
     private int mCoveflowCenter;
 
     public GalleryFlow(Context context) {
@@ -67,7 +70,8 @@ public class GalleryFlow extends Gallery {
         if (childCenter == mCoveflowCenter) {
             transformImageBitmap(child, t, 0);
         } else {
-            rotationAngle = (int) (((float) (mCoveflowCenter - childCenter) / childWidth) * mMaxRotationAngle);
+            rotationAngle = (int) (((float) (mCoveflowCenter - childCenter) / childWidth)
+                    * mMaxRotationAngle);
             if (Math.abs(rotationAngle) > mMaxRotationAngle) {
                 rotationAngle = (rotationAngle < 0) ? -mMaxRotationAngle
                         : mMaxRotationAngle;
@@ -84,7 +88,7 @@ public class GalleryFlow extends Gallery {
     }
 
     private void transformImageBitmap(View child, Transformation t,
-                                      int rotationAngle) {
+            int rotationAngle) {
         mCamera.save();
         final Matrix imageMatrix = t.getMatrix();
         final int imageHeight = child.getLayoutParams().height;

@@ -10,6 +10,7 @@ import java.security.MessageDigest;
  * MD5工具
  */
 public class Md5Util {
+
     private static final char HEX_DIGITS[] = {'0', '1', '2', '3', '4', '5',
             '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
@@ -28,8 +29,9 @@ public class Md5Util {
             StringBuffer d = new StringBuffer("");
             for (int i = 0; i < hash.length; i++) {
                 int v = hash[i] & 0xFF;
-                if (v < 16)
+                if (v < 16) {
                     d.append("0");
+                }
                 d.append(Integer.toString(v, 16).toUpperCase() + "");
             }
             return d.toString();

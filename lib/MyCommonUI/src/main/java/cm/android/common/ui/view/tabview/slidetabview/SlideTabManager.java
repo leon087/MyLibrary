@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+
 import cm.android.common.ui.view.tabview.BaseTabManager;
 
 public class SlideTabManager extends BaseTabManager {
@@ -18,7 +19,7 @@ public class SlideTabManager extends BaseTabManager {
     }
 
     public ViewPager initView(ViewPager viewPager,
-                              OnTabPageChangeListener onTabPageChangeListener) {
+            OnTabPageChangeListener onTabPageChangeListener) {
         mViewPager = viewPager;
         // mViewPager = new ViewPager(mActivity);
         // PagerTabStrip pagerTabStrip = new PagerTabStrip(mActivity);
@@ -45,18 +46,20 @@ public class SlideTabManager extends BaseTabManager {
     }
 
     private class MyOnPageChangeListener implements OnPageChangeListener {
+
         private int prevPosition;
+
         private OnTabPageChangeListener onTabPageChangeListener;
 
         MyOnPageChangeListener(int position,
-                               OnTabPageChangeListener onTabPageChangeListener) {
+                OnTabPageChangeListener onTabPageChangeListener) {
             prevPosition = position;
             this.onTabPageChangeListener = onTabPageChangeListener;
         }
 
         @Override
         public void onPageScrolled(int position, float positionOffset,
-                                   int positionOffsetPixels) {
+                int positionOffsetPixels) {
             // This space for rent
         }
 

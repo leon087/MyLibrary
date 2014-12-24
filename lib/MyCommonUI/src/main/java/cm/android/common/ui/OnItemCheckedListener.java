@@ -4,14 +4,18 @@ package cm.android.common.ui;
  * 提供item check状态
  */
 public interface OnItemCheckedListener {
+
     void onItemChecked(int position, boolean checked);
 
     /**
      * 单选Holder
      */
     public static class SingleItemCheckHolder {
+
         private static final int INVALID = -1;
+
         private int checkedPosition = INVALID;
+
         private OnItemCheckedListener onItemCheckedListener;
 
         public SingleItemCheckHolder() {
@@ -19,8 +23,6 @@ public interface OnItemCheckedListener {
 
         /**
          * 选中
-         *
-         * @param position
          */
         public void check(int position) {
             if (onItemCheckedListener != null) {

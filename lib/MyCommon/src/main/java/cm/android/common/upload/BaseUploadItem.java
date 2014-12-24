@@ -1,6 +1,7 @@
 package cm.android.common.upload;
 
 public class BaseUploadItem implements IUploadInterface {
+
     private int operate;
 
     @Override

@@ -3,6 +3,7 @@ package cm.android.common.db;
 import com.j256.ormlite.field.DatabaseField;
 
 public abstract class BaseBean {
+
     @DatabaseField(generatedId = true)
     private int _id;
 

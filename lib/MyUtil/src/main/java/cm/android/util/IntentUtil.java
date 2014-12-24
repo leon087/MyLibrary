@@ -1,10 +1,11 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -12,6 +13,7 @@ import java.io.File;
  * 封装了一些Intent操作
  */
 public class IntentUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(IntentUtil.class);
     // private static Context sContext = StoreApp.getApp();
     //
@@ -30,12 +32,8 @@ public class IntentUtil {
 
     /**
      * 打开一个应用
-     *
-     * @param context
-     * @param packageName
-     * @return
      */
-    public static boolean openApp(Context context, String packageName) {
+    public static boolean launchApp(Context context, String packageName) {
         try {
             Intent intent = context.getPackageManager()
                     .getLaunchIntentForPackage(packageName);
@@ -51,9 +49,6 @@ public class IntentUtil {
 
     /**
      * 发送安装请求，调用系统安装界面
-     *
-     * @param context
-     * @param packageURI
      */
     public static boolean installPackage(Context context, Uri packageURI) {
         File file = new File(packageURI.getPath());
@@ -73,9 +68,6 @@ public class IntentUtil {
 
     /**
      * 发送卸载应用请求，调用系统卸载界面
-     *
-     * @param context
-     * @param packageName
      */
     public static boolean deletePackage(Context context, String packageName) {
         if (Utils.isEmpty(packageName)) {

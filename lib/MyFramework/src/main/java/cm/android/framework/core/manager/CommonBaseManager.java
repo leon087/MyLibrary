@@ -1,12 +1,14 @@
 package cm.android.framework.core.manager;
 
 import android.content.Context;
+
 import cm.android.framework.core.global.GlobalData;
 
 public class CommonBaseManager extends BaseManager {
+
     @Override
     protected void onInit(Context context) {
-        
+
     }
 
     @Override

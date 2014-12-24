@@ -1,13 +1,5 @@
 package cm.android.util;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.res.AssetManager;
-import android.os.Bundle;
-import android.text.TextUtils;
-
 import com.alibaba.fastjson.JSON;
 
 import org.apache.http.Header;
@@ -16,6 +8,14 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.res.AssetManager;
+import android.os.Bundle;
+import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -50,6 +50,7 @@ import cm.android.sdk.MyParcelable;
  * 常用工具类
  */
 public final class Utils {
+
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
     private Utils() {
@@ -101,9 +102,7 @@ public final class Utils {
     /**
      * 判断文件MimeType的方法
      *
-     * @param f
      * @param isOpen 目的打开方式为true
-     * @return
      */
     public static String getMIMEType(File f, boolean isOpen) {
         String type = "";
@@ -180,13 +179,11 @@ public final class Utils {
 
     /**
      * check the http response data
-     *
-     * @param response
-     * @return
      */
     public static boolean checkResponseEntity(HttpResponse response) {
-        if (response == null)
+        if (response == null) {
             return false;
+        }
         if (response.getEntity().getContentLength() == 0
                 || (response.getEntity().getContentType() != null && response
                 .getEntity().getContentType().getValue()
@@ -200,7 +197,7 @@ public final class Utils {
      * 桩模块(Stub), 获取假数据，用于各个子功能单元测试
      */
     public static Map<String, Object> getStubFile(Context cxt,
-                                                  String stubFileName) {
+            String stubFileName) {
         if (Utils.isEmpty(stubFileName)) {
             return ObjectUtil.newHashMap();
         }
@@ -259,8 +256,9 @@ public final class Utils {
      * @return
      */
     public static int getLineCount(String text) {
-        if (text == null)
+        if (text == null) {
             return 0;
+        }
         int lineCount = 0;
         String[] br = text.split("<br>");
         System.out.println("br.length = " + br.length);
@@ -360,12 +358,9 @@ public final class Utils {
 
     /**
      * 加载Properties
-     *
-     * @param propertiesName
-     * @return
      */
     public static Properties loadProperties(Context context,
-                                            String propertiesName) {
+            String propertiesName) {
         Properties props = new Properties();
         try {
             int id = context.getResources().getIdentifier(propertiesName,
@@ -396,12 +391,16 @@ public final class Utils {
 
     public static int convertToInt(String str) throws NumberFormatException {
         int s, e;
-        for (s = 0; s < str.length(); s++)
-            if (Character.isDigit(str.charAt(s)))
+        for (s = 0; s < str.length(); s++) {
+            if (Character.isDigit(str.charAt(s))) {
                 break;
-        for (e = str.length(); e > 0; e--)
-            if (Character.isDigit(str.charAt(e - 1)))
+            }
+        }
+        for (e = str.length(); e > 0; e--) {
+            if (Character.isDigit(str.charAt(e - 1))) {
                 break;
+            }
+        }
         if (e > s) {
             try {
                 return Integer.parseInt(str.substring(s, e));
@@ -426,9 +425,6 @@ public final class Utils {
 
     /**
      * 获取classes.dex文件CRC值
-     *
-     * @param context
-     * @return
      */
     @TargetApi(8)
     public static long getDexCrc(Context context) {

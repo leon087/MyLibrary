@@ -9,13 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PageViewConfig {
+
     protected List<View> listViews; // Tab页面列表
+
     protected List<String> titles;
+
     protected Context mContext;
+
     protected int count;
 
     protected android.support.v4.view.ViewPager mViewPager;
+
     protected RadioGroup tabGroup;
+
     private View rootView;
 
     public PageViewConfig(Context context, int count) {

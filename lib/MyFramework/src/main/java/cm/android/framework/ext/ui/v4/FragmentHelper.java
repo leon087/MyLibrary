@@ -1,13 +1,14 @@
 package cm.android.framework.ext.ui.v4;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentTransaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * FragmentManager包装类
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 public class FragmentHelper {
 
     private FragmentManager mFragmentManager;
+
     private static final Logger logger = LoggerFactory.getLogger(FragmentHelper.class);
 
     public FragmentHelper(FragmentManager fragmentManager) {
@@ -41,9 +43,6 @@ public class FragmentHelper {
 
     /**
      * 获取BackStack中对应位置的Fragment
-     *
-     * @param position
-     * @return
      */
     public BackStackEntry getBackStackEntry(int position) {
         int count = mFragmentManager.getBackStackEntryCount();
@@ -68,10 +67,6 @@ public class FragmentHelper {
 
     /**
      * 替换resId中存在的Fragment
-     *
-     * @param arguments
-     * @param resId
-     * @param fragment
      */
     public void replace(Bundle arguments, int resId, Fragment fragment) {
         String tag = fragment.getClass().getName();
@@ -90,10 +85,6 @@ public class FragmentHelper {
 
     /**
      * 在resId中添加Fragment
-     *
-     * @param arguments
-     * @param resId
-     * @param fragment
      */
     public void add(Bundle arguments, int resId, Fragment fragment) {
         String tag = fragment.getClass().getName();
@@ -115,9 +106,6 @@ public class FragmentHelper {
 
     /**
      * 弹出对话框
-     *
-     * @param arguments
-     * @param dialogFragment
      */
     public void showDialog(Bundle arguments, DialogFragment dialogFragment) {
         String tag = dialogFragment.getClass().getName();
@@ -135,8 +123,6 @@ public class FragmentHelper {
 
     /**
      * 删除对话框Fragment
-     *
-     * @param dialogFragment
      */
     public void removeDialogFragment(DialogFragment dialogFragment) {
         // String backStateName = dialogFragment.getClass().getSimpleName();
@@ -165,8 +151,6 @@ public class FragmentHelper {
 
     /**
      * 删除一个fragment
-     *
-     * @param fragment
      */
     public void removeFragment(Fragment fragment) {
         if (fragment != null) {
@@ -179,9 +163,6 @@ public class FragmentHelper {
 
     /**
      * 通过findFragmentByTag获取Fragment，如果不存在则会根据默认构造创建出Fragment对象
-     *
-     * @param clazz
-     * @return
      */
     public android.support.v4.app.Fragment findFragment(
             Class<? extends android.support.v4.app.Fragment> clazz) {
@@ -220,9 +201,6 @@ public class FragmentHelper {
 
     /**
      * 根据xml中设置的ID来查找Fragment
-     *
-     * @param resId
-     * @return
      */
     public android.support.v4.app.Fragment findFragmentById(int resId) {
         android.support.v4.app.Fragment fragment = mFragmentManager
@@ -232,8 +210,6 @@ public class FragmentHelper {
 
     /**
      * 根据Tag查找Fragment
-     *
-     * @return
      */
     public android.support.v4.app.Fragment findFragmentByTag(
             Class<? extends android.support.v4.app.Fragment> clazz) {

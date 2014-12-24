@@ -5,12 +5,19 @@ import java.util.EventObject;
 public class PageEvent extends EventObject {
 
     public static final int EVENT_PAGE_LAST = 1;
+
     public static final int EVENT_PAGE_PREV = 2;
+
     public static final int EVENT_PAGE_NEXT = 3;
+
     public static final int EVENT_PAGE_FIRST = 4;
+
     public static final int EVENT_PAGE_GOTO = 5;
+
     private static final long serialVersionUID = 1L;
+
     private int code;
+
     private int page;
 
     public PageEvent(Object source) {

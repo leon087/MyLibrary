@@ -3,6 +3,7 @@ package cm.android.log;
 /**
  */
 public interface ILogger {
+
     void d(String msg);
 
     void i(String msg);

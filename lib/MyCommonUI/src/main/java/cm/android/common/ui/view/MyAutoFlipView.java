@@ -13,15 +13,21 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Gallery;
 import android.widget.ViewFlipper;
+
 import cm.android.util.MyLog;
 
 public class MyAutoFlipView extends Gallery {
 
     private static final int DEFAULT_INTERVAL = 3000;
+
     private int mFlipInterval = DEFAULT_INTERVAL;
+
     private final int FLIP_MSG = 1;
+
     private boolean mAutoStart = false;
+
     private boolean mRunning = false;
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -36,9 +42,13 @@ public class MyAutoFlipView extends Gallery {
             }
         }
     };
+
     private boolean mStarted = false;
+
     private boolean mVisible = false;
+
     private boolean mUserPresent = true;
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -213,7 +223,7 @@ public class MyAutoFlipView extends Gallery {
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                           float velocityY) {
+            float velocityY) {
         int kEvent;
         if (isScrollingLeft(e1, e2)) {
             // Check if scrolling left

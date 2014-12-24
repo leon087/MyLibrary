@@ -1,6 +1,7 @@
 package cm.android.custom;
 
 import android.content.Context;
+
 import cm.android.common.http.HttpLoader;
 import cm.android.common.http.MyHttp;
 import cm.android.framework.core.manager.CommonBaseManager;
@@ -9,6 +10,7 @@ import cm.android.sdk.content.ExternalStorageReceiver;
 import cm.android.sdk.content.ExternalStorageReceiver.ExternalStorageListener;
 
 public class MyServiceManager extends CommonBaseManager {
+
     private Context mContext;
 
     MyServiceManager() {

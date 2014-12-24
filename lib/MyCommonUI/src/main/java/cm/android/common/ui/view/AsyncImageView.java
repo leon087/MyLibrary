@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.widget.ImageView;
 
 public class AsyncImageView extends ImageView {
+
     private String url;
 
     public AsyncImageView(Context context) {
@@ -22,12 +23,9 @@ public class AsyncImageView extends ImageView {
 
     /**
      * Notifies the drawable that it's displayed state has changed.
-     *
-     * @param drawable
-     * @param isDisplayed
      */
     private static void notifyDrawable(Drawable drawable,
-                                       final boolean isDisplayed) {
+            final boolean isDisplayed) {
         // if (drawable instanceof RecyclingBitmapDrawable) {
         // // The drawable is a CountingBitmapDrawable, so notify it
         // ((RecyclingBitmapDrawable) drawable).setIsDisplayed(isDisplayed);
@@ -75,8 +73,6 @@ public class AsyncImageView extends ImageView {
 
     /**
      * 设置地址
-     *
-     * @param url
      */
     public void setImageUrl(String url) {
         // MyServiceManager.getAsyncImageManager().setImageUrl(this, url);

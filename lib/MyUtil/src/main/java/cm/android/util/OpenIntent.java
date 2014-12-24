@@ -6,6 +6,7 @@ import android.net.Uri;
 import java.io.File;
 
 public class OpenIntent {
+
     // android获取一个用于打开HTML文件的intent
     public static Intent getHtmlFileIntent(File file) {
         Uri uri = Uri.parse(file.toString()).buildUpon()

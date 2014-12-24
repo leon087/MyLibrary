@@ -17,6 +17,7 @@ public final class MyPackageManager {
      * to delete the package's data directory.
      */
     public static final int DONT_DELETE_DATA = 0x01;
+
     public static final int DELETE_DATA = 0x02;
     // public static final int DONT_DELETE_DATA =
     // PackageManager.DELETE_KEEP_DATA;
@@ -88,8 +89,8 @@ public final class MyPackageManager {
      *                             came from.
      */
     public void installPackage(final Uri packageURI,
-                               final IPackageInstallObserver observer, final int flags,
-                               final String installerPackageName) {
+            final IPackageInstallObserver observer, final int flags,
+            final String installerPackageName) {
         mPm.installPackage(packageURI, observer, flags, installerPackageName);
     }
 
@@ -111,17 +112,19 @@ public final class MyPackageManager {
      * @param flags       - possible values: {@link #DONT_DELETE_DATA}
      */
     public void deletePackage(String packageName,
-                              IPackageDeleteObserver observer, int flags) {
+            IPackageDeleteObserver observer, int flags) {
         mPm.deletePackage(packageName, observer, flags);
     }
 }
 
 abstract class PackageInstallObserver extends IPackageInstallObserver.Stub {
+
     @Override
     public abstract void packageInstalled(String packageName, int returnCode);
 }
 
 abstract class PackageDeleteObserver extends IPackageDeleteObserver.Stub {
+
     @Override
     public abstract void packageDeleted(String packageName, int returnCode)
             throws RemoteException;

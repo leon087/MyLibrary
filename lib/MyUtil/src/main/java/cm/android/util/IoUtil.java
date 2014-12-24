@@ -1,11 +1,11 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.StatFs;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -34,7 +34,9 @@ import cm.android.cmd.CmdExecute;
  * IO读写Util类
  */
 public class IoUtil {
+
     private static final int BUF_SIZE = 1024 * 100;
+
     private static final Logger logger = LoggerFactory.getLogger(IoUtil.class);
 
     private IoUtil() {
@@ -42,9 +44,6 @@ public class IoUtil {
 
     /**
      * 判断目录是否可用, 已经挂载并且拥有可读可写权限 true 可用
-     *
-     * @param path
-     * @return
      */
     public static boolean isDirectoryValid(String path) {
         File file = new File(path);
@@ -61,9 +60,6 @@ public class IoUtil {
 
     /**
      * 创建文件夹
-     *
-     * @param directorFilePath
-     * @return
      */
     public static boolean createDirector(String directorFilePath) {
         String[] dirStructor = parseDirSturctor(directorFilePath);
@@ -134,13 +130,9 @@ public class IoUtil {
 
     /**
      * 移动Assets目录下的文件
-     *
-     * @param context
-     * @param assetPath
-     * @param dir
      */
     public static void writeAssetToPhone(Context context, String assetPath,
-                                         String dir) {
+            String dir) {
         if (getAllFiles(dir).length != 0) {
             return;
         }
@@ -228,9 +220,6 @@ public class IoUtil {
 
     /**
      * 删除某个目录下的所有文件，但不删除该目录
-     *
-     * @param dir
-     * @return
      */
     public static boolean deleteFiles(File dir) {
         if (!dir.isDirectory()) {
@@ -246,9 +235,6 @@ public class IoUtil {
 
     /**
      * 删除文件，如果该文件是个目录，则会删除该目录以及该目录下所有文件
-     *
-     * @param dir
-     * @return
      */
     public static boolean deleteDir(File dir) {
         if (dir == null || !dir.exists()) {
@@ -267,12 +253,11 @@ public class IoUtil {
     /**
      * 拷贝用户目录下文件到指定路径
      *
-     * @param context
      * @param srcName      The name of the file to open; can not contain path separators.
      * @param destFilePath 拷贝路径
      */
     public static void copyFile(Context context, String srcName,
-                                String destFilePath) {
+            String destFilePath) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -329,9 +314,6 @@ public class IoUtil {
 
     /**
      * 创建文件
-     *
-     * @param file
-     * @return
      */
     private static boolean createNewFile(File file) {
         try {
@@ -348,7 +330,7 @@ public class IoUtil {
      * @return
      */
     public static ArrayList<String> searchFileToString(String path,
-                                                       String postfix) {
+            String postfix) {
         if (!path.endsWith(File.separator)) {
             path = path + File.separator;
         }
@@ -395,40 +377,34 @@ public class IoUtil {
 
     /**
      * 获取指定路径下的所有文件列表
-     *
-     * @param remotePathName
-     * @return
      */
     public static String[] getAllFiles(String remotePathName) {
         File file = new File(remotePathName);
-        if (!file.isDirectory())
+        if (!file.isDirectory()) {
             return new String[0];
+        }
         return file.list();
     }
 
     /**
      * 获取指定路径下的所有文件
-     *
-     * @param
-     * @return
      */
     public static File[] getFiles(File dir, FilenameFilter filenameFilter) {
-        if (!dir.isDirectory())
+        if (!dir.isDirectory()) {
             return new File[0];
+        }
         return dir.listFiles(filenameFilter);
     }
 
     /**
      * 获取执行路径下的所有文件列表，按最后修改时间排序
-     *
-     * @param remotePathName
-     * @return
      */
     public static List<String> getAllFilesByLastModifyTime(String remotePathName) {
         List<String> allFilesName = new ArrayList<String>();
         File file = new File(remotePathName);
-        if (!file.isDirectory())
+        if (!file.isDirectory()) {
             return new ArrayList<String>();
+        }
         File[] fileList = file.listFiles();
         // 按照文件最后修改时间排序
         // List<File> infoIds = Arrays.asList( file.listFiles() );
@@ -448,9 +424,6 @@ public class IoUtil {
 
     /**
      * 获取指定目录下文件大小
-     *
-     * @param rootDir
-     * @return
      */
     public static long getDirTotalSize(String rootDir) {
         File dir = new File(rootDir);
@@ -469,13 +442,11 @@ public class IoUtil {
 
     /**
      * 根据文件路径获取文件名称
-     *
-     * @param filePath
-     * @return
      */
     public static String getFileName(String filePath) {
-        if (null == filePath)
+        if (null == filePath) {
             return null;
+        }
         int end = filePath.lastIndexOf(".");
         int start = filePath.lastIndexOf(File.separator);
         String fileName = filePath.substring(start + 1, end);
@@ -504,8 +475,6 @@ public class IoUtil {
 
     /**
      * 读取源文件
-     *
-     * @throws Exception
      */
     public static byte[] readFile(File file) {
         if (null == file || !file.isFile()) {
@@ -532,10 +501,6 @@ public class IoUtil {
 
     /**
      * 将byte数组写入文件
-     *
-     * @param value
-     * @param file
-     * @return
      */
     public static boolean writeFile(byte[] value, File file) {
         if (null == value || null == file) {
@@ -568,14 +533,9 @@ public class IoUtil {
 
     /**
      * 把srcFilePath写入/data/data/<包名>/files/目录下
-     *
-     * @param srcFilePath
-     * @param destFileName
-     * @param context
-     * @return
      */
     public static boolean writeToDataDir(String srcFilePath,
-                                         String destFileName, Context context) {
+            String destFileName, Context context) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -601,11 +561,9 @@ public class IoUtil {
      *
      * @param zipfile   zip压缩包
      * @param entryName 需要读取的压缩包中文件文件名
-     * @param soFile
-     * @return
      */
     public static boolean writeZipFile(ZipFile zipfile, String entryName,
-                                       File soFile) {
+            File soFile) {
         InputStream is = null;
         OutputStream os = null;
         try {
@@ -631,10 +589,6 @@ public class IoUtil {
 
     /**
      * 将{@link InputStream}中内容写入{@link OutputStream}
-     *
-     * @param inputStream
-     * @param outputStream
-     * @throws IOException
      */
     public static void write(InputStream inputStream, OutputStream outputStream)
             throws IOException {
@@ -647,9 +601,6 @@ public class IoUtil {
 
     /**
      * 读取{@link InputStream}中内容，以byte[]返回
-     *
-     * @param inputStream
-     * @return
      */
     public static byte[] read(InputStream inputStream) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -666,9 +617,6 @@ public class IoUtil {
 
     /**
      * 对象序列化
-     *
-     * @param obj
-     * @return
      */
     public static byte[] serialIn(Object obj) {
         if (obj == null) {
@@ -692,9 +640,6 @@ public class IoUtil {
 
     /**
      * 返序列化
-     *
-     * @param buf
-     * @return
      */
     public static Object serialOut(byte[] buf) {
         if (buf == null) {

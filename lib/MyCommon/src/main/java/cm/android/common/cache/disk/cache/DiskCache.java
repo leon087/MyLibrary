@@ -12,6 +12,7 @@ import cm.android.common.cache.core.ICache;
 import cm.android.util.IoUtil;
 
 public abstract class DiskCache<V> implements ICache<String, V> {
+
     private static final Logger logger = LoggerFactory.getLogger(DiskCache.class);
 
     // HttpResponseCache的使用 缓存 cache,Caches HTTP and HTTPS responses to the
@@ -20,7 +21,9 @@ public abstract class DiskCache<V> implements ICache<String, V> {
     // platform-provided cache for DefaultHttpClient or AndroidHttpClient.
 
     private static final int VERSION = 201308;
+
     private static final int ENTRY_COUNT = 1;
+
     protected final DiskLruCache cache;
 
     public DiskCache(File directory, long maxSize) throws IOException {

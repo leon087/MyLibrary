@@ -9,15 +9,18 @@ import java.io.RandomAccessFile;
 import java.util.UUID;
 
 public class Installation {
+
     private static final String INSTALLATION = "INSTALLATION";
+
     private static String sID = null;
 
     public synchronized static String id(Context context) {
         if (sID == null) {
             File installation = new File(context.getFilesDir(), INSTALLATION);
             try {
-                if (!installation.exists())
+                if (!installation.exists()) {
                     writeInstallationFile(installation);
+                }
                 sID = readInstallationFile(installation);
             } catch (Exception e) {
                 throw new RuntimeException(e);

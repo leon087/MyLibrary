@@ -10,10 +10,14 @@ import java.util.regex.Pattern;
  * 简单检验工具类
  */
 public class ValidateUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(ValidateUtil.class);
+
     // 仅支持英文数字下划线中划线@英文句号
     public static final String RULE_USERNAME = "[0-9a-zA-Z\\._\\-@]*";
+
     public static final String RULE_POSTALCODE_SIMPLE = "^[0-9]{6}$";
+
     public static final String RULE_MOBILE_NUMBER_SIMPLE = "^1[0-9]{10}$";
 
     private ValidateUtil() {
@@ -21,9 +25,6 @@ public class ValidateUtil {
 
     /**
      * 判断8-15位字母或数据的合法密码
-     *
-     * @param passWord
-     * @return
      */
     public static boolean checkPassword(String passWord) {
         if (passWord == null) {
@@ -41,9 +42,6 @@ public class ValidateUtil {
 
     /**
      * 判断是否为移动手机号
-     *
-     * @param phone
-     * @return
      */
     public static boolean checkMobilePhone(String phone) {
         /*
@@ -73,8 +71,9 @@ public class ValidateUtil {
      */
     public static boolean isValidate(String[] str) {
         for (String string : str) {
-            if (string == null || "".equals(string.trim()))
+            if (string == null || "".equals(string.trim())) {
                 return false;
+            }
         }
         return true;
     }
@@ -87,8 +86,9 @@ public class ValidateUtil {
      */
     public static boolean isValidate(Long[] str) {
         for (Long string : str) {
-            if (string == null)
+            if (string == null) {
                 return false;
+            }
         }
         return true;
     }
@@ -99,8 +99,9 @@ public class ValidateUtil {
      * @return 任意一个字段为null或者"",返回false，否则返回 true
      */
     public static boolean isValidate(Long str) {
-        if (str == null)
+        if (str == null) {
             return false;
+        }
         return true;
     }
 
@@ -126,8 +127,9 @@ public class ValidateUtil {
      * @return 字段为null或者"",返回false，否则返回 true
      */
     public static boolean isValidate(String str) {
-        if (str == null || "".equals(str.trim()))
+        if (str == null || "".equals(str.trim())) {
             return false;
+        }
         return true;
     }
 
@@ -138,23 +140,27 @@ public class ValidateUtil {
      * @return 返回正确的手机号码，否则返回null
      */
     public static String trimMobile(String mobileCode) {
-        if (mobileCode != null)
+        if (mobileCode != null) {
             mobileCode = mobileCode.trim();
+        }
         String mobile = mobileCode;
         if (mobileCode == null || mobileCode.length() == 12
-                || mobileCode.length() < 11 || mobileCode.length() > 14)
+                || mobileCode.length() < 11 || mobileCode.length() > 14) {
             return "";
+        }
         if (mobileCode.length() == 14) {
-            if (!mobileCode.startsWith("+86"))
+            if (!mobileCode.startsWith("+86")) {
                 return "";
-            else
+            } else {
                 mobile = mobileCode.substring(3);
+            }
         }
         if (mobileCode.length() == 13) {
-            if (!mobileCode.startsWith("86"))
+            if (!mobileCode.startsWith("86")) {
                 return "";
-            else
+            } else {
                 mobile = mobileCode.substring(2);
+            }
         }
         // if (!mobile.startsWith("13") && !mobile.startsWith("15") &&
         // !mobile.startsWith("18"))
@@ -172,24 +178,28 @@ public class ValidateUtil {
 
     public static String addAdrToMobile(String mobileCode) {
         String firstcode = "86";
-        if (mobileCode != null)
+        if (mobileCode != null) {
             mobileCode = mobileCode.trim();
+        }
         String mobile = mobileCode;
         if (mobileCode == null || mobileCode.length() == 12
                 || mobileCode.length() < 11 || mobileCode.length() > 14
-                || mobileCode.length() == 0)
+                || mobileCode.length() == 0) {
             return "";
+        }
         if (mobileCode.length() == 14) {
-            if (!mobileCode.startsWith("+86"))
+            if (!mobileCode.startsWith("+86")) {
                 return "";
-            else
+            } else {
                 mobile = mobileCode.substring(3);
+            }
         }
         if (mobileCode.length() == 13) {
-            if (!mobileCode.startsWith("86"))
+            if (!mobileCode.startsWith("86")) {
                 return "";
-            else
+            } else {
                 mobile = mobileCode.substring(2);
+            }
         }
         try {
             Long.parseLong(mobile.trim());
@@ -228,12 +238,14 @@ public class ValidateUtil {
             if (strs.length == 3 || strs.length == 2) {
                 for (int i = 0; i < strs.length; i++) {
                     // 判断各字段是否为数字或者为字母
-                    if (!isChar(strs[i], i))
+                    if (!isChar(strs[i], i)) {
                         return false;
+                    }
                 }
             } else if (strs.length == 1) {
-                if (strs[0].length() != 11 && strs[0].length() != 4)
+                if (strs[0].length() != 11 && strs[0].length() != 4) {
                     return false;
+                }
 
                 for (int i = 0; i < strs[0].length(); i++) {
                     if (!(strs[0].charAt(i) >= '0' && strs[0].charAt(i) <= '9')) {
@@ -306,7 +318,8 @@ public class ValidateUtil {
     }
 
     public static boolean isEmail(String email) {
-        String str = "^([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+\\.[a-zA-Z]{2,3}$";
+        String str
+                = "^([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\\_|\\.]?)*[a-zA-Z0-9]+\\.[a-zA-Z]{2,3}$";
         Pattern p = Pattern.compile(str);
         Matcher m = p.matcher(email);
         return m.matches();
@@ -314,9 +327,6 @@ public class ValidateUtil {
 
     /**
      * 简单校验手机号（规则：长度为11，首位为1，仅数字）
-     *
-     * @param mobile
-     * @return
      */
     public static boolean isValidMobileNumber(String mobile) {
         return isValidString(mobile, RULE_MOBILE_NUMBER_SIMPLE);
@@ -324,9 +334,6 @@ public class ValidateUtil {
 
     /**
      * 简单校验邮政编码（规则：长度为6，仅数字）
-     *
-     * @param postalCode
-     * @return
      */
     public static boolean isValidPostalCode(String postalCode) {
         return isValidString(postalCode, RULE_POSTALCODE_SIMPLE);

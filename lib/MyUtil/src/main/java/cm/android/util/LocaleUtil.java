@@ -10,6 +10,7 @@ import java.util.Locale;
  * Local信息管理类
  */
 public class LocaleUtil {
+
     public static String showLocale() {
         StringBuilder sb = new StringBuilder();
         sb.append("getDefault() == " + Locale.getDefault().toString() + "\n");
@@ -50,7 +51,8 @@ public class LocaleUtil {
     public static String showLocale2() {
         StringBuilder sb = new StringBuilder();
         // sb.append("Language\n");
-        sb.append("getCountry,getDisplayCountry,getDisplayLanguage,getDisplayName,getDisplayVariant,getISO3Country,getISO3Language,getLanguage,getVariant\n");
+        sb.append(
+                "getCountry,getDisplayCountry,getDisplayLanguage,getDisplayName,getDisplayVariant,getISO3Country,getISO3Language,getLanguage,getVariant\n");
         for (Locale locale : Locale.getAvailableLocales()) {
             sb.append(locale.getCountry() + ",");
             sb.append(locale.getDisplayCountry() + ",");
@@ -76,8 +78,6 @@ public class LocaleUtil {
 
     /**
      * 更新语言
-     *
-     * @param context
      */
     public static void updateLanguage(Context context) {
         // 选择中文

@@ -1,22 +1,28 @@
 package cm.android.common.db;
 
-import android.content.Context;
-import cm.android.util.ObjectUtil;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import android.content.Context;
 
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
+import cm.android.util.ObjectUtil;
+
 /**
  */
 public class MyDaoManager {
+
     private static final Logger logger = LoggerFactory.getLogger("DB");
 
     public final Map<Class<?>, BaseDao<?>> daoMap = ObjectUtil.newHashMap();
+
     private final Map<Class<?>, MyDao> myDaoMap = ObjectUtil.newHashMap();
+
     private volatile OrmDatabaseHelper helper;
 
     public MyDaoManager init(Context context) {
@@ -37,11 +43,6 @@ public class MyDaoManager {
 
     /**
      * 获取dao
-     *
-     * @param <T>
-     * @param <K>
-     * @param beanClazz
-     * @return
      */
     public <T, K> MyDao<T, K> getMyDao(Class<T> beanClazz) {
         MyDao<T, K> daoWrapper = myDaoMap.get(beanClazz);
@@ -55,9 +56,6 @@ public class MyDaoManager {
 
     /**
      * 获取dao
-     *
-     * @param daoClazz
-     * @return
      */
     public <T extends BaseDao<?>> T getDao(Class<T> daoClazz) {
         T dao = (T) daoMap.get(daoClazz);

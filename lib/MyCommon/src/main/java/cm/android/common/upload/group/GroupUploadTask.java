@@ -1,21 +1,28 @@
 package cm.android.common.upload.group;
 
-import cm.android.common.db.MyDaoManager;
-import cm.android.common.upload.*;
-import cm.android.common.upload.db.UploadDao;
-
 import java.util.List;
+
+import cm.android.common.db.MyDaoManager;
+import cm.android.common.upload.IUploadListener;
+import cm.android.common.upload.UploadException;
+import cm.android.common.upload.UploadItem;
+import cm.android.common.upload.UploadStatus;
+import cm.android.common.upload.UploadTask;
+import cm.android.common.upload.db.UploadDao;
 
 /**
  * 集合上传，以后有时间完善，把一个集合当作一个内容，表字段：contId，status
  */
 public class GroupUploadTask implements Runnable {
+
     private GroupUploadItem groupItem;
+
     private UploadDao uploadDao;
+
     private IUploadListener<GroupUploadTask> groupUploadListener;
 
     public GroupUploadTask(GroupUploadItem item, MyDaoManager daoManager,
-                           IUploadListener<GroupUploadTask> groupUploadListener) {
+            IUploadListener<GroupUploadTask> groupUploadListener) {
         groupItem = item;
         uploadDao = daoManager.getDao(UploadDao.class);
         this.groupUploadListener = groupUploadListener;

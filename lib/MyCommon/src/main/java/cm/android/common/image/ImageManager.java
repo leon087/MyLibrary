@@ -1,9 +1,5 @@
 package cm.android.common.image;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -14,15 +10,24 @@ import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+
 import java.io.File;
 
 import cm.android.util.Utils;
 
 public class ImageManager {
+
     public static final int CLEAR_CACHE_ALL = 0x01;
+
     public static final int CLEAR_CACHE_MEMORY = CLEAR_CACHE_ALL + 1;
+
     public static final int CLEAR_CACHE_DISK = CLEAR_CACHE_ALL + 2;
+
     private static int maxImageWidthForMemoryCache = 0;
+
     private static int maxImageHeightForMemoryCache = 0;
 
     private static int resId;
@@ -114,8 +119,6 @@ public class ImageManager {
 
     /**
      * 清理缓存
-     *
-     * @param flag
      */
     public static void clearCache(int flag) {
         if (flag == CLEAR_CACHE_MEMORY) {
@@ -130,8 +133,6 @@ public class ImageManager {
 
     /**
      * 清理指定缓存
-     *
-     * @param uri
      */
     public static void clearCache(String uri) {
         MemoryCacheUtils.removeFromCache(uri, ImageLoader.getInstance().getMemoryCache());

@@ -22,22 +22,27 @@ import cm.android.thread.ThreadUtil;
 import cm.android.util.ObjectUtil;
 
 public class GroupUploadManager implements UIObserver {
+
     private int activeCount;
+
     private ThreadPool threadPool = new ThreadPool(1, 1);
     // private Map<UploadQueue, UploadQueueTask> uploadMap = Collections
     // .synchronizedMap(new LinkedHashMap<UploadQueue, UploadQueueTask>());
 
     private List<GroupUploadItem> uploadList = ObjectUtil.newArrayList();
+
     private GroupUploadDao groupUploadDao = null;
+
     private MyDaoManager daoManager = null;
+
     private List<UICallback> mUICallbacks = ObjectUtil.newArrayList();
+
     private IUpload upload;
 
     /**
      * 初始化
      *
      * @param activeCount 允许同时进行任务数
-     * @param context
      */
     public GroupUploadManager(int activeCount, Context context, IUpload upload) {
         daoManager = new MyDaoManager().init(context);
@@ -166,7 +171,8 @@ public class GroupUploadManager implements UIObserver {
         mUICallbacks.remove(callback);
     }
 
-    private IUploadListener<GroupUploadTask> uploadListener = new IUploadListener<GroupUploadTask>() {
+    private IUploadListener<GroupUploadTask> uploadListener
+            = new IUploadListener<GroupUploadTask>() {
 
         @Override
         public void onUploading(GroupUploadTask task, float percent) {

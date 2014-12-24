@@ -50,6 +50,7 @@ public class MyLogger extends BaseLogger implements ILogger {
 }
 
 class Test {
+
     private ILogger logger = MyLogger.getLogger(this.getClass());
 
     private void test() {

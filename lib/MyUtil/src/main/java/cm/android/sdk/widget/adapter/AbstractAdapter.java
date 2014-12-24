@@ -3,12 +3,12 @@ package cm.android.sdk.widget.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.BaseAdapter;
-import cm.android.util.ObjectUtil;
 
 import java.util.List;
 
+import cm.android.util.ObjectUtil;
+
 /**
- * @param <T>
  * @desc : 抽象Adapter类
  */
 public abstract class AbstractAdapter<T> extends BaseAdapter {
@@ -16,18 +16,17 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
     /**
      * 数据缓存
      */
-    protected List<T> mDataCache = ObjectUtil.newArrayList();
+    protected final List<T> mDataCache = ObjectUtil.newArrayList();
 
     /**
      * 用于从XML文件中创建Layout
      */
     protected LayoutInflater mInflater;
+
     protected Context context;
 
     /**
      * </br><b>description : </b> 创建Adapter，需要给定View创建接口。
-     *
-     * @param context
      */
     public AbstractAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -38,8 +37,6 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
      * <br>
      * <b>title : </b> 更新数据集 <br>
      * <b>description :</b>更新数据集 <br>
-     *
-     * @param data
      */
     public void update(List<T> data) {
         clear();
@@ -57,31 +54,24 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
 
     /**
      * <b>description :</b>添加数据集，向数据缓存中添加多个元素。 <br>
-     *
-     * @param set
      */
-    public void add(List<T> set) {
-        if (set != null) {
-            mDataCache.addAll(set);
+    public void add(List<T> data) {
+        if (data != null) {
+            mDataCache.addAll(data);
         }
     }
 
     /**
      * <b>description :</b>添加数据元素，向数据缓存中添加单个元素。 <br>
-     *
-     * @param item
      */
-    public void add(T item) {
-        if (item != null) {
-            mDataCache.add(item);
+    public void add(T data) {
+        if (data != null) {
+            mDataCache.add(data);
         }
     }
 
     /**
      * <b>description :</b> 交换两个元素的位置 <br>
-     *
-     * @param src
-     * @param target
      */
     public void exchange(int src, int target) {
         T endObject = getItem(target);
@@ -113,9 +103,6 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
 
     /**
      * 返回真实的position
-     *
-     * @param position
-     * @return
      */
     protected int getRealPosition(int position) {
         int size = mDataCache.size();

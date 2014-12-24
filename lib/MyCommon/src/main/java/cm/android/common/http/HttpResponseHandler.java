@@ -1,6 +1,7 @@
 package cm.android.common.http;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import org.apache.http.Header;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
@@ -8,17 +9,18 @@ import org.slf4j.LoggerFactory;
 
 public abstract class HttpResponseHandler<DATA_TYPE> extends
         AsyncHttpResponseHandler {
+
     private static final Logger logger = LoggerFactory.getLogger("HTTP");
 
     public abstract void onSuccess(int statusCode, Header[] headers,
-                                   byte[] responseBytes, DATA_TYPE response);
+            byte[] responseBytes, DATA_TYPE response);
 
     public abstract void onFailure(int statusCode, Header[] headers,
-                                   Throwable throwable, byte[] responseBytes, DATA_TYPE errorResponse);
+            Throwable throwable, byte[] responseBytes, DATA_TYPE errorResponse);
 
     @Override
     public final void onSuccess(final int statusCode, final Header[] headers,
-                                final byte[] responseBytes) {
+            final byte[] responseBytes) {
         if (statusCode != HttpStatus.SC_NO_CONTENT) {
             new Thread(new Runnable() {
                 @Override
@@ -52,7 +54,7 @@ public abstract class HttpResponseHandler<DATA_TYPE> extends
 
     @Override
     public final void onFailure(final int statusCode, final Header[] headers,
-                                final byte[] responseBytes, final Throwable throwable) {
+            final byte[] responseBytes, final Throwable throwable) {
         if (responseBytes != null) {
             new Thread(new Runnable() {
                 @Override
@@ -85,6 +87,6 @@ public abstract class HttpResponseHandler<DATA_TYPE> extends
     }
 
     protected abstract DATA_TYPE parseResponse(Header[] headers,
-                                               byte[] responseBytes, boolean isFailure) throws Throwable;
+            byte[] responseBytes, boolean isFailure) throws Throwable;
 
 }

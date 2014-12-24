@@ -6,12 +6,15 @@ import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ListAdapter;
+
 import cm.android.common.ui.MyViewExtend.IRefreshListener;
 import cm.android.common.ui.MyViewExtend.MyOnFocusChangeListener;
 import cm.android.common.ui.MyViewExtend.OnAtEndListener;
 
 public class KeyGridView extends GridView {
+
     private IRefreshListener onSlidingAtEndListener;
+
     private OnAtEndListener onAtEndListener = new OnAtEndListener() {
         @Override
         public boolean onAtEnd(int type) {
@@ -52,6 +55,7 @@ public class KeyGridView extends GridView {
             return false;
         }
     };
+
     private int keyType = OnAtEndListener.TYPE_KEY_UP
             | OnAtEndListener.TYPE_KEY_DOWN | OnAtEndListener.TYPE_KEY_LEFT
             | OnAtEndListener.TYPE_KEY_RIGHT;
@@ -119,8 +123,6 @@ public class KeyGridView extends GridView {
 
     /**
      * 获取列索引，从1开始
-     *
-     * @return
      */
     public int getColumnIndex() {
         return getSelectedItemPosition() % getNumColumns() + 1;
@@ -128,8 +130,6 @@ public class KeyGridView extends GridView {
 
     /**
      * 获取行索引，从1开始
-     *
-     * @return
      */
     public int getRowIndex() {
         return getSelectedItemPosition() / getNumColumns() + 1;
@@ -137,8 +137,6 @@ public class KeyGridView extends GridView {
 
     /**
      * 获取行数
-     *
-     * @return
      */
     public int getNumRows() {
         return ((getAdapter().getCount() - 1) / getNumColumns()) + 1;

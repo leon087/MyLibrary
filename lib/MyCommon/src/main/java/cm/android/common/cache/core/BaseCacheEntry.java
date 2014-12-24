@@ -1,6 +1,7 @@
 package cm.android.common.cache.core;
 
 public class BaseCacheEntry {
+
     private long cacheTime;
 
     public long getCacheTime() {

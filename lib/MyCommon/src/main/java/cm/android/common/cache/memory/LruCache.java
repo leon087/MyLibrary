@@ -3,6 +3,7 @@ package cm.android.common.cache.memory;
 import cm.android.common.cache.core.ICache;
 
 public class LruCache<V> implements ICache<String, V> {
+
     private android.support.v4.util.LruCache<String, V> cache;
 
     public LruCache(int maxSize) {

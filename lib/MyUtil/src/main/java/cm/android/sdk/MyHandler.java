@@ -32,6 +32,7 @@ public abstract class MyHandler {
     }
 
     private static class WeakHandler extends Handler {
+
         private WeakReference<MyHandler> mOuter;
 
         public WeakHandler(MyHandler callback) {

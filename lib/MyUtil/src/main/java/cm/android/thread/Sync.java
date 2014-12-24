@@ -1,7 +1,9 @@
 package cm.android.thread;
 
 public class Sync<T> extends Object {
+
     private volatile T result = null;
+
     private volatile boolean completed = false;
 
     public void set(T res) {
@@ -22,8 +24,9 @@ public class Sync<T> extends Object {
                 // log.d("sync.get() before wait "
                 // + Thread.currentThread().getName());
                 synchronized (this) {
-                    if (!completed)
+                    if (!completed) {
                         wait(time);
+                    }
                 }
                 // log.d("sync.get() after wait wait "
                 // + Thread.currentThread().getName());

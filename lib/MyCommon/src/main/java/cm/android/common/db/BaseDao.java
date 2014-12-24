@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import java.lang.reflect.ParameterizedType;
 
 public abstract class BaseDao<T extends BaseBean> extends MyDao<T, Integer> {
+
     protected Class<T> beanClazz = null;
 
     public BaseDao() {
@@ -17,13 +18,11 @@ public abstract class BaseDao<T extends BaseBean> extends MyDao<T, Integer> {
     }
 
     /**
-     * @param bean
      * @param uniqueColumnName 虚拟主键
      * @param uniqueValue      虚拟主键值
-     * @return
      */
     protected CreateOrUpdateStatus insertOrUpdate(T bean,
-                                                  String uniqueColumnName, Object uniqueValue) {
+            String uniqueColumnName, Object uniqueValue) {
         T beanTmp = super.queryForFirst(uniqueColumnName, uniqueValue);
         if (beanTmp != null) {
             // 设置主键

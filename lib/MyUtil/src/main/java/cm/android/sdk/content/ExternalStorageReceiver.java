@@ -1,23 +1,26 @@
 package cm.android.sdk.content;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * sdcard监听类
  */
 public class ExternalStorageReceiver extends BaseBroadcastReceiver {
+
     private static final Logger logger = LoggerFactory.getLogger(ExternalStorageReceiver.class);
+
     private ExternalStorageListener externalStorageListener;
 
     /**
      * 初始化
      */
     public ExternalStorageReceiver(Context context,
-                                   ExternalStorageListener listener) {
+            ExternalStorageListener listener) {
         externalStorageListener = listener;
         register(context);
     }
@@ -64,6 +67,7 @@ public class ExternalStorageReceiver extends BaseBroadcastReceiver {
      * sdcard监听接口
      */
     public interface ExternalStorageListener {
+
         /**
          * sdcard已挂载
          */

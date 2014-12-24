@@ -1,5 +1,12 @@
 package cm.android.log;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.android.BasicLogcatConfigurator;
@@ -9,12 +16,6 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
 
 /**
  */
@@ -32,8 +33,11 @@ public class LogConfig {
     }
 
     private static volatile boolean configFlag = false;
+
     private static final String PATTERN_LOGCAT = "[%logger:%thread:%file:%method:%line] %msg%n";
-    private static final String PATTERN_FILE = "%date %-5level [%logger:%thread:%file:%method:%line] - %msg%n";
+
+    private static final String PATTERN_FILE
+            = "%date %-5level [%logger:%thread:%file:%method:%line] - %msg%n";
 
     public static void configLogback(Level level, File logDir) {
         if (configFlag) {
@@ -62,7 +66,7 @@ public class LogConfig {
     }
 
     private static void setFileMode(ch.qos.logback.classic.Logger root,
-                                    LoggerContext lc, File logDir) {
+            LoggerContext lc, File logDir) {
         // setup FileAppender
         PatternLayoutEncoder encoder1 = new PatternLayoutEncoder();
         encoder1.setContext(lc);
@@ -91,7 +95,7 @@ public class LogConfig {
     }
 
     private static void setLogcatMode(ch.qos.logback.classic.Logger root,
-                                      LoggerContext lc) {
+            LoggerContext lc) {
         // setup LogcatAppender
         PatternLayoutEncoder encoder2 = new PatternLayoutEncoder();
         encoder2.setContext(lc);
@@ -144,7 +148,8 @@ public class LogConfig {
             return "";
         }
 
-        String fileXmlConfig = "<property name='LOG_DIR' value='" + logDir.getAbsolutePath() + "'/>" +
+        String fileXmlConfig = "<property name='LOG_DIR' value='" + logDir.getAbsolutePath() + "'/>"
+                +
 
                 "<appender name='FILE' class='ch.qos.logback.core.rolling.RollingFileAppender'>" +
                 "<file>${LOG_DIR}/logback.log</file>" +

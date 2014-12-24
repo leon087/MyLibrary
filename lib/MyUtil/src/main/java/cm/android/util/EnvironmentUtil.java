@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.Manifest.permission;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -9,13 +12,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.telephony.TelephonyManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class EnvironmentUtil {
+
     private static final long REMAIN_SPACE = 5 * 1024 * 1024;
+
     private static final Logger logger = LoggerFactory.getLogger(EnvironmentUtil.class);
 
     private EnvironmentUtil() {
@@ -60,7 +63,8 @@ public class EnvironmentUtil {
 
     public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+        if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY
+                .equals(state)) {
             return true;
         }
         return false;
@@ -68,8 +72,6 @@ public class EnvironmentUtil {
 
     /**
      * 判断外部存储是否可用
-     *
-     * @return
      */
     public static boolean isExternalStorageWritable() {
         return isExternalStorageMounted();
@@ -143,10 +145,6 @@ public class EnvironmentUtil {
 
     /**
      * 获取外部存储目录""/Android/data/"PackageName"/files/""
-     *
-     * @param context
-     * @param uniqueName
-     * @return
      */
     @TargetApi(8)
     public static File getExternalFilesDir(Context context, String uniqueName) {
@@ -184,9 +182,6 @@ public class EnvironmentUtil {
 
     /**
      * 判断是否有足够的空间
-     *
-     * @param file
-     * @return
      */
     public static boolean hasEnoughSpace(File file) {
         if (getUsableSpace(file) > REMAIN_SPACE) {
@@ -233,9 +228,6 @@ public class EnvironmentUtil {
 
     /**
      * 获取存储总内存大小
-     *
-     * @param root
-     * @return
      */
     public static long getTotalSize(String root) {
         if (root == null || "".equals(root)) {
@@ -255,9 +247,6 @@ public class EnvironmentUtil {
 
     /**
      * 获取已用存储大小
-     *
-     * @param root
-     * @return
      */
     public static long getUsedSize(String root) {
         long size = getTotalSize(root) - getUsableSpace(new File(root));
@@ -301,7 +290,6 @@ public class EnvironmentUtil {
     // return addresses;
     // }
 
-
     // @TargetApi(11)
     // public static void enableStrictMode() {
     // if (Utils.hasGingerbread()) {
@@ -327,12 +315,10 @@ public class EnvironmentUtil {
 
     /**
      * 判断是否是平板
-     *
-     * @param context
-     * @return
      */
     public static boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     public static boolean hasExternalStoragePermission(Context context) {
@@ -348,10 +334,9 @@ public class EnvironmentUtil {
      * 判断SDK版本
      */
     public static class SdkUtil {
+
         /**
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#FROYO}以上
-         *
-         * @return
          */
         public static boolean hasFroyo() {
             // Can use static final constants like FROYO, declared in later
@@ -364,8 +349,6 @@ public class EnvironmentUtil {
 
         /**
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#GINGERBREAD}以上
-         *
-         * @return
          */
         public static boolean hasGingerbread() {
             return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
@@ -373,8 +356,6 @@ public class EnvironmentUtil {
 
         /**
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#HONEYCOMB}以上
-         *
-         * @return
          */
         public static boolean hasHoneycomb() {
             return Build.VERSION.SDK_INT >= 11;
@@ -383,8 +364,6 @@ public class EnvironmentUtil {
 
         /**
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#HONEYCOMB_MR1}以上
-         *
-         * @return
          */
         public static boolean hasHoneycombMR1() {
             return Build.VERSION.SDK_INT >= 12;

@@ -1,7 +1,8 @@
 package cm.android.common.upload.db;
 
-import cm.android.common.db.BaseBean;
 import com.j256.ormlite.field.DatabaseField;
+
+import cm.android.common.db.BaseBean;
 
 public class UploadBean extends BaseBean {
     //
@@ -28,16 +29,22 @@ public class UploadBean extends BaseBean {
 
     @DatabaseField
     public int status;// 状态
+
     @DatabaseField
     public String url;// 上传地址
+
     @DatabaseField
     public String showName;// 上传文件名
+
     @DatabaseField
     public String uploadFilePath;// 上传文件路径
+
     @DatabaseField
     public float progress;// 进度
+
     @DatabaseField
     public String uploadParam;// 服务器需要的参数
+
     @DatabaseField
     private String contentId;
 

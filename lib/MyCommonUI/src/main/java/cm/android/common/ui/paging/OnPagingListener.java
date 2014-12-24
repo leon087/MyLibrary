@@ -3,6 +3,7 @@ package cm.android.common.ui.paging;
 import java.util.EventListener;
 
 public abstract interface OnPagingListener extends EventListener {
+
     public abstract void onNextPage(PageEvent parampageEvent);
 
     public abstract void onPrevPage(PageEvent parampageEvent);

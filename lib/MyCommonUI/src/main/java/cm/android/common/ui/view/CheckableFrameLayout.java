@@ -23,6 +23,7 @@ import android.widget.Checkable;
 import android.widget.FrameLayout;
 
 public class CheckableFrameLayout extends FrameLayout implements Checkable {
+
     private boolean mChecked;
 
     public CheckableFrameLayout(Context context) {

@@ -25,7 +25,6 @@ public interface IUploadListener<T> {
     public void onUploadCompleted(T task);
 
     /**
-     * @param task
      * @param percent 上传进度
      */
     public void onUploading(T task, float percent);

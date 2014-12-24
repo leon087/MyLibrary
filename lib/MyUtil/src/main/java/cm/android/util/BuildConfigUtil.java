@@ -1,11 +1,12 @@
 package cm.android.util;
 
-import android.content.Context;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.content.Context;
+
 public class BuildConfigUtil {
+
     private static final Logger logger = LoggerFactory.getLogger(BuildConfigUtil.class);
 
     public static Object getBuildConfigValue(Context context, String fieldName) {

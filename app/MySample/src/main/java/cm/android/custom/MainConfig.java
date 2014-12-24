@@ -1,13 +1,16 @@
 package cm.android.custom;
 
 import android.content.Context;
+
 import ch.qos.logback.classic.Level;
 import cm.android.framework.core.WorkDir;
 import cm.android.framework.ext.MyAppConfig;
 import cm.android.log.LogConfig;
 
 public class MainConfig extends MyAppConfig {
+
     public static final String DOWNLOAD = "download/";
+
     public static final String LOG_DIR = "log/";
 
 
@@ -31,10 +34,12 @@ public class MainConfig extends MyAppConfig {
     }
 
     private static final class StoreRoot {
+
         /**
          * 测试
          */
         private static final String TEST = "http://192.168.1.72:8080";
+
         /**
          * 正式环境
          */

@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 
 public final class PackageInstaller {
+
     private MyPackageManager mPm = null;
+
     private Context mContext = null;
 
     public PackageInstaller(Context context) {
@@ -19,7 +21,7 @@ public final class PackageInstaller {
      * @param iPackageLisntener 安装状态监听器
      */
     public void installPackage(Uri packageURI,
-                               IPackageLisntener iPackageLisntener) {
+            IPackageLisntener iPackageLisntener) {
         int flag = MyPackageManager.INSTALL_REPLACE_EXISTING;
         PackageInstallObserver observer = PackageInstallerFactory
                 .createInstallObserver(iPackageLisntener);
@@ -34,7 +36,7 @@ public final class PackageInstaller {
      * @param iPackageLisntener 卸载状态监听器
      */
     public void deletePackage(String packageName,
-                              IPackageLisntener iPackageLisntener) {
+            IPackageLisntener iPackageLisntener) {
         PackageDeleteObserver observer = PackageInstallerFactory
                 .createDeleteObserver(iPackageLisntener);
         int flag = MyPackageManager.DELETE_DATA;
@@ -45,6 +47,7 @@ public final class PackageInstaller {
      * 安装卸载状态监听器
      */
     public interface IPackageLisntener {
+
         /**
          * 安装
          */

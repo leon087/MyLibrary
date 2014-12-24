@@ -1,12 +1,13 @@
 package cm.android.net;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.net.ConnectivityManagerCompat;
 import android.telephony.TelephonyManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -32,7 +33,6 @@ public class NetworkUtil {
     /**
      * 对大数据传输时，需要调用该方法做出判断，如果流量敏感，应该提示用户
      *
-     * @param context
      * @return true表示流量敏感，false表示不敏感
      */
     public static boolean isActiveNetworkMetered(Context context) {
@@ -44,7 +44,6 @@ public class NetworkUtil {
     /**
      * 检查当前是否连接
      *
-     * @param context
      * @return true表示当前网络处于连接状态，否则返回false
      */
     public static boolean isConnected(Context context) {
@@ -59,9 +58,6 @@ public class NetworkUtil {
 
     /**
      * 判断WIFI网络是否可用
-     *
-     * @param context
-     * @return
      */
     public static boolean isWifiConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager) context
@@ -84,9 +80,6 @@ public class NetworkUtil {
 
     /**
      * 判断MOBILE网络是否可用
-     *
-     * @param context
-     * @return
      */
     public static boolean isMobileConnected(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager) context
@@ -109,9 +102,6 @@ public class NetworkUtil {
 
     /**
      * 获取当前网络连接的类型信息
-     *
-     * @param context
-     * @return
      */
     public static int getConnectedType(Context context) {
         if (context != null) {
@@ -128,9 +118,6 @@ public class NetworkUtil {
 
     /**
      * 获取当前的网络状态 -1：没有网络 1：WIFI网络2：wap 网络3：net网络
-     *
-     * @param context
-     * @return
      */
     public static NetType getAPNType(Context context) {
         ConnectivityManager connMgr = (ConnectivityManager) context
@@ -214,15 +201,18 @@ public class NetworkUtil {
      * <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
      */
     public static void setMobileDataEnabled(Context context, boolean enabled) {
-        final ConnectivityManager conman = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager conman = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
         Field iConnectivityManagerField;
         try {
             final Class conmanClass = Class.forName(conman.getClass().getName());
             iConnectivityManagerField = conmanClass.getDeclaredField("mService");
             iConnectivityManagerField.setAccessible(true);
             final Object iConnectivityManager = iConnectivityManagerField.get(conman);
-            final Class iConnectivityManagerClass = Class.forName(iConnectivityManager.getClass().getName());
-            final Method setMobileDataEnabledMethod = iConnectivityManagerClass.getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
+            final Class iConnectivityManagerClass = Class
+                    .forName(iConnectivityManager.getClass().getName());
+            final Method setMobileDataEnabledMethod = iConnectivityManagerClass
+                    .getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
             setMobileDataEnabledMethod.setAccessible(true);
             setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
         } catch (SecurityException e) {

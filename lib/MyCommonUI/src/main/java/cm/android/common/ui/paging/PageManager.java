@@ -4,20 +4,29 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class PageManager {
+
     private static PageManager pm = new PageManager();
+
     protected HashSet<OnPagingListener> listeners = new HashSet();
+
     // 总页数
     private int pageCount = 0;
+
     // 每一页个数
     private int pageSize = 10;
+
     // 总个数
     private int itemCount = 0;
+
     // 当前页数
     private int currentPage = 1;
+
     // 开始索引
     private int startIndex = 0;
+
     // 结束索引
     private int lastIndex = 0;
+
     private PageEvent pEvent = null;
 
     private PageManager() {
@@ -102,9 +111,9 @@ public class PageManager {
     }
 
     public void nextPage() {
-        if (this.currentPage <= this.pageCount)
+        if (this.currentPage <= this.pageCount) {
             this.currentPage += 1;
-        else {
+        } else {
             this.currentPage = 1;
         }
         measurePage();
@@ -117,9 +126,9 @@ public class PageManager {
     }
 
     public void prevPage() {
-        if (this.currentPage > 0)
+        if (this.currentPage > 0) {
             this.currentPage -= 1;
-        else {
+        } else {
             this.currentPage = 1;
         }
         measurePage();
@@ -156,9 +165,9 @@ public class PageManager {
     private void measurePage() {
         if (this.itemCount < this.pageSize) {
             this.pageCount = 1;
-        } else if (this.itemCount % this.pageSize == 0)
+        } else if (this.itemCount % this.pageSize == 0) {
             this.pageCount = (this.itemCount / this.pageSize);
-        else {
+        } else {
             this.pageCount = (this.itemCount / this.pageSize + 1);
         }
 

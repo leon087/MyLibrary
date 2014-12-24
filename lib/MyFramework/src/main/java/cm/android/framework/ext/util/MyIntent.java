@@ -12,29 +12,23 @@ import cm.android.sdk.MyParcelable;
  * 封装了一些Intent操作
  */
 public class MyIntent {
+
     private static final String BUNDLE_INSTANCESTATE = "InstanceState";
 
     /**
      * 跳转Activity，有返回值，参考{@link Activity#startActivityForResult}
      *
-     * @param <T>
-     * @param activity
-     * @param clazz
      * @param requestCode If >= 0, this code will be returned in onActivityResult() when
      *                    the activity exits.
      */
     public static <T> void startActivityForResult(Activity activity,
-                                                  Class<?> clazz, T data, int requestCode) {
+            Class<?> clazz, T data, int requestCode) {
         Intent intent = getActivityIntent(activity, clazz, data, false);
         activity.startActivityForResult(intent, requestCode);
     }
 
     /**
      * 跳转Activity
-     *
-     * @param <T>
-     * @param context
-     * @param
      */
     public static <T> void startActivity(Context context, Class<?> clazz, T data) {
         startActivity(context, clazz, data, false);
@@ -43,19 +37,17 @@ public class MyIntent {
     /**
      * 跳转Activity
      *
-     * @param <T>
-     * @param context
      * @param clazz     跳转activity的类名
      * @param isNewtask true: 添加{@link Intent.FLAG_ACTIVITY_NEW_TASK}标记
      */
     public static <T> void startActivity(Context context, Class<?> clazz,
-                                         T data, boolean isNewtask) {
+            T data, boolean isNewtask) {
         Intent intent = getActivityIntent(context, clazz, data, isNewtask);
         context.startActivity(intent);
     }
 
     public static <T> Intent getActivityIntent(Context context, Class<?> clazz,
-                                               T data, boolean isNewtask) {
+            T data, boolean isNewtask) {
         Intent intent = new Intent(context, clazz);
         intent = setData(intent, data);
         if (isNewtask) {
@@ -69,10 +61,6 @@ public class MyIntent {
 
     /**
      * startActivity()跳转后获取跳转时传递数据
-     *
-     * @param <T>
-     * @param intent
-     * @return
      */
     public static <T> T getData(Intent intent) {
         MyParcelable<T> parcelable = intent
@@ -85,9 +73,6 @@ public class MyIntent {
 
     /**
      * 获取Bundle中数据
-     *
-     * @param bundle
-     * @return
      */
     public static <T> T getData(Bundle bundle) {
         if (bundle == null) {
@@ -103,11 +88,6 @@ public class MyIntent {
 
     /**
      * 添加数据到Intent中
-     *
-     * @param <T>
-     * @param intent
-     * @param data
-     * @return
      */
     public static <T> Intent setData(Intent intent, T data) {
         if (data != null) {
@@ -120,11 +100,6 @@ public class MyIntent {
 
     /**
      * 添加数据到Bundle中
-     *
-     * @param <T>
-     * @param bundle
-     * @param data
-     * @return
      */
     public static <T> Bundle setData(Bundle bundle, T data) {
         if (data != null) {
@@ -137,10 +112,6 @@ public class MyIntent {
 
     /**
      * 发送带数据的广播
-     *
-     * @param <T>
-     * @param context
-     * @param action
      */
     public static <T> void sendBroadcast(Context context, String action, T data) {
         Intent intent = new Intent(action);

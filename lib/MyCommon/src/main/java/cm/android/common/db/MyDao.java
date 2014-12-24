@@ -4,9 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.PreparedUpdate;
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.UpdateBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +16,11 @@ import java.util.Map;
 import cm.android.util.ObjectUtil;
 
 public class MyDao<T, K> {
+
     private static final Logger logger = LoggerFactory.getLogger("DB");
 
     protected static final int ERROR = -1;
+
     protected Dao<T, K> dao;
 
     /**

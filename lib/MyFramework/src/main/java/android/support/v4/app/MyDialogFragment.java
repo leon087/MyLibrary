@@ -24,6 +24,7 @@ package android.support.v4.app;
  * implementation. See the framework SDK documentation for a class overview.
  */
 public class MyDialogFragment extends DialogFragment {
+
     /**
      * Display the dialog, adding the fragment to the given FragmentManager.
      * This is a convenience for explicitly creating a transaction, adding the

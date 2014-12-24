@@ -1,14 +1,18 @@
 package cm.android.framework.ext.ui;
 
-import android.app.Activity;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import cm.android.framework.ext.util.MyIntent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.app.Activity;
+import android.content.res.Configuration;
+import android.os.Bundle;
+
+import cm.android.framework.ext.util.MyIntent;
+
 public class BaseActivity extends Activity {
+
     private static final Logger logger = LoggerFactory.getLogger(BaseActivity.class);
+
     protected final Bundle bundleBak = new Bundle();
 
     @Override

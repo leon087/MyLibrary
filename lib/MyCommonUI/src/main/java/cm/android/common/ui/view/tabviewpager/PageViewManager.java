@@ -11,10 +11,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 public class PageViewManager {
+
     private ViewPager mViewPager;
+
     private MyPagerAdapter adapter;
+
     private RadioGroup tabGroup;
+
     private OnPageListener onPageChangeListener;
+
     private OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -22,6 +27,7 @@ public class PageViewManager {
             // 转圈
         }
     };
+
     private Handler uiHandler = new Handler() {
         @Override
         public void handleMessage(android.os.Message msg) {
@@ -62,6 +68,7 @@ public class PageViewManager {
     }
 
     public interface OnPageListener {
+
         public void onPageSelected(int position, boolean refresh);
     }
 

@@ -1,6 +1,5 @@
 package cm.android.cmd;
 
-import cm.android.util.IoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,19 +8,22 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import cm.android.util.IoUtil;
+
 public class ShellUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ShellUtil.class);
 
     public static final String COMMAND_SU = "su";
+
     public static final String COMMAND_SH = "sh";
+
     public static final String COMMAND_EXIT = "exit\n";
+
     public static final String COMMAND_LINE_END = "\n";
 
     /**
      * check whether has root permission
-     *
-     * @return
      */
     public static boolean checkRootPermission() {
         return exec("echo root", true, false).result == 0;
@@ -32,7 +34,6 @@ public class ShellUtil {
      *
      * @param command command
      * @param isRoot  whether need to run with root
-     * @return
      * @see ShellUtil#exec(String[], boolean, boolean)
      */
     public static CommandResult exec(String command, boolean isRoot) {
@@ -44,7 +45,6 @@ public class ShellUtil {
      *
      * @param commands command list
      * @param isRoot   whether need to run with root
-     * @return
      * @see ShellUtil#exec(String[], boolean, boolean)
      */
     public static CommandResult exec(List<String> commands, boolean isRoot) {
@@ -58,7 +58,6 @@ public class ShellUtil {
      *
      * @param commands command array
      * @param isRoot   whether need to run with root
-     * @return
      * @see ShellUtil#exec(String[], boolean, boolean)
      */
     public static CommandResult exec(String[] commands, boolean isRoot) {
@@ -71,11 +70,10 @@ public class ShellUtil {
      * @param command         command
      * @param isRoot          whether need to run with root
      * @param isNeedResultMsg whether need result msg
-     * @return
      * @see ShellUtil#exec(String[], boolean, boolean)
      */
     public static CommandResult exec(String command, boolean isRoot,
-                                     boolean isNeedResultMsg) {
+            boolean isNeedResultMsg) {
         return exec(new String[]{command}, isRoot, isNeedResultMsg);
     }
 
@@ -85,11 +83,10 @@ public class ShellUtil {
      * @param commands        command list
      * @param isRoot          whether need to run with root
      * @param isNeedResultMsg whether need result msg
-     * @return
      * @see ShellUtil#exec(String[], boolean, boolean)
      */
     public static CommandResult exec(List<String> commands, boolean isRoot,
-                                     boolean isNeedResultMsg) {
+            boolean isNeedResultMsg) {
         return exec(
                 commands == null ? null : commands.toArray(new String[]{}),
                 isRoot, isNeedResultMsg);
@@ -109,7 +106,7 @@ public class ShellUtil {
      * </ul>
      */
     public static CommandResult exec(String[] commands, boolean isRoot,
-                                     boolean isNeedResultMsg) {
+            boolean isNeedResultMsg) {
         int result = -1;
         if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
@@ -193,10 +190,12 @@ public class ShellUtil {
          * result of command *
          */
         public int result;
+
         /**
          * success message of command result *
          */
         public String successMsg;
+
         /**
          * error message of command result *
          */

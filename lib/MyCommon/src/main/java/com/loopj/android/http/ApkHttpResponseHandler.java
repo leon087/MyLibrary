@@ -1,14 +1,22 @@
 package com.loopj.android.http;
 
-import android.content.Context;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 
-import java.io.*;
+import android.content.Context;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public abstract class ApkHttpResponseHandler extends AsyncHttpResponseHandler {
+
     private static final int BUFFER_SIZE = 1024 * 50;
+
     private File mFile;
+
     private Context context;
 
     /**
@@ -44,7 +52,7 @@ public abstract class ApkHttpResponseHandler extends AsyncHttpResponseHandler {
 
     @Override
     public final void onFailure(int statusCode, Header[] headers,
-                                byte[] responseBytes, Throwable throwable) {
+            byte[] responseBytes, Throwable throwable) {
         onFailure(statusCode, headers, throwable, getTargetFile());
     }
 
@@ -58,11 +66,11 @@ public abstract class ApkHttpResponseHandler extends AsyncHttpResponseHandler {
      * @param file       file in which the file is stored
      */
     public abstract void onFailure(int statusCode, Header[] headers,
-                                   Throwable throwable, File file);
+            Throwable throwable, File file);
 
     @Override
     public final void onSuccess(int statusCode, Header[] headers,
-                                byte[] responseBytes) {
+            byte[] responseBytes) {
         onSuccess(statusCode, headers, getTargetFile());
     }
 

@@ -155,7 +155,8 @@ public class SystemInfoUtil {
         StringBuilder strBuf = new StringBuilder();
         ActivityManager actMgr = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
-        android.app.ActivityManager.MemoryInfo memoryinfo = new android.app.ActivityManager.MemoryInfo();
+        android.app.ActivityManager.MemoryInfo memoryinfo
+                = new android.app.ActivityManager.MemoryInfo();
         actMgr.getMemoryInfo(memoryinfo);
         strBuf.append("\nmemoryinfo.threshold = ");
         long threshold = memoryinfo.threshold >> 20;

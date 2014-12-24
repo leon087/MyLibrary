@@ -6,13 +6,15 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import cm.android.common.ui.view.tabview.BaseTabManager;
 
 import java.util.Random;
+
+import cm.android.common.ui.view.tabview.BaseTabManager;
 
 public class TabManager extends BaseTabManager {
 
     private ActionBar mActionBar;
+
     private TabsAdapter mTabsAdapter;
 
     public TabManager(FragmentActivity activity, int selectedTab) {
@@ -80,15 +82,18 @@ public class TabManager extends BaseTabManager {
     }
 
     public static class TabHolder extends BaseTabHolder {
+
         // public Class<? extends android.support.v4.app.Fragment> fragmentClazz
         // = null; // Tab
         // public CharSequence titleCharSequence = null;
         public Integer titleRes = null;
 
         public Drawable iconDrawable = null;
+
         public Integer iconRes = null;
 
         public View customView = null;
+
         public Integer customViewRes = null;
     }
 }

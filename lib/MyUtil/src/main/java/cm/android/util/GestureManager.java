@@ -15,6 +15,7 @@ public class GestureManager extends SimpleOnGestureListener implements
         OnTouchListener {
 
     private GestureDetector mGestureDetector;
+
     private OnGestureFlingListener mListener;
 
     @TargetApi(3)
@@ -25,8 +26,6 @@ public class GestureManager extends SimpleOnGestureListener implements
 
     /**
      * 注册touch监听
-     *
-     * @param view
      */
     public void register(View view) {
         view.setLongClickable(true);
@@ -35,8 +34,6 @@ public class GestureManager extends SimpleOnGestureListener implements
 
     /**
      * 去注册touch监听
-     *
-     * @param view
      */
     public void unRegister(View view) {
         view.setOnTouchListener(null);
@@ -49,7 +46,7 @@ public class GestureManager extends SimpleOnGestureListener implements
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                           float velocityY) {
+            float velocityY) {
         if (e1.getX() - e2.getX() > 50) {
             return mListener.onFling(OnGestureFlingListener.TYPE_LEFT);
         } else if (e1.getX() - e2.getX() < -50) {
@@ -92,6 +89,7 @@ public class GestureManager extends SimpleOnGestureListener implements
      * 手势动作接口
      */
     public interface OnGestureFlingListener {
+
         /**
          * 向左滑动
          */

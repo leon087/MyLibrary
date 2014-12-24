@@ -1,6 +1,7 @@
 package cm.android.common.upload;
 
 public class UploadStatus {
+
     /**
      * 正在上传 ，用户可控制
      */

@@ -3,6 +3,7 @@ package cm.android.log;
 /**
  */
 public abstract class BaseLogger {
+
     protected BaseLogger(Class clazz) {
         init(clazz);
     }

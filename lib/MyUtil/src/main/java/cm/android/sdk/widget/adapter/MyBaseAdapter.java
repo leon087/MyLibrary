@@ -1,6 +1,7 @@
 package cm.android.sdk.widget.adapter;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -11,6 +12,7 @@ public abstract class MyBaseAdapter<T> extends AbstractAdapter<T> implements
         AbsListView.RecyclerListener {
 
     protected final ArrayList<View> mActive = new ArrayList<View>();
+
     public boolean isRepeat = false;
 
     public MyBaseAdapter(Context context) {
@@ -37,13 +39,13 @@ public abstract class MyBaseAdapter<T> extends AbstractAdapter<T> implements
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
         T data = getItem(position);
-        AdapterViewHolder viewHolder;
+        ViewHolder viewHolder;
         if (null == convertView) {
             convertView = createRootView(position, parent);
-            viewHolder = initViewHolder(convertView);
+            viewHolder = initView(convertView);
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (AdapterViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         updateView(viewHolder, position, data);
@@ -57,36 +59,22 @@ public abstract class MyBaseAdapter<T> extends AbstractAdapter<T> implements
         mActive.remove(view);
     }
 
-    /**
-     * 根据ViewHolder刷新数据
-     *
-     * @param viewHolder
-     * @param position
-     * @param data
-     */
-    protected abstract void updateView(AdapterViewHolder viewHolder,
-                                       int position, T data);
+    protected ViewHolder initView(View convertView) {
+        return new DefaultViewHolder(convertView);
+    }
 
     /**
-     * 初始化AdapterViewHolder
-     *
-     * @param convertView
-     * @return
+     * 根据ViewHolder刷新数据
      */
-    protected abstract AdapterViewHolder initViewHolder(View convertView);
+    protected abstract void updateView(ViewHolder viewHolder, int position, T data);
 
     /**
      * 创建RootView
-     *
-     * @return
      */
     protected abstract View createRootView(int position, ViewGroup parent);
 
     /**
      * 根据layoutResId创建View
-     *
-     * @param layoutResId
-     * @return
      */
     protected View createRootView(int layoutResId) {
         return mInflater.inflate(layoutResId, null);
@@ -95,8 +83,29 @@ public abstract class MyBaseAdapter<T> extends AbstractAdapter<T> implements
     /**
      * AdapterViewHolder
      */
-    public static class AdapterViewHolder {
+    public static abstract class ViewHolder {
 
+    }
+
+    public static class DefaultViewHolder extends ViewHolder {
+
+        private SparseArray<View> views = new SparseArray<View>();
+
+        private View convertView;
+
+        public DefaultViewHolder(View convertView) {
+            this.convertView = convertView;
+        }
+
+        @SuppressWarnings("unchecked")
+        public <T extends View> T getView(int resId) {
+            View v = views.get(resId);
+            if (null == v) {
+                v = convertView.findViewById(resId);
+                views.put(resId, v);
+            }
+            return (T) v;
+        }
     }
 
 }

@@ -24,14 +24,13 @@ import android.content.res.Resources;
  * 设置ConfigChanges
  */
 public class InterestingConfigChanges {
+
     final Configuration mLastConfiguration = new Configuration();
+
     int mLastDensity;
 
     /**
      * 应用新的设置
-     *
-     * @param res
-     * @return
      */
     public boolean applyNewConfig(Resources res) {
         int configChanges = mLastConfiguration.updateFrom(res

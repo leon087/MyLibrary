@@ -10,8 +10,11 @@ import java.lang.reflect.Method;
 public class MethodProxy {
 
     private Class<? extends Object> clazz; // 对象所属的类
+
     private Object target; // 目标对象
+
     private Method method; // 目标方法
+
     private Object[] params; // 参数数组
 
     public MethodProxy(Object target, String methodName, Object... params) {
@@ -20,10 +23,6 @@ public class MethodProxy {
 
     /**
      * 重新设置目标对象与方法
-     *
-     * @param target
-     * @param methodName
-     * @param params
      */
     public void rebindTarget(Object target, String methodName, Object... params) {
         this.target = target;
@@ -33,9 +32,6 @@ public class MethodProxy {
 
     /**
      * 重新设置目标方法
-     *
-     * @param methodName
-     * @param params
      */
     public void rebindMethod(String methodName, Object... params) {
         this.method = null;
@@ -74,7 +70,6 @@ public class MethodProxy {
      * 获取方法上的注解
      *
      * @param anClazz 注解类
-     * @return
      */
     public Annotation getAnnotation(Class anClazz) {
         return method.getAnnotation(anClazz);

@@ -1,25 +1,29 @@
 package cm.android.codec;
 
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 /**
  * 对称加密算法：基于口令加密-PBE算法实现
  */
 public class PBECoder {
+
     // change to SC if using Spongycastle crypto libraries
     public static final String PROVIDER = "BC";
 
     private static final String BACKUP_PBE_KEY_ALG = "PBEWithMD5AndDES";
+
     private static final int ITERATIONS = 2000;
 
-    public static Key toKey(char[] password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static Key toKey(char[] password, byte[] salt)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
         // 密钥彩礼转换
         PBEKeySpec keySpec = new PBEKeySpec(password, salt, ITERATIONS);
         SecretKeyFactory keyFactory = null;

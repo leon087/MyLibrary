@@ -3,7 +3,9 @@ package cm.android.framework.core.manager;
 import java.util.HashMap;
 
 public final class ServiceHolder {
+
     private static final HashMap<String, Object> mServices = new HashMap<String, Object>();
+
     private static final HashMap<String, Object> appService = new HashMap<String, Object>();
 
     private ServiceHolder() {
@@ -11,8 +13,6 @@ public final class ServiceHolder {
 
     /**
      * 初始化管理模块
-     *
-     * @param manager
      */
     static void addService(Object manager) {
         mServices.put(manager.getClass().getSimpleName(), manager);
@@ -28,9 +28,6 @@ public final class ServiceHolder {
 
     /**
      * 获取单例服务对象
-     *
-     * @param clazz
-     * @return
      */
     @SuppressWarnings("unchecked")
     public static <T> T getService(Class<T> clazz) {

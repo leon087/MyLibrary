@@ -3,7 +3,11 @@ package cm.android.common.ui.view;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.*;
+import android.view.MotionEvent;
+import android.view.VelocityTracker;
+import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.widget.Scroller;
 
 public class LeftSliderLayout extends ViewGroup {
@@ -14,20 +18,25 @@ public class LeftSliderLayout extends ViewGroup {
      * TOUCH_STATE_SCROLLING : scrolling
      */
     private static final int TOUCH_STATE_REST = 0;
+
     private int mTouchState = TOUCH_STATE_REST;
+
     private static final int TOUCH_STATE_SCROLLING = 1;
+
     /**
      * Values for VelocityTracker to compute current velocity.
      * VELOCITY_UNITS in dp
      * mVelocityUnits in px
      */
     private static final int VELOCITY_UNITS = 1000;
+
     /**
      * The minimum velocity for determining the direction.
      * MINOR_VELOCITY in dp
      * mMinorVelocity in px
      */
     private static final float MINOR_VELOCITY = 150.0f;
+
     /**
      * The width of Sliding distance from left.
      * And it should be the same with the width of the View below SliderLayout in a FrameLayout.
@@ -35,26 +44,36 @@ public class LeftSliderLayout extends ViewGroup {
      * mDockWidth in px
      */
     private static final float SLIDING_WIDTH = 180.0f;
+
     /**
      * The default values of shadow.
      * VELOCITY_UNITS in dp
      * mVelocityUnits in px
      */
     private static final float DEF_SHADOW_WIDTH = 10.0f;
+
     private Scroller mScroller;
+
     private VelocityTracker mVelocityTracker;
+
     /**
      * Distance in pixels a touch can wander before we think the user is scrolling
      */
     private int mTouchSlop;
+
     /**
      * Values for saving axis of the last touch event.
      */
     private float mLastMotionX;
+
     private float mLastMotionY;
+
     private int mVelocityUnits;
+
     private int mMinorVelocity;
+
     private int mSlidingWidth;
+
     private int mDefShadowWidth;
 
     /**
@@ -78,6 +97,7 @@ public class LeftSliderLayout extends ViewGroup {
     private boolean mEnableSlide = true;
 
     private View mMainChild = null;
+
     private OnLeftSliderLayoutStateListener mListener = null;
 
     /**
@@ -119,7 +139,8 @@ public class LeftSliderLayout extends ViewGroup {
         // check Measure Mode is Exactly.
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         if (widthMode != MeasureSpec.EXACTLY) {
-            throw new IllegalStateException("LeftSliderLayout only canmCurScreen run at EXACTLY mode!");
+            throw new IllegalStateException(
+                    "LeftSliderLayout only canmCurScreen run at EXACTLY mode!");
         }
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         if (heightMode != MeasureSpec.EXACTLY) {
@@ -329,8 +350,9 @@ public class LeftSliderLayout extends ViewGroup {
             case MotionEvent.ACTION_MOVE:
                 final int xDiff = (int) Math.abs(mLastMotionX - x);
                 if (xDiff > mTouchSlop) {
-                    if (Math.abs(mLastMotionY - y) / Math.abs(mLastMotionX - x) < 1)
+                    if (Math.abs(mLastMotionY - y) / Math.abs(mLastMotionX - x) < 1) {
                         mTouchState = TOUCH_STATE_SCROLLING;
+                    }
                 }
                 break;
 
@@ -434,8 +456,6 @@ public class LeftSliderLayout extends ViewGroup {
 
     /**
      * enable slide action of LeftSliderLayout
-     *
-     * @param bEnable
      */
     public void enableSlide(boolean bEnable) {
         mEnableSlide = bEnable;
