@@ -3,6 +3,8 @@ package cm.android.common.cache.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.support.v4.util.LruCache;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -14,28 +16,37 @@ public class CacheLoader {
 
     private ICache cache;
 
-    public <V> CacheLoader(ICache<String, V> cache) {
-        if (cache == null) {
-            throw new NullPointerException("cache = null");
+    private LruCache memoryCache;
+
+    public <V> CacheLoader(LruCache memoryCache, ICache<String, V> cache) {
+        if (memoryCache == null || cache == null) {
+            throw new NullPointerException("memoryCache = " + memoryCache + ",cache = " + cache);
         }
         this.cache = cache;
+        this.memoryCache = memoryCache;
     }
 
     public void release() {
-        cache = null;
+        memoryCache.evictAll();
     }
 
     public void clear() {
         cache.clear();
+        memoryCache.evictAll();
     }
 
     public <V> V get(String key) {
         key = toKey(key);
+        V value = (V) memoryCache.get(key);
+        if (value != null) {
+            return value;
+        }
+
         if (cache.isExpire(key)) {
             cache.delete(key);
             return null;
         } else {
-            V value = (V) cache.get(key);
+            value = (V) cache.get(key);
             logger.info("key = {},value = {}", key, value);
             return value;
         }
@@ -46,6 +57,7 @@ public class CacheLoader {
         logger.info("key = {},value = {}", key, value);
         // 写入本地
         cache.put(key, value);
+        memoryCache.put(key, value);
     }
 
     private String toKey(String uri) {

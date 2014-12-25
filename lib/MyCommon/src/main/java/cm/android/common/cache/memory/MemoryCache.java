@@ -2,12 +2,17 @@ package cm.android.common.cache.memory;
 
 import cm.android.common.cache.core.ICache;
 
-public class LruCache<V> implements ICache<String, V> {
+public class MemoryCache<V> implements ICache<String, V> {
 
     private android.support.v4.util.LruCache<String, V> cache;
 
-    public LruCache(int maxSize) {
-        cache = new android.support.v4.util.LruCache(maxSize);
+    public MemoryCache(int maxSize) {
+        cache = new android.support.v4.util.LruCache(maxSize) {
+            @Override
+            public int sizeOf(Object key, Object value) {
+                return super.sizeOf(key, value);
+            }
+        };
     }
 
     @Override

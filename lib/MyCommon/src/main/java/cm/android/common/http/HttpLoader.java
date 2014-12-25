@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.support.v4.util.LruCache;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,10 @@ public class HttpLoader {
         } catch (IOException e) {
             logger.error("", e);
         }
-        localCache = new CacheLoader(cacheLoder);
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int cacheSize = maxMemory / 8;
+        LruCache memoryCache = new LruCache(cacheSize);
+        localCache = new CacheLoader(memoryCache, cacheLoder);
     }
 
     public static <T> void load(String url, CacheHttpListener<T> httpHandler) {
