@@ -61,6 +61,7 @@ public class ImageManager {
         // imageScaleType(ImageScaleType imageScaleType)
 
         // builder.displayer(displayer);
+        // builder.imageScaleType(ImageScaleType.NONE);
         return builder;
     }
 

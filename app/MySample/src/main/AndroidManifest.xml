@@ -3,7 +3,7 @@
           package="cm.android.app.sample">
 
     <uses-sdk
-            android:minSdkVersion="15"
+            android:minSdkVersion="19"
             android:targetSdkVersion="19"/>
 
     <application
@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
