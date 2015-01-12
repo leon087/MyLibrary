@@ -29,11 +29,15 @@ public class WorkDir {
     }
 
     public static void initWorkDir(Context context, String... dirNames) {
-        privateWorkDir.initWorkDir(context, dirNames);
+        privateWorkDir.initWorkDir(context, null, dirNames);
+    }
+
+    public static void initPublicWorkDir(Context context, File rootDir, String... dirNames) {
+        publicWorkDir.initWorkDir(context, rootDir, dirNames);
     }
 
     public static void initPublicWorkDir(Context context, String... dirNames) {
-        publicWorkDir.initWorkDir(context, dirNames);
+        publicWorkDir.initWorkDir(context, null, dirNames);
     }
 
     public static File getDir(String dir) {
@@ -62,13 +66,13 @@ public class WorkDir {
 
         protected File workDir = null;
 
-        protected void initWorkDir(Context context, String... dirNames) {
-            workDir = getRootDir(context);
+        protected void initWorkDir(Context context, File rootDir, String... dirNames) {
+            workDir = getRootDir(context, rootDir);
             logger.info("workDir = " + workDir.getAbsolutePath());
-            initDirs(context, dirNames);
+            initDirs(dirNames);
         }
 
-        protected abstract File getRootDir(Context context);
+        protected abstract File getRootDir(Context context, File rootDir);
 
         /**
          * 获取目录
@@ -79,7 +83,7 @@ public class WorkDir {
             return dirs.get(dir);
         }
 
-        private void initDirs(Context context, String... dirNames) {
+        private void initDirs(String... dirNames) {
             for (String dir : dirNames) {
                 File file = new File(workDir, dir);
                 file.mkdirs();
@@ -104,14 +108,14 @@ public class WorkDir {
         public static final String WORK_PATH = "workpath";
 
         @Override
-        protected File getRootDir(Context context) {
-            File rootDir = new File(context.getFilesDir(), WORK_PATH);
+        protected File getRootDir(Context context, File rootDir) {
+            File tmpRootDir = new File(context.getFilesDir(), WORK_PATH);
             if (EnvironmentUtil.isExternalStorageWritable()) {
                 // 删除files目录下文件
                 //IoUtil.deleteFiles(rootDir);
-                rootDir = EnvironmentUtil.getExternalFilesDir(context, WORK_PATH);
+                tmpRootDir = EnvironmentUtil.getExternalFilesDir(context, WORK_PATH);
             }
-            return rootDir;
+            return tmpRootDir;
         }
 
     }
@@ -120,8 +124,17 @@ public class WorkDir {
 
         @Override
         @TargetApi(8)
-        protected File getRootDir(Context context) {
-            return EnvironmentUtil.getExternalStoragePublicDirectory(context.getPackageName());
+        protected File getRootDir(Context context, File rootDir) {
+            if (rootDir == null) {
+                return EnvironmentUtil.getExternalStoragePublicDirectory(context.getPackageName());
+            }
+
+            File file = new File(rootDir, context.getPackageName());
+            if (!file.isDirectory() && !file.mkdirs()) {
+                return EnvironmentUtil.getExternalStoragePublicDirectory(context.getPackageName());
+            }
+
+            return file;
         }
     }
 }
