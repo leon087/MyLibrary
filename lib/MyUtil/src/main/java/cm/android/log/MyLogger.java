@@ -1,7 +1,5 @@
 package cm.android.log;
 
-import cm.android.util.MyLog;
-
 /**
  */
 public class MyLogger extends BaseLogger implements ILogger {

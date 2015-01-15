@@ -3,6 +3,7 @@ package cm.android.util;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 
 import cm.android.sdk.content.BaseBroadcastReceiver;
 
@@ -26,6 +27,11 @@ public class ExitHolder {
 
     public ExitHolder() {
 
+    }
+
+    public static void exit(Context context) {
+        LocalBroadcastManager.getInstance(context.getApplicationContext())
+                .sendBroadcast(new Intent(ACTION_EXIT_ACTIVITY));
     }
 
     private class ExitReceiver extends BaseBroadcastReceiver {

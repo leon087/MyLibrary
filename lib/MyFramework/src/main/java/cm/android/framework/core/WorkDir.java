@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import cm.android.util.EnvironmentUtil;
+import cm.android.util.IoUtil;
 import cm.android.util.ObjectUtil;
 import cm.android.util.Utils;
 
@@ -80,13 +81,18 @@ public class WorkDir {
         public File getDir(String dir) {
             // return new File(workDir, mDirs.get(dir)).getAbsolutePath()
             // + File.separator;
-            return dirs.get(dir);
+            File file = dirs.get(dir);
+            IoUtil.checkDirectory(file);
+            return file;
         }
 
         private void initDirs(String... dirNames) {
             for (String dir : dirNames) {
                 File file = new File(workDir, dir);
-                file.mkdirs();
+                if (!IoUtil.checkDirectory(file)) {
+                    throw new IllegalStateException(
+                            "file error: " + file.getAbsolutePath());
+                }
                 dirs.put(dir, file);
             }
         }

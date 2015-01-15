@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import cm.android.framework.ext.util.MyIntent;
+import cm.android.util.ExitHolder;
 
 public class BaseActivity extends Activity {
 
@@ -15,10 +16,24 @@ public class BaseActivity extends Activity {
 
     protected final Bundle bundleBak = new Bundle();
 
+    private final ExitHolder exitHolder = new ExitHolder();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MyIntent.restore(savedInstanceState, bundleBak);
+        exitHolder.init(this, new ExitHolder.IExitActivity() {
+            @Override
+            public void exitActivity() {
+                BaseActivity.this.finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        exitHolder.deInit(this);
+        super.onDestroy();
     }
 
     @Override

@@ -15,7 +15,7 @@ public class HexUtil {
         if (buf == null) {
             return "";
         }
-        StringBuffer result = new StringBuffer(2 * buf.length);
+        StringBuilder result = new StringBuilder(2 * buf.length);
         for (int i = 0; i < buf.length; i++) {
             appendHex(result, buf[i]);
         }
@@ -24,7 +24,7 @@ public class HexUtil {
 
     private final static String HEX = "0123456789ABCDEF";
 
-    private static void appendHex(StringBuffer sb, byte b) {
+    private static void appendHex(StringBuilder sb, byte b) {
         sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
     }
 }

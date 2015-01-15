@@ -8,7 +8,7 @@ import android.support.v4.util.LruCache;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import cm.android.util.ByteUtil;
+import cm.android.util.HexUtil;
 
 public class CacheLoader {
 
@@ -64,7 +64,7 @@ public class CacheLoader {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             byte[] md5bytes = messageDigest.digest(uri.getBytes());
-            return ByteUtil.bytesToHexString(md5bytes, false);
+            return HexUtil.toHex(md5bytes);
         } catch (NoSuchAlgorithmException e) {
             // throw new AssertionError(e);
             logger.error("uri = " + uri, e);

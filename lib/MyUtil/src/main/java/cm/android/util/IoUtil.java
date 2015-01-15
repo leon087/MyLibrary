@@ -87,7 +87,7 @@ public class IoUtil {
             if (isFileExist(fileName)) {
                 return;
             }
-            createFile(fileName);
+            createFile(new File(fileName));
 
             inputStream = new BufferedInputStream(context.getResources()
                     .openRawResource(res));
@@ -112,7 +112,7 @@ public class IoUtil {
             if (isFileExist(fileName)) {
                 return;
             }
-            createFile(fileName);
+            createFile(new File(fileName));
 
             inputStream = new BufferedInputStream(context.getResources()
                     .openRawResource(res));
@@ -160,7 +160,6 @@ public class IoUtil {
                         dir + strSvy));
                 write(inputStream, outputStream);
             } catch (IOException e) {
-                // e.printStackTrace();
                 logger.error("assetPath = " + assetPath, e);
             } finally {
                 closeQuietly(inputStream);
@@ -174,48 +173,53 @@ public class IoUtil {
      * 'closeable' is null.
      */
     public static void closeQuietly(Closeable closeable) {
-        if (closeable != null) {
+        if (closeable == null) {
+            return;
+        }
+
+        try {
+            closeable.close();
+        } catch (RuntimeException rethrown) {
+            throw rethrown;
+        } catch (Exception e) {
+            // e.printStackTrace();
+            logger.error("", e);
+        }
+    }
+
+//    /**
+//     * 创建文件,fileName为文件全路径加文件名
+//     */
+//    public static boolean createFile(String fileName) {
+//        String[] dirStructor = parseDirSturctor(fileName);
+//        File file;
+//        for (int i = 0; i < dirStructor.length; i++) {
+//            file = new File(dirStructor[i]);
+//            if (i == dirStructor.length - 1) {
+//                if (!file.isFile()) {
+//                    return createNewFile(file);
+//                }
+//            } else {
+//                if (!file.exists()) {
+//                    file.mkdir();
+//                }
+//            }
+//        }
+//        return false;
+//    }
+
+    public static boolean createFile(File file) {
+        File parent = file.getParentFile();
+        if (checkDirectory(parent)) {
             try {
-                closeable.close();
-            } catch (RuntimeException rethrown) {
-                throw rethrown;
-            } catch (Exception e) {
-                // e.printStackTrace();
-                logger.error("", e);
+                file.createNewFile();
+                return true;
+            } catch (IOException e) {
+                return false;
             }
+        } else {
+            return false;
         }
-    }
-
-    /**
-     * 创建文件,fileName为文件全路径加文件名
-     */
-    public static boolean createFile(String fileName) {
-        String[] dirStructor = parseDirSturctor(fileName);
-        File file;
-        for (int i = 0; i < dirStructor.length; i++) {
-            file = new File(dirStructor[i]);
-            if (i == dirStructor.length - 1) {
-                if (!file.isFile()) {
-                    return createNewFile(file);
-                }
-            } else {
-                if (!file.exists()) {
-                    file.mkdir();
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 删除文件
-     */
-    public static boolean deleteFile(String filePath) {
-        File file = new File(filePath);
-        if (file.exists()) {
-            return file.delete();
-        }
-        return false;
     }
 
     /**
@@ -223,12 +227,13 @@ public class IoUtil {
      */
     public static boolean deleteFiles(File dir) {
         if (!dir.isDirectory()) {
-            return dir.delete();
+            logger.error("dir.isDirectory() = false");
+            return false;
         }
 
         boolean isSucceed = true;
         for (File file : dir.listFiles()) {
-            isSucceed &= deleteDir(file);
+            isSucceed &= deleteFile(file);
         }
         return isSucceed;
     }
@@ -236,38 +241,41 @@ public class IoUtil {
     /**
      * 删除文件，如果该文件是个目录，则会删除该目录以及该目录下所有文件
      */
-    public static boolean deleteDir(File dir) {
-        if (dir == null || !dir.exists()) {
+    public static boolean deleteFile(File file) {
+        if (file == null || !file.exists()) {
             return true;
         }
 
         try {
-            CmdExecute.exec("rm -fr " + dir.getAbsolutePath());
+            CmdExecute.exec("rm -fr " + file.getAbsolutePath());
             return true;
-        } catch (SecurityException e) {
-            logger.error("dir = " + dir.getAbsolutePath(), e);
-            return false;
+        } catch (Exception e) {
+            try {
+                return file.delete();
+            } catch (SecurityException se) {
+                logger.error("dir = " + file.getAbsolutePath(), e);
+                return false;
+            }
         }
     }
 
     /**
      * 拷贝用户目录下文件到指定路径
      *
-     * @param srcName      The name of the file to open; can not contain path separators.
-     * @param destFilePath 拷贝路径
+     * @param srcName The name of the file to open; can not contain path separators.
      */
-    public static void copyFile(Context context, String srcName,
-            String destFilePath) {
+    public static void copyPrivateFile(Context context, String srcName,
+            File destFile) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
             inputStream = new BufferedInputStream(
                     context.openFileInput(srcName));
             outputStream = new BufferedOutputStream(new FileOutputStream(
-                    destFilePath));
+                    destFile));
             write(inputStream, outputStream);
         } catch (IOException e) {
-            logger.error("srcName = " + srcName + ",destFilePath = " + destFilePath,
+            logger.error("srcName = " + srcName + ",destFile = " + destFile.getAbsolutePath(),
                     e);
         } finally {
             closeQuietly(inputStream);
@@ -278,19 +286,20 @@ public class IoUtil {
     /**
      * 拷贝文件
      *
-     * @param srcPath  源文件路径
-     * @param destPath 拷贝后路径
+     * @param srcFile  源文件
+     * @param destFile 拷贝后文件
      */
-    public static void copyFile(String srcPath, String destPath) {
+    public static void copyFile(File srcFile, File destFile) {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(srcPath));
+            inputStream = new BufferedInputStream(new FileInputStream(srcFile));
             outputStream = new BufferedOutputStream(new FileOutputStream(
-                    destPath));
+                    destFile));
             write(inputStream, outputStream);
         } catch (IOException e) {
-            logger.error("srcPath = " + srcPath + ",destPath = " + destPath, e);
+            logger.error("srcFile = " + srcFile.getAbsolutePath() + ",destFile = " + destFile
+                    .getAbsolutePath(), e);
         } finally {
             closeQuietly(inputStream);
             closeQuietly(outputStream);
@@ -301,7 +310,8 @@ public class IoUtil {
      * 文件是否存在
      */
     public static boolean isFileExist(String filePath) {
-        if (null == filePath) {
+        if (Utils.isEmpty(filePath)) {
+            logger.error("filePath = " + filePath);
             return false;
         }
 
@@ -310,18 +320,6 @@ public class IoUtil {
             return true;
         }
         return false;
-    }
-
-    /**
-     * 创建文件
-     */
-    private static boolean createNewFile(File file) {
-        try {
-            return file.createNewFile();
-        } catch (IOException e) {
-            logger.error("file:" + file, e);
-            return false;
-        }
     }
 
     /**
@@ -425,10 +423,8 @@ public class IoUtil {
     /**
      * 获取指定目录下文件大小
      */
-    public static long getDirTotalSize(String rootDir) {
-        File dir = new File(rootDir);
-
-        File[] files = dir.listFiles();
+    public static long getDirTotalSize(File rootDir) {
+        File[] files = rootDir.listFiles();
         if (null == files) {
             return 0;
         }
@@ -441,36 +437,20 @@ public class IoUtil {
     }
 
     /**
-     * 根据文件路径获取文件名称
-     */
-    public static String getFileName(String filePath) {
-        if (null == filePath) {
-            return null;
-        }
-        int end = filePath.lastIndexOf(".");
-        int start = filePath.lastIndexOf(File.separator);
-        String fileName = filePath.substring(start + 1, end);
-        return fileName;
-    }
-
-    /**
      * 文件重命名
-     *
-     * @param oldPath 原来的文件名
-     * @param newPath 新文件名
      */
-    public static boolean renameFile(String oldPath, String newPath) {
-        if (!oldPath.equals(newPath)) {// 新的文件名和以前文件名不同时,才有必要进行重命名
-            File oldfile = new File(oldPath);
-            File newfile = new File(newPath);
-            // 若在该目录下已经有一个文件和新文件名相同，则不允许重命名
-            if (!newfile.exists()) {
-                return oldfile.renameTo(newfile);
-            } else {
-                logger.error("newfile.exists() = true");
-            }
+    public static boolean renameFile(File oldFile, File newFile) {
+        if (oldFile.equals(newFile)) {
+            return true;
         }
-        return false;
+
+        // 若在该目录下已经有一个文件和新文件名相同，则不允许重命名
+        if (!newFile.exists()) {
+            return oldFile.renameTo(newFile);
+        } else {
+            logger.error("newFile.exists() = true");
+            return false;
+        }
     }
 
     /**
@@ -504,16 +484,19 @@ public class IoUtil {
      */
     public static boolean writeFile(byte[] value, File file) {
         if (null == value || null == file) {
+            logger.error("value = {},file = {}", value, file);
             return false;
         }
 
         if (file.isDirectory()) {
+            logger.error("file.isDirectory() = " + true);
             return false;
         }
 
         file.delete();
-        boolean createFile = createFile(file.getAbsolutePath());
+        boolean createFile = createFile(file);
         if (!createFile) {
+            logger.error("createFile = false,file = " + file);
             return false;
         }
 
@@ -659,5 +642,22 @@ public class IoUtil {
             IoUtil.closeQuietly(baos);
             IoUtil.closeQuietly(ois);
         }
+    }
+
+    public static boolean checkDirectory(File file) {
+        if (file == null) {
+            throw new IllegalStateException("file = null");
+        } else if (file.exists()) {
+            if (!file.isDirectory()) {
+                logger.error(file.getAbsolutePath() + " already exists and is not a directory");
+                return false;
+            }
+        } else {
+            if (!file.mkdirs()) {
+                logger.error("Unable to create directory: " + file.getAbsolutePath());
+                return false;
+            }
+        }
+        return true;
     }
 }

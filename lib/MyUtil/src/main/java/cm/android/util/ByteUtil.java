@@ -42,23 +42,7 @@ public class ByteUtil {
     private static final char[] MOD_10_TABLE = {0, 1, 2, 2, 3, 3, 4, 5, 5, 6,
             7, 7, 8, 8, 9, 0};
 
-    /**
-     * The digits for every supported radix.
-     */
-    private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6',
-            '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
-            'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
-            'x', 'y', 'z'};
-
-    private static final char[] UPPER_CASE_DIGITS = {'0', '1', '2', '3', '4',
-            '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-            'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-            'V', 'W', 'X', 'Y', 'Z'};
-
     private static final char SPACE_CH = ' ';
-
-    private static final char HEX_DIGITS[] = {'0', '1', '2', '3', '4', '5',
-            '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
     /**
      * 私有构造函数，不允许实例化该类
@@ -520,48 +504,5 @@ public class ByteUtil {
 
         String retStr = str.toString();
         return retStr;
-    }
-
-    /**
-     * 转换成十六进制字符串
-     */
-    public static String toHex(byte[] buf) {
-        StringBuffer strbuf = new StringBuffer(buf.length * 2);
-        int i;
-        for (i = 0; i < buf.length; i++) {
-            strbuf.append(Integer.toString((buf[i] >> 4) & 0xf, 16)
-                    + Integer.toString(buf[i] & 0xf, 16));
-        }
-
-        // for (i = 0; i < buf.length; i++) {
-        // if (((int) buf[i] & 0xff) < 0x10)
-        // strbuf.append("0");
-        //
-        // strbuf.append(Long.toString((int) buf[i] & 0xff, 16));
-        // }
-        return strbuf.toString();
-    }
-
-    /**
-     * 转换成十六进制字符串
-     */
-    public static String toHexString(byte[] b) {
-        StringBuilder sb = new StringBuilder(b.length * 2);
-        for (int i = 0; i < b.length; i++) {
-            sb.append(HEX_DIGITS[(b[i] & 0xf0) >>> 4 & 0xf]);
-            sb.append(HEX_DIGITS[b[i] & 0x0f]);
-        }
-        return sb.toString();
-    }
-
-    public static String bytesToHexString(byte[] bytes, boolean upperCase) {
-        char[] digits = upperCase ? UPPER_CASE_DIGITS : DIGITS;
-        char[] buf = new char[bytes.length * 2];
-        int c = 0;
-        for (byte b : bytes) {
-            buf[c++] = digits[(b >> 4) & 0xf];
-            buf[c++] = digits[b & 0xf];
-        }
-        return new String(buf);
     }
 }

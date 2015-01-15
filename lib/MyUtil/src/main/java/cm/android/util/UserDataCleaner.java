@@ -95,7 +95,7 @@ public class UserDataCleaner {
      * 删除方法
      */
     private static void deleteFilesByDirectory(File directory) {
-        IoUtil.deleteDir(directory);
+        IoUtil.deleteFile(directory);
 //        IoUtil.deleteFiles(directory);
     }
 

@@ -177,7 +177,7 @@ public class FragmentHelper {
                 Fragment f = (Fragment) clazz.newInstance();
                 return f;
             } catch (InstantiationException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
                 // throw new java.lang.InstantiationException(
                 // "Unable to instantiate fragment "
                 // + tag
@@ -189,7 +189,7 @@ public class FragmentHelper {
                 // + ": make sure class name exists, is public, and has an"
                 // + " empty constructor that is public", e);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
                 // throw new InstantiationException(
                 // "Unable to instantiate fragment "
                 // + tag
@@ -204,19 +204,16 @@ public class FragmentHelper {
      * 根据xml中设置的ID来查找Fragment
      */
     public Fragment findFragmentById(int resId) {
-        Fragment fragment = mFragmentManager
-                .findFragmentById(resId);
+        Fragment fragment = mFragmentManager.findFragmentById(resId);
         return fragment;
     }
 
     /**
      * 根据Tag查找Fragment
      */
-    public Fragment findFragmentByTag(
-            Class<? extends Fragment> clazz) {
+    public Fragment findFragmentByTag(Class<? extends Fragment> clazz) {
         String tag = clazz.getName();
-        Fragment fragment = mFragmentManager
-                .findFragmentByTag(tag);
+        Fragment fragment = mFragmentManager.findFragmentByTag(tag);
         return fragment;
     }
 

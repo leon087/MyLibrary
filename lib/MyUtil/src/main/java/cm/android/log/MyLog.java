@@ -1,4 +1,4 @@
-package cm.android.util;
+package cm.android.log;
 
 import android.os.Environment;
 
@@ -7,9 +7,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 
-import cm.android.util.MyLog.MyLogManager;
-import cm.android.util.MyLog.MyLogManager.Level;
-import cm.android.util.MyLog.MyLogManager.LogMode;
+import cm.android.log.MyLog.MyLogManager;
+import cm.android.log.MyLog.MyLogManager.Level;
+import cm.android.log.MyLog.MyLogManager.LogMode;
+import cm.android.util.EnvironmentUtil;
+import cm.android.util.IoUtil;
+import cm.android.util.MyFormatter;
 
 /**
  * android Log的Adapter类，打印调试信息。
@@ -223,7 +226,7 @@ public class MyLog {
 
 }
 
-abstract class BaseLogger {
+abstract class MyBaseLogger {
 
     private static String generateTag(StackTraceElement caller) {
         String tag = "[ %s:%s:%s():%d ]";
@@ -245,7 +248,7 @@ abstract class BaseLogger {
             return null;
         }
         for (StackTraceElement st : sts) {
-            if (st.getClassName().equals(BaseLogger.class.getName())) {
+            if (st.getClassName().equals(MyBaseLogger.class.getName())) {
                 continue;
             }
             if (st.getClassName().equals(MyLogManager.class.getName())) {
@@ -285,7 +288,7 @@ abstract class BaseLogger {
     public abstract void log(Level level, String msg);
 }
 
-class LogcatLogger extends BaseLogger {
+class LogcatLogger extends MyBaseLogger {
 
     @Override
     public void log(Level level, String msg) {
@@ -307,7 +310,7 @@ class LogcatLogger extends BaseLogger {
     }
 }
 
-class FileLogger extends BaseLogger {
+class FileLogger extends MyBaseLogger {
 
     private static final int BUFFER_SIZE = 1024 * 100;
 
@@ -352,8 +355,8 @@ class FileLogger extends BaseLogger {
 
         boolean append = true;
         // 是否存在文件
-        if (!IoUtil.isFileExist(logFile.getAbsolutePath())) {
-            IoUtil.createFile(logFile.getAbsolutePath());
+        if (!logFile.exists()) {
+            IoUtil.createFile(logFile);
             append = false;
         }
 

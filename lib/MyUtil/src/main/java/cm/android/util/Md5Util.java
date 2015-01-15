@@ -103,6 +103,6 @@ public class Md5Util {
             return null;
         }
 
-        return ByteUtil.toHexString(digest);
+        return HexUtil.toHex(digest);
     }
 }

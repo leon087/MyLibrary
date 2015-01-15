@@ -12,12 +12,12 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     /**
      * 注册
      */
-    public void register(Context context) {
+    public final void register(Context context) {
         IntentFilter intentFilter = createIntentFilter();
         register(context, intentFilter);
     }
 
-    public void register(Context context, IntentFilter intentFilter) {
+    public final void register(Context context, IntentFilter intentFilter) {
         this.context = context;
         context.registerReceiver(this, intentFilter);
     }
@@ -25,21 +25,21 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     /**
      * 去注册
      */
-    public void unregister() {
+    public final void unregister() {
         context.unregisterReceiver(this);
         context = null;
     }
 
-    public void registerLocal(Context context, IntentFilter intentFilter) {
+    public final void registerLocal(Context context, IntentFilter intentFilter) {
         LocalBroadcastManager.getInstance(context).registerReceiver(this, intentFilter);
     }
 
-    public void registerLocal(Context context) {
+    public final void registerLocal(Context context) {
         IntentFilter intentFilter = createIntentFilter();
         registerLocal(context, intentFilter);
     }
 
-    public void unregisterLocal(Context context) {
+    public final void unregisterLocal(Context context) {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
     }
 
