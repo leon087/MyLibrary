@@ -80,22 +80,22 @@ public class IoUtil {
     /**
      * 移动资源配置文件至制定路径
      */
-    public static void writeResToPhone(Context context, String fileName, int res) {
+    public static void copyRes(Context context, File destFile, int res) {
+        if (destFile.exists()) {
+            return;
+        }
+
         InputStream inputStream = null;
         OutputStream outputStream = null;
         try {
-            if (isFileExist(fileName)) {
-                return;
-            }
-            createFile(new File(fileName));
+            createFile(destFile);
 
             inputStream = new BufferedInputStream(context.getResources()
                     .openRawResource(res));
-            outputStream = new BufferedOutputStream(new FileOutputStream(
-                    fileName));
+            outputStream = new BufferedOutputStream(new FileOutputStream(destFile));
             write(inputStream, outputStream);
         } catch (IOException e) {
-            logger.error("fileName = " + fileName, e);
+            logger.error("destFile = " + destFile, e);
         } finally {
             closeQuietly(inputStream);
             closeQuietly(outputStream);
@@ -131,16 +131,12 @@ public class IoUtil {
     /**
      * 移动Assets目录下的文件
      */
-    public static void writeAssetToPhone(Context context, String assetPath,
-            String dir) {
-        if (getAllFiles(dir).length != 0) {
+    public static void copyAssetFiles(Context context, String assetPath, File dir) {
+        if (getFiles(dir).length == 0) {
             return;
         }
 
         AssetManager assetManager = context.getAssets();
-        if (!dir.endsWith(File.separator)) {
-            dir += File.separator;
-        }
         String[] files = null;
         try {
             files = assetManager.list(assetPath);
@@ -151,20 +147,24 @@ public class IoUtil {
 
         for (String strSvy : files) {
             String filePath = assetPath + File.separator + strSvy;
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-            try {
-                inputStream = new BufferedInputStream(
-                        assetManager.open(filePath));
-                outputStream = new BufferedOutputStream(new FileOutputStream(
-                        dir + strSvy));
-                write(inputStream, outputStream);
-            } catch (IOException e) {
-                logger.error("assetPath = " + assetPath, e);
-            } finally {
-                closeQuietly(inputStream);
-                closeQuietly(outputStream);
-            }
+            copyAssetFile(assetManager, filePath, new File(dir, strSvy));
+        }
+    }
+
+    public static boolean copyAssetFile(AssetManager assetManager, String fileName, File destFile) {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            inputStream = new BufferedInputStream(assetManager.open(fileName));
+            outputStream = new BufferedOutputStream(new FileOutputStream(destFile));
+            write(inputStream, outputStream);
+            return true;
+        } catch (IOException e) {
+            logger.error("fileName = {},destFile = {},e = {}", fileName, destFile, e);
+            return false;
+        } finally {
+            closeQuietly(inputStream);
+            closeQuietly(outputStream);
         }
     }
 
@@ -382,6 +382,13 @@ public class IoUtil {
             return new String[0];
         }
         return file.list();
+    }
+
+    public static String[] getFiles(File fir) {
+        if (!fir.isDirectory()) {
+            return new String[0];
+        }
+        return fir.list();
     }
 
     /**

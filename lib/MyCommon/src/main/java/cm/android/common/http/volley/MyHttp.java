@@ -31,6 +31,7 @@ public class MyHttp {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context);
         }
+        requestQueue.start();
     }
 
     public static void addHeader(String name, String value) {

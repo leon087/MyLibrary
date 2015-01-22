@@ -1,11 +1,14 @@
 package cm.android.common.ui.paging;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import cm.android.util.MyLog;
-
 public class PageHelper {
+
+    private static final Logger logger = LoggerFactory.getLogger("page");
 
     private List<Object> totalItems = new ArrayList<Object>();
 
@@ -33,11 +36,11 @@ public class PageHelper {
         int end = endIndex % eachRequestCount + 1;
 
         if (end > totalItems.size()) {
-            MyLog.e("end = " + end);
+            logger.error("end = " + end);
             end = totalItems.size();
         }
         if (start > end) {
-            MyLog.e("start = " + start);
+            logger.error("start = " + start);
             start = 0;
         }
         return totalItems.subList(start, end);
@@ -53,11 +56,11 @@ public class PageHelper {
         int end = endIndex % eachRequestCount + 1;
 
         if (end > totalItems.size()) {
-            MyLog.e("end = " + end);
+            logger.error("end = " + end);
             end = totalItems.size();
         }
         if (start > end) {
-            MyLog.e("start = " + start);
+            logger.error("start = " + start);
             start = 0;
         }
         return totalItems.subList(start, end);

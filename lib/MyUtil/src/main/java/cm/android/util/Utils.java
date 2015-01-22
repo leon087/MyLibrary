@@ -15,6 +15,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
@@ -544,5 +545,16 @@ public final class Utils {
         }
 
         return str.trim();
+    }
+
+    public static boolean reboot(Context context) {
+        try {
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            pm.reboot(context.getPackageName());
+            return true;
+        } catch (Exception e) {
+            logger.error("reboot error:" + e.getMessage(), e);
+            return false;
+        }
     }
 }
