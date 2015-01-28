@@ -1,5 +1,8 @@
 package cm.android.common.ui.view;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +17,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Gallery;
 import android.widget.ViewFlipper;
 
-import cm.android.util.MyLog;
-
 public class MyAutoFlipView extends Gallery {
+
+    private static final Logger logger = LoggerFactory.getLogger("SearchKeywordsView");
 
     private static final int DEFAULT_INTERVAL = 3000;
 
@@ -185,10 +188,10 @@ public class MyAutoFlipView extends Gallery {
             }
             mRunning = running;
         }
-        if (MyLog.isDebug()) {
-            MyLog.d("updateRunning() mVisible=" + mVisible + ", mStarted="
-                    + mStarted + ", mUserPresent=" + mUserPresent
-                    + ", mRunning=" + mRunning);
+        if (logger.isDebugEnabled()) {
+            logger.debug(
+                    "updateRunning() mVisible = {},mStarted = {},mStarted = {},mUserPresent = {},mRunning = {}",
+                    mVisible, mStarted, mUserPresent, mRunning);
         }
     }
 

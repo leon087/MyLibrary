@@ -1,4 +1,4 @@
-package cm.android.framework.core;
+package cm.android.framework.core.daemon;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,11 +6,11 @@ import android.content.IntentFilter;
 
 import cm.android.sdk.content.BaseBroadcastReceiver;
 
-public class CoreReceiver extends BaseBroadcastReceiver {
+public class DaemonReceiver extends BaseBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(new Intent(context, CoreService.class));
+        context.startService(new Intent(context, DaemonService.class));
     }
 
     @Override

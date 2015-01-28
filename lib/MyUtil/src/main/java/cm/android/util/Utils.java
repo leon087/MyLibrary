@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -556,5 +557,16 @@ public final class Utils {
             logger.error("reboot error:" + e.getMessage(), e);
             return false;
         }
+    }
+
+    public static void killProcess(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (EnvironmentUtil.SdkUtil.hasFroyo()) {
+            am.killBackgroundProcesses(context.getPackageName());
+        } else {
+            am.restartPackage(context.getPackageName());
+        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
     }
 }

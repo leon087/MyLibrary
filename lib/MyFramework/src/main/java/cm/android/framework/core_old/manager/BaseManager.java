@@ -1,4 +1,4 @@
-package cm.android.framework.core.manager;
+package cm.android.framework.core_old.manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

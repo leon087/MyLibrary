@@ -1,4 +1,4 @@
-package cm.android.framework.core;
+package cm.android.framework.core.daemon;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,13 +23,13 @@ public class DaemonManager {
     }
 
     public void startDaemon(Context context) {
-        Intent alarmIntent = new Intent(context, CoreReceiver.class);
+        Intent alarmIntent = new Intent(context, DaemonReceiver.class);
         alarmIntent.setAction(ACTION_ALARM_WAKE_UP);
         AlarmUtil.start(context, alarmIntent, 0, 60 * 1000);
     }
 
     public void stopDaemon(Context context) {
-        Intent alarmIntent = new Intent(context, CoreReceiver.class);
+        Intent alarmIntent = new Intent(context, DaemonReceiver.class);
         alarmIntent.setAction(ACTION_ALARM_WAKE_UP);
         AlarmUtil.stop(context, alarmIntent, 0);
     }

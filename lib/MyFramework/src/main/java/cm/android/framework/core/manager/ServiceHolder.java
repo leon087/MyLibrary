@@ -1,25 +1,29 @@
 package cm.android.framework.core.manager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 
-public final class ServiceHolder {
+final class ServiceHolder {
 
-    private static final HashMap<String, Object> mServices = new HashMap<String, Object>();
+    private static final Logger logger = LoggerFactory.getLogger("framework");
 
-    private static final HashMap<String, Object> appService = new HashMap<String, Object>();
+    private final HashMap<String, Object> mServices = new HashMap<String, Object>();
 
-    private ServiceHolder() {
+    ServiceHolder() {
     }
 
     /**
      * 初始化管理模块
      */
-    static void addService(Object manager) {
-        mServices.put(manager.getClass().getSimpleName(), manager);
-    }
-
-    static void addAppService(Object manager) {
-        appService.put(manager.getClass().getSimpleName(), manager);
+    void addService(String name, Object manager) {
+        Object tmp = mServices.get(name);
+        if (tmp != null) {
+            logger.error("name = {},manager = {},tmp = {}", name, manager, tmp);
+            return;
+        }
+        mServices.put(name, manager);
     }
 
     // public Object getService(Class<?> clazz) {
@@ -29,24 +33,16 @@ public final class ServiceHolder {
     /**
      * 获取单例服务对象
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T getService(Class<T> clazz) {
-        if (mServices.containsKey(clazz.getSimpleName())) {
-            return (T) mServices.get(clazz.getSimpleName());
-        } else {
-            return (T) appService.get(clazz.getSimpleName());
-        }
+    <T> T getService(String name) {
+        return (T) mServices.get(name);
     }
 
-    static void resetService() {
+    void resetService() {
         mServices.clear();
     }
 
-    static void resetAppService() {
-        appService.clear();
-    }
 
-    public static boolean isEmpty() {
-        return mServices.isEmpty() && appService.isEmpty();
+    boolean isEmpty() {
+        return mServices.isEmpty();
     }
 }

@@ -24,21 +24,21 @@ public class WorkDir {
 
     private static final PublicWorkDir publicWorkDir = new PublicWorkDir();
 
-    private static final Logger logger = LoggerFactory.getLogger(WorkDir.class);
+    private static final Logger logger = LoggerFactory.getLogger("WorkDir");
 
     private WorkDir() {
     }
 
-    public static void initWorkDir(Context context, String... dirNames) {
-        privateWorkDir.initWorkDir(context, null, dirNames);
+    public static void initWorkDir(Context context) {
+        privateWorkDir.initWorkDir(context, null);
     }
 
-    public static void initPublicWorkDir(Context context, File rootDir, String... dirNames) {
-        publicWorkDir.initWorkDir(context, rootDir, dirNames);
+    public static void initPublicWorkDir(Context context, File rootDir) {
+        publicWorkDir.initWorkDir(context, rootDir);
     }
 
-    public static void initPublicWorkDir(Context context, String... dirNames) {
-        publicWorkDir.initWorkDir(context, null, dirNames);
+    public static void initPublicWorkDir(Context context) {
+        publicWorkDir.initWorkDir(context, null);
     }
 
     public static File getDir(String dir) {
@@ -49,16 +49,20 @@ public class WorkDir {
         return publicWorkDir.getDir(dir);
     }
 
-    public static Collection<File> getDirs() {
-        return privateWorkDir.getDirs();
+    public static File getWorkDir() {
+        return privateWorkDir.getWorkDir();
     }
 
-    public static Collection<File> getPublicDirs() {
-        return publicWorkDir.getDirs();
+    public static File getPublicWorkDir() {
+        return publicWorkDir.getWorkDir();
     }
 
     public static void bindPublicDir(String tag, File dir) {
         publicWorkDir.bindDir(tag, dir);
+    }
+
+    public static Collection<File> getPublicDirs() {
+        return publicWorkDir.getDirs();
     }
 
     private static abstract class BaseWorkDir {
@@ -67,10 +71,13 @@ public class WorkDir {
 
         protected File workDir = null;
 
-        protected void initWorkDir(Context context, File rootDir, String... dirNames) {
+        protected void initWorkDir(Context context, File rootDir) {
             workDir = getRootDir(context, rootDir);
             logger.info("workDir = " + workDir.getAbsolutePath());
-            initDirs(dirNames);
+        }
+
+        File getWorkDir() {
+            return workDir;
         }
 
         protected abstract File getRootDir(Context context, File rootDir);
@@ -78,23 +85,14 @@ public class WorkDir {
         /**
          * 获取目录
          */
-        public File getDir(String dir) {
-            // return new File(workDir, mDirs.get(dir)).getAbsolutePath()
-            // + File.separator;
-            File file = dirs.get(dir);
+        public File getDir(String tag) {
+            File file = dirs.get(tag);
+            if (file == null) {
+                file = new File(workDir, tag);
+                dirs.put(tag, file);
+            }
             IoUtil.checkDirectory(file);
             return file;
-        }
-
-        private void initDirs(String... dirNames) {
-            for (String dir : dirNames) {
-                File file = new File(workDir, dir);
-                if (!IoUtil.checkDirectory(file)) {
-                    throw new IllegalStateException(
-                            "file error: " + file.getAbsolutePath());
-                }
-                dirs.put(dir, file);
-            }
         }
 
         public void bindDir(String tag, File dir) {

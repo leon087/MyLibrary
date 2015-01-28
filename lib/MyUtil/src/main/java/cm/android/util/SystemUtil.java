@@ -263,4 +263,18 @@ public class SystemUtil {
         return activityName;
     }
 
+    public static String getCurProcessName(Context context) {
+        int pid = android.os.Process.myPid();
+        logger.info("pid = " + pid);
+        ActivityManager mActivityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager
+                .getRunningAppProcesses()) {
+            if (appProcess.pid == pid) {
+                return appProcess.processName;
+            }
+        }
+        return null;
+    }
+
 }

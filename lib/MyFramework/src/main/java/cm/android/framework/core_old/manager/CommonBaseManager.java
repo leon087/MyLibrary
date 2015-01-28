@@ -1,4 +1,4 @@
-package cm.android.framework.core.manager;
+package cm.android.framework.core_old.manager;
 
 import android.content.Context;
 

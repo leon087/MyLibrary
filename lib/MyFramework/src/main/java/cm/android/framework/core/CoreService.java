@@ -1,17 +1,26 @@
 package cm.android.framework.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import cm.android.framework.core.manager.ServiceBidnerImpl;
 import cm.android.sdk.PersistentService;
 
 public class CoreService extends PersistentService {
 
-    private final CoreReceiver coreReceiver = new CoreReceiver();
+
+    private static final Logger logger = LoggerFactory.getLogger("framework");
+
+    private ServiceBidnerImpl serviceBidner;
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public final IBinder onBind(Intent intent) {
+        return serviceBidner;
     }
 
     @Override
@@ -20,14 +29,26 @@ public class CoreService extends PersistentService {
     }
 
     @Override
-    public void onCreate() {
+    public final void onCreate() {
         super.onCreate();
-        coreReceiver.register(this);
+        serviceBidner = new ServiceBidnerImpl();
     }
 
     @Override
-    public void onDestroy() {
-        coreReceiver.unregister();
+    public final void onDestroy() {
+        logger.error("onDestroy");
+        serviceBidner.destroy();
+        serviceBidner = null;
         super.onDestroy();
+    }
+
+    public final static boolean bind(Context context, ServiceConnection connection) {
+        return context.getApplicationContext()
+                .bindService(new Intent(context, CoreService.class), connection,
+                        Context.BIND_AUTO_CREATE);
+    }
+
+    public final static void unBind(Context context, ServiceConnection connection) {
+        context.getApplicationContext().unbindService(connection);
     }
 }

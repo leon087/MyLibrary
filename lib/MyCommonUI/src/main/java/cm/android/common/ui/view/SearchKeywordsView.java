@@ -1,5 +1,8 @@
 package cm.android.common.ui.view;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -20,10 +23,10 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
 
-import cm.android.util.MyLog;
-
 public class SearchKeywordsView extends FrameLayout implements
         OnGlobalLayoutListener {
+
+    private static final Logger logger = LoggerFactory.getLogger("SearchKeywordsView");
 
     public static final int IDX_X = 0;
 
@@ -235,7 +238,7 @@ public class SearchKeywordsView extends FrameLayout implements
             // 关键字的个数。
             int size = vecKeywords.size();
             int xItem = width / size, yItem = height / size;
-            MyLog.d(
+            logger.debug(
                     "--------------------------width=" + width + " height="
                             + height + "  xItem=" + xItem + " yItem=" + yItem
                             + "---------------------------");
@@ -245,7 +248,7 @@ public class SearchKeywordsView extends FrameLayout implements
                 // 准备随机候选数，分别对应x/y轴位置
                 listX.add(i * xItem);
                 listY.add(i * yItem + (yItem >> 2));
-                MyLog.d(
+                logger.debug(
                         "ListX:" + (i * xItem) + "#listY:"
                                 + (i * yItem + (yItem >> 2)));
             }

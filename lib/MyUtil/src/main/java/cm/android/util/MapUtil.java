@@ -41,7 +41,12 @@ public class MapUtil {
         if (value instanceof String) {
             return (String) value;
         } else {
-            return defaultValue;
+            try {
+                return String.valueOf(value);
+            } catch (Exception e) {
+                logger.error("value = " + value, e);
+                return defaultValue;
+            }
         }
     }
 

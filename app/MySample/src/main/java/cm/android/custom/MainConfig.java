@@ -25,7 +25,7 @@ public class MainConfig extends MyAppConfig {
 
     @Override
     public void initWorkDir(Context context) {
-        WorkDir.initWorkDir(context, DOWNLOAD, LOG_DIR);
+        WorkDir.initWorkDir(context);
     }
 
     @Override
