@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-import cm.android.framework.core.manager.ServiceBidnerImpl;
 import cm.android.sdk.PersistentService;
 
 public class CoreService extends PersistentService {
@@ -16,7 +15,7 @@ public class CoreService extends PersistentService {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
-    private ServiceBidnerImpl serviceBidner;
+    private final ServiceBidnerImpl serviceBidner = new ServiceBidnerImpl();
 
     @Override
     public final IBinder onBind(Intent intent) {
@@ -31,14 +30,13 @@ public class CoreService extends PersistentService {
     @Override
     public final void onCreate() {
         super.onCreate();
-        serviceBidner = new ServiceBidnerImpl();
+        serviceBidner.initialize();
     }
 
     @Override
     public final void onDestroy() {
         logger.error("onDestroy");
-        serviceBidner.destroy();
-        serviceBidner = null;
+        serviceBidner.release();
         super.onDestroy();
     }
 

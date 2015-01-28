@@ -1,4 +1,4 @@
-package cm.android.framework.core.manager;
+package cm.android.framework.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import android.os.Binder;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import cm.android.framework.core.manager.IServiceBinder;
 
 public class ServiceBidnerImpl extends Binder implements IServiceBinder {
 
@@ -15,10 +17,25 @@ public class ServiceBidnerImpl extends Binder implements IServiceBinder {
 
     private final ServiceHolder serviceHolder = new ServiceHolder();
 
-    private IServiceManager serviceManager;
+    private cm.android.framework.core.manager.IServiceManager serviceManager;
+
+    void initialize() {
+        reset();
+    }
+
+    void release() {
+        destroy();
+        reset();
+    }
+
+    private void reset() {
+        isInitAtomic.set(false);
+        serviceHolder.resetService();
+        serviceManager = null;
+    }
 
     @Override
-    public void initService(IServiceManager serviceManager) {
+    public void initService(cm.android.framework.core.manager.IServiceManager serviceManager) {
         if (serviceManager == null) {
             throw new IllegalArgumentException("serviceManger = null");
         }

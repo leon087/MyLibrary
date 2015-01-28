@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.daemon.DaemonService;
 import cm.android.framework.core.manager.IServiceManager;
-import cm.android.framework.core.manager.ServiceBidnerImpl;
 import cm.android.util.BuildConfigUtil;
 import cm.android.util.EnvironmentUtil;
 import cm.android.util.SystemUtil;
