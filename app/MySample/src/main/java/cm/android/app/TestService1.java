@@ -7,28 +7,30 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import cm.android.custom.MainApp;
+import cm.android.app.sample.ITestManager;
 import cm.android.framework.core.InitListener;
 import cm.android.framework.core.ServiceManager;
 import cm.android.sdk.PersistentService;
 
-public class MainService extends PersistentService {
+public class TestService1 extends PersistentService {
 
     private static final Logger logger = LoggerFactory.getLogger("ggg");
 
     @Override
     public void onStartService(Intent intent, int flags, int startId) {
-        MainApp.getApp().initApp(new InitListener() {
+        ServiceManager.start(new InitListener() {
             @Override
             public void initSucceed() {
-                logger.error("ggg initSucceed");
-                MainApp.TestManager test = (MainApp.TestManager) ServiceManager
-                        .getService("Test");
+                logger.error("ggg testService1 initSucceed");
+                ITestManager test = ITestManager.Stub
+                        .asInterface(ServiceManager.getService("Test"));
                 try {
-                    test.initialize();
+                    test.count();
                 } catch (RemoteException e) {
                     LoggerFactory.getLogger("gggg").error(e.getMessage(), e);
                 }
+
+                startService(new Intent(TestService1.this, TestService2.class));
             }
         });
     }

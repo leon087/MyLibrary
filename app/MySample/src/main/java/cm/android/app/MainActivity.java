@@ -48,7 +48,7 @@ public class MainActivity extends Activity
     private void test() {
         LoggerFactory.getLogger("gggg").error("gggg1");
 
-//        MyMainApp.getApp().initApp(new InitListener() {
+//        MyMainApp.getApp().start(new InitListener() {
 //            @Override
 //            public void initSucceed() {
 ////                SharedPreferences preferences = ServiceManager.getService("Preference");
@@ -58,7 +58,7 @@ public class MainActivity extends Activity
 //
 //                IManager test = MyServiceManager.getService("Test");
 //                try {
-//                    test.initialize();
+//                    test.start();
 //                } catch (RemoteException e) {
 //                    LoggerFactory.getLogger("gggg").error(e.getMessage(), e);
 //                }

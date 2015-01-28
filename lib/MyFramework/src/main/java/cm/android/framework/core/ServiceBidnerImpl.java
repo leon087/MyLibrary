@@ -3,6 +3,7 @@ package cm.android.framework.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.os.IBinder;
 import android.os.RemoteException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -45,7 +46,7 @@ public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.
 
     @Override
     public final void create() {
-        logger.info("isInit = " + isInitAtomic.get());
+        logger.info("isStarted = " + isInitAtomic.get());
         if (!isInitAtomic.compareAndSet(false, true)) {
             return;
         }
@@ -60,7 +61,7 @@ public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.
 
     @Override
     public final void destroy() {
-        logger.info("isInit = " + isInitAtomic.get());
+        logger.info("isStarted = " + isInitAtomic.get());
         if (!isInitAtomic.compareAndSet(true, false)) {
             return;
         }
@@ -74,12 +75,12 @@ public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.
     }
 
     @Override
-    public final void addService(String name, IManager manager) {
-        serviceHolder.addService(name, manager);
+    public final void addService(String name, IBinder binder) {
+        serviceHolder.addService(name, binder);
     }
 
     @Override
-    public final IManager getService(String name) {
+    public final IBinder getService(String name) {
         return serviceHolder.getService(name);
     }
 }

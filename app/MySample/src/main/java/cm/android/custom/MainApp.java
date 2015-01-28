@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import android.content.Intent;
 import android.os.RemoteException;
 
-import cm.android.app.MainService;
+import cm.android.app.TestService1;
+import cm.android.app.sample.ITestManager;
 import cm.android.framework.core.AppConfig;
 import cm.android.framework.core.BaseApp;
-import cm.android.framework.core.IManager;
 import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
 
@@ -22,20 +22,22 @@ public class MainApp extends BaseApp {
         super.onCreate();
         logger.error("ggg application onCreate");
 
-        startService(new Intent(this, MainService.class));
+        startService(new Intent(this, TestService1.class));
     }
 
     @Override
-    protected AppConfig initConfig() {
+    public AppConfig initConfig() {
         return new MainConfig();
     }
 
     @Override
-    protected cm.android.framework.core.IServiceManager initService() {
+    public cm.android.framework.core.IServiceManager initService() {
         return new IServiceManager.Stub() {
             @Override
             public void onCreate() throws RemoteException {
-                ServiceManager.addService("Test", new TestManager());
+                logger.error("ggggg initService:onCreate");
+                TestManager testManager = new TestManager();
+                ServiceManager.addService("Test", testManager);
             }
 
             @Override
@@ -47,16 +49,14 @@ public class MainApp extends BaseApp {
         };
     }
 
-    public static class TestManager extends IManager.Stub {
+    public static class TestManager extends ITestManager.Stub {
+
+        private int count;
 
         @Override
-        public void initialize() throws RemoteException {
-            logger.error("ggg initialize");
-        }
-
-        @Override
-        public void release() throws RemoteException {
-
+        public void count() throws RemoteException {
+            logger.error("ggg count = " + count);
+            count++;
         }
     }
 }

@@ -21,7 +21,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name="cm.android.app.MainService" android:process=":remote"/>
+        <service android:name="cm.android.app.TestService1"
+                 android:process="cm.android.app.sample.test1"/>
+        <service android:name="cm.android.app.TestService2"
+                 android:process="cm.android.app.sample.test2"/>
     </application>
 
 </manifest>

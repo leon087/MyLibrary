@@ -1,16 +1,33 @@
 package cm.android.framework.core;
 
+import android.content.Context;
+import android.os.IBinder;
+
 public final class ServiceManager {
 
-    public static void addService(String name, IManager manager) {
-        BaseApp.getApp().addService(name, manager);
+    private static final ApplicationImpl mApplication = new ApplicationImpl();
+
+    static void appInit(Context context, AppConfig appConfig, IServiceManager serviceManager) {
+        mApplication.appInit(context, appConfig, serviceManager);
     }
 
-    public static IManager getService(String name) {
-        return BaseApp.getApp().getService(name);
+    public static void addService(String name, IBinder binder) {
+        mApplication.addService(name, binder);
+    }
+
+    public static IBinder getService(String name) {
+        return mApplication.getService(name);
     }
 
     public static boolean isBindService() {
-        return BaseApp.getApp().isBindService();
+        return mApplication.isBindService();
+    }
+
+    public static void start(InitListener initListener) {
+        mApplication.start(initListener);
+    }
+
+    public static void stop() {
+        mApplication.stop();
     }
 }

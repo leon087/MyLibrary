@@ -2,7 +2,6 @@
 package cm.android.framework.core;
 
 import cm.android.framework.core.IServiceManager;
-import cm.android.framework.core.IManager;
 
 interface IServiceBinder {
 
@@ -12,7 +11,7 @@ interface IServiceBinder {
 
     void destroy();
 
-    IManager getService(String name);
+    IBinder getService(String name);
 
-    void addService(String name, IManager manager);
+    void addService(String name, IBinder binder);
 }

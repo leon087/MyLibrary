@@ -15,14 +15,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.AppConfig;
-import cm.android.framework.core.IApp;
 import cm.android.framework.core.InitListener;
 import cm.android.framework.core.daemon.DaemonService;
 import cm.android.util.BuildConfigUtil;
 import cm.android.util.EnvironmentUtil;
 import cm.android.util.SystemUtil;
 
-public abstract class LocalBaseApp extends Application implements IApp {
+public abstract class LocalBaseApp extends Application {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
@@ -82,7 +81,6 @@ public abstract class LocalBaseApp extends Application implements IApp {
         LocalCoreService.bind(LocalBaseApp.this, mServiceConnection);
     }
 
-    @Override
     public final synchronized void initApp(InitListener initListener) {
         this.initListener = initListener;
         initApp();
@@ -92,7 +90,7 @@ public abstract class LocalBaseApp extends Application implements IApp {
         StateHolder.writeState(this, true);
 
         if (!isBindService()) {
-            logger.error("initApp:serviceBidner = null");
+            logger.error("start:serviceBidner = null");
             return;
         }
 
@@ -102,7 +100,6 @@ public abstract class LocalBaseApp extends Application implements IApp {
         notifyInitSucceed();
     }
 
-    @Override
     public final synchronized void exitApp() {
         StateHolder.writeState(this, false);
 

@@ -2,11 +2,10 @@ package cm.android.framework.core;
 
 public interface IApp {
 
-    void initApp(InitListener initInterface);
+    /**
+     * 初始化App运行配置
+     */
+    AppConfig initConfig();
 
-    void exitApp();
-
-//    <T> T getService(String name);
-//
-//    void addService(String name, Object manager);
+    IServiceManager initService();
 }
