@@ -5,19 +5,19 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-final class ServiceHolder {
+public final class ServiceHolder {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
     private final HashMap<String, Object> mServices = new HashMap<String, Object>();
 
-    ServiceHolder() {
+    public ServiceHolder() {
     }
 
     /**
      * 初始化管理模块
      */
-    void addService(String name, Object manager) {
+    public void addService(String name, Object manager) {
         Object tmp = mServices.get(name);
         if (tmp != null) {
             logger.error("name = {},manager = {},tmp = {}", name, manager, tmp);
@@ -33,16 +33,16 @@ final class ServiceHolder {
     /**
      * 获取单例服务对象
      */
-    <T> T getService(String name) {
+    public <T> T getService(String name) {
         return (T) mServices.get(name);
     }
 
-    void resetService() {
+    public void resetService() {
         mServices.clear();
     }
 
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return mServices.isEmpty();
     }
 }

@@ -9,7 +9,7 @@ public abstract class AppConfig implements IAppConfig {
     /**
      * 初始化
      */
-    protected void init(Context context) {
+    public void init(Context context) {
         initWorkDir(context);
         initLog();
     }

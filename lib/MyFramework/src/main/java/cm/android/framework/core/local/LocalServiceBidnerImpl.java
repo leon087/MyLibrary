@@ -1,13 +1,17 @@
-package cm.android.framework.core;
+package cm.android.framework.core.local;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.os.RemoteException;
+import android.os.Binder;
+import android.os.IBinder;
+import android.os.IInterface;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.Stub {
+import cm.android.framework.core.ServiceHolder;
+
+public class LocalServiceBidnerImpl extends Binder implements ILocalServiceBinder, IInterface {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
@@ -15,7 +19,25 @@ public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.
 
     private final ServiceHolder serviceHolder = new ServiceHolder();
 
-    private IServiceManager serviceManager;
+    private ILocalServiceManager serviceManager;
+
+    private static final java.lang.String DESCRIPTOR
+            = "cm.android.framework.core.local.IServiceBinder";
+
+    LocalServiceBidnerImpl() {
+        this.attachInterface(this, DESCRIPTOR);
+    }
+
+    public static ILocalServiceBinder asInterface(android.os.IBinder obj) {
+        if ((obj == null)) {
+            return null;
+        }
+        android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
+        if (((iin != null) && (iin instanceof ILocalServiceBinder))) {
+            return ((ILocalServiceBinder) iin);
+        }
+        return null;
+    }
 
     void initialize() {
         reset();
@@ -33,7 +55,7 @@ public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.
     }
 
     @Override
-    public void initService(IServiceManager serviceManager) {
+    public void initService(ILocalServiceManager serviceManager) {
         if (serviceManager == null) {
             throw new IllegalArgumentException("serviceManger = null");
         }
@@ -51,11 +73,7 @@ public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.
         }
 
         serviceHolder.resetService();
-        try {
-            serviceManager.onCreate();
-        } catch (RemoteException e) {
-            logger.error(e.getMessage(), e);
-        }
+        serviceManager.onCreate();
     }
 
     @Override
@@ -65,21 +83,22 @@ public class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.
             return;
         }
 
-        try {
-            serviceManager.onDestroy();
-        } catch (RemoteException e) {
-            logger.error(e.getMessage(), e);
-        }
+        serviceManager.onDestroy();
         serviceHolder.resetService();
     }
 
     @Override
-    public final void addService(String name, IManager manager) {
+    public final void addService(String name, Object manager) {
         serviceHolder.addService(name, manager);
     }
 
     @Override
-    public final IManager getService(String name) {
+    public final <T> T getService(String name) {
         return serviceHolder.getService(name);
+    }
+
+    @Override
+    public IBinder asBinder() {
+        return this;
     }
 }

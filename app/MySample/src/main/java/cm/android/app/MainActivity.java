@@ -6,7 +6,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -16,9 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cm.android.app.sample.R;
-import cm.android.custom.MainApp;
-import cm.android.framework.core.InitListener;
-import cm.android.framework.core.ServiceManager;
 
 
 public class MainActivity extends Activity
@@ -52,15 +48,22 @@ public class MainActivity extends Activity
     private void test() {
         LoggerFactory.getLogger("gggg").error("gggg1");
 
-        MainApp.getApp().initApp(new InitListener() {
-            @Override
-            public void initSucceed() {
-                SharedPreferences preferences = ServiceManager.getService("Preference");
-                preferences.edit().putString("ggg", "g111").commit();
-                String s = preferences.getString("ggg", "ggg");
-                LoggerFactory.getLogger("gggg").error("ggg s = " + s);
-            }
-        });
+//        MyMainApp.getApp().initApp(new InitListener() {
+//            @Override
+//            public void initSucceed() {
+////                SharedPreferences preferences = ServiceManager.getService("Preference");
+////                preferences.edit().putString("ggg", "g111").commit();
+////                String s = preferences.getString("ggg", "ggg");
+////                LoggerFactory.getLogger("gggg").error("ggg s = " + s);
+//
+//                IManager test = MyServiceManager.getService("Test");
+//                try {
+//                    test.initialize();
+//                } catch (RemoteException e) {
+//                    LoggerFactory.getLogger("gggg").error(e.getMessage(), e);
+//                }
+//            }
+//        });
 
     }
 

@@ -1,4 +1,4 @@
-package cm.android.framework.core;
+package cm.android.framework.core.local;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,21 +10,23 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.os.IBinder;
-import android.os.RemoteException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
+import cm.android.framework.core.AppConfig;
+import cm.android.framework.core.IApp;
+import cm.android.framework.core.InitListener;
 import cm.android.framework.core.daemon.DaemonService;
 import cm.android.util.BuildConfigUtil;
 import cm.android.util.EnvironmentUtil;
 import cm.android.util.SystemUtil;
 
-public abstract class BaseApp extends Application implements IApp {
+public abstract class LocalBaseApp extends Application implements IApp {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
-    private static BaseApp sApp = null;
+    private static LocalBaseApp sApp = null;
 
     private final AtomicBoolean isInitAtomic = new AtomicBoolean(false);
 
@@ -48,7 +50,7 @@ public abstract class BaseApp extends Application implements IApp {
      *
      * @return BaseApp
      */
-    public synchronized final static BaseApp getApp() {
+    public synchronized final static LocalBaseApp getApp() {
         return sApp;
     }
 
@@ -77,7 +79,7 @@ public abstract class BaseApp extends Application implements IApp {
     }
 
     public final void appInit() {
-        CoreService.bind(BaseApp.this, mServiceConnection);
+        LocalCoreService.bind(LocalBaseApp.this, mServiceConnection);
     }
 
     @Override
@@ -96,7 +98,7 @@ public abstract class BaseApp extends Application implements IApp {
 
         isInitAtomic.set(true);
         DaemonService.start(this);
-        serviceBidnerProxy.create();
+        serviceBidner.create();
         notifyInitSucceed();
     }
 
@@ -108,7 +110,9 @@ public abstract class BaseApp extends Application implements IApp {
         DaemonService.stop(this);
         this.initListener = null;
 
-        serviceBidnerProxy.destroy();
+        if (serviceBidner != null) {
+            serviceBidner.destroy();
+        }
     }
 
     /**
@@ -116,22 +120,26 @@ public abstract class BaseApp extends Application implements IApp {
      */
     protected abstract AppConfig initConfig();
 
-    protected abstract IServiceManager initService();
+    protected abstract ILocalServiceManager initService();
 
-    private ServiceBinderProxy serviceBidnerProxy = new ServiceBinderProxy();
+    private LocalServiceBidnerImpl serviceBidner;
 
     private InitListener initListener;
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            logger.info("onServiceConnected:componentName = {},iBinder = {},processName = {}",
-                    componentName, iBinder, SystemUtil.getCurProcessName(BaseApp.getApp()));
-            serviceBidnerProxy.bindServiceBinder(IServiceBinder.Stub.asInterface(iBinder));
-            serviceBidnerProxy.initService(initService());
+            logger.info("onServiceConnected:componentName = {},iBinder = {}", componentName,
+                    iBinder);
+            if (!(iBinder instanceof LocalServiceBidnerImpl)) {
+                logger.error("bind error:iBinder = " + iBinder.getClass().getName());
+                return;
+            }
+            serviceBidner = (LocalServiceBidnerImpl) iBinder;
+            serviceBidner.initService(initService());
 
             //状态恢复
-            if (StateHolder.isStateInit(BaseApp.this)) {
+            if (StateHolder.isStateInit(LocalBaseApp.this)) {
                 initApp();
             }
         }
@@ -139,28 +147,32 @@ public abstract class BaseApp extends Application implements IApp {
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             logger.error("onServiceDisconnected:componentName = " + componentName);
-            serviceBidnerProxy.bindServiceBinder(null);
+            serviceBidner = null;
         }
     };
 
-    final IManager getService(String name) {
+    final <T> T getService(String name) {
         if (!isBindService()) {
             logger.error("name = " + name);
             return null;
         }
-        return serviceBidnerProxy.getService(name);
+        return serviceBidner.getService(name);
     }
 
-    final void addService(String name, IManager manager) {
+    final void addService(String name, Object manager) {
         if (!isBindService()) {
             logger.error("name = {},manager = {}", name, manager);
             return;
         }
-        serviceBidnerProxy.addService(name, manager);
+        serviceBidner.addService(name, manager);
     }
 
     final boolean isBindService() {
-        return serviceBidnerProxy.isBindService();
+        if (serviceBidner == null) {
+            logger.info("serviceBidner = null");
+            return false;
+        }
+        return true;
     }
 
     private void notifyInitSucceed() {
@@ -188,89 +200,6 @@ public abstract class BaseApp extends Application implements IApp {
             SharedPreferences preferences = context.getSharedPreferences("app_status",
                     Context.MODE_PRIVATE);
             return preferences.getBoolean("state", false);
-        }
-    }
-
-    private static class ServiceBinderProxy {
-
-        private static final Logger logger = LoggerFactory.getLogger("framework");
-
-        private IServiceBinder serviceBinder;
-
-        ServiceBinderProxy() {
-
-        }
-
-        void bindServiceBinder(IServiceBinder serviceBinder) {
-            this.serviceBinder = serviceBinder;
-        }
-
-        boolean isBindService() {
-            if (serviceBinder == null) {
-                return false;
-            }
-            return true;
-        }
-
-        void initService(IServiceManager serviceManager) {
-            if (!isBindService()) {
-                return;
-            }
-
-            try {
-                serviceBinder.initService(serviceManager);
-            } catch (RemoteException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-
-        void create() {
-            if (!isBindService()) {
-                return;
-            }
-
-            try {
-                serviceBinder.create();
-            } catch (RemoteException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-
-        void destroy() {
-            if (!isBindService()) {
-                return;
-            }
-
-            try {
-                serviceBinder.destroy();
-            } catch (RemoteException e) {
-                logger.error(e.getMessage(), e);
-            }
-        }
-
-        IManager getService(String name) {
-            if (!isBindService()) {
-                return null;
-            }
-
-            try {
-                return serviceBinder.getService(name);
-            } catch (RemoteException e) {
-                logger.error(e.getMessage(), e);
-                return null;
-            }
-        }
-
-        void addService(String name, IManager manager) {
-            if (!isBindService()) {
-                return;
-            }
-
-            try {
-                serviceBinder.addService(name, manager);
-            } catch (RemoteException e) {
-                logger.error(e.getMessage(), e);
-            }
         }
     }
 }

@@ -3,15 +3,15 @@ package cm.android.custom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.RemoteException;
 
 import cm.android.app.MainService;
-import cm.android.common.http.MyHttp;
 import cm.android.framework.core.AppConfig;
 import cm.android.framework.core.BaseApp;
+import cm.android.framework.core.IManager;
+import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
-import cm.android.framework.core.manager.IServiceManager;
 
 public class MainApp extends BaseApp {
 
@@ -31,21 +31,32 @@ public class MainApp extends BaseApp {
     }
 
     @Override
-    protected IServiceManager initService() {
-        return new IServiceManager() {
+    protected cm.android.framework.core.IServiceManager initService() {
+        return new IServiceManager.Stub() {
             @Override
-            public void onCreate() {
-                ServiceManager.addService("Mdmhttp", new MyHttp(MainApp.getApp()));
-                ServiceManager.addService("Preference", MainApp.getApp()
-                        .getSharedPreferences(MainApp.getApp().getPackageName(),
-                                Context.MODE_PRIVATE));
+            public void onCreate() throws RemoteException {
+                ServiceManager.addService("Test", new TestManager());
             }
 
             @Override
-            public void onDestroy() {
-                MyHttp myHttp = ServiceManager.getService("MdmHttp");
-                myHttp.cancel();
+            public void onDestroy() throws RemoteException {
+
             }
+
+            ;
         };
+    }
+
+    public static class TestManager extends IManager.Stub {
+
+        @Override
+        public void initialize() throws RemoteException {
+            logger.error("ggg initialize");
+        }
+
+        @Override
+        public void release() throws RemoteException {
+
+        }
     }
 }
