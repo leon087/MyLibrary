@@ -1,7 +1,12 @@
 package cm.android.custom;
 
-import android.content.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import android.content.Context;
+import android.content.Intent;
+
+import cm.android.app.MainService;
 import cm.android.common.http.MyHttp;
 import cm.android.framework.core.AppConfig;
 import cm.android.framework.core.BaseApp;
@@ -10,9 +15,14 @@ import cm.android.framework.core.manager.IServiceManager;
 
 public class MainApp extends BaseApp {
 
+    private static final Logger logger = LoggerFactory.getLogger("ggg");
+
     @Override
     public void onCreate() {
         super.onCreate();
+        logger.error("ggg application onCreate");
+
+        startService(new Intent(this, MainService.class));
     }
 
     @Override

@@ -61,6 +61,7 @@ public class MainActivity extends Activity
                 LoggerFactory.getLogger("gggg").error("ggg s = " + s);
             }
         });
+
     }
 
     @Override
