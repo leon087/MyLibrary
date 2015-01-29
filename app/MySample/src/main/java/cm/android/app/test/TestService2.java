@@ -1,4 +1,4 @@
-package cm.android.app;
+package cm.android.app.test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import android.content.Intent;
 import android.os.IBinder;
 
-import cm.android.custom.MyManager;
+import cm.android.app.core.MyManager;
 import cm.android.framework.core.ServiceManager;
 import cm.android.sdk.PersistentService;
 

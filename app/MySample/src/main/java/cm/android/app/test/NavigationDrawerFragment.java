@@ -1,4 +1,4 @@
-package cm.android.app;
+package cm.android.app.test;
 
 import android.app.ActionBar;
 import android.app.Activity;

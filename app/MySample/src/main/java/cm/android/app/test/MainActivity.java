@@ -1,4 +1,4 @@
-package cm.android.app;
+package cm.android.app.test;
 
 import org.slf4j.LoggerFactory;
 

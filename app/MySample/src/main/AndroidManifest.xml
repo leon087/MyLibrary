@@ -7,13 +7,13 @@
             android:targetSdkVersion="19"/>
 
     <application
-            android:name="cm.android.custom.MainApp"
+            android:name="cm.android.app.core.MainApp"
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
         <activity
-                android:name="cm.android.app.MainActivity"
+                android:name="cm.android.app.test.MainActivity"
                 android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -21,9 +21,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name="cm.android.app.TestService1"
+        <service android:name="cm.android.app.test.TestService1"
                  android:process="cm.android.app.sample.test1"/>
-        <service android:name="cm.android.app.TestService2"
+        <service android:name="cm.android.app.test.TestService2"
                  android:process="cm.android.app.sample.test2"/>
     </application>
 

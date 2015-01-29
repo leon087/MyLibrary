@@ -1,4 +1,4 @@
-package cm.android.custom;
+package cm.android.app.core;
 
 import android.content.Context;
 

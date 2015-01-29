@@ -1,4 +1,4 @@
-package cm.android.custom;
+package cm.android.app.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import android.content.Intent;
 import android.os.RemoteException;
 
-import cm.android.app.TestManager;
-import cm.android.app.TestService1;
+import cm.android.app.test.TestManager;
+import cm.android.app.test.TestService1;
 import cm.android.framework.core.AppConfig;
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;

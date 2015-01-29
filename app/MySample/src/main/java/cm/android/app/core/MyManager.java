@@ -1,6 +1,6 @@
-package cm.android.custom;
+package cm.android.app.core;
 
-import cm.android.app.TestManager;
+import cm.android.app.test.TestManager;
 import cm.android.framework.core.ProxyFactory;
 import cm.android.framework.core.global.GlobalData;
 
