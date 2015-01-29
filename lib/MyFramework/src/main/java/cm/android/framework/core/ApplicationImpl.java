@@ -29,7 +29,7 @@ final class ApplicationImpl {
 
     private final ServiceBinderProxy serviceBidnerProxy = new ServiceBinderProxy();
 
-    private InitListener initListener;
+    private ServiceManager.InitListener initListener;
 
     final boolean isStarted() {
         return startAtomic.get();
@@ -55,7 +55,7 @@ final class ApplicationImpl {
                 , packageInfo.versionName, SystemUtil.getCurProcessName(appContext));
     }
 
-    final synchronized void start(InitListener initListener) {
+    final synchronized void start(ServiceManager.InitListener initListener) {
         this.initListener = initListener;
         start();
     }
@@ -89,7 +89,7 @@ final class ApplicationImpl {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             logger.info("onServiceConnected:componentName = {},iBinder = {},processName = {}",
                     componentName, iBinder, SystemUtil.getCurProcessName(appContext));
-            serviceBidnerProxy.bindServiceBinder(IServiceBinder.Stub.asInterface(iBinder));
+            serviceBidnerProxy.bindServiceBinder(iBinder);
             serviceBidnerProxy.initService(serviceManager);
 
             //状态恢复
@@ -152,11 +152,10 @@ final class ApplicationImpl {
         private IServiceBinder serviceBinder;
 
         ServiceBinderProxy() {
-
         }
 
-        void bindServiceBinder(IServiceBinder serviceBinder) {
-            this.serviceBinder = serviceBinder;
+        void bindServiceBinder(IBinder iBinder) {
+            this.serviceBinder = IServiceBinder.Stub.asInterface(iBinder);
         }
 
         boolean isBindService() {

@@ -5,6 +5,11 @@ import android.os.IBinder;
 
 public final class ServiceManager {
 
+    public static interface InitListener {
+
+        void initSucceed();
+    }
+
     private static final ApplicationImpl mApplication = new ApplicationImpl();
 
     static void appInit(Context context, AppConfig appConfig, IServiceManager serviceManager) {
@@ -30,4 +35,5 @@ public final class ServiceManager {
     public static void stop() {
         mApplication.stop();
     }
+
 }
