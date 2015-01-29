@@ -10,17 +10,17 @@
     <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
 
     <application>
-        <service android:name=".core.daemon.DaemonService"
+        <service android:name="cm.android.framework.core.daemon.DaemonService"
                  android:persistent="true" android:exported="false"
                  android:permission="cm.android.framework"/>
 
-        <receiver android:name=".core.daemon.DaemonReceiver">
+        <receiver android:name="cm.android.framework.core.daemon.DaemonReceiver">
             <intent-filter>
                 <action android:name="cm.android.framework.intent.action.ALARM_WAKE_UP"/>
             </intent-filter>
         </receiver>
 
-        <service android:name=".core.CoreService" android:persistent="true"
+        <service android:name="cm.android.framework.core.CoreService" android:persistent="true"
                  android:exported="false" android:permission="cm.android.framework"/>
     </application>
 
