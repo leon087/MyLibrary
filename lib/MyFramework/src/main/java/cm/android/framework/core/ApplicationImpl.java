@@ -106,18 +106,10 @@ final class ApplicationImpl {
     };
 
     final IBinder getService(String name) {
-        if (!isBindService()) {
-            logger.error("name = " + name);
-            return null;
-        }
         return serviceBidnerProxy.getService(name);
     }
 
     final void addService(String name, IBinder binder) {
-        if (!isBindService()) {
-            logger.error("name = {},manager = {}", name, binder);
-            return;
-        }
         serviceBidnerProxy.addService(name, binder);
     }
 
@@ -153,7 +145,7 @@ final class ApplicationImpl {
         }
     }
 
-    private static class ServiceBinderProxy {
+    private static class ServiceBinderProxy extends IServiceBinder.Stub {
 
         private static final Logger logger = LoggerFactory.getLogger("framework");
 
@@ -174,7 +166,8 @@ final class ApplicationImpl {
             return true;
         }
 
-        void initService(IServiceManager serviceManager) {
+        @Override
+        public void initService(IServiceManager serviceManager) {
             if (!isBindService()) {
                 return;
             }
@@ -186,7 +179,8 @@ final class ApplicationImpl {
             }
         }
 
-        void create() {
+        @Override
+        public void create() {
             if (!isBindService()) {
                 return;
             }
@@ -198,7 +192,8 @@ final class ApplicationImpl {
             }
         }
 
-        void destroy() {
+        @Override
+        public void destroy() {
             if (!isBindService()) {
                 return;
             }
@@ -210,8 +205,10 @@ final class ApplicationImpl {
             }
         }
 
-        IBinder getService(String name) {
+        @Override
+        public IBinder getService(String name) {
             if (!isBindService()) {
+                logger.error("name = " + name);
                 return null;
             }
 
@@ -223,8 +220,10 @@ final class ApplicationImpl {
             }
         }
 
-        void addService(String name, IBinder binder) {
+        @Override
+        public void addService(String name, IBinder binder) {
             if (!isBindService()) {
+                logger.error("name = {},binder = {}", name, binder);
                 return;
             }
 
