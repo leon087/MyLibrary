@@ -27,7 +27,7 @@ public abstract class BaseApp extends Application implements IApp {
 
         disableConnectionReuseIfNecessary();
 
-        AppConfig appConfig = initConfig();
+        ServiceManager.AppConfig appConfig = initConfig();
         IServiceManager serviceManager = initService();
         ServiceManager.appInit(this, appConfig, serviceManager);
     }

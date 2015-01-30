@@ -1,7 +1,7 @@
 package cm.android.app.core;
 
 import cm.android.app.test.TestManager;
-import cm.android.framework.core.ProxyFactory;
+import cm.android.framework.core.BinderFactory;
 import cm.android.framework.core.global.GlobalData;
 
 public class MyManager {
@@ -19,7 +19,7 @@ public class MyManager {
     }
 
     public static TestManager.TestManagerProxy getTestManager() {
-        TestManager.TestManagerProxy test = ProxyFactory.getProxy("Test",
+        TestManager.TestManagerProxy test = BinderFactory.getProxy("Test",
                 TestManager.TestManagerProxy.class);
         return test;
     }

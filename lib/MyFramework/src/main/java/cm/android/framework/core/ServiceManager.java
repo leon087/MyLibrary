@@ -10,6 +10,24 @@ public final class ServiceManager {
         void initSucceed();
     }
 
+    public static interface IAppConfig {
+
+        void initLog();
+
+        void initWorkDir(Context context);
+    }
+
+    public static abstract class AppConfig implements IAppConfig {
+
+        /**
+         * 初始化
+         */
+        public void init(Context context) {
+            initWorkDir(context);
+            initLog();
+        }
+    }
+
     private static final ApplicationImpl mApplication = new ApplicationImpl();
 
     static void appInit(Context context, AppConfig appConfig, IServiceManager serviceManager) {

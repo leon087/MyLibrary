@@ -35,7 +35,8 @@ final class ApplicationImpl {
         return startAtomic.get();
     }
 
-    void appInit(Context context, AppConfig appConfig, IServiceManager serviceManager) {
+    void appInit(Context context, ServiceManager.AppConfig appConfig,
+            IServiceManager serviceManager) {
         if (appContext != null) {
             logger.error(
                     "old.appContext = {},old.processName = {},new.context = {},new.processName = {}",

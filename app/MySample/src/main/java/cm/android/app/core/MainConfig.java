@@ -3,7 +3,7 @@ package cm.android.app.core;
 import android.content.Context;
 
 import ch.qos.logback.classic.Level;
-import cm.android.framework.core.WorkDir;
+import cm.android.framework.core.global.WorkDir;
 import cm.android.framework.ext.MyAppConfig;
 import cm.android.log.LogConfig;
 

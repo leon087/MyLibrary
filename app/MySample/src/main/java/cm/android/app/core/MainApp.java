@@ -8,7 +8,6 @@ import android.os.RemoteException;
 
 import cm.android.app.test.TestManager;
 import cm.android.app.test.TestService1;
-import cm.android.framework.core.AppConfig;
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
@@ -26,7 +25,7 @@ public class MainApp extends BaseApp {
     }
 
     @Override
-    public AppConfig initConfig() {
+    public ServiceManager.AppConfig initConfig() {
         return new MainConfig();
     }
 

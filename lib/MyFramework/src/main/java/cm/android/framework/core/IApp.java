@@ -5,7 +5,7 @@ public interface IApp {
     /**
      * 初始化App运行配置
      */
-    AppConfig initConfig();
+    ServiceManager.AppConfig initConfig();
 
     IServiceManager initService();
 }

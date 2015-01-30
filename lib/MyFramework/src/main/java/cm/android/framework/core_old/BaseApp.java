@@ -13,7 +13,7 @@ import android.content.pm.PackageInfo;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
-import cm.android.framework.core.AppConfig;
+import cm.android.framework.core.ServiceManager;
 import cm.android.framework.core.daemon.DaemonService;
 import cm.android.framework.core_old.manager.BaseManager;
 import cm.android.util.ActivityStack;
@@ -175,5 +175,5 @@ public abstract class BaseApp extends Application implements IApp {
     /**
      * 初始化App运行配置
      */
-    protected abstract AppConfig initConfig();
+    protected abstract ServiceManager.AppConfig initConfig();
 }

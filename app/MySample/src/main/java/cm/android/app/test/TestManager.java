@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import cm.android.app.sample.ITestManager;
-import cm.android.framework.core.ProxyFactory;
+import cm.android.framework.core.BinderFactory;
 
 public class TestManager extends ITestManager.Stub {
 
@@ -22,7 +22,7 @@ public class TestManager extends ITestManager.Stub {
     }
 
     public static class TestManagerProxy extends ITestManager.Stub implements
-            ProxyFactory.IBinderProxy {
+            BinderFactory.IBinderProxy {
 
         private ITestManager testManager;
 

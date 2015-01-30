@@ -8,10 +8,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import cm.android.framework.core.binder.ServiceBidnerImpl;
 import cm.android.sdk.PersistentService;
 
-public class CoreService extends PersistentService {
-
+public final class CoreService extends PersistentService {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
