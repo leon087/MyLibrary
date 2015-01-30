@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import android.content.Intent;
 import android.os.RemoteException;
 
-import cm.android.app.test.TestManager;
 import cm.android.app.test.TestService1;
+import cm.android.app.test.server.TestManagerServer;
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
@@ -35,7 +35,7 @@ public class MainApp extends BaseApp {
             @Override
             public void onCreate() throws RemoteException {
                 logger.error("ggggg initService:onCreate");
-                TestManager testManager = new TestManager();
+                TestManagerServer testManager = new TestManagerServer();
                 ServiceManager.addService("Test", testManager);
             }
 

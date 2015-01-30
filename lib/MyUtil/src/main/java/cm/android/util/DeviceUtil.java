@@ -1,8 +1,5 @@
 package cm.android.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -12,6 +9,10 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -256,5 +257,30 @@ public class DeviceUtil {
                 .getSystemService(Context.TELEPHONY_SERVICE);
         String imsi = tm.getSubscriberId();
         return imsi;
+    }
+
+    public static String getHostName() {
+        try {
+            Method getString = Build.class.getDeclaredMethod("getString", String.class);
+            getString.setAccessible(true);
+            return getString.invoke(null, "net.hostname").toString();
+        } catch (Exception ex) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
+            return sb.toString();
+        }
+    }
+
+    public static String getHostName2() {
+        try {
+            Class clazz = Class.forName("android.os.SystemProperties");
+            Method get = clazz.getDeclaredMethod("get", String.class);
+            get.setAccessible(true);
+            return get.invoke(null, "net.hostname").toString();
+        } catch (Exception e) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
+            return sb.toString();
+        }
     }
 }

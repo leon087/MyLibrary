@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import cm.android.app.core.MyManager;
+import cm.android.app.test.server.TestManager;
 import cm.android.framework.core.ServiceManager;
 import cm.android.sdk.PersistentService;
 
@@ -20,7 +21,7 @@ public class TestService2 extends PersistentService {
             @Override
             public void initSucceed() {
                 logger.error("ggg testService2 initSucceed");
-                TestManager.TestManagerProxy test = MyManager.getTestManager();
+                TestManager test = MyManager.getTestManager();
                 test.count();
             }
         });

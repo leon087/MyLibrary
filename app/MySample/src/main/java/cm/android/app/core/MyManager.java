@@ -1,6 +1,6 @@
 package cm.android.app.core;
 
-import cm.android.app.test.TestManager;
+import cm.android.app.test.server.TestManager;
 import cm.android.framework.core.BinderFactory;
 import cm.android.framework.core.global.GlobalData;
 
@@ -18,9 +18,8 @@ public class MyManager {
         GlobalData.getInstance().putData(tag, value);
     }
 
-    public static TestManager.TestManagerProxy getTestManager() {
-        TestManager.TestManagerProxy test = BinderFactory.getProxy("Test",
-                TestManager.TestManagerProxy.class);
+    public static TestManager getTestManager() {
+        TestManager test = BinderFactory.getProxy("Test", TestManager.class);
         return test;
     }
 }
