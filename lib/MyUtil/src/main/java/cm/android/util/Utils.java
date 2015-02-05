@@ -46,7 +46,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cm.android.applications.AppUtil;
-import cm.android.sdk.MyParcelable;
 
 /**
  * 常用工具类
@@ -493,17 +492,6 @@ public final class Utils {
         return str;
     }
 
-    /**
-     * 将object包装至Bundle中
-     */
-    public static Bundle generateBundle(String key, Object object) {
-        Bundle bundle = new Bundle();
-        MyParcelable<Object> parcelable = MyParcelable.newParcelable();
-        parcelable.setValue(object);
-        bundle.putParcelable(key, parcelable);
-        return bundle;
-    }
-
     public static Object cloneObject(Object obj) {
         if (obj == null) {
             return null;
@@ -568,5 +556,11 @@ public final class Utils {
         }
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(0);
+    }
+
+    public static void transferData(Bundle oldBundle, Bundle newBundle) {
+        if (oldBundle != null) {
+            newBundle.putAll(oldBundle);
+        }
     }
 }

@@ -10,6 +10,7 @@ public class DaemonReceiver extends BaseBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        DaemonManager.getInstance().schedule(context);
         context.startService(new Intent(context, DaemonService.class));
     }
 

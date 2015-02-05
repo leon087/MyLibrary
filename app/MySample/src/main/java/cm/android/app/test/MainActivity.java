@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cm.android.app.sample.R;
+import cm.android.app.test.alarm.TestReceiver;
 
 
 public class MainActivity extends Activity
@@ -45,6 +47,8 @@ public class MainActivity extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
+    private TestReceiver testReceiver = new TestReceiver();
+
     private void test() {
         LoggerFactory.getLogger("gggg").error("gggg1");
 
@@ -65,6 +69,9 @@ public class MainActivity extends Activity
 //            }
 //        });
 
+        testReceiver.register(this);
+
+        LoggerFactory.getLogger("ggg").error("ggg systemClock = " + SystemClock.elapsedRealtime());
     }
 
     @Override
@@ -72,6 +79,14 @@ public class MainActivity extends Activity
         super.onResume();
 
         test();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        LoggerFactory.getLogger("ggg").error("ggg onPause");
+        testReceiver.unregister();
     }
 
     @Override

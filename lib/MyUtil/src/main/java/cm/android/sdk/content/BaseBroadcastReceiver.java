@@ -30,16 +30,16 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
         context = null;
     }
 
-    public final void registerLocal(Context context, IntentFilter intentFilter) {
+    public void registerLocal(Context context, IntentFilter intentFilter) {
         LocalBroadcastManager.getInstance(context).registerReceiver(this, intentFilter);
     }
 
-    public final void registerLocal(Context context) {
+    public void registerLocal(Context context) {
         IntentFilter intentFilter = createIntentFilter();
         registerLocal(context, intentFilter);
     }
 
-    public final void unregisterLocal(Context context) {
+    public void unregisterLocal(Context context) {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
     }
 

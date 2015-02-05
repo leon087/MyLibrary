@@ -380,5 +380,10 @@ public class EnvironmentUtil {
             return Build.VERSION.SDK_INT >= 17;
 //            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
         }
+
+        public static boolean hasKitkat() {
+            return Build.VERSION.SDK_INT >= 19;
+//            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        }
     }
 }
