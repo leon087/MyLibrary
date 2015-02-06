@@ -1,5 +1,8 @@
 package cm.android.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -8,9 +11,6 @@ import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.net.InetAddress;
@@ -155,6 +155,10 @@ public class DeviceUtil {
     public static String getSerial() {
         try {
             String serial = ReflectUtil.getFieldValue(new Build(), "SERIAL");
+            if (Utils.isEmpty(serial)) {
+                logger.error("serial = " + serial);
+                return "";
+            }
             return serial;
         } catch (Exception e) {
             return "";
@@ -243,8 +247,13 @@ public class DeviceUtil {
             TelephonyManager tm = (TelephonyManager) context
                     .getSystemService(Context.TELEPHONY_SERVICE);
             String imei = tm.getDeviceId();
+            if (Utils.isEmpty(imei)) {
+                logger.error("imei = " + imei);
+                return "";
+            }
             return imei;
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             return "";
         }
     }
@@ -253,10 +262,19 @@ public class DeviceUtil {
      * 获取IMSI
      */
     public static String getIMSI(Context context) {
-        TelephonyManager tm = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        String imsi = tm.getSubscriberId();
-        return imsi;
+        try {
+            TelephonyManager tm = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            String imsi = tm.getSubscriberId();
+            if (Utils.isEmpty(imsi)) {
+                logger.error("imsi = " + imsi);
+                return "";
+            }
+            return imsi;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return "";
+        }
     }
 
     public static String getHostName() {

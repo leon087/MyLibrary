@@ -53,7 +53,7 @@ public class AlarmUtil {
         }
     }
 
-    public static void stop(Context context, Intent broadcastIntent, int requestCode) {
+    public static void cancel(Context context, Intent broadcastIntent, int requestCode) {
         PendingIntent sender = genPendingBroadcast(context, requestCode, broadcastIntent);
         AlarmManager am = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);

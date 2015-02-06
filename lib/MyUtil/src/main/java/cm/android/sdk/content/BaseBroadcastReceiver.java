@@ -26,6 +26,10 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
      * 去注册
      */
     public final void unregister() {
+        if (context == null) {
+            return;
+        }
+
         context.unregisterReceiver(this);
         context = null;
     }

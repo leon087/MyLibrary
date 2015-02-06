@@ -10,11 +10,11 @@ import android.os.SystemClock;
 
 import cm.android.sdk.content.BaseBroadcastReceiver;
 
-public class TestReceiver extends BaseBroadcastReceiver {
+public class TestReceiver2 extends BaseBroadcastReceiver {
 
     private static final Logger logger = LoggerFactory.getLogger("ggg");
 
-    public static final String ACTION = "cm.android.ggg.test1";
+    public static final String ACTION = "cm.android.ggg.test2";
 
     @Override
     public IntentFilter createIntentFilter() {

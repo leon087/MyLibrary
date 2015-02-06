@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import cm.android.app.test.TestContext;
 import cm.android.app.test.TestService1;
 import cm.android.app.test.server.TestManagerServer;
+import cm.android.app.test.server.TimerTaskServer;
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
@@ -25,6 +26,7 @@ public class MainApp extends BaseApp {
         startService(new Intent(this, TestService1.class));
     }
 
+
     @Override
     public ServiceManager.AppConfig initConfig() {
         return new MainConfig();
@@ -38,6 +40,11 @@ public class MainApp extends BaseApp {
                 logger.error("ggggg initService:onCreate");
                 TestManagerServer testManager = new TestManagerServer();
                 ServiceManager.addService(TestContext.TEST, testManager);
+
+                TimerTaskServer timerTaskServer = new TimerTaskServer();
+                timerTaskServer.start();
+
+                ServiceManager.addService(TestContext.TIMER_TASK_SERVER, timerTaskServer);
             }
 
             @Override

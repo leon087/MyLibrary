@@ -9,7 +9,7 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
 
     private Context context;
 
-    private AlarmTask alarmTask = new AlarmTask() {
+    private TimerTask timerTask = new TimerTask() {
         @Override
         protected Intent getIntent() {
             return BaseAlarmReceiver.this.getIntent();
@@ -18,6 +18,11 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
         @Override
         protected long getDelayAtMillis() {
             return BaseAlarmReceiver.this.getDelayAtMillis();
+        }
+
+        @Override
+        public int getRequestCode() {
+            return BaseAlarmReceiver.this.getRequestCode();
         }
     };
 
@@ -34,6 +39,10 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
     }
 
     public final void unregister() {
+        if (context == null) {
+            return;
+        }
+
         stopAlarm();
 
         context.unregisterReceiver(this);
@@ -41,17 +50,17 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
     }
 
     public final void startAlarm() {
-        alarmTask.start(context, getRequestCode());
+        timerTask.start(context);
     }
 
     public final void stopAlarm() {
-        alarmTask.stop(context, getRequestCode());
+        timerTask.cancel(context);
     }
 
     @Override
     public final void onReceive(Context context, Intent intent) {
         if (getIntent().getAction().equals(intent.getAction())) {
-            alarmTask.schedule(context, getRequestCode());
+            timerTask.schedule(context);
         }
 
         onHandleIntent(context, intent);
@@ -61,7 +70,7 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
         return new IntentFilter();
     }
 
-    public int getRequestCode() {
+    protected int getRequestCode() {
         return 0;
     }
 

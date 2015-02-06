@@ -3,7 +3,7 @@ package cm.android.framework.core.daemon;
 import android.content.Context;
 import android.content.Intent;
 
-import cm.android.sdk.alarm.AlarmTask;
+import cm.android.sdk.alarm.TimerTask;
 
 public class DaemonManager {
 
@@ -24,7 +24,7 @@ public class DaemonManager {
         return Singleton.INSTANCE;
     }
 
-    private AlarmTask daemonAlarmTask = new AlarmTask() {
+    private TimerTask daemonTimerTask = new TimerTask() {
         @Override
         protected Intent getIntent() {
             Intent intent = new Intent();
@@ -36,17 +36,22 @@ public class DaemonManager {
         protected long getDelayAtMillis() {
             return DELAY;
         }
+
+        @Override
+        public int getRequestCode() {
+            return hashCode();
+        }
     };
 
     public void startDaemon(Context context) {
-        daemonAlarmTask.start(context, 0);
+        daemonTimerTask.start(context);
     }
 
     public void stopDaemon(Context context) {
-        daemonAlarmTask.stop(context, 0);
+        daemonTimerTask.cancel(context);
     }
 
     public void schedule(Context context) {
-        daemonAlarmTask.schedule(context, 0);
+        daemonTimerTask.schedule(context);
     }
 }
