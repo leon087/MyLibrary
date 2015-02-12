@@ -42,6 +42,7 @@ public final class ServiceBidnerImpl extends cm.android.framework.core.IServiceB
         }
 
         if (this.serviceManager == null) {
+            logger.info("IServiceBinder:initService(IServiceManager):" + serviceManager);
             this.serviceManager = serviceManager;
         }
     }

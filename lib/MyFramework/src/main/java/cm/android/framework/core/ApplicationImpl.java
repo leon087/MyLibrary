@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.daemon.DaemonService;
+import cm.android.util.EnvironmentUtil;
 import cm.android.util.SystemUtil;
 
 final class ApplicationImpl {
@@ -45,10 +46,21 @@ final class ApplicationImpl {
             throw new IllegalArgumentException("appContext = " + appContext);
         }
 
+        if (serviceManager == null) {
+            logger.error("serviceManager = null,new.context = {},new.processName = {}", context,
+                    SystemUtil.getCurProcessName(context));
+            throw new IllegalArgumentException("serviceManager = null");
+        }
+
         appContext = context.getApplicationContext();
-        this.serviceManager = serviceManager;
         appConfig.init(appContext);
-        CoreService.bind(appContext, mServiceConnection);
+
+        if (EnvironmentUtil.SdkUtil.hasJellyBeanMr2()) {
+            CoreService.bind(appContext, mServiceConnection, serviceManager);
+        } else {
+            this.serviceManager = serviceManager;
+            CoreService.bind(appContext, mServiceConnection);
+        }
 
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 appContext.getPackageManager(), appContext.getPackageName());
@@ -91,7 +103,9 @@ final class ApplicationImpl {
             logger.info("onServiceConnected:componentName = {},iBinder = {},processName = {}",
                     componentName, iBinder, SystemUtil.getCurProcessName(appContext));
             serviceBidnerProxy.bindServiceBinder(iBinder);
-            serviceBidnerProxy.initService(serviceManager);
+            if (serviceManager != null) {
+                serviceBidnerProxy.initService(serviceManager);
+            }
 
             //状态恢复
             if (StateHolder.isStateInit(appContext)) {
