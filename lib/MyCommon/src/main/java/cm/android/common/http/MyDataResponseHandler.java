@@ -48,7 +48,7 @@ public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
             Throwable throwable, byte[] responseBytes, T errorResponse) {
         printf(headers, responseBytes);
 
-        httpListener.onFailure(throwable, errorResponse);
+        httpListener.onFailure(throwable, responseBytes, errorResponse);
         String responseBody = Utils.getString(responseBytes, getCharset());
         logger.error(responseBody, throwable);
     }

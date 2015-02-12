@@ -33,7 +33,7 @@ public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
         // 保存缓存
         cacheHolder.saveCache(headMap, responseBytes);
         // 返回数据
-        onSuccess(statusCode, headMap, responseMap);
+        onSuccess(statusCode, headMap, responseBytes, responseMap);
     }
 
     private static class CacheHolder {

@@ -74,7 +74,7 @@ public class HttpLoader {
                         T responseMap = httpHandler.parseResponse(headers,
                                 responseBytes);
                         if (null != responseMap) {
-                            httpHandler.onSuccess(200, entry.getHeaders(),
+                            httpHandler.onSuccess(200, entry.getHeaders(), responseBytes,
                                     responseMap);
                             // log
                             if (logger.isDebugEnabled()) {
