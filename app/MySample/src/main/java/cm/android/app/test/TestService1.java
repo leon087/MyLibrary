@@ -16,7 +16,7 @@ public class TestService1 extends PersistentService {
     private static final Logger logger = LoggerFactory.getLogger("ggg");
 
     @Override
-    public void onStartService(Intent intent, int flags, int startId) {
+    public void onServiceStart(Intent intent, int flags, int startId) {
         ServiceManager.start(new ServiceManager.InitListener() {
             @Override
             public void initSucceed() {

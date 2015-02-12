@@ -34,11 +34,11 @@ public abstract class PersistentService extends Service {
             }
         }
 
-        onStartService(intent, flags, startId);
+        onServiceStart(intent, flags, startId);
 
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
 
-    public abstract void onStartService(Intent intent, int flags, int startId);
+    public abstract void onServiceStart(Intent intent, int flags, int startId);
 }

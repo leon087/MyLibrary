@@ -1,5 +1,8 @@
 package cm.android.sdk.alarm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,6 +14,8 @@ import cm.android.sdk.content.BaseBroadcastReceiver;
 import cm.android.util.ObjectUtil;
 
 public final class TimerTaskManager {
+
+    private static final Logger logger = LoggerFactory.getLogger("timer");
 
     private final Map<String, TimerTask> taskMap = ObjectUtil.newHashMap();
 
@@ -30,6 +35,8 @@ public final class TimerTaskManager {
         TimerTask alarmTask = new MyAlarmTask(action, period, globalBroadcast);
         taskMap.put(action, alarmTask);
         alarmTask.start(context);
+
+        logger.info("action = " + action);
     }
 
     public synchronized void unregister(String action) {
@@ -37,6 +44,8 @@ public final class TimerTaskManager {
         if (task != null) {
             task.cancel(context);
         }
+
+        logger.info("action = " + action);
     }
 
     public void start(Context context) {
@@ -46,6 +55,8 @@ public final class TimerTaskManager {
         this.context = context;
         taskMap.clear();
         timerReceiver.register(context);
+
+        logger.info("TimerTaskManager:start");
     }
 
     public void stop() {
@@ -55,6 +66,8 @@ public final class TimerTaskManager {
         taskMap.clear();
         timerReceiver.unregister();
         this.context = null;
+
+        logger.info("TimerTaskManager:stop");
     }
 
     private class MyAlarmTask extends TimerTask {
@@ -120,6 +133,8 @@ public final class TimerTaskManager {
             } else {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(realIntent);
             }
+
+            logger.info("alarmAction = " + alarmAction);
         }
 
         @Override

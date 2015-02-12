@@ -10,7 +10,7 @@ public class DaemonManager {
     public static final String ACTION_ALARM_WAKE_UP
             = "cm.android.framework.intent.action.ALARM_WAKE_UP";
 
-    private static final long DELAY = 20 * 60 * 1000;
+    private static final long DELAY = 1 * 60 * 60 * 1000;
 
     private DaemonManager() {
     }

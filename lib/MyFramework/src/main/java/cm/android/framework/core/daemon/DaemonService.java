@@ -16,7 +16,7 @@ public class DaemonService extends PersistentService {
     }
 
     @Override
-    public void onStartService(Intent intent, int flags, int startId) {
+    public void onServiceStart(Intent intent, int flags, int startId) {
 
     }
 

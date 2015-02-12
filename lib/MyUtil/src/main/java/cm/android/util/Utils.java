@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
@@ -562,5 +563,13 @@ public final class Utils {
         if (oldBundle != null) {
             newBundle.putAll(oldBundle);
         }
+    }
+
+    public static void transferData(Intent oldIntent, Intent newIntent) {
+        if (oldIntent == null) {
+            return;
+        }
+
+        newIntent.putExtras(oldIntent);
     }
 }
