@@ -2,7 +2,7 @@ package cm.android.framework.core.global;
 
 import java.util.Map;
 
-import cm.android.util.ObjectUtil;
+import cm.java.util.ObjectUtil;
 
 /**
  * 用户保存全局数据

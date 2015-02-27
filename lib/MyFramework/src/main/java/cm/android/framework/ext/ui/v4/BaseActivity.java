@@ -15,7 +15,7 @@ import java.util.Set;
 
 import cm.android.framework.ext.util.MyIntent;
 import cm.android.util.ActivityStack;
-import cm.android.util.ObjectUtil;
+import cm.java.util.ObjectUtil;
 import cm.android.util.UIUtils;
 
 /**

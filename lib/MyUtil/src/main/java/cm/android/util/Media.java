@@ -20,6 +20,8 @@ import android.net.Uri;
 import java.io.File;
 import java.util.regex.Pattern;
 
+import cm.java.util.Utils;
+
 public final class Media {
 
     public static final String[] EXTENSIONS;

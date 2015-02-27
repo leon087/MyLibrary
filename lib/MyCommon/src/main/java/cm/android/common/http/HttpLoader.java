@@ -18,7 +18,7 @@ import cm.android.common.cache.core.CacheLoader;
 import cm.android.common.cache.disk.cache.HttpCache;
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
 import cm.android.util.EnvironmentUtil;
-import cm.android.util.Utils;
+import cm.java.util.Utils;
 
 /**
  * 带有缓存的数据请求接口

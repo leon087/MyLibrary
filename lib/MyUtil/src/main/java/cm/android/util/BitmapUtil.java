@@ -31,6 +31,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import cm.java.util.IoUtil;
+
 public class BitmapUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(BitmapUtil.class);

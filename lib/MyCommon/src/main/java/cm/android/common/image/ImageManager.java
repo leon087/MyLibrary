@@ -16,7 +16,7 @@ import android.widget.ImageView;
 
 import java.io.File;
 
-import cm.android.util.Utils;
+import cm.java.util.Utils;
 
 public class ImageManager {
 

@@ -15,7 +15,6 @@
  */
 package cm.android.thread;
 
-
 import android.os.Process;
 
 import java.util.concurrent.ThreadFactory;

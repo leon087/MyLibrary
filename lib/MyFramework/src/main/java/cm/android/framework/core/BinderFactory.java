@@ -8,7 +8,7 @@ import android.os.IBinder;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import cm.android.proguard.annotations.Keep;
+import cm.java.proguard.annotations.Keep;
 
 public final class BinderFactory {
 

@@ -4,7 +4,7 @@ import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cm.android.util.Utils;
+import cm.java.util.Utils;
 
 public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
 

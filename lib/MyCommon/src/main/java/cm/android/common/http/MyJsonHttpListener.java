@@ -5,8 +5,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.apache.http.Header;
 
-import cm.android.util.ReflectUtil;
-import cm.android.util.Utils;
+import cm.java.util.ReflectUtil;
+import cm.java.util.Utils;
 
 public abstract class MyJsonHttpListener<T> extends HttpListener<T> {
 

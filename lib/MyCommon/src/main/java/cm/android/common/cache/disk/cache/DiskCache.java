@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import cm.android.common.cache.core.ICache;
-import cm.android.util.IoUtil;
+import cm.java.util.IoUtil;
 
 public abstract class DiskCache<V> implements ICache<String, V> {
 

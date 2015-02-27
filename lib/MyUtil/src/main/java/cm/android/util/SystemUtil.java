@@ -22,6 +22,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import cm.java.util.Utils;
+
 /**
  * 系统环境Util类
  */
@@ -183,7 +185,7 @@ public class SystemUtil {
             logger.error(e.getMessage(), e);
             return true;
         } finally {
-            IoUtil.closeQuietly(os);
+            cm.java.util.IoUtil.closeQuietly(os);
             if (process != null) {
                 process.destroy();
             }

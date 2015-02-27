@@ -1,4 +1,3 @@
-
 package cm.android.common.am;
 
 import org.slf4j.Logger;
@@ -21,20 +20,23 @@ import java.util.concurrent.Executors;
 
 import cm.android.applications.AppUtil;
 import cm.android.sdk.content.BaseBroadcastReceiver;
-import cm.android.util.ObjectUtil;
-import cm.android.util.Utils;
+import cm.java.util.ObjectUtil;
+import cm.java.util.Utils;
 
 public class AppManager {
+
     private static final Logger logger = LoggerFactory.getLogger("am");
 
     /**
      * 通知app列表有变化
      */
     public static final int APPLIST_CHANGED = 0;
+
     /**
      * 请求更新列表
      */
     public static final int REQUEST_UPDATE_LIST = APPLIST_CHANGED + 1;
+
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -60,13 +62,20 @@ public class AppManager {
             updateAppManager.start();
         }
     };
+
     private final Set<IAppListener> listeners = ObjectUtil.newHashSet();
+
     private final Map<String, Map<String, String>> appMap = ObjectUtil
             .newHashMap();
+
     private ExecutorService threadPool;
+
     private Context context;
+
     private UpdateAppManager updateAppManager;
+
     private PackageIntentReceiver packageIntentReceiver;
+
     private IAppInfoProcessor appInfoProcessor;
 
     public AppManager() {
@@ -151,8 +160,6 @@ public class AppManager {
 
     /**
      * 去注册IAppManager监听接口
-     *
-     * @param listener
      */
     public void unregisterAppListener(IAppListener listener) {
         synchronized (listeners) {
@@ -170,8 +177,6 @@ public class AppManager {
 
     /**
      * 获取已安装应用列表
-     *
-     * @return
      */
     private void initInstalledApp() {
         synchronized (appMap) {
@@ -197,6 +202,7 @@ public class AppManager {
     }
 
     public static interface IAppInfoProcessor {
+
         public Map<String, String> getAppInfo(PackageInfo packageInfo);
     }
 
@@ -204,6 +210,7 @@ public class AppManager {
      * Receives notifications when applications are added/removed.
      */
     private class PackageIntentReceiver extends BaseBroadcastReceiver {
+
         public PackageIntentReceiver() {
 
         }
@@ -239,6 +246,7 @@ public class AppManager {
     }
 
     public class DefaultAppInfoProcessor implements IAppInfoProcessor {
+
         @Override
         public Map<String, String> getAppInfo(PackageInfo packageInfo) {
             Map<String, String> appInfo = ObjectUtil.newHashMap();

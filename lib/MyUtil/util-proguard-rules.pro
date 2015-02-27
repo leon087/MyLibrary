@@ -160,16 +160,16 @@
 #================================框架======================================
 
 # Keep our interfaces so they can be used by other ProGuard rules.
--keep,allowobfuscation @interface cm.android.proguard.annotations.Keep
--keep,allowobfuscation @interface cm.android.proguard.annotations.KeepGettersAndSetters
+-keep,allowobfuscation @interface cm.java.proguard.annotations.Keep
+-keep,allowobfuscation @interface cm.java.proguard.annotations.KeepGettersAndSetters
 
 # Do not strip any method/class that is annotated with @DoNotStrip
--keep @cm.android.proguard.annotations.Keep class *
+-keep @cm.java.proguard.annotations.Keep class *
 -keepclassmembers class * {
-    @cm.android.proguard.annotations.Keep *;
+    @cm.java.proguard.annotations.Keep *;
 }
 
--keepclassmembers @cm.android.proguard.annotations.KeepGettersAndSetters class * {
+-keepclassmembers @cm.java.proguard.annotations.KeepGettersAndSetters class * {
   void set*(***);
   *** get*();
 }

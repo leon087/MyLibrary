@@ -9,9 +9,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import cm.android.util.Charsets;
-import cm.android.util.IoUtil;
-import cm.android.util.StrictLineReader;
+import cm.java.util.Charsets;
+import cm.java.util.IoUtil;
+import cm.java.util.StrictLineReader;
 
 public abstract class DiskCacheEntry {
 

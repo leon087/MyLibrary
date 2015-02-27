@@ -1,4 +1,3 @@
-
 package cm.android.common.am;
 
 import org.slf4j.Logger;
@@ -13,16 +12,19 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import cm.android.util.MapUtil;
-import cm.android.util.ObjectUtil;
-import cm.android.util.Utils;
+import cm.java.util.MapUtil;
+import cm.java.util.ObjectUtil;
+import cm.java.util.Utils;
 
 public class UpdateAppManager {
+
     private static final Logger logger = LoggerFactory.getLogger("update");
 
     private static final long INIT_DELAY_TIME = 1 * 60 * 1000 / 2;
+
     // private static final long PERIOD = 4 * 60 * 60 * 1000;
     private static final long PERIOD = 60 * 1000;
+
     private Runnable task = new Runnable() {
         public void run() {
             taskHandler.postDelayed(this, PERIOD);
@@ -30,11 +32,17 @@ public class UpdateAppManager {
             externalHandler.sendEmptyMessage(AppManager.REQUEST_UPDATE_LIST);
         }
     };
+
     private final Set<IUpdateAppListener> listeners = ObjectUtil.newHashSet();
+
     private Handler taskHandler = new Handler();
+
     private Handler externalHandler;
+
     private IAsynRequest asynRequest;
+
     private ExecutorService threadPool;
+
     private List<Map<String, Object>> updateList = ObjectUtil.newArrayList();
 
     UpdateAppManager(Handler externalHandler) {
@@ -91,8 +99,6 @@ public class UpdateAppManager {
 
     /**
      * 去注册IAppManager监听接口
-     *
-     * @param listener
      */
     public void unregisterUpdateAppListener(IUpdateAppListener listener) {
         synchronized (listeners) {
@@ -163,14 +169,17 @@ public class UpdateAppManager {
     }
 
     public static interface IAsynRequest {
+
         public void request(List<Map<String, String>> list, IResult iResult);
     }
 
     public static interface IResult {
+
         public void onSuccess(List<Map<String, Object>> updateAppList);
     }
 
     public static class DefaultAsynRequest implements IAsynRequest {
+
         @Override
         public void request(List<Map<String, String>> list, final IResult result) {
             // String url = MyManager.getUrl(UrlData.APP_UPDATE_URL);

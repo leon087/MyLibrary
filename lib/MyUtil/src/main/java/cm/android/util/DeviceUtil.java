@@ -19,6 +19,9 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.UUID;
 
+import cm.java.util.ReflectUtil;
+import cm.java.util.Utils;
+
 public class DeviceUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(DeviceUtil.class);
@@ -176,7 +179,10 @@ public class DeviceUtil {
 
     public static UUID getUUID(Context context) {
         String appTag = "111";
+        return getUUID(context, appTag);
+    }
 
+    public static UUID getUUID(Context context, String appTag) {
         //需要通信模块
         String imei = getIMEI(context);
 

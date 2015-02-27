@@ -6,7 +6,7 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import cm.android.util.ObjectUtil;
+import cm.java.util.ObjectUtil;
 
 /**
  * @desc : 抽象Adapter类

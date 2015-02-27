@@ -5,7 +5,7 @@ import org.apache.http.Header;
 import java.util.Map;
 
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
-import cm.android.util.Utils;
+import cm.java.util.Utils;
 
 public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
 

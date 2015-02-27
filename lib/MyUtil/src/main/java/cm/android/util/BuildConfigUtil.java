@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import android.content.Context;
 
+import cm.java.util.ReflectUtil;
+
 public class BuildConfigUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(BuildConfigUtil.class);

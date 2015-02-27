@@ -9,6 +9,8 @@ import android.net.Uri;
 
 import java.io.File;
 
+import cm.java.util.Utils;
+
 /**
  * 封装了一些Intent操作
  */

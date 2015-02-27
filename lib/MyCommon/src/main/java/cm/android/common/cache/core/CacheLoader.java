@@ -8,7 +8,7 @@ import android.support.v4.util.LruCache;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import cm.android.util.HexUtil;
+import cm.java.util.HexUtil;
 
 public class CacheLoader {
 

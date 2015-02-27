@@ -11,8 +11,8 @@ import cm.android.log.MyLog.MyLogManager;
 import cm.android.log.MyLog.MyLogManager.Level;
 import cm.android.log.MyLog.MyLogManager.LogMode;
 import cm.android.util.EnvironmentUtil;
-import cm.android.util.IoUtil;
 import cm.android.util.MyFormatter;
+import cm.java.util.IoUtil;
 
 /**
  * android Log的Adapter类，打印调试信息。

@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-import cm.android.util.ObjectUtil;
-import cm.android.util.StrictLineReader;
-import cm.android.util.Utils;
+import cm.java.util.ObjectUtil;
+import cm.java.util.StrictLineReader;
+import cm.java.util.Utils;
 
 public class HttpCacheEntry extends DiskCacheEntry {
 

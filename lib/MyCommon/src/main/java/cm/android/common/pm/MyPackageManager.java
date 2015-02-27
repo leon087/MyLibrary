@@ -7,7 +7,7 @@ import android.net.Uri;
 import java.util.concurrent.ExecutorService;
 
 import cm.android.applications.AppUtil;
-import cm.android.thread.ThreadUtil;
+import cm.java.thread.ThreadUtil;
 
 /**
  * PackageManager适配器，添加了静默卸载安装功能（该功能需要系统权限签名）

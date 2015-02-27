@@ -7,6 +7,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.zip.ZipFile;
 
+import cm.java.util.IoUtil;
+
 /**
  * so文件加载器
  */

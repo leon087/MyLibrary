@@ -10,10 +10,10 @@ import android.net.Uri;
 import java.io.File;
 
 import cm.android.applications.AppUtil;
-import cm.android.cmd.ShellUtil;
-import cm.android.cmd.ShellUtil.CommandResult;
 import cm.android.util.IntentUtil;
-import cm.android.util.Utils;
+import cm.java.cmd.ShellUtil;
+import cm.java.cmd.ShellUtil.CommandResult;
+import cm.java.util.Utils;
 
 /**
  * PackageUtil

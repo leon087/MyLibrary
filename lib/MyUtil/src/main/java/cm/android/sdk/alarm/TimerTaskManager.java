@@ -11,7 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import java.util.Map;
 
 import cm.android.sdk.content.BaseBroadcastReceiver;
-import cm.android.util.ObjectUtil;
+import cm.java.util.ObjectUtil;
 
 public final class TimerTaskManager {
 
