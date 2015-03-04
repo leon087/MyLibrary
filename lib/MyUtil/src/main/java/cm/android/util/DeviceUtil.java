@@ -307,4 +307,9 @@ public class DeviceUtil {
             return sb.toString();
         }
     }
+
+    public static int getAdbEnabled(Context context) {
+        return Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Global.ADB_ENABLED, 0);
+    }
 }

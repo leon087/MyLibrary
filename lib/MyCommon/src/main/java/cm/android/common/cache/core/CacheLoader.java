@@ -64,7 +64,7 @@ public class CacheLoader {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             byte[] md5bytes = messageDigest.digest(uri.getBytes());
-            return HexUtil.toHex(md5bytes);
+            return HexUtil.encode(md5bytes);
         } catch (NoSuchAlgorithmException e) {
             // throw new AssertionError(e);
             logger.error("uri = " + uri, e);

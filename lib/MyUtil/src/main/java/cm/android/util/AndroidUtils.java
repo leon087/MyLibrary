@@ -14,6 +14,7 @@ import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.provider.Settings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -187,5 +188,15 @@ public final class AndroidUtils {
         }
 
         newIntent.putExtras(oldIntent);
+    }
+
+    public static boolean setAdbEnabled(Context context, int value) {
+        try {
+            return Settings.Secure.putInt(context.getContentResolver(), Settings.Global.ADB_ENABLED,
+                    value);
+        } catch (SecurityException e) {
+            logger.error(e.getMessage(), e);
+            return false;
+        }
     }
 }

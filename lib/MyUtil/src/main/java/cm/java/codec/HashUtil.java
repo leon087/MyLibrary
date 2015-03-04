@@ -1,75 +1,78 @@
 package cm.java.codec;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
+import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import cm.java.util.HexUtil;
 
 public final class HashUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger("codec");
+
     private HashUtil() {
     }
-
-    private static final String ALG_PBK_LOW = "PBKDF2WithHmacSHA1And8bit";
 
     private static final String ALG_PBK = "PBKDF2WithHmacSHA1";
 
     private static final String ALG_PBE_LOW = "PBEWithMD5AndDES";
 
-    public static final String ALG_PBE = "PBEWithSHA256And256BitAES-CBC-BC";
+    public static final String ALG_HMAC = "HmacSHA256";
+
+    public static final String ALG_SHA = "SHA-256";
 
     public static final String PROVIDER = "BC";
 
-    private static final int ITERATIONS = 1000;
+    private static final int ITERATIONS = 499;
 
-    private static final int KEY_SIZE = 256;
+    private static final int KEY_SIZE = 128;
 
-    public static SecretKey generateHash(char[] password, byte[] salt, int iterationCount)
-            throws InvalidKeySpecException, NoSuchAlgorithmException {
-        SecretKey key;
+    public static SecretKey generateHash(char[] password, byte[] salt, int iterationCount,
+            int keyLength) throws InvalidKeySpecException {
         try {
-            // TODO: what if there's an OS upgrade and now supports the primary PBE
-            key = generatePBEKey(password, salt, ALG_PBK, iterationCount, KEY_SIZE);
+            SecretKey key = generatePBEKey(password, salt, ALG_PBK, iterationCount, keyLength);
+            return key;
         } catch (NoSuchAlgorithmException e) {
+            logger.error(e.getMessage(), e);
             try {
-                key = generatePBEKey(password, salt, ALG_PBE, iterationCount, KEY_SIZE);
+                SecretKey key = generatePBEKey(password, salt, ALG_PBE_LOW, iterationCount,
+                        keyLength);
+                return key;
             } catch (NoSuchAlgorithmException e1) {
-                // older devices may not support the have the implementation try with a weaker algorthm
-                key = generatePBEKey(password, salt,
-                        ALG_PBE_LOW, iterationCount, KEY_SIZE);
+                logger.error(e1.getMessage(), e1);
+                throw new RuntimeException(e1);
             }
         }
-        return key;
-    }
-
-    public static SecretKey generateHash(char[] password)
-            throws InvalidKeySpecException, NoSuchAlgorithmException {
-        byte[] salt = SecureUtil.SALT_DEF;
-        return generateHash(password, salt, ITERATIONS);
     }
 
     public static SecretKey generateHash(char[] password, byte[] salt)
-            throws InvalidKeySpecException, NoSuchAlgorithmException {
-        return generateHash(password, salt, ITERATIONS);
+            throws InvalidKeySpecException {
+        if (null == salt) {
+            salt = SecureUtil.SALT_DEF;
+        }
+        return generateHash(password, salt, KEY_SIZE);
     }
 
-//    private static String getAlgorthm() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            // Use compatibility key factory -- only uses lower 8-bits of passphrase chars
-//            return ALG_PBK_LOW;
-//        } else {
-//            // Traditional key factory. Will use lower 8-bits of passphrase chars on
-//            // older Android versions (API level 18 and lower) and all available bits
-//            // on KitKat and newer (API level 19 and higher).
-//            return ALG_PBK;
-//        }
-//    }
+    public static SecretKey generateHash(char[] password, byte[] salt, int keyLength)
+            throws InvalidKeySpecException {
+        if (null == salt) {
+            salt = SecureUtil.SALT_DEF;
+        }
+        return generateHash(password, salt, ITERATIONS, keyLength);
+    }
 
     private static SecretKey generatePBEKey(char[] password, byte[] salt, String algorthm,
             int iterations, int keyLength)
@@ -80,20 +83,67 @@ public final class HashUtil {
         return secretKey;
     }
 
-    public static String getSha256(final String string) {
-        if (null == string) {
-            throw new IllegalArgumentException("string cannot be null");
-        }
+    public static String getSha256(final byte[] data) {
+        final byte[] digest = getSha(data);
+        return HexUtil.encode(digest);
+    }
 
+    public static byte[] getSha(final byte[] data) {
         try {
-            final MessageDigest md = MessageDigest.getInstance("SHA-256");
-            final byte[] digest = md.digest(string.getBytes("UTF-8"));
-            final BigInteger hashedNumber = new BigInteger(1, digest);
-            return hashedNumber.toString(16);
+            final MessageDigest md = MessageDigest.getInstance(ALG_SHA);
+            final byte[] digest = md.digest(data);
+            return digest;
         } catch (final NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (final UnsupportedEncodingException e) {
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
+
+    public static byte[] getHmac(byte[] macKey, byte[] data) {
+        SecretKey secret = new SecretKeySpec(macKey, ALG_HMAC);
+
+        try {
+            Mac mac = Mac.getInstance(ALG_HMAC);
+            mac.init(secret);
+            byte[] doFinal = mac.doFinal(data);
+            return doFinal;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return getSha(data);
+        }
+    }
+
+    public static byte[] getSha(InputStream inputStream) throws IOException {
+        InputStream is = new BufferedInputStream(inputStream);
+
+        try {
+            final MessageDigest md = MessageDigest.getInstance(ALG_SHA);
+
+            byte[] buffer = new byte[2048];
+            int sizeRead = -1;
+            while ((sizeRead = is.read(buffer)) != -1) {
+                md.update(buffer, 0, sizeRead);
+            }
+
+            final byte[] digest = md.digest();
+            return digest;
+        } catch (final NoSuchAlgorithmException e) {
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+//    public static byte[] getHmac(byte[] macKey, InputStream is) {
+//        SecretKey secret = new SecretKeySpec(macKey, ALG_HMAC);
+//
+//        try {
+//            Mac mac = Mac.getInstance(ALG_HMAC);
+//            mac.init(secret);
+//            byte[] doFinal = mac.doFinal(data);
+//            return doFinal;
+//        } catch (Exception e) {
+//            logger.error(e.getMessage(), e);
+//            return getSha(data);
+//        }
+//    }
 }

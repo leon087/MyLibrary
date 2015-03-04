@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public final class AESCoder {
 
-    private static final int KEY_SIZE = 256;
+    private static final int KEY_SIZE = 128;
 
     public static final String KEY_ALGORITHM = "AES";
 
@@ -21,62 +21,40 @@ public final class AESCoder {
     private AESCoder() {
     }
 
-    public static SecretKey generateKey(byte[] seed) throws Exception {
-        KeyGenerator kgen = KeyGenerator.getInstance(KEY_ALGORITHM);
-        SecureRandom sr = SecureUtil.getSecureRandom();
-        sr.setSeed(seed);
-        kgen.init(KEY_SIZE, sr); //256 bits or 128 bits,192bits
-        SecretKey secretKey = kgen.generateKey();
-        return secretKey;
+    public static SecretKey generateKey() throws NoSuchAlgorithmException {
+        return generateKey(KEY_SIZE);
     }
 
-    public static SecretKey generateKey() throws NoSuchAlgorithmException {
+    public static SecretKey generateKey(int keySize) throws NoSuchAlgorithmException {
         // Do *not* seed secureRandom! Automatically seeded from system entropy
         final SecureRandom random = new SecureRandom();
 
-        // Use the largest AES key length which is supported by the OS
         final KeyGenerator generator = KeyGenerator.getInstance(KEY_ALGORITHM);
-        try {
-            generator.init(KEY_SIZE, random);
-        } catch (Exception e) {
-            try {
-                generator.init(192, random);
-            } catch (Exception e1) {
-                generator.init(128, random);
-            }
-        }
+        generator.init(keySize, random);
 
         return generator.generateKey();
-        //return SecureUtil.encode(generator.generateKey().getEncoded());
     }
 
-    public static SecretKey generateKey(char[] password, byte[] salt)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
-        SecretKey tmp = HashUtil.generateHash(password, salt);
-        SecretKey secret = new SecretKeySpec(tmp.getEncoded(), C_AES_CBC_PKCS5PADDING);
+    public static SecretKey generateKey(char[] password, byte[] salt, int keySize)
+            throws InvalidKeySpecException {
+        SecretKey tmp = HashUtil.generateHash(password, salt, keySize);
+        SecretKey secret = getSecretKey(tmp.getEncoded());
         return secret;
     }
 
-    public static byte[] encryptBySeed(byte[] seed, byte[] iv, byte[] data) throws Exception {
-        byte[] rawKey = generateKey(seed).getEncoded();
-        byte[] result = encrypt(rawKey, iv, data);
-        return result;
-    }
-
-    public static byte[] decryptBySeed(byte[] seed, byte[] iv, byte[] encrypted) throws Exception {
-        byte[] rawKey = generateKey(seed).getEncoded();
-        byte[] result = decrypt(rawKey, iv, encrypted);
-        return result;
+    private static SecretKey getSecretKey(byte[] key) {
+        SecretKey secret = new SecretKeySpec(key, KEY_ALGORITHM);
+        return secret;
     }
 
     public static byte[] encrypt(byte[] key, byte[] iv, byte[] src) throws Exception {
-        SecretKeySpec skeySpec = new SecretKeySpec(key, C_AES_CBC_PKCS5PADDING);
-        return encrypt(skeySpec, iv, src);
+        SecretKey secret = getSecretKey(key);
+        return encrypt(secret, iv, src);
     }
 
     public static byte[] decrypt(byte[] key, byte[] iv, byte[] encrypted) throws Exception {
-        SecretKeySpec skeySpec = new SecretKeySpec(key, C_AES_CBC_PKCS5PADDING);
-        return decrypt(skeySpec, iv, encrypted);
+        SecretKey secret = getSecretKey(key);
+        return decrypt(secret, iv, encrypted);
     }
 
     public static byte[] encrypt(SecretKey secretKey, byte[] iv, byte[] src) throws Exception {

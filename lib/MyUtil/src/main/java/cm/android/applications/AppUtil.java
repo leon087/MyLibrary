@@ -3,6 +3,7 @@ package cm.android.applications;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -25,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import cm.java.codec.HashUtil;
 import cm.java.util.ObjectUtil;
 import cm.java.util.Utils;
 
@@ -303,6 +305,7 @@ public class AppUtil {
                     PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
             return packageInfo;
         } catch (NameNotFoundException e) {
+            logger.error(e.getMessage(), e);
             return null;
         }
     }
@@ -317,7 +320,7 @@ public class AppUtil {
                     packageName, PackageManager.GET_SIGNATURES).signatures;
             return sigs;
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             return null;
         }
     }
@@ -331,7 +334,8 @@ public class AppUtil {
             String pubKey = cert.getPublicKey().toString();
             String signNumber = cert.getSerialNumber().toString();
         } catch (CertificateException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+
         }
     }
 
@@ -345,9 +349,22 @@ public class AppUtil {
             sig = s[0].hashCode();
         } catch (Exception e) {
             sig = 0;
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return sig;
+    }
+
+    public static byte[] getFingerprint(Context context, String tag) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(tag);
+        sb.append(context.getPackageName());
+
+        android.content.pm.Signature[] signatures = getSignature(context.getPackageManager(),
+                context.getPackageName());
+        sb.append(signatures[0].toCharsString());
+
+        byte[] fingerprint = HashUtil.getHmac(tag.getBytes(), sb.toString().getBytes());
+        return fingerprint;
     }
 
     /**
@@ -403,7 +420,7 @@ public class AppUtil {
             Signature[] info = (Signature[]) packageInfoFld.get(pkgParserPkg);
             return info[0].toCharsString();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
         return null;
     }

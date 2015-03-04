@@ -2,7 +2,7 @@ package cm.java.util;
 
 public class HexUtil {
 
-    public static byte[] fromHex(String hexString) {
+    public static byte[] decode(String hexString) {
         int len = hexString.length() / 2;
         byte[] result = new byte[len];
         for (int i = 0; i < len; i++) {
@@ -11,7 +11,7 @@ public class HexUtil {
         return result;
     }
 
-    public static String toHex(byte[] buf) {
+    public static String encode(byte[] buf) {
         if (buf == null) {
             return "";
         }

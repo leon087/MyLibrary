@@ -10,6 +10,12 @@ public class Assertions {
         }
     }
 
+    public static void checkArgument(boolean expression, String errorMessage) {
+        if (!expression) {
+            throw new IllegalArgumentException(String.valueOf(errorMessage));
+        }
+    }
+
     public static void checkArgumentForIO(boolean expression, String errorMessage)
             throws IOException {
         if (!expression) {
