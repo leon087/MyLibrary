@@ -34,6 +34,8 @@ public final class HashUtil {
 
     public static final String ALG_SHA = "SHA-256";
 
+    public static final String ALG_MD5 = "MD5";
+
     public static final String PROVIDER = "BC";
 
     private static final int ITERATIONS = 499;
@@ -89,14 +91,7 @@ public final class HashUtil {
     }
 
     public static byte[] getSha(final byte[] data) {
-        try {
-            final MessageDigest md = MessageDigest.getInstance(ALG_SHA);
-            final byte[] digest = md.digest(data);
-            return digest;
-        } catch (final NoSuchAlgorithmException e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
-        }
+        return getMessageDigest(data, ALG_SHA);
     }
 
     public static byte[] getHmac(byte[] macKey, byte[] data) {
@@ -113,11 +108,32 @@ public final class HashUtil {
         }
     }
 
+    public static String getMd5(InputStream inputStream) throws IOException {
+        byte[] data = getMessageDigest(inputStream, ALG_MD5);
+        return HexUtil.encode(data);
+    }
+
     public static byte[] getSha(InputStream inputStream) throws IOException {
+        return getMessageDigest(inputStream, ALG_SHA);
+    }
+
+    public static byte[] getMessageDigest(byte[] data, String algorithm) {
+        try {
+            final MessageDigest md = MessageDigest.getInstance(algorithm);
+            final byte[] digest = md.digest(data);
+            return digest;
+        } catch (final NoSuchAlgorithmException e) {
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static byte[] getMessageDigest(InputStream inputStream, String algorithm)
+            throws IOException {
         InputStream is = new BufferedInputStream(inputStream);
 
         try {
-            final MessageDigest md = MessageDigest.getInstance(ALG_SHA);
+            final MessageDigest md = MessageDigest.getInstance(algorithm);
 
             byte[] buffer = new byte[2048];
             int sizeRead = -1;
