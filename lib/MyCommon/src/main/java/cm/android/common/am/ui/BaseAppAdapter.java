@@ -209,6 +209,7 @@ public abstract class BaseAppAdapter extends MyBaseAdapter<AppEntry> implements
     public void onRunningStateChanged(boolean running) {
         // mTab.mOwner.getActivity()
         // .setProgressBarIndeterminateVisibility(running);
+        notifyDataSetChanged();
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -23,6 +24,8 @@ public final class HashUtil {
 
     private static final Logger logger = LoggerFactory.getLogger("codec");
 
+    private static final int BUF_SIZE = 1024;
+
     private HashUtil() {
     }
 
@@ -30,13 +33,13 @@ public final class HashUtil {
 
     private static final String ALG_PBE_LOW = "PBEWithMD5AndDES";
 
-    public static final String ALG_HMAC = "HmacSHA256";
-
     public static final String ALG_SHA = "SHA-256";
 
     public static final String ALG_MD5 = "MD5";
 
     public static final String PROVIDER = "BC";
+
+    public static final String ALG_HMAC = "HmacSHA256";
 
     private static final int ITERATIONS = 499;
 
@@ -94,20 +97,6 @@ public final class HashUtil {
         return getMessageDigest(data, ALG_SHA);
     }
 
-    public static byte[] getHmac(byte[] macKey, byte[] data) {
-        SecretKey secret = new SecretKeySpec(macKey, ALG_HMAC);
-
-        try {
-            Mac mac = Mac.getInstance(ALG_HMAC);
-            mac.init(secret);
-            byte[] doFinal = mac.doFinal(data);
-            return doFinal;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return getSha(data);
-        }
-    }
-
     public static String getMd5(InputStream inputStream) throws IOException {
         byte[] data = getMessageDigest(inputStream, ALG_MD5);
         return HexUtil.encode(data);
@@ -135,7 +124,7 @@ public final class HashUtil {
         try {
             final MessageDigest md = MessageDigest.getInstance(algorithm);
 
-            byte[] buffer = new byte[2048];
+            byte[] buffer = new byte[BUF_SIZE];
             int sizeRead = -1;
             while ((sizeRead = is.read(buffer)) != -1) {
                 md.update(buffer, 0, sizeRead);
@@ -149,17 +138,46 @@ public final class HashUtil {
         }
     }
 
-//    public static byte[] getHmac(byte[] macKey, InputStream is) {
-//        SecretKey secret = new SecretKeySpec(macKey, ALG_HMAC);
-//
-//        try {
-//            Mac mac = Mac.getInstance(ALG_HMAC);
-//            mac.init(secret);
-//            byte[] doFinal = mac.doFinal(data);
-//            return doFinal;
-//        } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-//            return getSha(data);
-//        }
-//    }
+    public static byte[] getHmac(byte[] key, InputStream inputStream) throws IOException {
+        InputStream is = new BufferedInputStream(inputStream);
+
+        byte[] macKey = HashUtil.getSha(key);
+        SecretKey secret = new SecretKeySpec(macKey, ALG_HMAC);
+
+        try {
+            Mac mac = Mac.getInstance(ALG_HMAC);
+            mac.init(secret);
+
+            byte[] buffer = new byte[BUF_SIZE];
+            int sizeRead = -1;
+            while ((sizeRead = is.read(buffer)) != -1) {
+                mac.update(buffer, 0, sizeRead);
+            }
+
+            byte[] doFinal = mac.doFinal();
+            return doFinal;
+        } catch (NoSuchAlgorithmException e) {
+            logger.error(e.getMessage(), e);
+            return getSha(inputStream);
+        } catch (InvalidKeyException e) {
+            logger.error(e.getMessage(), e);
+            return getSha(inputStream);
+        }
+    }
+
+    public static byte[] getHmac(byte[] macKey, byte[] data) {
+        byte[] key = HashUtil.getSha(macKey);
+
+        SecretKey secret = new SecretKeySpec(key, ALG_HMAC);
+
+        try {
+            Mac mac = Mac.getInstance(ALG_HMAC);
+            mac.init(secret);
+            byte[] doFinal = mac.doFinal(data);
+            return doFinal;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return HashUtil.getSha(data);
+        }
+    }
 }

@@ -6,9 +6,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
-/**
- * JSON数据处理Util类
- */
 public class MapUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);

@@ -112,18 +112,7 @@ public class DeviceUtil {
     }
 
     public static int getSdkInt() {
-        try {
-            int j = Build.VERSION.class.getField("SDK_INT").getInt(null);
-            return j;
-        } catch (Exception e1) {
-            try {
-                int i = Integer.parseInt((String) Build.VERSION.class.getField("SDK").get(null));
-                return i;
-            } catch (Exception e2) {
-                logger.error("", e2);
-            }
-        }
-        return 2;
+        return Build.VERSION.SDK_INT;
     }
 
     @TargetApi(8)
@@ -137,7 +126,7 @@ public class DeviceUtil {
     @TargetApi(8)
     public static String getCpuAbi2() {
         try {
-            String cpuAbi2 = (String) Build.class.getField("CPU_ABI2").get(new Build());
+            String cpuAbi2 = ReflectUtil.getStaticFieldValue(Build.class, "CPU_ABI2");
             return cpuAbi2;
         } catch (Exception e1) {
             return "";
@@ -147,7 +136,7 @@ public class DeviceUtil {
     @TargetApi(8)
     public static String getHardware() {
         try {
-            String hardware = ReflectUtil.getFieldValue(new Build(), "HARDWARE");
+            String hardware = ReflectUtil.getStaticFieldValue(Build.class, "HARDWARE");
             return hardware;
         } catch (Exception e) {
             return "";
@@ -157,7 +146,7 @@ public class DeviceUtil {
     @TargetApi(9)
     public static String getSerial() {
         try {
-            String serial = ReflectUtil.getFieldValue(new Build(), "SERIAL");
+            String serial = ReflectUtil.getStaticFieldValue(Build.class, "SERIAL");
             if (Utils.isEmpty(serial)) {
                 logger.error("serial = " + serial);
                 return "";

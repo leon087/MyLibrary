@@ -31,7 +31,7 @@ import cm.java.cmd.CmdExecute;
  */
 public class IoUtil {
 
-    private static final int BUF_SIZE = 1024 * 100;
+    private static final int BUF_SIZE = 1024;
 
     private static final Logger logger = LoggerFactory.getLogger(IoUtil.class);
 

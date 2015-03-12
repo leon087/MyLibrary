@@ -1,6 +1,5 @@
 package cm.android.util;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -134,44 +133,28 @@ public class SystemInfoUtil {
     }
 
     public static String getMountInfo() {
-        String[] args = {"/system/bin/mount"};
-        return CmdExecute.run(args, "/system/bin/");
+        String args = "mount";
+        return CmdExecute.exec(args);
     }
 
     public static String getDumpsysMeminfo(String packageName) {
-        String[] args = {"/system/bin/dumpsys", "meminfo", packageName};
-        return CmdExecute.run(args, "/system/bin/");
+        String args = "dumpsys meminfo " + packageName;
+        return CmdExecute.exec(args);
     }
 
     public static String getDumpsysCpuinfo() {
-        String[] args = {"/system/bin/dumpsys", "cpuinfo"};
-        return CmdExecute.run(args, "/system/bin/");
+        String args = "dumpsys cpuinfo";
+        return CmdExecute.exec(args);
     }
 
     public static String getDumpsysBattery() {
-        String[] args = {"/system/bin/dumpsys", "battery"};
-        return CmdExecute.run(args, "/system/bin/");
+        String args = "dumpsys battery";
+        return CmdExecute.exec(args);
     }
 
     public static String getMemoryInfo(Context context) {
-        StringBuilder strBuf = new StringBuilder();
-        ActivityManager actMgr = (ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        android.app.ActivityManager.MemoryInfo memoryinfo
-                = new android.app.ActivityManager.MemoryInfo();
-        actMgr.getMemoryInfo(memoryinfo);
-        strBuf.append("\nmemoryinfo.threshold = ");
-        long threshold = memoryinfo.threshold >> 20;
-        strBuf.append(threshold).append("M");
-        strBuf.append("\nmemoryinfo.availMem = ");
-        long availMem = memoryinfo.availMem >> 20;
-        strBuf.append(availMem).append("M");
-        strBuf.append("\nmemoryinfo.lowMemory = ");
-        boolean lowMemory = memoryinfo.lowMemory;
-        strBuf.append(lowMemory).append("\n");
-        String[] args = {"/system/bin/cat", "/proc/meminfo"};
-        strBuf.append(CmdExecute.run(args, "/system/bin/"));
-        return strBuf.toString();
+        String args = "cat /proc/meminfo";
+        return CmdExecute.exec(args);
     }
 
     public static String getProcessRunningInfo() {

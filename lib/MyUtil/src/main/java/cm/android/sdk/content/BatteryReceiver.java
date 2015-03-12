@@ -10,9 +10,9 @@ import android.os.BatteryManager;
  */
 public class BatteryReceiver extends BaseBroadcastReceiver {
 
-    private BetteryChangedListener listener;
+    private BatteryChangedListener listener;
 
-    public BatteryReceiver(BetteryChangedListener listener) {
+    public BatteryReceiver(BatteryChangedListener listener) {
         if (listener == null) {
             this.listener = defaultListener;
         } else {
@@ -20,30 +20,27 @@ public class BatteryReceiver extends BaseBroadcastReceiver {
         }
     }
 
-    private static final BetteryChangedListener defaultListener = new BetteryChangedListener() {
+    private static final BatteryChangedListener defaultListener = new BatteryChangedListener() {
         @Override
-        public void betteryChanged(BetteryInfo betteryInfo) {
+        public void batteryChanged(BatteryInfo batteryInfo) {
         }
     };
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-            BetteryInfo betteryInfo = new BetteryInfo();
-            betteryInfo.status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);//API:5
-            betteryInfo.health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0);
-            betteryInfo.present = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
-            betteryInfo.level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-            betteryInfo.scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-            betteryInfo.icon_small = intent.getIntExtra(BatteryManager.EXTRA_ICON_SMALL, 0);
-            betteryInfo.plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
-            betteryInfo.voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
-            betteryInfo.temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-            betteryInfo.technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
+        BatteryInfo betteryInfo = new BatteryInfo();
+        betteryInfo.status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);//API:5
+        betteryInfo.health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0);
+        betteryInfo.present = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
+        betteryInfo.level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        betteryInfo.scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+        betteryInfo.icon_small = intent.getIntExtra(BatteryManager.EXTRA_ICON_SMALL, 0);
+        betteryInfo.plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+        betteryInfo.voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
+        betteryInfo.temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+        betteryInfo.technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
 
-            listener.betteryChanged(betteryInfo);
-        }
+        listener.batteryChanged(betteryInfo);
     }
 
     @Override
@@ -53,12 +50,12 @@ public class BatteryReceiver extends BaseBroadcastReceiver {
         return intentFilter;
     }
 
-    public static interface BetteryChangedListener {
+    public static interface BatteryChangedListener {
 
-        public void betteryChanged(BetteryInfo betteryInfo);
+        public void batteryChanged(BatteryInfo batteryInfo);
     }
 
-    public static class BetteryInfo {
+    public static class BatteryInfo {
 
         public int status;
 
@@ -79,6 +76,22 @@ public class BatteryReceiver extends BaseBroadcastReceiver {
         public int temperature;
 
         public String technology;
+
+        @Override
+        public String toString() {
+            return "BatteryInfo{" +
+                    "status=" + status +
+                    ", health=" + health +
+                    ", present=" + present +
+                    ", level=" + level +
+                    ", scale=" + scale +
+                    ", icon_small=" + icon_small +
+                    ", plugged=" + plugged +
+                    ", voltage=" + voltage +
+                    ", temperature=" + temperature +
+                    ", technology='" + technology + '\'' +
+                    '}';
+        }
     }
 
 }

@@ -14,7 +14,7 @@ public final class AESCoder {
 
     private static final int KEY_SIZE = 128;
 
-    public static final String KEY_ALGORITHM = "AES";
+    public static final String ALG_AES = "AES";
 
     public static final String C_AES_CBC_PKCS5PADDING = "AES/CBC/PKCS5Padding";
 
@@ -29,7 +29,7 @@ public final class AESCoder {
         // Do *not* seed secureRandom! Automatically seeded from system entropy
         final SecureRandom random = new SecureRandom();
 
-        final KeyGenerator generator = KeyGenerator.getInstance(KEY_ALGORITHM);
+        final KeyGenerator generator = KeyGenerator.getInstance(ALG_AES);
         generator.init(keySize, random);
 
         return generator.generateKey();
@@ -43,7 +43,7 @@ public final class AESCoder {
     }
 
     private static SecretKey getSecretKey(byte[] key) {
-        SecretKey secret = new SecretKeySpec(key, KEY_ALGORITHM);
+        SecretKey secret = new SecretKeySpec(key, ALG_AES);
         return secret;
     }
 

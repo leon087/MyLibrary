@@ -344,24 +344,27 @@ public class AppUtil {
      */
     public static int getSignatureHashCode(PackageManager pm, String packageName) {
         int sig = 0;
-        try {
-            Signature[] s = getSignature(pm, packageName);
+        Signature[] s = getSignature(pm, packageName);
+        if (s != null) {
             sig = s[0].hashCode();
-        } catch (Exception e) {
-            sig = 0;
-            logger.error(e.getMessage(), e);
         }
         return sig;
     }
 
     public static byte[] getFingerprint(Context context, String tag) {
+        return getFingerprint(context, tag, context.getPackageName());
+    }
+
+    public static byte[] getFingerprint(Context context, String tag, String packageName) {
         StringBuilder sb = new StringBuilder();
         sb.append(tag);
-        sb.append(context.getPackageName());
+        sb.append(packageName);
 
         android.content.pm.Signature[] signatures = getSignature(context.getPackageManager(),
-                context.getPackageName());
-        sb.append(signatures[0].toCharsString());
+                packageName);
+        if (signatures != null) {
+            sb.append(signatures[0].toCharsString());
+        }
 
         byte[] fingerprint = HashUtil.getHmac(tag.getBytes(), sb.toString().getBytes());
         return fingerprint;
