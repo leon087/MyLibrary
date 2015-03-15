@@ -1,5 +1,4 @@
 include ':lib:MyFramework'
 include ':lib:MyUtil'
 include ':lib:MyCommon'
-include ':lib:MyCommonUI'
 include ':app:MySample'

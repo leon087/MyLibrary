@@ -252,7 +252,7 @@ public class AppUtil {
     public static PackageInfo getUninatllAppInfo(PackageManager pm,
             String archiveFilePath) {
         PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath,
-                PackageManager.GET_ACTIVITIES);
+                PackageManager.GET_UNINSTALLED_PACKAGES);
         return info;
     }
 
@@ -298,11 +298,25 @@ public class AppUtil {
     /**
      * 获取应用PackageInfo信息
      */
-    public static PackageInfo getPackageInfo(PackageManager pm,
-            String packageName) {
+    public static PackageInfo getPackageInfo(PackageManager pm, String packageName) {
+        PackageInfo packageInfo = getPackageInfo(pm, packageName, PackageManager.GET_ACTIVITIES |
+                PackageManager.GET_GIDS |
+                PackageManager.GET_CONFIGURATIONS |
+                PackageManager.GET_INSTRUMENTATION |
+                PackageManager.GET_PERMISSIONS |
+                PackageManager.GET_PROVIDERS |
+                PackageManager.GET_RECEIVERS |
+                PackageManager.GET_SERVICES |
+                PackageManager.GET_SIGNATURES |
+                PackageManager.GET_UNINSTALLED_PACKAGES |
+                PackageManager.GET_URI_PERMISSION_PATTERNS |
+                PackageManager.GET_SHARED_LIBRARY_FILES);
+        return packageInfo;
+    }
+
+    public static PackageInfo getPackageInfo(PackageManager pm, String packageName, int flags) {
         try {
-            PackageInfo packageInfo = pm.getPackageInfo(packageName,
-                    PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
+            PackageInfo packageInfo = pm.getPackageInfo(packageName, flags);
             return packageInfo;
         } catch (NameNotFoundException e) {
             logger.error(e.getMessage(), e);
@@ -460,7 +474,7 @@ public class AppUtil {
 
     public static boolean isPackageUnavailable(PackageManager pm,
             String packageName) {
-        return getPackageInfo(pm, packageName) == null;
+        return getPackageInfo(pm, packageName, 0) == null;
     }
 
     public static interface AppFilter {

@@ -209,7 +209,6 @@ public abstract class BaseAppAdapter extends MyBaseAdapter<AppEntry> implements
     public void onRunningStateChanged(boolean running) {
         // mTab.mOwner.getActivity()
         // .setProgressBarIndeterminateVisibility(running);
-        notifyDataSetChanged();
     }
 
     @Override
@@ -239,6 +238,8 @@ public abstract class BaseAppAdapter extends MyBaseAdapter<AppEntry> implements
     public void onPackageIconChanged() {
         // We ensure icons are loaded when their item is displayed, so
         // don't care about icons loaded in the background.
+
+        notifyDataSetChanged();
     }
 
     @Override

@@ -1,7 +1,0 @@
-<resources>
-
-    <!-- slidingmenu阴影宽 -->
-    <dimen name="slidingmenu_shadow_width">15dp</dimen>
-    <dimen name="slidingmenu_menu_width">180dp</dimen>
-
-</resources>
