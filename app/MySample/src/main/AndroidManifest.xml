@@ -22,7 +22,7 @@
         </activity>
 
         <service android:name="cm.android.app.test.TestService1"
-                 android:process="cm.android.app.sample.test1"/>
+                 android:process=":test1"/>
         <service android:name="cm.android.app.test.TestService2"
                  android:process="cm.android.app.sample.test2"/>
     </application>

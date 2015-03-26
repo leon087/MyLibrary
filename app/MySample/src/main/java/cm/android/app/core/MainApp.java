@@ -13,6 +13,7 @@ import cm.android.app.test.server.TimerTaskServer;
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
+import cm.android.util.SystemUtil;
 
 public class MainApp extends BaseApp {
 
@@ -23,7 +24,13 @@ public class MainApp extends BaseApp {
         super.onCreate();
         logger.error("ggg application onCreate");
 
-        startService(new Intent(this, TestService1.class));
+        ServiceManager.start(new ServiceManager.InitListener() {
+            @Override
+            public void initSucceed() {
+                logger.error("ggg testService1 initSucceed");
+                startService(new Intent(MainApp.this, TestService1.class));
+            }
+        });
     }
 
 
@@ -37,7 +44,8 @@ public class MainApp extends BaseApp {
         return new IServiceManager.Stub() {
             @Override
             public void onCreate() throws RemoteException {
-                logger.error("ggggg initService:onCreate");
+                logger.error("ggggg initService:onCreate:processName = " + SystemUtil
+                        .getCurProcessName(getApplicationContext()));
                 TestManagerServer testManager = new TestManagerServer();
                 ServiceManager.addService(TestContext.TEST, testManager);
 

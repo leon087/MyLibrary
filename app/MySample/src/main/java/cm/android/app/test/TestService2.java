@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 
 import cm.android.app.core.MainApp;
@@ -11,18 +12,19 @@ import cm.android.app.core.MyManager;
 import cm.android.app.test.alarm.TestReceiver;
 import cm.android.app.test.alarm.TestReceiver2;
 import cm.android.app.test.server.TimerTaskManager;
-import cm.android.framework.core.ServiceManager;
 import cm.android.sdk.PersistentService;
 
 public class TestService2 extends PersistentService {
 
     private static final Logger logger = LoggerFactory.getLogger("ggg");
 
+    private Handler mHandler = new Handler();
+
     @Override
     public void onServiceStart(Intent intent, int flags, int startId) {
-        ServiceManager.start(new ServiceManager.InitListener() {
+        mHandler.postDelayed(new Runnable() {
             @Override
-            public void initSucceed() {
+            public void run() {
                 logger.error("ggg TestService2");
                 TimerTaskManager timerTaskManager = MyManager.getTimerManager();
                 timerTaskManager.register(TestReceiver.ACTION, 5 * 1000, true);
@@ -33,7 +35,7 @@ public class TestService2 extends PersistentService {
 
                 timerTaskManager.unregister(TestReceiver.ACTION);
             }
-        });
+        }, 1000);
     }
 
     private TestReceiver testReceiver = new TestReceiver();
