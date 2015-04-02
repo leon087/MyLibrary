@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -506,5 +507,38 @@ public class IoUtil {
             }
         }
         return true;
+    }
+
+    private static int getShort(byte[] data) {
+        return (int) ((data[0] << 8) | data[1] & 0xFF);
+    }
+
+    public static byte[] decompressGZip(byte[] data) {
+        byte[] h = new byte[2];
+        h[0] = (data)[0];
+        h[1] = (data)[1];
+        int head = getShort(h);
+        boolean t = head == 0x1f8b;
+        InputStream in = null;
+        ByteArrayOutputStream bos = null;
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(data);
+        try {
+            if (t) {
+                in = new GZIPInputStream(bis);
+            } else {
+                in = bis;
+            }
+
+            bos = new ByteArrayOutputStream();
+            write(in, bos);
+            return bos.toByteArray();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return null;
+        } finally {
+            closeQuietly(in);
+            closeQuietly(bos);
+        }
     }
 }

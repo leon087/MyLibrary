@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -57,38 +56,6 @@ public class VolleyUtil {
             closeQuietly(br);
         }
         return sb.toString();
-    }
-
-    public static byte[] decompressGZip(byte[] data) {
-        byte[] h = new byte[2];
-        h[0] = (data)[0];
-        h[1] = (data)[1];
-        int head = getShort(h);
-        boolean t = head == 0x1f8b;
-        InputStream in = null;
-        ByteArrayOutputStream bos = null;
-
-        ByteArrayInputStream bis = new ByteArrayInputStream(data);
-        try {
-            if (t) {
-                in = new GZIPInputStream(bis);
-            } else {
-                in = bis;
-            }
-            bos = new ByteArrayOutputStream();
-            int count;
-            byte[] tmp = new byte[20148];
-            while ((count = in.read(tmp, 0, 2048)) != -1) {
-                bos.write(data, 0, count);
-            }
-            return bos.toByteArray();
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            return null;
-        } finally {
-            closeQuietly(in);
-            closeQuietly(bos);
-        }
     }
 
     public static void closeQuietly(Closeable closeable) {

@@ -13,6 +13,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import cm.java.util.IoUtil;
+
 public final class DataRequest<T> extends Request<T> {
 
     /** Charset for request. */
@@ -73,7 +75,7 @@ public final class DataRequest<T> extends Request<T> {
         if (!ENCODING_GZIP.equals(acceptEncoding)) {
             return response.data;
         } else {
-            return VolleyUtil.decompressGZip(response.data);
+            return IoUtil.decompressGZip(response.data);
         }
     }
 

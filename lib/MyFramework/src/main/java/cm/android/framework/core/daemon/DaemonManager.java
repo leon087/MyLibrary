@@ -60,10 +60,10 @@ public class DaemonManager {
     }
 
     public void schedule(Context context) {
-        if (startFlag.get() == false) {
+        if (!startFlag.get()) {
             return;
         }
-        
+
         daemonTimerTask.schedule(context);
     }
 }
