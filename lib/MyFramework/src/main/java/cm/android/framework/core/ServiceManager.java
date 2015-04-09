@@ -12,7 +12,7 @@ public final class ServiceManager {
 
     public static interface IAppConfig {
 
-        void initLog();
+        void initLog(Context context);
 
         void initWorkDir(Context context);
     }
@@ -24,7 +24,7 @@ public final class ServiceManager {
          */
         public void init(Context context) {
             initWorkDir(context);
-            initLog();
+            initLog(context);
         }
     }
 

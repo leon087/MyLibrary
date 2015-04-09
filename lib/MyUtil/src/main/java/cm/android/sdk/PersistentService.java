@@ -40,5 +40,5 @@ public abstract class PersistentService extends Service {
         return START_STICKY;
     }
 
-    public abstract void onServiceStart(Intent intent, int flags, int startId);
+    protected abstract void onServiceStart(Intent intent, int flags, int startId);
 }

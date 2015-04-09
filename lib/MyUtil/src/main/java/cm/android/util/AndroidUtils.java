@@ -154,6 +154,24 @@ public final class AndroidUtils {
         return false;
     }
 
+    public static boolean isDebuggable(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return isDebuggable(info);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean isDebuggable(Context context, String packageName) {
+        PackageInfo pkginfo = AppUtil.getPackageInfo(context.getPackageManager(), packageName, 1);
+        if (pkginfo != null) {
+            return isDebuggable(pkginfo.applicationInfo);
+        }
+
+        return false;
+    }
+
     public static boolean reboot(Context context) {
         try {
             PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);

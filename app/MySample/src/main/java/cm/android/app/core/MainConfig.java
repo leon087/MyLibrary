@@ -29,7 +29,7 @@ public class MainConfig extends MyAppConfig {
     }
 
     @Override
-    public void initLog() {
+    public void initLog(Context context) {
         LogConfig.configLogback(Level.ALL, WorkDir.getDir(LOG_DIR));
     }
 

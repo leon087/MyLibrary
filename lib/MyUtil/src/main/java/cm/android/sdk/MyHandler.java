@@ -1,13 +1,22 @@
 package cm.android.sdk;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import java.lang.ref.WeakReference;
 
 public abstract class MyHandler {
 
-    private final WeakHandler handler = new WeakHandler(this);
+    private WeakHandler handler = null;
+
+    public MyHandler() {
+        handler = new WeakHandler(this);
+    }
+
+    public MyHandler(Looper looper) {
+        handler = new WeakHandler(this, looper);
+    }
 
     public abstract void handleMessage(Message msg);
 
@@ -36,6 +45,12 @@ public abstract class MyHandler {
         private WeakReference<MyHandler> mOuter;
 
         public WeakHandler(MyHandler callback) {
+            super();
+            mOuter = new WeakReference<MyHandler>(callback);
+        }
+
+        public WeakHandler(MyHandler callback, Looper looper) {
+            super(looper);
             mOuter = new WeakReference<MyHandler>(callback);
         }
 
