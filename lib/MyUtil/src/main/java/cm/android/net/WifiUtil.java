@@ -102,6 +102,10 @@ public class WifiUtil {
 
     public static WifiConfiguration exsits(WifiManager wifiManager, String ssid) {
         List<WifiConfiguration> existingConfigs = wifiManager.getConfiguredNetworks();
+        if (Utils.isEmpty(existingConfigs)) {
+            return null;
+        }
+
         for (WifiConfiguration existingConfig : existingConfigs) {
             if (existingConfig.SSID.equals(getSSID(ssid))) {
                 return existingConfig;

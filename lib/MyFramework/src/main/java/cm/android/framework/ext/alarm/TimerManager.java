@@ -1,4 +1,4 @@
-package cm.android.app.test.server;
+package cm.android.framework.ext.alarm;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,18 +7,17 @@ import android.os.IBinder;
 import android.os.RemoteException;
 
 import cm.android.framework.core.BinderFactory;
-import cm.android.framework.ext.alarm.ITimerTaskServer;
 
-public class TimerTaskManager extends ITimerTaskServer.Stub implements BinderFactory.IBinderProxy {
+public final class TimerManager extends ITimerServer.Stub implements BinderFactory.IBinderProxy {
 
-    private static final Logger logger = LoggerFactory.getLogger("ggg");
+    private static final Logger logger = LoggerFactory.getLogger("timer");
 
-    private ITimerTaskServer timerTaskManager;
+    private ITimerServer timerManager;
 
     @Override
     public void register(String action, long period, boolean globalBroadcast) {
         try {
-            timerTaskManager.register(action, period, globalBroadcast);
+            timerManager.register(action, period, globalBroadcast);
         } catch (RemoteException e) {
             logger.error(e.getMessage(), e);
         }
@@ -27,7 +26,7 @@ public class TimerTaskManager extends ITimerTaskServer.Stub implements BinderFac
     @Override
     public void unregister(String action) {
         try {
-            timerTaskManager.unregister(action);
+            timerManager.unregister(action);
         } catch (RemoteException e) {
             logger.error(e.getMessage(), e);
         }
@@ -35,6 +34,6 @@ public class TimerTaskManager extends ITimerTaskServer.Stub implements BinderFac
 
     @Override
     public void bind(IBinder binder) {
-        timerTaskManager = ITimerTaskServer.Stub.asInterface(binder);
+        timerManager = ITimerServer.Stub.asInterface(binder);
     }
 }

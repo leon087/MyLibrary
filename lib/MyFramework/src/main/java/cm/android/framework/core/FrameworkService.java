@@ -13,7 +13,7 @@ public abstract class FrameworkService extends Service {
     @Override
     public final void onCreate() {
         super.onCreate();
-        if (!ServiceManager.isBindService()) {
+        if (!ServiceManager.isSystemReady()) {
             stopSelf();
             return;
         }

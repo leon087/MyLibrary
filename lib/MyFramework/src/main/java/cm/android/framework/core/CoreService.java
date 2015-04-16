@@ -10,7 +10,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
-import cm.android.framework.core.binder.ServiceBidnerImpl;
+import cm.android.framework.core.binder.ServiceBinderImpl;
 import cm.android.sdk.PersistentService;
 import cm.android.util.EnvironmentUtil;
 
@@ -18,7 +18,7 @@ public final class CoreService extends PersistentService {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
-    private final ServiceBidnerImpl serviceBidner = new ServiceBidnerImpl();
+    private final ServiceBinderImpl serviceBidner = new ServiceBinderImpl();
 
     private static final String TAG = "CoreService";
 

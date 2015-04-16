@@ -4,25 +4,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Intent;
-import android.os.RemoteException;
 
-import cm.android.app.test.TestContext;
 import cm.android.app.test.TestService1;
-import cm.android.app.test.server.TestManagerServer;
-import cm.android.app.test.server.TimerTaskServer;
 import cm.android.framework.core.BaseApp;
-import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
-import cm.android.util.SystemUtil;
 
 public class MainApp extends BaseApp {
 
     private static final Logger logger = LoggerFactory.getLogger("ggg");
 
+    private static MainApp sMainApp;
+
     @Override
     public void onCreate() {
         super.onCreate();
         logger.error("ggg application onCreate");
+        sMainApp = this;
 
         ServiceManager.start(new ServiceManager.InitListener() {
             @Override
@@ -33,6 +30,9 @@ public class MainApp extends BaseApp {
         });
     }
 
+    public static MainApp getApp() {
+        return sMainApp;
+    }
 
     @Override
     public ServiceManager.AppConfig initConfig() {
@@ -41,26 +41,6 @@ public class MainApp extends BaseApp {
 
     @Override
     public cm.android.framework.core.IServiceManager initService() {
-        return new IServiceManager.Stub() {
-            @Override
-            public void onCreate() throws RemoteException {
-                logger.error("ggggg initService:onCreate:processName = " + SystemUtil
-                        .getCurProcessName(getApplicationContext()));
-                TestManagerServer testManager = new TestManagerServer();
-                ServiceManager.addService(TestContext.TEST, testManager);
-
-                TimerTaskServer timerTaskServer = new TimerTaskServer();
-                timerTaskServer.start();
-
-                ServiceManager.addService(TestContext.TIMER_TASK_SERVER, timerTaskServer);
-            }
-
-            @Override
-            public void onDestroy() throws RemoteException {
-
-            }
-
-            ;
-        };
+        return new MyServiceManager();
     }
 }

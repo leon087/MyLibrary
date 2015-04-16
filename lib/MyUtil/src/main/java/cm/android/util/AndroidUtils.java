@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -164,7 +165,8 @@ public final class AndroidUtils {
     }
 
     public static boolean isDebuggable(Context context, String packageName) {
-        PackageInfo pkginfo = AppUtil.getPackageInfo(context.getPackageManager(), packageName, 1);
+        PackageInfo pkginfo = AppUtil.getPackageInfo(context.getPackageManager(), packageName,
+                PackageManager.GET_ACTIVITIES);
         if (pkginfo != null) {
             return isDebuggable(pkginfo.applicationInfo);
         }

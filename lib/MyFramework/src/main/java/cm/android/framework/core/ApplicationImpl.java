@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
@@ -30,7 +32,8 @@ final class ApplicationImpl {
 
     private final ServiceBinderProxy serviceBidnerProxy = new ServiceBinderProxy();
 
-    private ServiceManager.InitListener initListener;
+    //    private ServiceManager.InitListener initListener;
+    private WeakReference<ServiceManager.InitListener> initListener;
 
     final boolean isStarted() {
         return startAtomic.get();
@@ -53,6 +56,7 @@ final class ApplicationImpl {
         }
 
         appContext = context.getApplicationContext();
+
         appConfig.init(appContext);
 
         if (EnvironmentUtil.SdkUtil.hasJellyBeanMr2()) {
@@ -63,38 +67,61 @@ final class ApplicationImpl {
         }
 
         PackageInfo packageInfo = AppUtil.getPackageInfo(
-                appContext.getPackageManager(), appContext.getPackageName());
-        logger.info("versionCode = {},versionName = {},processName = {}", packageInfo.versionCode
-                , packageInfo.versionName, SystemUtil.getCurProcessName(appContext));
+                appContext.getPackageManager(), appContext.getPackageName(),
+                PackageManager.GET_ACTIVITIES);
+
+        if (packageInfo == null) {
+            logger.error("packageInfo = null,getPackageName() = {},processName = {}",
+                    appContext.getPackageName(), SystemUtil.getCurProcessName(appContext));
+        } else {
+            logger.info("versionCode = {},versionName = {},processName = {}",
+                    packageInfo.versionCode, packageInfo.versionName,
+                    SystemUtil.getCurProcessName(appContext));
+        }
     }
 
-    final synchronized void start(ServiceManager.InitListener initListener) {
-        this.initListener = initListener;
-        start();
-    }
-
-    private void start() {
+    final void start(ServiceManager.InitListener initListener) {
         StateHolder.writeState(appContext, true);
 
-        if (!isBindService()) {
-            logger.error("start:serviceBidner = null");
+        this.initListener = new WeakReference<>(initListener);
+        startLocked();
+    }
+
+    private synchronized void startLocked() {
+        if (!isSystemReady()) {
+            logger.error("startLocked:isSystemReady = false");
             return;
         }
 
-        startAtomic.set(true);
-        DaemonService.start(appContext);
-        serviceBidnerProxy.create();
-        notifyInitSucceed();
+        if (startAtomic.compareAndSet(false, true)) {
+            DaemonService.start(appContext);
+            serviceBidnerProxy.create();
+            notifyInitSucceed();
+        } else {
+            logger.error("startLocked:startAtomic = " + startAtomic.get());
+            this.initListener = null;
+        }
     }
 
-    final synchronized void stop() {
-        StateHolder.writeState(appContext, false);
-
+    private synchronized void stopLocked() {
         startAtomic.set(false);
         DaemonService.stop(appContext);
         this.initListener = null;
 
         serviceBidnerProxy.destroy();
+    }
+
+    final void stop() {
+        StateHolder.writeState(appContext, false);
+
+        stopLocked();
+    }
+
+    private void systemReady() {
+        //状态恢复
+        if (StateHolder.isStateInit(appContext)) {
+            startLocked();
+        }
     }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -107,10 +134,7 @@ final class ApplicationImpl {
                 serviceBidnerProxy.initService(serviceManager);
             }
 
-            //状态恢复
-            if (StateHolder.isStateInit(appContext)) {
-                start();
-            }
+            systemReady();
         }
 
         @Override
@@ -128,13 +152,17 @@ final class ApplicationImpl {
         serviceBidnerProxy.addService(name, binder);
     }
 
-    final boolean isBindService() {
+//    final boolean isBindService() {
+//        return serviceBidnerProxy.isBindService();
+//    }
+
+    final boolean isSystemReady() {
         return serviceBidnerProxy.isBindService();
     }
 
     private void notifyInitSucceed() {
-        if (null != initListener) {
-            initListener.initSucceed();
+        if (null != initListener && initListener.get() != null) {
+            initListener.get().initSucceed();
             this.initListener = null;
         }
     }
@@ -146,7 +174,7 @@ final class ApplicationImpl {
         }
 
         private static void writeState(Context context, boolean state) {
-            SharedPreferences preferences = context.getSharedPreferences("app_status",
+            SharedPreferences preferences = context.getSharedPreferences("framework_app_status",
                     Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("state", state);
@@ -154,7 +182,7 @@ final class ApplicationImpl {
         }
 
         private static boolean readState(Context context) {
-            SharedPreferences preferences = context.getSharedPreferences("app_status",
+            SharedPreferences preferences = context.getSharedPreferences("framework_app_status",
                     Context.MODE_PRIVATE);
             return preferences.getBoolean("state", false);
         }

@@ -6,8 +6,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cm.android.app.core.MyManager;
 import cm.android.app.sample.R;
+import cm.android.framework.core.ServiceManager;
 
 
 public class MainActivity extends Activity
@@ -44,36 +46,25 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        ServiceManager.start(new ServiceManager.InitListener() {
+            @Override
+            public void initSucceed() {
+                LoggerFactory.getLogger("ggg").error("ggg testService1 initSucceed");
+                startService(new Intent(MyManager.getApp(), TestService1.class));
+            }
+        });
     }
 
-    private void test() {
-        LoggerFactory.getLogger("gggg").error("gggg1");
-
-//        MyMainApp.getApp().start(new InitListener() {
-//            @Override
-//            public void initSucceed() {
-////                SharedPreferences preferences = ServiceManager.getService("Preference");
-////                preferences.edit().putString("ggg", "g111").commit();
-////                String s = preferences.getString("ggg", "ggg");
-////                LoggerFactory.getLogger("gggg").error("ggg s = " + s);
-//
-//                IManager test = MyServiceManager.getService("Test");
-//                try {
-//                    test.start();
-//                } catch (RemoteException e) {
-//                    LoggerFactory.getLogger("gggg").error(e.getMessage(), e);
-//                }
-//            }
-//        });
-
-        LoggerFactory.getLogger("ggg").error("ggg systemClock = " + SystemClock.elapsedRealtime());
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServiceManager.stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        test();
     }
 
     @Override

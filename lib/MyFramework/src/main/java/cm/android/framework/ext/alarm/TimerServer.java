@@ -1,17 +1,18 @@
-package cm.android.app.test.server;
+package cm.android.framework.ext.alarm;
 
+import android.content.Context;
 import android.os.RemoteException;
 
-import cm.android.app.core.MainApp;
-import cm.android.framework.ext.alarm.ITimerTaskServer;
-
-public class TimerTaskServer extends ITimerTaskServer.Stub {
+public final class TimerServer extends ITimerServer.Stub {
 
     private cm.android.sdk.alarm.TimerTaskManager timerTaskManager
             = new cm.android.sdk.alarm.TimerTaskManager();
 
-    public void start() {
-        timerTaskManager.start(MainApp.getApp());
+    public TimerServer() {
+    }
+
+    public void start(Context context) {
+        timerTaskManager.start(context.getApplicationContext());
     }
 
     public void stop() {

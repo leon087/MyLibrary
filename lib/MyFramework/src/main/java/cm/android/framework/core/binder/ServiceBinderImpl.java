@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.framework.core.IServiceManager;
 
-public final class ServiceBidnerImpl extends cm.android.framework.core.IServiceBinder.Stub {
+public final class ServiceBinderImpl extends cm.android.framework.core.IServiceBinder.Stub {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 

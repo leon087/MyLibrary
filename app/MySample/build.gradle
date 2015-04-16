@@ -59,7 +59,15 @@ android {
             keyAlias project.keyAlias
             keyPassword project.keyPassword
         }
+
         debug { storeFile file("keystore/debug.keystore") }
+
+        test {
+            storeFile file(project.storeFile)
+            storePassword project.storePassword
+            keyAlias project.keyAlias
+            keyPassword project.keyPassword
+        }
     }
 
     buildTypes {
@@ -79,24 +87,17 @@ android {
 
         debug {
             zipAlignEnabled true
+            
             versionNameSuffix "." + buildTime() + "-debug"
-
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.test
         }
 
         beta {
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
+            initWith(buildTypes.release)
+
             versionNameSuffix "." + buildTime() + "-beta"
-
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.test
             debuggable true
-
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.pro'),
-                    new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.pro'),
-                    'proguard-rules.pro'
         }
     }
 

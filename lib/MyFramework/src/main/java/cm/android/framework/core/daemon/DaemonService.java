@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import cm.android.sdk.PersistentService;
+import cm.android.sdk.WakeLockUtil;
 
 public final class DaemonService extends PersistentService {
 
@@ -48,12 +49,16 @@ public final class DaemonService extends PersistentService {
     }
 
     public static void start(Context context) {
+        WakeLockUtil.acquire(context, "framework", 1000);
+
         Intent intent = new Intent(context, DaemonService.class);
         intent.setAction(ACTION_START);
         context.startService(intent);
     }
 
     public static void stop(Context context) {
+        WakeLockUtil.acquire(context, "framework", 1000);
+
         Intent intent = new Intent(context, DaemonService.class);
         intent.setAction(ACTION_STOP);
         context.startService(intent);

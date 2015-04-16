@@ -42,8 +42,8 @@ public final class ServiceManager {
         return mApplication.getService(name);
     }
 
-    public static boolean isBindService() {
-        return mApplication.isBindService();
+    public static boolean isSystemReady() {
+        return mApplication.isSystemReady();
     }
 
     public static void start(InitListener initListener) {
@@ -52,6 +52,10 @@ public final class ServiceManager {
 
     public static void stop() {
         mApplication.stop();
+    }
+
+    public static boolean isStarted() {
+        return mApplication.isStarted();
     }
 
 }

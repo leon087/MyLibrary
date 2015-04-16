@@ -24,6 +24,8 @@ public class WorkDir {
 
     private static final PublicWorkDir publicWorkDir = new PublicWorkDir();
 
+    private static final PublicWorkDir sdcardDir = new PublicWorkDir();
+
     private static final Logger logger = LoggerFactory.getLogger("WorkDir");
 
     private WorkDir() {
@@ -37,8 +39,8 @@ public class WorkDir {
         publicWorkDir.initWorkDir(context, rootDir);
     }
 
-    public static void initPublicWorkDir(Context context) {
-        publicWorkDir.initWorkDir(context, null);
+    public static void initSdcardDir(Context context) {
+        sdcardDir.initWorkDir(context, null);
     }
 
     public static File getDir(String dir) {
@@ -49,12 +51,20 @@ public class WorkDir {
         return publicWorkDir.getDir(dir);
     }
 
+    public static File getSdcardDir(String dir) {
+        return sdcardDir.getDir(dir);
+    }
+
     public static File getWorkDir() {
         return privateWorkDir.getWorkDir();
     }
 
     public static File getPublicWorkDir() {
         return publicWorkDir.getWorkDir();
+    }
+
+    public static File getSdcardWorkDir() {
+        return sdcardDir.getWorkDir();
     }
 
     public static void bindPublicDir(String tag, File dir) {

@@ -11,7 +11,7 @@ import cm.android.app.core.MainApp;
 import cm.android.app.core.MyManager;
 import cm.android.app.test.alarm.TestReceiver;
 import cm.android.app.test.alarm.TestReceiver2;
-import cm.android.app.test.server.TimerTaskManager;
+import cm.android.framework.ext.alarm.TimerManager;
 import cm.android.sdk.PersistentService;
 
 public class TestService2 extends PersistentService {
@@ -26,7 +26,7 @@ public class TestService2 extends PersistentService {
             @Override
             public void run() {
                 logger.error("ggg TestService2");
-                TimerTaskManager timerTaskManager = MyManager.getTimerManager();
+                TimerManager timerTaskManager = MyManager.getTimerManager();
                 timerTaskManager.register(TestReceiver.ACTION, 5 * 1000, true);
                 timerTaskManager.register(TestReceiver2.ACTION, 10 * 1000, true);
 
