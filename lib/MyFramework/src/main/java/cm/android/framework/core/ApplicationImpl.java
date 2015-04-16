@@ -83,7 +83,7 @@ final class ApplicationImpl {
     final void start(ServiceManager.InitListener initListener) {
         StateHolder.writeState(appContext, true);
 
-        this.initListener = new WeakReference<>(initListener);
+        this.initListener = new WeakReference<ServiceManager.InitListener>(initListener);
         startLocked();
     }
 
