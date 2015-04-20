@@ -84,10 +84,10 @@ final class ApplicationImpl {
         StateHolder.writeState(appContext, true);
 
         this.initListener = new WeakReference<ServiceManager.InitListener>(initListener);
-        startLocked();
+        startInternal();
     }
 
-    private synchronized void startLocked() {
+    private synchronized void startInternal() {
         if (!isSystemReady()) {
             logger.error("startLocked:isSystemReady = false");
             return;
@@ -103,24 +103,31 @@ final class ApplicationImpl {
         }
     }
 
-    private synchronized void stopLocked() {
-        startAtomic.set(false);
-        DaemonService.stop(appContext);
+    private synchronized void stopInternal() {
         this.initListener = null;
 
-        serviceBidnerProxy.destroy();
+        if (startAtomic.compareAndSet(true, false)) {
+            DaemonService.stop(appContext);
+            serviceBidnerProxy.destroy();
+        }
     }
 
     final void stop() {
         StateHolder.writeState(appContext, false);
 
-        stopLocked();
+        stopInternal();
     }
 
     private void systemReady() {
         //状态恢复
         if (StateHolder.isStateInit(appContext)) {
-            startLocked();
+            startInternal();
+        }
+    }
+
+    private void systemFailed() {
+        if (StateHolder.isStateInit(appContext)) {
+            stopInternal();
         }
     }
 
@@ -141,6 +148,8 @@ final class ApplicationImpl {
         public void onServiceDisconnected(ComponentName componentName) {
             logger.error("onServiceDisconnected:componentName = " + componentName);
             serviceBidnerProxy.bindServiceBinder(null);
+
+            systemFailed();
         }
     };
 

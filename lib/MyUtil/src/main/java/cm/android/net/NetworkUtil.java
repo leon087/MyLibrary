@@ -17,6 +17,15 @@ public class NetworkUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(NetworkUtil.class);
 
+    /**
+     * 取得网络类型
+     */
+    public static int getNetWorkType(Context context) {
+        TelephonyManager tm = (TelephonyManager) context
+                .getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getNetworkType();
+    }
+
     // sim卡是否可读
     public static boolean isSimReady(Context context) {
         try {

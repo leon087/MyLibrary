@@ -3,34 +3,6 @@ tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 apply plugin: 'com.android.library'
 
 android {
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
-    }
-
-    lintOptions {
-        xmlReport false
-        abortOnError false
-        quiet false
-        showAll true
-    }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':lib:MyUtil')
-
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
-}
-
-android {
     compileSdkVersion Integer.parseInt(project.compileSdkVersion)
     buildToolsVersion project.buildToolsVersion
 
@@ -66,3 +38,30 @@ artifacts {
 
 version = project.versionName
 
+android {
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+
+    lintOptions {
+        xmlReport false
+        abortOnError false
+        quiet false
+        showAll true
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':lib:MyUtil')
+
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
+}

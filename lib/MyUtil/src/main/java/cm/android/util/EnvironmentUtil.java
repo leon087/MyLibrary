@@ -11,9 +11,10 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
-import android.telephony.TelephonyManager;
 
 import java.io.File;
+
+import cm.java.util.IoUtil;
 
 public class EnvironmentUtil {
 
@@ -22,15 +23,6 @@ public class EnvironmentUtil {
     private static final Logger logger = LoggerFactory.getLogger(EnvironmentUtil.class);
 
     private EnvironmentUtil() {
-    }
-
-    /**
-     * 取得网络类型
-     */
-    public static int getNetWorkType(Context context) {
-        TelephonyManager tm = (TelephonyManager) context
-                .getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getNetworkType();
     }
 
     /**
@@ -78,13 +70,6 @@ public class EnvironmentUtil {
     }
 
     /**
-     * 获取手机内存项目存储根目录 格式(/data/data/项目包名/files/)
-     */
-    public static File getDataStorageDirectory(Context context) {
-        return context.getFilesDir();
-    }
-
-    /**
      * 获取手机sdCard根目录 格式(/sdcard/)
      */
     public static File getExternalStorageDirectory() {
@@ -95,12 +80,12 @@ public class EnvironmentUtil {
     public static File getExternalStoragePublicDirectory(String type) {
         if (!EnvironmentUtil.SdkUtil.hasFroyo()) {
             File file = new File(EnvironmentUtil.getExternalStorageDirectory(), type);
-            file.mkdirs();
+            IoUtil.checkDirectory(file);
             return file;
         }
 
         File file = Environment.getExternalStoragePublicDirectory(type);
-        file.mkdirs();
+        IoUtil.checkDirectory(file);
         return file;
     }
 
@@ -116,12 +101,8 @@ public class EnvironmentUtil {
             return context.getExternalCacheDir();
         }
 
-        // Before Froyo we need to construct the external cache dir ourselves
-        final String cacheDir = "/Android/data/" + context.getPackageName()
-                + "/cache/";
-        File externalCacheDir = new File(
-                Environment.getExternalStorageDirectory(), cacheDir);
-        externalCacheDir.mkdirs();
+        File externalCacheDir = new File(getExternalDir(context), "cache/");
+        IoUtil.checkDirectory(externalCacheDir);
         return externalCacheDir;
     }
 
@@ -132,14 +113,14 @@ public class EnvironmentUtil {
      * @param uniqueName A unique directory name to append to the cache dir
      * @return The cache dir
      */
-    public static File getDiskCacheDir(Context context, String uniqueName) {
+    public static File getCacheDir(Context context, String uniqueName) {
         // Check if media is mounted or storage is built-in, if so, try and use
         // external cache dir
         // otherwise use internal cache dir
         final File cachePathFile = isExternalStorageWritable() ? getExternalCacheDir(context)
                 : context.getCacheDir();
         File uniqueCacheDir = new File(cachePathFile, uniqueName);
-        uniqueCacheDir.mkdirs();
+        IoUtil.checkDirectory(uniqueCacheDir);
         return uniqueCacheDir;
     }
 
@@ -155,28 +136,24 @@ public class EnvironmentUtil {
             }
         }
 
-        // Before Froyo we need to construct the external cache dir ourselves
-        final String filesDir = "/Android/data/" + context.getPackageName()
-                + "/files/";
-        File externalFilesDir = new File(
-                Environment.getExternalStorageDirectory(), filesDir);
+        File externalFilesDir = new File(getExternalDir(context), "files/");
 
         if (uniqueName == null) {
-            externalFilesDir.mkdirs();
+            IoUtil.checkDirectory(externalFilesDir);
             return externalFilesDir;
         }
 
         File dir = new File(externalFilesDir, uniqueName);
-        dir.mkdirs();
-        // IoUtil.createDirector(dir.getAbsolutePath());
+        IoUtil.checkDirectory(dir);
         return dir;
     }
 
     public static File getExternalDir(Context context) {
-        // Before Froyo we need to construct the external cache dir ourselves
         final String filesDir = "/Android/data/" + context.getPackageName();
         File externalFilesDir = new File(
                 Environment.getExternalStorageDirectory(), filesDir);
+
+        IoUtil.checkDirectory(externalFilesDir);
         return externalFilesDir;
     }
 

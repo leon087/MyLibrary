@@ -32,7 +32,7 @@ public class HttpLoader {
     public static CacheLoader localCache;
 
     public static void init(Context context) {
-        File cacheDir = EnvironmentUtil.getDiskCacheDir(context, "http");
+        File cacheDir = EnvironmentUtil.getCacheDir(context, "http");
         long byteSize = 10 * 1024 * 1024L;
         HttpCache cacheLoder = null;
         try {

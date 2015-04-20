@@ -1,15 +1,20 @@
 apply plugin: 'com.android.application'
 
-dependencies {
-    //android.jar
-    //compile files("${android.sdk}/platforms/${android.target}/android.jar")
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':lib:MyCommon')
-    compile project(':lib:MyFramework')
+android {
+    compileSdkVersion Integer.parseInt(project.compileSdkVersion)
+    buildToolsVersion project.buildToolsVersion
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
 
-    provided fileTree(dir: 'user_libs', include: ['*.jar'])
+    defaultConfig {
+        minSdkVersion Integer.parseInt(project.minSdkVersion)
+        targetSdkVersion Integer.parseInt(project.targetSdkVersion)
+        versionCode Integer.parseInt(project.versionCode)
+        versionName project.versionName
+    }
 }
 
 android {
@@ -37,21 +42,6 @@ android {
 }
 
 android {
-    compileSdkVersion Integer.parseInt(project.compileSdkVersion)
-    buildToolsVersion project.buildToolsVersion
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-
-    defaultConfig {
-        minSdkVersion Integer.parseInt(project.minSdkVersion)
-        targetSdkVersion Integer.parseInt(project.targetSdkVersion)
-        versionCode Integer.parseInt(project.versionCode)
-        versionName project.versionName
-    }
-
     signingConfigs {
         release {
             storeFile file(project.storeFile)
@@ -60,9 +50,7 @@ android {
             keyPassword project.keyPassword
         }
 
-        debug { storeFile file("keystore/debug.keystore") }
-
-        test {
+        debug {
             storeFile file(project.storeFile)
             storePassword project.storePassword
             keyAlias project.keyAlias
@@ -87,16 +75,16 @@ android {
 
         debug {
             zipAlignEnabled true
-            
+
             versionNameSuffix "." + buildTime() + "-debug"
-            signingConfig signingConfigs.test
+            signingConfig signingConfigs.debug
         }
 
         beta {
             initWith(buildTypes.release)
 
             versionNameSuffix "." + buildTime() + "-beta"
-            signingConfig signingConfigs.test
+            signingConfig signingConfigs.debug
             debuggable true
         }
     }
@@ -110,8 +98,12 @@ android {
     }
 }
 
-def buildTime() {
-    def date = new Date()
-    def formattedDate = date.format('MMddHH')
-    return formattedDate
+dependencies {
+    //android.jar
+    //compile files("${android.sdk}/platforms/${android.target}/android.jar")
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':lib:MyCommon')
+    compile project(':lib:MyFramework')
+
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
 }
