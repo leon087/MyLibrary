@@ -35,7 +35,7 @@ final class ApplicationImpl {
     //    private ServiceManager.InitListener initListener;
     private WeakReference<ServiceManager.InitListener> initListener;
 
-    final boolean isStarted() {
+    final synchronized boolean isStarted() {
         return startAtomic.get();
     }
 
@@ -81,38 +81,46 @@ final class ApplicationImpl {
     }
 
     final void start(ServiceManager.InitListener initListener) {
-        StateHolder.writeState(appContext, true);
-
-        this.initListener = new WeakReference<ServiceManager.InitListener>(initListener);
-        startInternal();
-    }
-
-    private synchronized void startInternal() {
-        if (!isSystemReady()) {
-            logger.error("startLocked:isSystemReady = false");
+        logger.info("start");
+        if (isStarted()) {
+            logger.error("start:isStarted = true");
             return;
         }
 
+        StateHolder.writeState(appContext, true);
+
+        this.initListener = new WeakReference<ServiceManager.InitListener>(initListener);
+
+        if (isSystemReady()) {
+            startInternal();
+        } else {
+            logger.error("start:isSystemReady = false");
+        }
+    }
+
+    private synchronized void startInternal() {
         if (startAtomic.compareAndSet(false, true)) {
             DaemonService.start(appContext);
-            serviceBidnerProxy.create();
-            notifyInitSucceed();
         } else {
-            logger.error("startLocked:startAtomic = " + startAtomic.get());
-            this.initListener = null;
+            logger.error("startInternal:startAtomic = " + startAtomic.get());
         }
+
+        serviceBidnerProxy.create();
+        notifyInitSucceed();
     }
 
     private synchronized void stopInternal() {
         this.initListener = null;
+        serviceBidnerProxy.destroy();
 
         if (startAtomic.compareAndSet(true, false)) {
             DaemonService.stop(appContext);
-            serviceBidnerProxy.destroy();
         }
+
     }
 
     final void stop() {
+        logger.info("stop");
         StateHolder.writeState(appContext, false);
 
         stopInternal();
@@ -136,6 +144,12 @@ final class ApplicationImpl {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             logger.info("onServiceConnected:componentName = {},iBinder = {},processName = {}",
                     componentName, iBinder, SystemUtil.getCurProcessName(appContext));
+
+            if (iBinder == null) {
+                logger.error("iBinder = null");
+                return;
+            }
+
             serviceBidnerProxy.bindServiceBinder(iBinder);
             if (serviceManager != null) {
                 serviceBidnerProxy.initService(serviceManager);
