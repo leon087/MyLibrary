@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import cm.android.framework.ext.ui.v4.BaseActivity.KeyEventListener;
 
 /**
@@ -116,9 +118,9 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment
         // onStart之后isVisible()会返回true
         if (isVisible()) {
             if (isVisibleToUser) {
-                onShowToUser();
+                onVisibleInternal();
             } else {
-                onUnShowToUser();
+                onInvisibleInternal();
             }
         }
     }
@@ -127,6 +129,8 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment
     public void onStop() {
         mActivity.unRegisterKeyEventListener(this);
         super.onStop();
+
+        setUserVisibleHint(false);
     }
 
     @Override
@@ -134,21 +138,35 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment
         super.onStart();
         mActivity.registerKeyEventListener(this);
         if (getUserVisibleHint()) {
-            onShowToUser();
+            onVisibleInternal();
+        }
+    }
+
+    private final AtomicBoolean visible = new AtomicBoolean(false);
+
+    private void onVisibleInternal() {
+        if (visible.compareAndSet(false, true)) {
+            onVisible();
+        }
+    }
+
+    private void onInvisibleInternal() {
+        if (visible.compareAndSet(true, false)) {
+            onInvisible();
         }
     }
 
     /**
      * tab中对用户可见时调用
      */
-    protected void onShowToUser() {
+    protected void onVisible() {
 
     }
 
     /**
      * tab中对用户不可见时调用
      */
-    protected void onUnShowToUser() {
+    protected void onInvisible() {
 
     }
 

@@ -16,9 +16,3 @@ allprojects {
 }
 task wrapper(type: Wrapper) { gradleVersion = '2.2.1' }
 apply plugin: 'android-reporting'
-
-def buildTime() {
-    def date = new Date()
-    def formattedDate = date.format('MMddHH')
-    return formattedDate
-}

@@ -32,7 +32,7 @@ import cm.java.cmd.CmdExecute;
  */
 public class IoUtil {
 
-    private static final int BUF_SIZE = 1024;
+    private static final int BUF_SIZE = 8 * 1024;
 
     private static final Logger logger = LoggerFactory.getLogger(IoUtil.class);
 
@@ -160,9 +160,8 @@ public class IoUtil {
         OutputStream outputStream = null;
         try {
             inputStream = new BufferedInputStream(new FileInputStream(srcFile));
-            outputStream = new BufferedOutputStream(new FileOutputStream(
-                    destFile));
-            write(inputStream, outputStream);
+            outputStream = new BufferedOutputStream(new FileOutputStream(destFile));
+            write(inputStream, outputStream, BUF_SIZE);
         } catch (IOException e) {
             logger.error("srcFile = " + srcFile.getAbsolutePath() + ",destFile = " + destFile
                     .getAbsolutePath(), e);
@@ -340,7 +339,7 @@ public class IoUtil {
             inputStream = new BufferedInputStream(new FileInputStream(file));
             outputStream = new ByteArrayOutputStream(BUF_SIZE);
 
-            write(inputStream, outputStream);
+            write(inputStream, outputStream, BUF_SIZE);
             byte[] bytes = outputStream.toByteArray();
             return bytes;
         } catch (IOException e) {
@@ -402,7 +401,7 @@ public class IoUtil {
             if (!soFile.exists() || zipentry.getSize() != soFile.length()) {
                 is = new BufferedInputStream(zipfile.getInputStream(zipentry));
                 os = new BufferedOutputStream(new FileOutputStream(soFile));
-                write(is, os);
+                write(is, os, BUF_SIZE);
             } else {
                 // log.i("JNI library " + soname.getAbsolutePath()
                 // + " is up to date");
@@ -421,13 +420,18 @@ public class IoUtil {
     /**
      * 将{@link java.io.InputStream}中内容写入{@link java.io.OutputStream}
      */
-    public static void write(InputStream inputStream, OutputStream outputStream)
+    public static void write(InputStream inputStream, OutputStream outputStream, int bufSize)
             throws IOException {
         int count = -1;
-        byte[] buffer = new byte[BUF_SIZE];
+        byte[] buffer = new byte[bufSize];
         while ((count = inputStream.read(buffer)) != -1) {
             outputStream.write(buffer, 0, count);
         }
+    }
+
+    public static void write(InputStream inputStream, OutputStream outputStream)
+            throws IOException {
+        write(inputStream, outputStream, BUF_SIZE);
     }
 
     /**
@@ -436,7 +440,7 @@ public class IoUtil {
     public static byte[] read(InputStream inputStream) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
-            write(inputStream, baos);
+            write(inputStream, baos, BUF_SIZE);
             return baos.toByteArray();
         } catch (IOException e) {
             logger.error("", e);
@@ -531,7 +535,7 @@ public class IoUtil {
             }
 
             bos = new ByteArrayOutputStream();
-            write(in, bos);
+            write(in, bos, BUF_SIZE);
             return bos.toByteArray();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
