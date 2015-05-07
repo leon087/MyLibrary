@@ -22,6 +22,7 @@
 #避免使用泛型的位置混淆后出现类型转换错误:
 -keepattributes Signature
 
+ #混淆时是否记录日志
 -verbose
 
 #保留源码的行号、源文件信息
@@ -31,14 +32,14 @@
 #忽略警告：
 -ignorewarnings
 
+#不优化输入的类文件
 -dontoptimize
 
-#混淆采用的算法
+#混淆时所采用的算法
 -optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 
 #优化：设置混淆的压缩比率 0 ~ 7 
 -optimizationpasses 5
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
 -allowaccessmodification
 
@@ -94,10 +95,6 @@
 -keepclassmembers,allowoptimization enum * {
     public static **[] values();
     public static ** valueOf(java.lang.String);
-}
-
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
 }
 
 #保留资源文件

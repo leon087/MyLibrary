@@ -3,15 +3,14 @@ package cm.android.framework.ext.ui.v7;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import cm.android.framework.ext.util.MyIntent;
 import cm.android.util.ExitHolder;
 
-public class BaseActivity extends ActionBarActivity {
+public class BaseActivity extends AppCompatActivity {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseActivity.class);
 

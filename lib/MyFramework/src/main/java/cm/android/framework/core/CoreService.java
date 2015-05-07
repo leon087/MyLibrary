@@ -36,6 +36,12 @@ public final class CoreService extends PersistentService {
     }
 
     @Override
+    public boolean onUnbind(Intent intent) {
+        logger.info("CoreService:onUnbind:intent = " + intent);
+        return super.onUnbind(intent);
+    }
+
+    @Override
     public void onServiceStart(Intent intent, int flags, int startId) {
 
     }

@@ -5,7 +5,6 @@ import android.os.Environment;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Calendar;
 
 import cm.android.log.MyLog.MyLogManager;
 import cm.android.log.MyLog.MyLogManager.Level;
@@ -413,22 +412,10 @@ class FileLogger extends MyBaseLogger {
 
     private String formatLogStr(Level level, String tag, String msg) {
         // 格式：[INFO] - YYYY-MM-DD HH:MM:SS.SSS :[tag] msg
-        Calendar cld = Calendar.getInstance();
         builder.setLength(0);
         builder.append(level.getTag());
-        builder.append(cld.get(Calendar.YEAR));
-        builder.append("-");
-        builder.append(cld.get(Calendar.MONTH) + 1);
-        builder.append("-");
-        builder.append(cld.get(Calendar.DATE));
-        builder.append(" ");
-        builder.append(cld.get(Calendar.HOUR_OF_DAY));
-        builder.append(":");
-        builder.append(cld.get(Calendar.MINUTE));
-        builder.append(":");
-        builder.append(cld.get(Calendar.SECOND));
-        builder.append(".");
-        builder.append(cld.get(Calendar.MILLISECOND));
+        builder.append(
+                MyFormatter.formatDate("yyyy-MM-dd HH:mm:ss.SSS", System.currentTimeMillis()));
         builder.append(" : [");
         builder.append(tag);
         builder.append("] ");

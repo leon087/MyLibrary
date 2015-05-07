@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 
 public class ObjectProxy {
 
-    private static final Logger logger = LoggerFactory.getLogger("MethodProxy");
+    private static final Logger logger = LoggerFactory.getLogger("util");
 
     private Class<? extends Object> clazz; // 对象所属的类
 

@@ -17,4 +17,9 @@ public class MainAppTest extends InstrumentationTestCase {
     public void testTest() throws Throwable {
         assertEquals(true, true);
     }
+
+    private void testCmCipher(){
+        String plainData = "I am a test String";
+
+    }
 }

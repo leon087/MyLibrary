@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class MapUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(MapUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger("util");
 
     private static final String DEF_VALUE_STRING = "";
 

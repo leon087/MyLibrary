@@ -2,7 +2,6 @@ package cm.android.framework.core;
 
 import android.app.Application;
 
-import cm.android.util.BuildConfigUtil;
 import cm.android.util.EnvironmentUtil;
 
 public abstract class BaseApp extends Application implements IApp {
@@ -11,13 +10,6 @@ public abstract class BaseApp extends Application implements IApp {
 
     public static BaseApp getApp() {
         return sApp;
-    }
-
-    public static boolean isDebug() {
-        if (sApp == null) {
-            return false;
-        }
-        return BuildConfigUtil.isDebug(sApp);
     }
 
     @Override

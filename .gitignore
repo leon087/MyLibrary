@@ -12,5 +12,3 @@ build
 *.iml
 local.properties
 
-doc
-WdCommonAPI

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class ValidateUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(ValidateUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger("util");
 
     // 仅支持英文数字下划线中划线@英文句号
     public static final String RULE_USERNAME = "[0-9a-zA-Z\\._\\-@]*";

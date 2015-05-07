@@ -47,6 +47,7 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
             exclude 'META-INF/NOTICE'
             exclude 'META-INF/notice.txt'
             exclude 'META-INF/ASL2.0'
+            exclude 'META-INF/RELEASE_NOTES.txt'
         }
 
         lintOptions {

@@ -12,7 +12,7 @@ import cm.java.util.IoUtil;
 
 public class ShellUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(ShellUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger("cmd");
 
     public static final String COMMAND_SU = "su";
 

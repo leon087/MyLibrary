@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public final class AESCoder {
 
-    private static final int KEY_SIZE = 128;
+    private static final int KEY_LENGTH = 16;
 
     public static final String ALG_AES = "AES";
 
@@ -22,22 +22,23 @@ public final class AESCoder {
     }
 
     public static SecretKey generateKey() throws NoSuchAlgorithmException {
-        return generateKey(KEY_SIZE);
+        return generateKey(KEY_LENGTH);
     }
 
-    public static SecretKey generateKey(int keySize) throws NoSuchAlgorithmException {
-        // Do *not* seed secureRandom! Automatically seeded from system entropy
+    public static SecretKey generateKey(int keyLength) throws NoSuchAlgorithmException {
         final SecureRandom random = new SecureRandom();
 
         final KeyGenerator generator = KeyGenerator.getInstance(ALG_AES);
-        generator.init(keySize, random);
+
+        int keySizeBit = SecureUtil.convertSize(keyLength);
+        generator.init(keySizeBit, random);
 
         return generator.generateKey();
     }
 
-    public static SecretKey generateKey(char[] password, byte[] salt, int keySize)
+    public static SecretKey generateKey(char[] password, byte[] salt, int keyLength)
             throws InvalidKeySpecException {
-        SecretKey tmp = HashUtil.generateHash(password, salt, keySize);
+        SecretKey tmp = HashUtil.generateHash(password, salt, keyLength);
         SecretKey secret = getSecretKey(tmp.getEncoded());
         return secret;
     }

@@ -142,8 +142,8 @@ final class ApplicationImpl {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            logger.info("onServiceConnected:componentName = {},iBinder = {},processName = {}",
-                    componentName, iBinder, SystemUtil.getCurProcessName(appContext));
+            logger.info("onServiceConnected:iBinder = {},processName = {}", iBinder,
+                    SystemUtil.getCurProcessName(appContext));
 
             if (iBinder == null) {
                 logger.error("iBinder = null");
@@ -160,7 +160,8 @@ final class ApplicationImpl {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            logger.error("onServiceDisconnected:componentName = " + componentName);
+            logger.error("onServiceDisconnected:processName = {}",
+                    SystemUtil.getCurProcessName(appContext));
             serviceBidnerProxy.bindServiceBinder(null);
 
             systemFailed();

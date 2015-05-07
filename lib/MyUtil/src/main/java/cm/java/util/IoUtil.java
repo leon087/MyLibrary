@@ -34,7 +34,7 @@ public class IoUtil {
 
     private static final int BUF_SIZE = 8 * 1024;
 
-    private static final Logger logger = LoggerFactory.getLogger(IoUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger("util");
 
     private IoUtil() {
     }

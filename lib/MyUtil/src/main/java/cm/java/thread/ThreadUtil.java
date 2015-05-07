@@ -1,9 +1,14 @@
 package cm.java.thread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ThreadUtil {
+
+    private static final Logger looger = LoggerFactory.getLogger("thread");
 
     /**
      * 休眠一段时间
@@ -12,7 +17,7 @@ public class ThreadUtil {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            looger.error(e.getMessage(), e);
         }
     }
 

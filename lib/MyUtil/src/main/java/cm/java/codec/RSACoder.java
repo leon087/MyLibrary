@@ -19,13 +19,15 @@ public final class RSACoder {
     // 非对称密钥算法
     public static final String ALG_RSA = "RSA";
 
-    public static final int KEY_SIZE = 512;
+    public static final int KEY_LENGTH = 512 / 8;
 
     public static Map<RsaKeyType, byte[]> initKey(int keyLength) throws Exception {
+        int keySizeBit = SecureUtil.convertSize(keyLength);
+
         // 实例化密钥生成器
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALG_RSA);
         // 初始化密钥生成器
-        keyPairGenerator.initialize(keyLength);
+        keyPairGenerator.initialize(keySizeBit);
         // 生成密钥对
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
         // 甲方公钥
