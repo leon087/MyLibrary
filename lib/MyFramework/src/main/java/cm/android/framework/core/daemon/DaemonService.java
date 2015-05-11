@@ -1,5 +1,8 @@
 package cm.android.framework.core.daemon;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -8,6 +11,8 @@ import cm.android.sdk.PersistentService;
 import cm.android.sdk.WakeLockUtil;
 
 public final class DaemonService extends PersistentService {
+
+    private static final Logger logger = LoggerFactory.getLogger("DaemonService");
 
     private final DaemonReceiver daemonReceiver = new DaemonReceiver();
 
@@ -28,6 +33,8 @@ public final class DaemonService extends PersistentService {
         }
 
         String action = intent.getAction();
+        logger.info("intent = " + intent);
+
         if (ACTION_START.equals(action)) {
             DaemonManager.getInstance().startDaemon(this);
         } else if (ACTION_STOP.equals(action)) {
@@ -40,12 +47,14 @@ public final class DaemonService extends PersistentService {
     public void onCreate() {
         super.onCreate();
         daemonReceiver.register(this);
+        logger.info("DaemonService:onCreate");
     }
 
     @Override
     public void onDestroy() {
         daemonReceiver.unregister();
         super.onDestroy();
+        logger.info("DaemonService:onDestroy");
     }
 
     public static void start(Context context) {

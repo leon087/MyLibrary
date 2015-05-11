@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -544,5 +545,19 @@ public class IoUtil {
             closeQuietly(in);
             closeQuietly(bos);
         }
+    }
+
+    public static final Properties loadProperties(File file) {
+        Properties properties = new Properties();
+        InputStream in = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(file));
+            properties.load(in);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            closeQuietly(in);
+        }
+        return properties;
     }
 }

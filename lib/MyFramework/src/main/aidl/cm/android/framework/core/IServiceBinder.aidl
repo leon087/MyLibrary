@@ -1,11 +1,12 @@
 // ICoreService.aidl
 package cm.android.framework.core;
 
-import cm.android.framework.core.IServiceManager;
+//import cm.android.framework.core.IServiceManager;
+//import cm.android.framework.core.IServiceCreator;
 
 interface IServiceBinder {
 
-    void initService(IServiceManager serviceManager);
+//    void initService(IServiceCreator creator);
 
     void create();
 

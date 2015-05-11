@@ -27,7 +27,8 @@
 
         <service android:name="cm.android.framework.core.CoreService" android:persistent="true"
                  android:stopWithTask="false" android:exported="false"
-                 android:permission="cm.android.framework"/>
+                 android:permission="cm.android.framework"
+                 android:process="cm.android.framework.core.CoreService"/>
     </application>
 
 </manifest>

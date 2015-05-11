@@ -30,9 +30,13 @@ public final class ServiceManager {
 
     private static final ApplicationImpl mApplication = new ApplicationImpl();
 
-    static void appInit(Context context, AppConfig appConfig, IServiceManager serviceManager) {
-        mApplication.appInit(context, appConfig, serviceManager);
+    static void appInit(Context context, AppConfig appConfig, Class<? extends IServiceManager> serviceClass) {
+        mApplication.appInit(context, appConfig, serviceClass);
     }
+//    static void appInit(Context context, AppConfig appConfig,
+//            Class<? extends AbstractCoreService> clazz) {
+//        mApplication.appInit(context, appConfig, clazz);
+//    }
 
     public static void addService(String name, IBinder binder) {
         mApplication.addService(name, binder);

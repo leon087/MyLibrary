@@ -20,8 +20,7 @@ public abstract class BaseApp extends Application implements IApp {
         disableConnectionReuseIfNecessary();
 
         ServiceManager.AppConfig appConfig = initConfig();
-        IServiceManager serviceManager = initService();
-        ServiceManager.appInit(this, appConfig, serviceManager);
+        ServiceManager.appInit(this, appConfig, initServiceManager());
     }
 
     /**
@@ -33,5 +32,7 @@ public abstract class BaseApp extends Application implements IApp {
             System.setProperty("http.keepAlive", "false");
         }
     }
+
+    protected abstract Class<? extends IServiceManager> initServiceManager();
 
 }

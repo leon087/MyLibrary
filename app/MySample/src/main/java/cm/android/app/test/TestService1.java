@@ -28,7 +28,7 @@ public class TestService1 extends PersistentService {
 
                 startService(new Intent(TestService1.this, TestService2.class));
             }
-        }, 1000);
+        }, 2000);
     }
 
     @Override

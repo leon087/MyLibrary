@@ -4,10 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
-import android.content.Intent;
 
-import cm.android.app.test.TestService1;
 import cm.android.framework.core.BaseApp;
+import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
 
 public class MainApp extends BaseApp {
@@ -27,14 +26,6 @@ public class MainApp extends BaseApp {
         super.onCreate();
         logger.error("ggg application onCreate");
         sMainApp = this;
-
-        ServiceManager.start(new ServiceManager.InitListener() {
-            @Override
-            public void initSucceed() {
-                logger.error("ggg testService1 initSucceed");
-                startService(new Intent(MainApp.this, TestService1.class));
-            }
-        });
     }
 
     public static MainApp getApp() {
@@ -47,7 +38,7 @@ public class MainApp extends BaseApp {
     }
 
     @Override
-    public cm.android.framework.core.IServiceManager initService() {
-        return new MyServiceManager();
+    protected Class<? extends IServiceManager> initServiceManager() {
+        return MyServiceManager.class;
     }
 }

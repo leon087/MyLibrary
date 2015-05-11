@@ -6,19 +6,23 @@ import org.slf4j.LoggerFactory;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.daemon.DaemonService;
-import cm.android.util.EnvironmentUtil;
 import cm.android.util.SystemUtil;
+import cm.java.util.IoUtil;
 
 final class ApplicationImpl {
 
@@ -27,8 +31,6 @@ final class ApplicationImpl {
     private final AtomicBoolean startAtomic = new AtomicBoolean(false);
 
     private Context appContext;
-
-    private IServiceManager serviceManager;
 
     private final ServiceBinderProxy serviceBidnerProxy = new ServiceBinderProxy();
 
@@ -40,7 +42,7 @@ final class ApplicationImpl {
     }
 
     void appInit(Context context, ServiceManager.AppConfig appConfig,
-            IServiceManager serviceManager) {
+            Class<? extends IServiceManager> serviceClass) {
         if (appContext != null) {
             logger.error(
                     "old.appContext = {},old.processName = {},new.context = {},new.processName = {}",
@@ -49,27 +51,18 @@ final class ApplicationImpl {
             throw new IllegalArgumentException("appContext = " + appContext);
         }
 
-        if (serviceManager == null) {
-            logger.error("serviceManager = null,new.context = {},new.processName = {}", context,
-                    SystemUtil.getCurProcessName(context));
-            throw new IllegalArgumentException("serviceManager = null");
+        if (serviceClass == null) {
+            throw new IllegalArgumentException("serviceClass = null");
         }
+        String serviceName = serviceClass.getName();
 
         appContext = context.getApplicationContext();
-
         appConfig.init(appContext);
-
-        if (EnvironmentUtil.SdkUtil.hasJellyBeanMr2()) {
-            CoreService.bind(appContext, mServiceConnection, serviceManager);
-        } else {
-            this.serviceManager = serviceManager;
-            CoreService.bind(appContext, mServiceConnection);
-        }
+        CoreService.bind(appContext, mServiceConnection, serviceName);
 
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 appContext.getPackageManager(), appContext.getPackageName(),
                 PackageManager.GET_ACTIVITIES);
-
         if (packageInfo == null) {
             logger.error("packageInfo = null,getPackageName() = {},processName = {}",
                     appContext.getPackageName(), SystemUtil.getCurProcessName(appContext));
@@ -116,7 +109,6 @@ final class ApplicationImpl {
         if (startAtomic.compareAndSet(true, false)) {
             DaemonService.stop(appContext);
         }
-
     }
 
     final void stop() {
@@ -149,11 +141,7 @@ final class ApplicationImpl {
                 logger.error("iBinder = null");
                 return;
             }
-
             serviceBidnerProxy.bindServiceBinder(iBinder);
-            if (serviceManager != null) {
-                serviceBidnerProxy.initService(serviceManager);
-            }
 
             systemReady();
         }
@@ -193,22 +181,40 @@ final class ApplicationImpl {
 
     private static class StateHolder {
 
+        private static final String STATE_FILE_NAME = "framework_app_status";
+
+        private static final String TAG_STATE = "state";
+
         private static boolean isStateInit(Context context) {
             return readState(context);
         }
 
         private static void writeState(Context context, boolean state) {
-            SharedPreferences preferences = context.getSharedPreferences("framework_app_status",
-                    Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("state", state);
-            editor.commit();
+            logger.info("writeState:state = " + state);
+
+            File file = new File(context.getFilesDir(), STATE_FILE_NAME);
+            Properties properties = IoUtil.loadProperties(file);
+            properties.setProperty(TAG_STATE, String.valueOf(state));
+
+            OutputStream os = null;
+            try {
+                os = new FileOutputStream(file);
+                properties.store(os, "writeState:state = " + state);
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+            } finally {
+                IoUtil.closeQuietly(os);
+            }
         }
 
         private static boolean readState(Context context) {
-            SharedPreferences preferences = context.getSharedPreferences("framework_app_status",
-                    Context.MODE_PRIVATE);
-            return preferences.getBoolean("state", false);
+            File file = new File(context.getFilesDir(), STATE_FILE_NAME);
+            Properties properties = IoUtil.loadProperties(file);
+            boolean state = Boolean.valueOf(
+                    properties.getProperty(TAG_STATE, String.valueOf(false)));
+
+            logger.info("readState:state = " + state);
+            return state;
         }
     }
 
@@ -230,19 +236,6 @@ final class ApplicationImpl {
                 return false;
             }
             return true;
-        }
-
-        @Override
-        public void initService(IServiceManager serviceManager) {
-            if (!isBindService()) {
-                return;
-            }
-
-            try {
-                serviceBinder.initService(serviceManager);
-            } catch (RemoteException e) {
-                logger.error(e.getMessage(), e);
-            }
         }
 
         @Override

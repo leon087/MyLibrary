@@ -9,30 +9,65 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import cm.android.framework.core.binder.ServiceBinderImpl;
 import cm.android.sdk.PersistentService;
-import cm.android.util.EnvironmentUtil;
 
 public final class CoreService extends PersistentService {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
-    private final ServiceBinderImpl serviceBidner = new ServiceBinderImpl();
+    private final ServiceBinderImpl serviceBinder = new ServiceBinderImpl();
 
-    private static final String TAG = "CoreService";
+    private static final String ACTION_BIND = "cm.android.framework.intent.action.BIND_CORESERVICE";
+
+    private static final String TAG_ACTION = "actionBind";
+
+    private static final String TAG_SERVICE_MANAGER = "SERVICE_MANAGER";
+
+    private static final IServiceBinder.Stub emptyServiceBinder = new IServiceBinder.Stub() {
+
+        @Override
+        public void create() throws RemoteException {
+
+        }
+
+        @Override
+        public void destroy() throws RemoteException {
+
+        }
+
+        @Override
+        public IBinder getService(String name) throws RemoteException {
+            return null;
+        }
+
+        @Override
+        public void addService(String name, IBinder binder) throws RemoteException {
+
+        }
+    };
 
     @TargetApi(18)
     @Override
     public final IBinder onBind(Intent intent) {
         Bundle bundle = intent.getExtras();
-        if (bundle != null) {
-            logger.info("CoreService:onBind:initService");
-            IBinder iBinder = bundle.getBinder(TAG);
-            IServiceManager serviceManager = IServiceManager.Stub.asInterface(iBinder);
-            serviceBidner.initService(serviceManager);
+        if (bundle == null) {
+            logger.error("bundle = null,intent = " + intent);
+            return emptyServiceBinder;
         }
-        return serviceBidner;
+
+        String action = bundle.getString(TAG_ACTION);
+        if (!ACTION_BIND.equals(action)) {
+            logger.error("intent = {}", intent);
+            return emptyServiceBinder;
+        }
+
+        logger.info("CoreService:onBind:initService:intent = " + intent);
+        String serviceManagerName = bundle.getString(TAG_SERVICE_MANAGER);
+        serviceBinder.initService(serviceManagerName);
+        return serviceBinder;
     }
 
     @Override
@@ -49,31 +84,27 @@ public final class CoreService extends PersistentService {
     @Override
     public final void onCreate() {
         super.onCreate();
-        serviceBidner.initialize();
+        serviceBinder.initialize(this);
+        logger.info("CoreService:onCreate");
     }
 
     @Override
     public final void onDestroy() {
-        logger.error("onDestroy");
-        serviceBidner.release();
+        logger.error("CoreService:onDestroy");
+        serviceBinder.release();
         super.onDestroy();
     }
 
     @TargetApi(18)
-    public final static boolean bind(Context context, ServiceConnection connection,
-            IServiceManager iServiceManager) {
+    public final static boolean bind(Context context,
+            ServiceConnection connection, String serviceManagerName) {
         Intent intent = new Intent(context, CoreService.class);
-        if (iServiceManager != null && EnvironmentUtil.SdkUtil.hasJellyBeanMr2()) {
-            Bundle bundle = new Bundle();
-            bundle.putBinder(TAG, iServiceManager.asBinder());
-            intent.putExtras(bundle);
-        }
+        Bundle bundle = new Bundle();
+        bundle.putString(TAG_SERVICE_MANAGER, serviceManagerName);
+        bundle.putString(TAG_ACTION, ACTION_BIND);
+        intent.putExtras(bundle);
         return context.getApplicationContext().bindService(intent, connection,
                 Context.BIND_AUTO_CREATE);
-    }
-
-    public final static boolean bind(Context context, ServiceConnection connection) {
-        return bind(context, connection, null);
     }
 
     public final static void unBind(Context context, ServiceConnection connection) {
