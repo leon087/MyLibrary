@@ -12,6 +12,8 @@ public final class ServiceManager {
 
     public static interface IAppConfig {
 
+        void initEnvironment(Context context);
+
         void initLog(Context context);
 
         void initWorkDir(Context context);
@@ -23,6 +25,7 @@ public final class ServiceManager {
          * 初始化
          */
         public void init(Context context) {
+            initEnvironment(context);
             initWorkDir(context);
             initLog(context);
         }
@@ -30,7 +33,8 @@ public final class ServiceManager {
 
     private static final ApplicationImpl mApplication = new ApplicationImpl();
 
-    static void appInit(Context context, AppConfig appConfig, Class<? extends IServiceManager> serviceClass) {
+    static void appInit(Context context, AppConfig appConfig,
+            Class<? extends IServiceManager> serviceClass) {
         mApplication.appInit(context, appConfig, serviceClass);
     }
 //    static void appInit(Context context, AppConfig appConfig,
