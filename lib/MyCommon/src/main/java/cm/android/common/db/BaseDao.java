@@ -40,8 +40,18 @@ public class BaseDao {
     }
 
     public int delete(int id) {
+        int count = delete(id, null, null);
+        return count;
+    }
+
+    public int delete(int id, String where, String[] selectionArgs) {
         Uri uri = ContentUris.withAppendedId(contentUri, id);
-        int count = resolver.delete(uri, null, null);
+        int count = delete(uri, where, selectionArgs);
+        return count;
+    }
+
+    public int delete(Uri uri, String where, String[] selectionArgs) {
+        int count = resolver.delete(uri, where, selectionArgs);
         return count;
     }
 

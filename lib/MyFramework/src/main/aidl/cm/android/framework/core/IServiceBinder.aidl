@@ -6,7 +6,7 @@ package cm.android.framework.core;
 
 interface IServiceBinder {
 
-//    void initService(IServiceCreator creator);
+    boolean isInit();
 
     void create();
 

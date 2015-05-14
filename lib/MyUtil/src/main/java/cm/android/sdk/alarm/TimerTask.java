@@ -12,10 +12,14 @@ public abstract class TimerTask {
     private final AtomicBoolean startFlag = new AtomicBoolean(false);
 
     public void start(Context context) {
+        start(context, 0);
+    }
+
+    public void start(Context context, long delayAtMillis) {
         if (startFlag.compareAndSet(false, true)) {
             Intent intent = getIntent();
             int requestCode = getRequestCode();
-            AlarmUtil.schedule(context, intent, requestCode, 0);
+            AlarmUtil.schedule(context, intent, requestCode, delayAtMillis);
         }
     }
 

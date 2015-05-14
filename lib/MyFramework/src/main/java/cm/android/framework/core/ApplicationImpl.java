@@ -38,7 +38,8 @@ final class ApplicationImpl {
     private WeakReference<ServiceManager.InitListener> initListener;
 
     final synchronized boolean isStarted() {
-        return startAtomic.get();
+//        return startAtomic.get();
+        return serviceBidnerProxy.isInit();
     }
 
     void appInit(Context context, ServiceManager.AppConfig appConfig,
@@ -92,7 +93,7 @@ final class ApplicationImpl {
     }
 
     private synchronized void startInternal() {
-        if (startAtomic.compareAndSet(false, true)) {
+        if (!startAtomic.get()) {
             DaemonService.start(appContext);
         } else {
             logger.error("startInternal:startAtomic = " + startAtomic.get());
@@ -100,15 +101,17 @@ final class ApplicationImpl {
 
         serviceBidnerProxy.create();
         notifyInitSucceed();
+        startAtomic.set(true);
     }
 
     private synchronized void stopInternal() {
         this.initListener = null;
         serviceBidnerProxy.destroy();
 
-        if (startAtomic.compareAndSet(true, false)) {
+        if (startAtomic.get()) {
             DaemonService.stop(appContext);
         }
+        startAtomic.set(false);
     }
 
     final void stop() {
@@ -290,6 +293,21 @@ final class ApplicationImpl {
                 serviceBinder.addService(name, binder);
             } catch (RemoteException e) {
                 logger.error(e.getMessage(), e);
+            }
+        }
+
+        @Override
+        public boolean isInit() {
+            if (!isBindService()) {
+                logger.error("isInit:isBindService = false");
+                return false;
+            }
+
+            try {
+                return serviceBinder.isInit();
+            } catch (RemoteException e) {
+                logger.error(e.getMessage(), e);
+                return false;
             }
         }
     }

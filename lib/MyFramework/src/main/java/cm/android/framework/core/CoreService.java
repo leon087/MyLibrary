@@ -47,6 +47,10 @@ public final class CoreService extends PersistentService {
         public void addService(String name, IBinder binder) throws RemoteException {
 
         }
+
+        public boolean isInit() throws RemoteException {
+            return false;
+        }
     };
 
     @TargetApi(18)

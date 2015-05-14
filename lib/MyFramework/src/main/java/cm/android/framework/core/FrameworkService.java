@@ -24,8 +24,9 @@ public abstract class FrameworkService extends Service {
 
     @Override
     public final void onDestroy() {
-        if (create.compareAndSet(true, false)) {
+        if (create.get()) {
             onServiceDestroy();
+            create.set(false);
         }
 
         super.onDestroy();
