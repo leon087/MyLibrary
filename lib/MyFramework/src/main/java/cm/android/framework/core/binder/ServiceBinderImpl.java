@@ -65,7 +65,8 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
 
     @Override
     public final void create() throws RemoteException {
-        logger.info("isStarted = " + isInitAtomic.get());
+        logger.info("create:isStarted = {},serviceManager = {}", isInitAtomic.get(),
+                serviceManager);
         if (isInitAtomic.get()) {
             return;
         }
@@ -80,7 +81,8 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
 
     @Override
     public final void destroy() throws RemoteException {
-        logger.info("isStarted = " + isInitAtomic.get());
+        logger.info("destroy:isStarted = {},serviceManager = {}", isInitAtomic.get(),
+                serviceManager);
         if (!isInitAtomic.get()) {
             return;
         }
@@ -94,16 +96,21 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
 
     @Override
     public final void addService(String name, IBinder binder) throws RemoteException {
+        logger.info("addService:name = {},binder = {}", name, binder);
         serviceHolder.addService(name, binder);
     }
 
     @Override
     public final IBinder getService(String name) throws RemoteException {
-        return serviceHolder.getService(name);
+        IBinder binder = serviceHolder.getService(name);
+        logger.info("getService:name = {},binder = {}", name, binder);
+        return binder;
     }
 
     @Override
     public boolean isInit() throws RemoteException {
-        return isInitAtomic.get();
+        boolean isInit = isInitAtomic.get();
+        logger.info("isInit:isInit = {}", isInit);
+        return isInit;
     }
 }

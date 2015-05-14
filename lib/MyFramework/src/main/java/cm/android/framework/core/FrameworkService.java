@@ -1,5 +1,8 @@
 package cm.android.framework.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Intent;
@@ -10,10 +13,15 @@ public abstract class FrameworkService extends Service {
 
     private final AtomicBoolean create = new AtomicBoolean(false);
 
+    private static final Logger logger = LoggerFactory.getLogger("FrameworkService");
+
     @Override
     public final void onCreate() {
         super.onCreate();
-        if (!ServiceManager.isStarted()) {
+
+        boolean start = ServiceManager.isStarted();
+        logger.error("ServiceManager.isStarted() = {}", start);
+        if (!start) {
             stopSelf();
             return;
         }

@@ -76,7 +76,7 @@ final class ApplicationImpl {
 
     final void start(ServiceManager.InitListener initListener) {
         logger.info("start");
-        if (isStarted()) {
+        if (startAtomic.get()) {
             logger.error("start:isStarted = true");
             return;
         }
@@ -270,7 +270,7 @@ final class ApplicationImpl {
         @Override
         public IBinder getService(String name) {
             if (!isBindService()) {
-                logger.error("name = " + name);
+                logger.error("getService:name = " + name);
                 return null;
             }
 
@@ -285,7 +285,7 @@ final class ApplicationImpl {
         @Override
         public void addService(String name, IBinder binder) {
             if (!isBindService()) {
-                logger.error("name = {},binder = {}", name, binder);
+                logger.error("addService:name = {},binder = {}", name, binder);
                 return;
             }
 
