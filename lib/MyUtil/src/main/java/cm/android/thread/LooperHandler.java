@@ -120,16 +120,19 @@ public class LooperHandler {
 
     private class MyHandler extends Handler {
 
+        private Callback callback;
+
         private MyHandler(Looper looper, Callback callback) {
-            super(looper, callback);
+            super(looper);
+            this.callback = callback;
         }
 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            // if (null != callback) {
-            // callback.handleMessage(msg);
-            // }
+            if (null != callback) {
+                callback.handleMessage(msg);
+            }
         }
     }
 }
