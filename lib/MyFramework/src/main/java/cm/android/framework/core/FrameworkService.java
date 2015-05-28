@@ -18,9 +18,9 @@ public abstract class FrameworkService extends Service {
     @Override
     public final void onCreate() {
         super.onCreate();
-
         boolean start = ServiceManager.isStarted();
-        logger.error("ServiceManager.isStarted() = {}", start);
+        logger.info("ServiceManager.isStarted() = {},this = {}", start,
+                this.getClass().getSimpleName());
         if (!start) {
             stopSelf();
             return;
@@ -32,6 +32,7 @@ public abstract class FrameworkService extends Service {
 
     @Override
     public final void onDestroy() {
+        logger.info("create.get() = {},this = {}", create.get(), this.getClass().getSimpleName());
         if (create.get()) {
             onServiceDestroy();
             create.set(false);

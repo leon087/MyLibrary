@@ -56,7 +56,11 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
             showAll true
         }
 
-        dexOptions { preDexLibraries = false }
+        dexOptions {
+            preDexLibraries = false
+            incremental true
+            javaMaxHeapSize "2g"
+        }
     }
 }
 

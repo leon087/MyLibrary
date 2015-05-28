@@ -23,12 +23,12 @@ public class MyServiceManager implements IServiceManager {
     @Override
     public void onCreate(Context context) {
         logger.error("ggggg initService:onCreate:processName = " + SystemUtil
-                .getCurProcessName(MyManager.getApp()));
+                .getCurProcessName(MyManager.getAppContext()));
         testManager = new TestManagerServer();
         ServiceManager.addService(TestContext.TEST, testManager);
 
         timerServer = new TimerServer();
-        timerServer.start(MyManager.getApp());
+        timerServer.start(MyManager.getAppContext());
 
         ServiceManager.addService(TestContext.TIMER_TASK_SERVER, timerServer);
     }

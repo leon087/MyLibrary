@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import cm.android.app.core.MyManager;
-import cm.android.app.sample.R;
 import cm.android.framework.core.ServiceManager;
 
 
@@ -21,7 +20,7 @@ public class MainActivity extends Activity {
             @Override
             public void initSucceed() {
                 LoggerFactory.getLogger("ggg").error("ggg testService1 initSucceed");
-                startService(new Intent(MyManager.getApp(), TestService1.class));
+                startService(new Intent(MyManager.getAppContext(), TestService1.class));
             }
         });
     }

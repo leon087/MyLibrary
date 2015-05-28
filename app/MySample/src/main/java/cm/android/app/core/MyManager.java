@@ -1,5 +1,7 @@
 package cm.android.app.core;
 
+import android.content.Context;
+
 import cm.android.app.test.TestContext;
 import cm.android.app.test.server.TestManager;
 import cm.android.framework.core.BinderFactory;
@@ -20,9 +22,8 @@ public class MyManager {
         GlobalData.getInstance().putData(tag, value);
     }
 
-
-    public static MainApp getApp() {
-        return MainApp.getApp();
+    public static Context getAppContext() {
+        return MainApp.getApp().getApplicationContext();
     }
 
     public static TestManager getTestManager() {

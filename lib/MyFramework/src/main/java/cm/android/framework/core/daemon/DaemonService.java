@@ -61,6 +61,7 @@ public final class DaemonService extends PersistentService {
         WakeLockUtil.acquire(context, "framework", 1000);
 
         Intent intent = new Intent(context, DaemonService.class);
+        intent.setPackage(context.getPackageName());
         intent.setAction(ACTION_START);
         context.startService(intent);
     }
@@ -69,6 +70,7 @@ public final class DaemonService extends PersistentService {
         WakeLockUtil.acquire(context, "framework", 1000);
 
         Intent intent = new Intent(context, DaemonService.class);
+        intent.setPackage(context.getPackageName());
         intent.setAction(ACTION_STOP);
         context.startService(intent);
     }

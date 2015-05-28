@@ -58,7 +58,7 @@ public final class CoreService extends PersistentService {
     public final IBinder onBind(Intent intent) {
         Bundle bundle = intent.getExtras();
         if (bundle == null) {
-            logger.error("bundle = null,intent = " + intent);
+            logger.error("bundle = null,intent = {}", intent);
             return emptyServiceBinder;
         }
 
@@ -68,7 +68,7 @@ public final class CoreService extends PersistentService {
             return emptyServiceBinder;
         }
 
-        logger.info("CoreService:onBind:initService:intent = " + intent);
+        logger.info("CoreService:onBind:initService:intent = {}", intent);
         String serviceManagerName = bundle.getString(TAG_SERVICE_MANAGER);
         serviceBinder.initService(serviceManagerName);
         return serviceBinder;
@@ -76,13 +76,13 @@ public final class CoreService extends PersistentService {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        logger.info("CoreService:onUnbind:intent = " + intent);
+        logger.info("CoreService:onUnbind:intent = {}", intent);
         return super.onUnbind(intent);
     }
 
     @Override
     public void onServiceStart(Intent intent, int flags, int startId) {
-
+        logger.info("intent = {},flags = {},startId = {}", intent, flags, startId);
     }
 
     @Override
@@ -99,7 +99,6 @@ public final class CoreService extends PersistentService {
         super.onDestroy();
     }
 
-    @TargetApi(18)
     public final static boolean bind(Context context,
             ServiceConnection connection, String serviceManagerName) {
         Intent intent = new Intent(context, CoreService.class);

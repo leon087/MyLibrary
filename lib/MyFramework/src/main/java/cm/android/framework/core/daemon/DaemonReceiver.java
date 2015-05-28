@@ -21,4 +21,5 @@ public class DaemonReceiver extends BaseBroadcastReceiver {
         filter.addAction(DaemonManager.ACTION_ALARM_WAKE_UP);
         return filter;
     }
+
 }
