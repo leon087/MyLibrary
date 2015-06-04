@@ -30,6 +30,14 @@ public class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (!getUserVisibleHint()) {
+            setUserVisibleHint(true);
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         setUserVisibleHint(false);

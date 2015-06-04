@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.os.IBinder;
-import android.os.RemoteException;
 
 import cm.android.framework.core.BinderFactory;
 
@@ -18,7 +17,7 @@ public final class TimerManager extends ITimerServer.Stub implements BinderFacto
     public void register(String action, long period, boolean globalBroadcast) {
         try {
             timerManager.register(action, period, globalBroadcast);
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
@@ -27,7 +26,7 @@ public final class TimerManager extends ITimerServer.Stub implements BinderFacto
     public void unregister(String action) {
         try {
             timerManager.unregister(action);
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }

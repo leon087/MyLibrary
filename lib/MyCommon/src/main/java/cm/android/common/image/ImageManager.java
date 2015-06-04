@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.java.util.Utils;
 
@@ -32,6 +33,8 @@ public class ImageManager {
     private static int maxImageHeightForMemoryCache = 0;
 
     private static int resId;
+
+    private static final AtomicBoolean initFlag = new AtomicBoolean(false);
 
     private ImageManager() {
     }
@@ -73,12 +76,22 @@ public class ImageManager {
     }
 
     public static void init(Context context, String cacheDirPath, int defResId) {
+        if (initFlag.get()) {
+            return;
+        }
+        initFlag.set(true);
+
         resId = defResId;
         ImageLoaderConfiguration defaultConfig = getConfiguration(context, cacheDirPath);
         ImageLoader.getInstance().init(defaultConfig);
     }
 
     public static void deInit() {
+        if (!initFlag.get()) {
+            return;
+        }
+        initFlag.set(false);
+
         clearCache(CLEAR_CACHE_MEMORY);
         ImageLoader.getInstance().destroy();
     }
