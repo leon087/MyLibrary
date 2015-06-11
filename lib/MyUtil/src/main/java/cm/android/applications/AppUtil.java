@@ -249,10 +249,10 @@ public class AppUtil {
      *
      * @param archiveFilePath APK文件的路径。如：/sdcard /download/XX.apk
      */
-    public static PackageInfo getUninatllAppInfo(PackageManager pm,
+    public static PackageInfo getArchiveInfo(PackageManager pm,
             String archiveFilePath) {
         PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath,
-                PackageManager.GET_UNINSTALLED_PACKAGES);
+                PackageManager.GET_ACTIVITIES);
         return info;
     }
 
@@ -472,9 +472,8 @@ public class AppUtil {
         return false;
     }
 
-    public static boolean isPackageUnavailable(PackageManager pm,
-            String packageName) {
-        return getPackageInfo(pm, packageName, 0) == null;
+    public static boolean isPackageUnavailable(PackageManager pm, String packageName) {
+        return getPackageInfo(pm, packageName, PackageManager.GET_UNINSTALLED_PACKAGES) == null;
     }
 
     public static interface AppFilter {

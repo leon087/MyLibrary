@@ -17,7 +17,8 @@ public abstract class TimerTask {
 
     public void start(Context context, long delayAtMillis) {
         if (startFlag.compareAndSet(false, true)) {
-            Intent intent = getIntent();
+            Intent intent = getIntent(context);
+            intent.setPackage(context.getPackageName());
             int requestCode = getRequestCode();
             AlarmUtil.schedule(context, intent, requestCode, delayAtMillis);
         }
@@ -25,7 +26,8 @@ public abstract class TimerTask {
 
     public void cancel(Context context) {
         if (startFlag.compareAndSet(true, false)) {
-            Intent intent = getIntent();
+            Intent intent = getIntent(context);
+            intent.setPackage(context.getPackageName());
             int requestCode = getRequestCode();
             AlarmUtil.cancel(context, intent, requestCode);
         }
@@ -36,7 +38,8 @@ public abstract class TimerTask {
             return;
         }
 
-        Intent intent = getIntent();
+        Intent intent = getIntent(context);
+        intent.setPackage(context.getPackageName());
         int requestCode = getRequestCode();
         AlarmUtil.schedule(context, intent, requestCode, getDelayAtMillis());
     }
@@ -45,7 +48,7 @@ public abstract class TimerTask {
         return 0;
     }
 
-    protected abstract Intent getIntent();
+    protected abstract Intent getIntent(Context context);
 
     protected abstract long getDelayAtMillis();
 }

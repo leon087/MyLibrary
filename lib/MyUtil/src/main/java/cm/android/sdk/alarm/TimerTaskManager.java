@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.Map;
 
 import cm.android.sdk.content.BaseBroadcastReceiver;
+import cm.android.util.IntentUtil;
 import cm.java.util.ObjectUtil;
 
 public final class TimerTaskManager {
@@ -85,8 +85,9 @@ public final class TimerTaskManager {
         }
 
         @Override
-        protected Intent getIntent() {
+        protected Intent getIntent(Context context) {
             Intent alarmIntent = new Intent(TimerReceiver.ACTION_ALARM_TASK);
+            alarmIntent.setPackage(context.getPackageName());
 //                alarmIntent.putExtra(AlarmTaskReceiver.INTENT_DATA, intent.getExtras());
             alarmIntent.putExtra(TimerReceiver.INTENT_ACTION, action);
             alarmIntent.putExtra(TimerReceiver.INTENT_BROADCAST_TYPE, globalBroadcast);
@@ -129,9 +130,9 @@ public final class TimerTaskManager {
 //            realIntent.putExtras(intent.getBundleExtra(INTENT_DATA));
             boolean globalBroadcast = intent.getBooleanExtra(INTENT_BROADCAST_TYPE, false);
             if (globalBroadcast) {
-                context.sendBroadcast(realIntent);
+                IntentUtil.sendBroadcastInternal(context, realIntent);
             } else {
-                LocalBroadcastManager.getInstance(context).sendBroadcast(realIntent);
+                IntentUtil.sendBroadcastLocal(context, realIntent);
             }
 
             logger.info("alarmAction = " + alarmAction);

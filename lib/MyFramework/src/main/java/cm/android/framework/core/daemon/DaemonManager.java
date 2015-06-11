@@ -30,8 +30,9 @@ public class DaemonManager {
 
     private TimerTask daemonTimerTask = new TimerTask() {
         @Override
-        protected Intent getIntent() {
+        protected Intent getIntent(Context context) {
             Intent intent = new Intent();
+            intent.setPackage(context.getPackageName());
             intent.setAction(ACTION_ALARM_WAKE_UP);
             return intent;
         }

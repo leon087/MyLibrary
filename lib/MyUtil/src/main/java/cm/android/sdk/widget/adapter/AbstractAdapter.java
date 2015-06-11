@@ -40,9 +40,7 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
      */
     public void update(List<T> data) {
         clear();
-        if (data != null) {
-            mDataCache.addAll(data);
-        }
+        add(data);
     }
 
     /**

@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -18,11 +19,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -38,25 +37,6 @@ public class IoUtil {
     private static final Logger logger = LoggerFactory.getLogger("util");
 
     private IoUtil() {
-    }
-
-    /**
-     * 创建文件夹
-     */
-    public static boolean createDirector(String directorFilePath) {
-        String[] dirStructor = parseDirSturctor(directorFilePath);
-        File file;
-        boolean isSucceed = true;
-        for (int i = 0; i < dirStructor.length; i++) {
-            file = new File(dirStructor[i]);
-            if (!file.exists()) {
-                isSucceed = (isSucceed & file.mkdir());
-                if (i == dirStructor.length - 1) {
-                    return isSucceed;
-                }
-            }
-        }
-        return false;
     }
 
     /**
@@ -189,36 +169,6 @@ public class IoUtil {
     }
 
     /**
-     * @param path
-     * @param postfix
-     * @return
-     */
-    public static ArrayList<String> searchFileToString(String path,
-            String postfix) {
-        if (!path.endsWith(File.separator)) {
-            path = path + File.separator;
-        }
-
-        ArrayList<String> fileToString = new ArrayList<String>();
-        File file = new File(path);
-        if (!file.exists() || !file.isDirectory()) {
-            // 不是一个目录
-            return fileToString;
-        }
-        File[] files = file.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].isFile()) {
-                String name = files[i].getName();
-                // String stuffer = name.substring( name.lastIndexOf( "." ) );
-                if (name.endsWith(postfix)) {
-                    fileToString.add(path + files[i].getName());
-                }
-            }
-        }
-        return fileToString;
-    }
-
-    /**
      * @param remotePathName
      * @return
      */
@@ -239,17 +189,6 @@ public class IoUtil {
         return (String[]) dirList.toArray(retStr);
     }
 
-    /**
-     * 获取指定路径下的所有文件列表
-     */
-    public static String[] getAllFiles(String remotePathName) {
-        File file = new File(remotePathName);
-        if (!file.isDirectory()) {
-            return new String[0];
-        }
-        return file.list();
-    }
-
     public static String[] getFiles(File fir) {
         if (!fir.isDirectory()) {
             return new String[0];
@@ -265,32 +204,6 @@ public class IoUtil {
             return new File[0];
         }
         return dir.listFiles(filenameFilter);
-    }
-
-    /**
-     * 获取执行路径下的所有文件列表，按最后修改时间排序
-     */
-    public static List<String> getAllFilesByLastModifyTime(String remotePathName) {
-        List<String> allFilesName = new ArrayList<String>();
-        File file = new File(remotePathName);
-        if (!file.isDirectory()) {
-            return new ArrayList<String>();
-        }
-        File[] fileList = file.listFiles();
-        // 按照文件最后修改时间排序
-        // List<File> infoIds = Arrays.asList( file.listFiles() );
-        Arrays.sort(fileList, new Comparator<File>() {
-            public int compare(File o1, File o2) {
-                return ((int) (o1.lastModified() - o2.lastModified()));
-            }
-        });
-
-        for (File f : fileList) {
-            if (f.getAbsoluteFile().isFile()) {
-                allFilesName.add(f.getName());
-            }
-        }
-        return allFilesName;
     }
 
     /**
@@ -544,6 +457,63 @@ public class IoUtil {
         } finally {
             closeQuietly(in);
             closeQuietly(bos);
+        }
+    }
+
+    public static boolean compress(File srcFile, File destFile) {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new BufferedInputStream(new FileInputStream(srcFile));
+            os = new BufferedOutputStream(new FileOutputStream(destFile));
+
+            return compress(is, os);
+        } catch (FileNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            return false;
+        } finally {
+            IoUtil.closeQuietly(is);
+            IoUtil.closeQuietly(os);
+        }
+
+    }
+
+    public static boolean decompress(File srcFile, File destFile) {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new BufferedInputStream(new FileInputStream(srcFile));
+            os = new BufferedOutputStream(new FileOutputStream(destFile));
+
+            return decompress(is, os);
+        } catch (FileNotFoundException e) {
+            logger.error(e.getMessage(), e);
+            return false;
+        } finally {
+            IoUtil.closeQuietly(is);
+            IoUtil.closeQuietly(os);
+        }
+    }
+
+    public static boolean compress(InputStream is, OutputStream os) {
+        try {
+            GZIPOutputStream gos = new GZIPOutputStream(os);
+            write(is, gos);
+            return true;
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return false;
+        }
+    }
+
+    public static boolean decompress(InputStream is, OutputStream os) {
+        try {
+            GZIPInputStream gis = new GZIPInputStream(is);
+            write(gis, os);
+            return true;
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return false;
         }
     }
 

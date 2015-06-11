@@ -6,6 +6,10 @@
             android:minSdkVersion="19"
             android:targetSdkVersion="19"/>
 
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+
     <application
             android:name="cm.android.app.core.MainApp"
             android:allowBackup="true"

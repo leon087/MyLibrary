@@ -23,8 +23,7 @@ final class MyPackageManager {
         threadPool = ThreadUtil.newCachedThreadPool();
     }
 
-    void installPackage(final Uri packageURI,
-            final PackageInstallObserver observer) {
+    void installPackage(final Uri packageURI, final PackageInstallObserver observer) {
         threadPool.submit(new Runnable() {
             @Override
             public void run() {
@@ -34,7 +33,7 @@ final class MyPackageManager {
                 if (null != observer) {
                     // 获取安装包信息
                     String archiveFilePath = packageURI.getPath();
-                    PackageInfo packageInfo = AppUtil.getUninatllAppInfo(
+                    PackageInfo packageInfo = AppUtil.getArchiveInfo(
                             context.getPackageManager(), archiveFilePath);
                     String packageName = "";
                     if (packageInfo != null) {

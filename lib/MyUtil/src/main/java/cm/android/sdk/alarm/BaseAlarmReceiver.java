@@ -11,8 +11,8 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
 
     private TimerTask timerTask = new TimerTask() {
         @Override
-        protected Intent getIntent() {
-            return BaseAlarmReceiver.this.getIntent();
+        protected Intent getIntent(Context context) {
+            return BaseAlarmReceiver.this.getIntent(context);
         }
 
         @Override
@@ -59,7 +59,7 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public final void onReceive(Context context, Intent intent) {
-        if (getIntent().getAction().equals(intent.getAction())) {
+        if (getIntent(context).getAction().equals(intent.getAction())) {
             timerTask.schedule(context);
         }
 
@@ -74,7 +74,7 @@ public abstract class BaseAlarmReceiver extends BroadcastReceiver {
         return 0;
     }
 
-    protected abstract Intent getIntent();
+    protected abstract Intent getIntent(Context context);
 
     protected abstract long getDelayAtMillis();
 

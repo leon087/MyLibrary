@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.LocalBroadcastManager;
 
 import java.io.File;
 
@@ -64,6 +65,7 @@ public class IntentUtil {
         apkintent.setDataAndType(packageURI,
                 "application/vnd.android.package-archive");
         apkintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        apkintent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         context.startActivity(apkintent);
         return true;
     }
@@ -77,9 +79,24 @@ public class IntentUtil {
         }
 
         Uri packageURI = Uri.parse("package:" + packageName);
-        Intent i = new Intent(Intent.ACTION_DELETE, packageURI);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
+        Intent apkintent = new Intent(Intent.ACTION_DELETE, packageURI);
+        apkintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        apkintent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        context.startActivity(apkintent);
         return true;
+    }
+
+    public static void sendBroadcastInternal(Context context, Intent intent) {
+        intent.setPackage(context.getPackageName());
+        context.sendBroadcast(intent);
+    }
+
+    public static void sendBroadcastLocal(Context context, Intent intent) {
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public static void sendBroadcastInternal(Context context, Intent intent, String permission) {
+        intent.setPackage(context.getPackageName());
+        context.sendBroadcast(intent, permission);
     }
 }
