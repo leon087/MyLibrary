@@ -58,7 +58,7 @@ public class ObjectProxy {
 
     public Method getMethod(String methodName, Class<?>... parameterTypes) {
         try {
-            Method method = clazz.getMethod(methodName, parameterTypes);
+            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
             method.setAccessible(true);
             return method;
         } catch (NoSuchMethodException e) {

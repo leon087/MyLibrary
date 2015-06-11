@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
 
 /**
@@ -92,12 +93,11 @@ public class SystemUtil {
      * 获取栈顶activity
      */
     public static String getTopActivityPackageName(Context context) {
-        List<RunningTaskInfo> taskInfos;
-        // 判断程序是否处于桌面
-        ActivityManager am = (ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        taskInfos = am.getRunningTasks(1);
-        String packageName = taskInfos.get(0).topActivity.getPackageName();
+        RunningTaskInfo taskInfo = getFirstRunningTaskInfo(context);
+        if (taskInfo == null) {
+            return "";
+        }
+        String packageName = taskInfo.topActivity.getPackageName();
         return packageName;
     }
 
@@ -234,16 +234,16 @@ public class SystemUtil {
 
     public static boolean isAppForeground(Context paramContext, String paramString) {
         if (TextUtils.isEmpty(paramString)) {
-            ;
-        }
-        ActivityManager.RunningTaskInfo localRunningTaskInfo = getFirstRunningTaskInfo(
-                paramContext);
-
-        if (localRunningTaskInfo == null) {
             return false;
         }
 
-        return TextUtils.equals(localRunningTaskInfo.baseActivity.getPackageName(), paramString);
+        String topPackageName = getTopPackageNameCompat(paramContext);
+
+        if (Utils.isEmpty(topPackageName)) {
+            return false;
+        }
+
+        return TextUtils.equals(topPackageName, paramString);
     }
 
     public static ActivityManager.RunningTaskInfo getFirstRunningTaskInfo(Context paramContext) {
@@ -268,14 +268,56 @@ public class SystemUtil {
     public static String getCurProcessName(Context context) {
         int pid = android.os.Process.myPid();
         logger.info("pid = " + pid);
-        ActivityManager mActivityManager = (ActivityManager) context
+        ActivityManager am = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo appProcess : mActivityManager
-                .getRunningAppProcesses()) {
+        for (ActivityManager.RunningAppProcessInfo appProcess : am.getRunningAppProcesses()) {
             if (appProcess.pid == pid) {
                 return appProcess.processName;
             }
         }
+        return null;
+    }
+
+    public static String getTopPackageNameCompat(Context context) {
+        if (context == null) {
+            return null;
+        }
+
+        if (!EnvironmentUtil.SdkUtil.hasLollipop()) {
+            String pkgName = getTopActivityPackageName(context);
+            return pkgName;
+        }
+
+        int START_TASK_TO_FRONT = 2;
+
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<RunningAppProcessInfo> appList = am.getRunningAppProcesses();
+        if (appList == null || appList.isEmpty()) {
+            return null;
+        }
+
+        for (RunningAppProcessInfo app : appList) {
+            if (app.importance != RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                continue;
+            }
+
+            Integer state = null;
+            try {
+                state = ReflectUtil.getFieldValue(app, "processState");
+            } catch (Exception e) {
+                return null;
+            }
+
+            if (state == null || state != START_TASK_TO_FRONT) {
+                continue;
+            }
+
+            String[] pkgList = app.pkgList;
+            if (pkgList != null && pkgList.length > 0) {
+                return pkgList[0];
+            }
+        }
+
         return null;
     }
 

@@ -312,6 +312,10 @@ public class EnvironmentUtil {
      */
     public static class SdkUtil {
 
+        public static boolean has(int versionCode) {
+            return Build.VERSION.SDK_INT >= versionCode;
+        }
+
         /**
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#FROYO}以上
          */
@@ -321,21 +325,21 @@ public class EnvironmentUtil {
             // of the OS since they are inlined at compile time. This is
             // guaranteed
             // behavior.
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
+            return has(Build.VERSION_CODES.FROYO);
         }
 
         /**
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#GINGERBREAD}以上
          */
         public static boolean hasGingerbread() {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
+            return has(Build.VERSION_CODES.GINGERBREAD);
         }
 
         /**
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#HONEYCOMB}以上
          */
         public static boolean hasHoneycomb() {
-            return Build.VERSION.SDK_INT >= 11;
+            return has(11);
             // return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
         }
 
@@ -343,29 +347,33 @@ public class EnvironmentUtil {
          * 判断手机系统版本是否为{@link android.os.Build.VERSION_CODES#HONEYCOMB_MR1}以上
          */
         public static boolean hasHoneycombMR1() {
-            return Build.VERSION.SDK_INT >= 12;
+            return has(12);
             // return Build.VERSION.SDK_INT >=
             // Build.VERSION_CODES.HONEYCOMB_MR1;
         }
 
         public static boolean hasJellyBean() {
-            return Build.VERSION.SDK_INT >= 16;
+            return has(16);
             // return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
         }
 
         public static boolean hasJellyBeanMr1() {
-            return Build.VERSION.SDK_INT >= 17;
+            return has(17);
 //            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
         }
 
         public static boolean hasJellyBeanMr2() {
-            return Build.VERSION.SDK_INT >= 18;
+            return has(18);
 //            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
         }
 
         public static boolean hasKitkat() {
-            return Build.VERSION.SDK_INT >= 19;
+            return has(19);
 //            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        }
+
+        public static boolean hasLollipop() {
+            return has(21);
         }
     }
 }

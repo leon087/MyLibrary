@@ -1,5 +1,6 @@
 package cm.java.util;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -46,13 +47,17 @@ public class ReflectUtil {
 
     public static <T> T getFieldValue(Object object, String fieldName)
             throws NoSuchFieldException, IllegalAccessException {
-        T value = (T) object.getClass().getField(fieldName).get(object);
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        T value = (T) field.get(object);
         return value;
     }
 
     public static <T> T getStaticFieldValue(Class clazz, String fieldName)
             throws NoSuchFieldException, IllegalAccessException {
-        T value = (T) clazz.getField(fieldName).get(null);
+        Field field = clazz.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        T value = (T) field.get(null);
         return value;
     }
 }
