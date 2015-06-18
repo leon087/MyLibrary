@@ -319,7 +319,7 @@ public class AppUtil {
             PackageInfo packageInfo = pm.getPackageInfo(packageName, flags);
             return packageInfo;
         } catch (NameNotFoundException e) {
-            logger.error(e.getMessage(), e);
+//            logger.error(e.getMessage(), e);
             return null;
         }
     }
@@ -472,8 +472,8 @@ public class AppUtil {
         return false;
     }
 
-    public static boolean isPackageUnavailable(PackageManager pm, String packageName) {
-        return getPackageInfo(pm, packageName, PackageManager.GET_UNINSTALLED_PACKAGES) == null;
+    public static boolean isAppInstalled(PackageManager pm, String packageName) {
+        return getPackageInfo(pm, packageName, PackageManager.GET_UNINSTALLED_PACKAGES) != null;
     }
 
     public static interface AppFilter {

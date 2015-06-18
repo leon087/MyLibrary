@@ -8,22 +8,16 @@ import cm.android.sdk.PersistentService;
 
 public abstract class AppService extends PersistentService {
 
-    public static final String ACTION_ADD_APP = "android.app.action_add_app";
+    public static final String ACTION_INIT_APP = "cm.android.intent.action.INIT_APP";
 
-    public static final String ACTION_REMOVE_APP = "android.app.action_remove_app";
+    private final IBinder mServiceBinder = new ServiceBinder();
 
-    public static final String PACKAGE_NAME = "packageName";
-
-    private IBinder mServiceBinder = new ServiceBinder();
-
-    private AppManager appManager = new AppManager();
+    private final AppManager appManager = new AppManager();
 
     @Override
     public void onCreate() {
-        super.onCreate();
-        appManager.init(this);
-        appManager.initInstalledList();
-        appManager.getUpdateAppManager().config(configAsynRequest());
+        appManager.init(this, configAppProcessor(), configAsynRequest());
+//        appManager.initInstalledList();
     }
 
     @Override
@@ -33,20 +27,35 @@ public abstract class AppService extends PersistentService {
 
     @Override
     public void onServiceStart(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            return;
+        }
+
+        String action = intent.getAction();
+        if (UpdateAppManager.ACTION_REQUEST_UPDATE.equals(action)) {
+            appManager.getUpdateAppManager().request();
+        } else if (ACTION_INIT_APP.equals(action)) {
+            appManager.initInstalledList();
+        }
     }
 
     @Override
     public void onDestroy() {
         appManager.deInit();
-        super.onDestroy();
     }
 
     public class ServiceBinder extends Binder {
 
-        public AppManager getService() {
+        public AppManager getAppManager() {
             return appManager;
+        }
+
+        public UpdateAppManager getUpdateManager() {
+            return appManager.getUpdateAppManager();
         }
     }
 
     protected abstract UpdateAppManager.IAsynRequest configAsynRequest();
+
+    protected abstract AppManager.IAppProcessor configAppProcessor();
 }

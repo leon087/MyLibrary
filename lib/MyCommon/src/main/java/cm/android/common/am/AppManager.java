@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.os.Handler;
 import android.os.Message;
 
 import java.util.ArrayList;
@@ -19,7 +18,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import cm.android.applications.AppUtil;
+import cm.android.sdk.MyHandler;
 import cm.android.sdk.content.BaseBroadcastReceiver;
+import cm.java.util.MapUtil;
 import cm.java.util.ObjectUtil;
 import cm.java.util.Utils;
 
@@ -32,20 +33,12 @@ public class AppManager {
      */
     public static final int APPLIST_CHANGED = 0;
 
-    /**
-     * 请求更新列表
-     */
-    public static final int REQUEST_UPDATE_LIST = APPLIST_CHANGED + 1;
-
-    private Handler handler = new Handler() {
+    private MyHandler handler = new MyHandler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case APPLIST_CHANGED:
                     // app列表有变化
                     notifyAppListener();
-                    break;
-                case REQUEST_UPDATE_LIST:
-                    updateAppManager.request(getAppList());
                     break;
                 default:
                     break;
@@ -58,8 +51,8 @@ public class AppManager {
         @Override
         public void run() {
             initInstalledApp();
+            updateAppManager.initSucceed();
             handler.sendEmptyMessage(APPLIST_CHANGED);
-            updateAppManager.start();
         }
     };
 
@@ -72,36 +65,42 @@ public class AppManager {
 
     private Context context;
 
-    private UpdateAppManager updateAppManager;
+    private final UpdateAppManager updateAppManager = new UpdateAppManager();
 
-    private PackageIntentReceiver packageIntentReceiver;
+    private final PackageIntentReceiver packageIntentReceiver = new PackageIntentReceiver();
 
-    private IAppInfoProcessor appInfoProcessor;
+    private IAppProcessor appProcessor;
 
     public AppManager() {
-        packageIntentReceiver = new PackageIntentReceiver();
     }
 
-    public void setAppInfoProcessor(IAppInfoProcessor appInfoProcessor) {
-        this.appInfoProcessor = appInfoProcessor;
+    private void configAppProcessor(IAppProcessor appProcessor) {
+        if (appProcessor == null) {
+            this.appProcessor = new DefaultAppProcessor();
+        } else {
+            this.appProcessor = appProcessor;
+        }
     }
 
-    public void init(Context context) {
-        threadPool = Executors.newCachedThreadPool();
-        updateAppManager = new UpdateAppManager(handler);
-        packageIntentReceiver.register(context);
+    void init(Context context, IAppProcessor appProcessor,
+            UpdateAppManager.IAsynRequest aysnRequest) {
         this.context = context;
+
+        threadPool = Executors.newCachedThreadPool();
+        updateAppManager.init(aysnRequest);
+        configAppProcessor(appProcessor);
+        packageIntentReceiver.register(context);
     }
 
-    public void deInit() {
+    void deInit() {
         packageIntentReceiver.unregister();
-        updateAppManager.stop();
+        updateAppManager.deInit();
         threadPool.shutdown();
         context = null;
-        updateAppManager = null;
+        appProcessor = null;
     }
 
-    public void initInstalledList() {
+    void initInstalledList() {
         // 异步
         // 从缓存中读取，同时从系统中读取，返回成功则更新缓存，并更新UI
 
@@ -113,15 +112,19 @@ public class AppManager {
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 context.getPackageManager(), pkgName);
         if (packageInfo != null) {
-            Map<String, String> map = getAppInfo(packageInfo);
-            put(packageInfo.packageName, map);
-            handler.sendEmptyMessage(APPLIST_CHANGED);
+            Map<String, String> map = appProcessor.getAppInfo(packageInfo);
+            boolean result = put(packageInfo.packageName, map);
+            if (result) {
+                handler.sendEmptyMessage(APPLIST_CHANGED);
+            }
         }
     }
 
     private void removePackage(String pkgName) {
-        remove(pkgName);
-        handler.sendEmptyMessage(APPLIST_CHANGED);
+        boolean result = remove(pkgName);
+        if (result) {
+            handler.sendEmptyMessage(APPLIST_CHANGED);
+        }
     }
 
     public List<Map<String, String>> getAppList() {
@@ -130,25 +133,39 @@ public class AppManager {
         }
     }
 
-    private void put(String packageName, Map<String, String> app) {
+    private boolean put(String packageName, Map<String, String> app) {
+        if (Utils.isEmpty(app)) {
+            return false;
+        }
+
         // 过滤掉自身
         if (packageName.equals(context.getPackageName())) {
-            return;
+            return false;
         }
+        //过滤掉不在白名单中的应用
+
+        int versionCode = MapUtil.getInt(app, AppTag.VERSION_CODE);
+        updateAppManager.onAddApp(packageName, versionCode);
         synchronized (appMap) {
             appMap.put(packageName, app);
-            updateAppManager.onAddApp(packageName, app);
+
+            return true;
         }
     }
 
-    private void remove(String packageName) {
+    private boolean remove(String packageName) {
+        updateAppManager.onRemoveApp(packageName);
         synchronized (appMap) {
-            appMap.remove(packageName);
-            updateAppManager.onRemoveApp(packageName);
+            Map<String, String> tmp = appMap.remove(packageName);
+            if (Utils.isEmpty(tmp)) {
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
-    public UpdateAppManager getUpdateAppManager() {
+    UpdateAppManager getUpdateAppManager() {
         return updateAppManager;
     }
 
@@ -167,7 +184,7 @@ public class AppManager {
         }
     }
 
-    public void notifyAppListener() {
+    private void notifyAppListener() {
         synchronized (listeners) {
             for (IAppListener listener : listeners) {
                 listener.notifyAppListener();
@@ -177,33 +194,55 @@ public class AppManager {
 
     /**
      * 获取已安装应用列表
+     *
+     * @return
+     */
+
+//    private void initInstalledApp() {
+//        synchronized (appMap) {
+//            appMap.clear();
+//            /* 已安装应用列表 数据 */
+//            List<PackageInfo> packageList = AppUtil.getInstalledPackages(
+//                    context.getPackageManager(), AppUtil.APP_USER);
+//            if (!Utils.isEmpty(packageList)) {
+//                for (PackageInfo packageInfo : packageList) {
+//                    Map<String, String> appInfo = getAppInfo(packageInfo);
+//                    put(packageInfo.packageName, appInfo);
+//                }
+//            }
+//            logger.info("appMap = " + appMap);
+//        }
+//    }
+
+
+    /**
+     * 获取本地数据库中的应用列表
      */
     private void initInstalledApp() {
         synchronized (appMap) {
             appMap.clear();
-            /* 已安装应用列表 数据 */
-            List<PackageInfo> packageList = AppUtil.getInstalledPackages(
-                    context.getPackageManager(), AppUtil.APP_USER);
+            List<PackageInfo> packageList = appProcessor.queryApps(context);
+            logger.error("ggggg packageList = " + packageList);
             if (!Utils.isEmpty(packageList)) {
                 for (PackageInfo packageInfo : packageList) {
-                    Map<String, String> appInfo = getAppInfo(packageInfo);
-                    put(packageInfo.packageName, appInfo);
+                    Map<String, String> appInfo = appProcessor.getAppInfo(packageInfo);
+//                    put(packageInfo.packageName, appInfo);
+                    if (packageInfo.packageName.equals(context.getPackageName())) {
+                        continue;
+                    }
+                    appMap.put(packageInfo.packageName, appInfo);
+                    int versionCode = MapUtil.getInt(appInfo, AppTag.VERSION_CODE);
+                    updateAppManager.addApp(packageInfo.packageName, versionCode);
                 }
             }
-            logger.info("appMap = " + appMap);
         }
     }
 
-    private Map<String, String> getAppInfo(PackageInfo packageInfo) {
-        if (appInfoProcessor == null) {
-            appInfoProcessor = new DefaultAppInfoProcessor();
-        }
-        return appInfoProcessor.getAppInfo(packageInfo);
-    }
-
-    public static interface IAppInfoProcessor {
+    public static interface IAppProcessor {
 
         public Map<String, String> getAppInfo(PackageInfo packageInfo);
+
+        public List<PackageInfo> queryApps(Context context);
     }
 
     /**
@@ -245,7 +284,7 @@ public class AppManager {
         }
     }
 
-    public class DefaultAppInfoProcessor implements IAppInfoProcessor {
+    public static class DefaultAppProcessor implements IAppProcessor {
 
         @Override
         public Map<String, String> getAppInfo(PackageInfo packageInfo) {
@@ -254,6 +293,11 @@ public class AppManager {
             appInfo.put(AppTag.VERSION_CODE,
                     String.valueOf(packageInfo.versionCode));
             return appInfo;
+        }
+
+        @Override
+        public List<PackageInfo> queryApps(Context context) {
+            return AppUtil.getInstalledPackages(context.getPackageManager());
         }
 
     }

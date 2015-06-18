@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
 import cm.android.framework.core.daemon.DaemonService;
+import cm.android.util.IntentUtil;
 import cm.android.util.SystemUtil;
 import cm.java.util.IoUtil;
 
@@ -126,6 +128,14 @@ final class ApplicationImpl {
         if (StateHolder.isStateInit(appContext)) {
             startInternal();
         }
+
+        notifyBindSucceed(appContext);
+    }
+
+    public final static void notifyBindSucceed(Context context) {
+        Intent intent = new Intent(ServiceManager.ACTION_BIND_SUCCEED);
+        //绑定成功发送本地广播
+        IntentUtil.sendBroadcastLocal(context, intent);
     }
 
     private void systemFailed() {

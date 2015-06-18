@@ -119,7 +119,11 @@ public class EnvironmentUtil {
         // otherwise use internal cache dir
         final File cachePathFile = isExternalStorageWritable() ? getExternalCacheDir(context)
                 : context.getCacheDir();
-        File uniqueCacheDir = new File(cachePathFile, uniqueName);
+
+        File uniqueCacheDir = cachePathFile;
+        if (uniqueName != null) {
+            uniqueCacheDir = new File(cachePathFile, uniqueName);
+        }
         IoUtil.checkDirectory(uniqueCacheDir);
         return uniqueCacheDir;
     }

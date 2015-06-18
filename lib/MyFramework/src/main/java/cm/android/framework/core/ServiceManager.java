@@ -5,6 +5,9 @@ import android.os.IBinder;
 
 public final class ServiceManager {
 
+    public static final String ACTION_BIND_SUCCEED
+            = "cm.android.framework.intent.action.BIND_SUCCEED";
+
     public static interface InitListener {
 
         void initSucceed();
@@ -64,6 +67,10 @@ public final class ServiceManager {
 
     public static boolean isStarted() {
         return mApplication.isStarted();
+    }
+
+    public static void restoreService(Context context, String processName) {
+        CoreReceiver.restore(context, processName);
     }
 
 }

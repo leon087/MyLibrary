@@ -78,13 +78,13 @@ public final class AndroidUtils {
         return stubMap;
     }
 
-    public static String getVersionCode(Context context) {
+    public static int getVersionCode(Context context) {
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 context.getPackageManager(), context.getPackageName());
         if (packageInfo == null) {
-            return "";
+            return -1;
         }
-        return String.valueOf(packageInfo.versionCode);
+        return packageInfo.versionCode;
     }
 
     public static String getVersionName(Context context) {

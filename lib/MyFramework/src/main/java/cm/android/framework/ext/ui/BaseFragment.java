@@ -25,7 +25,7 @@ public class BaseFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (getUserVisibleHint()) {
-            onVisibleInternal();
+//            onVisibleInternal();
         }
     }
 
@@ -33,14 +33,14 @@ public class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (!getUserVisibleHint()) {
-            setUserVisibleHint(true);
+//            setUserVisibleHint(true);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        setUserVisibleHint(false);
+//        setUserVisibleHint(false);
     }
 
     @Override

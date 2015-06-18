@@ -7,12 +7,12 @@ import android.content.Context;
 
 import cm.android.app.test.TestContext;
 import cm.android.app.test.server.TestManagerServer;
-import cm.android.framework.core.IServiceManager;
+import cm.android.framework.core.BaseServiceManager;
 import cm.android.framework.core.ServiceManager;
 import cm.android.framework.ext.alarm.TimerServer;
 import cm.android.util.SystemUtil;
 
-public class MyServiceManager implements IServiceManager {
+public class MyServiceManager extends BaseServiceManager {
 
     private static final Logger logger = LoggerFactory.getLogger("MyServiceManager");
 
@@ -21,7 +21,7 @@ public class MyServiceManager implements IServiceManager {
     private TimerServer timerServer;
 
     @Override
-    public void onCreate(Context context) {
+    protected void create(Context context) {
         logger.error("ggggg initService:onCreate:processName = " + SystemUtil
                 .getCurProcessName(MyManager.getAppContext()));
         testManager = new TestManagerServer();
@@ -34,9 +34,19 @@ public class MyServiceManager implements IServiceManager {
     }
 
     @Override
-    public void onDestroy() {
+    protected void destroy() {
         timerServer.stop();
 
         logger.error("ggggg onDestroy");
+    }
+
+    @Override
+    protected void startService() {
+        MainService.start();
+    }
+
+    @Override
+    protected void stopService() {
+        MainService.stop();
     }
 }

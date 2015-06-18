@@ -1,20 +1,16 @@
 
-package cm.android.common.am.ui;
+package cm.android.common.am.ui_old;
 
 import android.app.Application;
 import android.widget.AbsListView;
 
 public class DefaultHolder {
-
     public int filterMode = BaseAppAdapter.FILTER_APPS_THIRD_PARTY_EXCLUDE_SELF;
-
     public ApplicationsState applicationsState;
-
     // sort order
     public int mSortOrder = BaseAppAdapter.SORT_ORDER_ALPHA;
 
     private BaseAppAdapter adapter;
-
     private AbsListView listView;
 
     public void init(Application application) {
@@ -25,8 +21,8 @@ public class DefaultHolder {
         // adapter = new AppAdapter(this.getActivity(), applicationsState,
         // filterMode);
         this.adapter = adapter;
-        listView.setAdapter(this.adapter);
-        listView.setRecyclerListener(this.adapter);
+        listView.setAdapter(adapter);
+        listView.setRecyclerListener(adapter);
     }
 
     public void resume() {
@@ -52,11 +48,5 @@ public class DefaultHolder {
         // if (mRunningProcessesView != null) {
         // mRunningProcessesView.doPause();
         // }
-    }
-
-    public void release() {
-        if (adapter != null) {
-            adapter.release();
-        }
     }
 }

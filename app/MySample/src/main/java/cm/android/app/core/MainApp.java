@@ -15,6 +15,8 @@ public class MainApp extends BaseApp {
 
     private static MainApp sMainApp;
 
+    private final DaemonReceiver daemonReceiver = new DaemonReceiver();
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -26,6 +28,8 @@ public class MainApp extends BaseApp {
         super.onCreate();
         logger.error("ggg application onCreate");
         sMainApp = this;
+
+        daemonReceiver.registerLocal(this);
     }
 
     public static MainApp getApp() {

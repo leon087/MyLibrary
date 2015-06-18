@@ -21,7 +21,7 @@ public class AppBindHolder {
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
             AppService.ServiceBinder binder = (AppService.ServiceBinder) service;
-            appService = binder.getService();
+            appService = binder.getAppManager();
             serviceListener.onServiceConnected();
             // appService.notifyAppListener();
             // appService.getUpdateAppManager().notifyUpdateAppListener();
@@ -56,6 +56,10 @@ public class AppBindHolder {
 
     public AppManager getAppManager() {
         return appService;
+    }
+
+    public UpdateAppManager getUpdateManager() {
+        return appService.getUpdateAppManager();
     }
 
     public static interface ServiceListener {
