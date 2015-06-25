@@ -73,9 +73,9 @@ public class WifiUtil {
 
         // 分为三种情况：1没有密码2用wep加密3用wpa加密
         if (wifiConfig.wifiType == WifiType.NOPASS) {
-            config.wepKeys[0] = "";
+//            config.wepKeys[0] = "";
             config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-            config.wepTxKeyIndex = 0;
+//            config.wepTxKeyIndex = 0;
         } else if (wifiConfig.wifiType == WifiType.WEP) {
             config.wepKeys[0] = "\"" + wifiConfig.password + "\"";
             config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);

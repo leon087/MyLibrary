@@ -118,13 +118,14 @@ public class IoUtil {
         }
 
         try {
-            CmdExecute.exec("rm -fr " + file.getAbsolutePath());
-            return true;
-        } catch (Exception e) {
+            return file.delete();
+        } catch (SecurityException se) {
             try {
-                return file.delete();
-            } catch (SecurityException se) {
-                logger.error("dir = " + file.getAbsolutePath(), e);
+                CmdExecute.exec("rm -fr -- \"" + file.getAbsolutePath() + "\'");
+                return true;
+            } catch (Exception e) {
+                logger.error("dir = {},se = {},e = {}", file.getAbsolutePath(), se.getMessage(),
+                        e.getMessage());
                 return false;
             }
         }

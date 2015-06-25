@@ -8,7 +8,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
-public class SysWindow {
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public abstract class SysWindow {
 
     private static final Logger logger = LoggerFactory.getLogger("SysWindow");
 
@@ -16,69 +18,65 @@ public class SysWindow {
 
     protected WindowManager.LayoutParams mLayoutParams;
 
-    protected boolean mShow = false;
+    protected AtomicBoolean show = new AtomicBoolean(false);
 
-    protected View mView;
+    protected View rootView;
 
     protected WindowManager mWindowManager;
 
-    public SysWindow(Context paramContext) {
-        this.mContext = paramContext;
+    public SysWindow(Context context) {
+        this.mContext = context;
         this.mWindowManager = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE));
-        this.mLayoutParams = new WindowManager.LayoutParams();
-        this.mLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-        this.mLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        this.mLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        this.mLayoutParams.gravity = Gravity.CENTER;
+        this.mLayoutParams = initLayoutParams();
+
+        rootView = onCreateView();
+    }
+
+    protected abstract View onCreateView();
+
+    protected WindowManager.LayoutParams initLayoutParams() {
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.gravity = Gravity.CENTER;
+
+        return layoutParams;
     }
 
     public void hide() {
-        if (!mShow) {
+        if (!show.get()) {
             return;
         }
 
-        if (mView == null) {
-            return;
-        }
-
-        if (mWindowManager == null) {
+        if (rootView == null) {
             return;
         }
 
         try {
-            this.mWindowManager.removeView(this.mView);
-            this.mShow = false;
-            return;
+            this.mWindowManager.removeView(this.rootView);
+            show.set(false);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }
 
     public boolean isShow() {
-        return this.mShow;
+        return this.show.get();
     }
 
     public void show() {
-        if (mShow) {
+        if (show.get()) {
             return;
         }
 
-        if (mView == null) {
-            return;
-        }
-
-        if (mWindowManager == null) {
-            return;
-        }
-
-        if (mLayoutParams == null) {
+        if (rootView == null) {
             return;
         }
 
         try {
-            this.mWindowManager.addView(this.mView, this.mLayoutParams);
-            this.mShow = true;
-            return;
+            this.mWindowManager.addView(this.rootView, this.mLayoutParams);
+            show.set(true);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
