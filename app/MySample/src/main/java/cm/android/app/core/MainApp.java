@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.content.Intent;
 
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
+import cm.android.screenlocker.LockScreenService;
 
 public class MainApp extends BaseApp {
 
@@ -30,6 +32,9 @@ public class MainApp extends BaseApp {
         sMainApp = this;
 
         daemonReceiver.registerLocal(this);
+
+        Intent intent = new Intent(this, LockScreenService.class);
+        this.startService(intent);
     }
 
     public static MainApp getApp() {

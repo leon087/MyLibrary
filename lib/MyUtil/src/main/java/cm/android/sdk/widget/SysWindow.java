@@ -14,8 +14,6 @@ public abstract class SysWindow {
 
     private static final Logger logger = LoggerFactory.getLogger("SysWindow");
 
-    protected Context mContext;
-
     protected WindowManager.LayoutParams mLayoutParams;
 
     protected AtomicBoolean show = new AtomicBoolean(false);
@@ -25,14 +23,13 @@ public abstract class SysWindow {
     protected WindowManager mWindowManager;
 
     public SysWindow(Context context) {
-        this.mContext = context;
-        this.mWindowManager = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE));
+        this.mWindowManager = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE));
         this.mLayoutParams = initLayoutParams();
 
-        rootView = onCreateView();
+        rootView = onCreateView(context);
     }
 
-    protected abstract View onCreateView();
+    protected abstract View onCreateView(Context context);
 
     protected WindowManager.LayoutParams initLayoutParams() {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();

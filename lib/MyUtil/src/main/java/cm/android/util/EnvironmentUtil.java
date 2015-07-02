@@ -98,7 +98,10 @@ public class EnvironmentUtil {
     @TargetApi(8)
     public static File getExternalCacheDir(Context context) {
         if (SdkUtil.hasFroyo()) {
-            return context.getExternalCacheDir();
+            File file = context.getExternalCacheDir();
+            if (file != null) {
+                return file;
+            }
         }
 
         File externalCacheDir = new File(getExternalDir(context), "cache/");
