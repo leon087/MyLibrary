@@ -109,26 +109,46 @@ public class IoUtil {
         return isSucceed;
     }
 
-    /**
-     * 删除文件，如果该文件是个目录，则会删除该目录以及该目录下所有文件
-     */
     public static boolean deleteFile(File file) {
-        if (file == null || !file.exists()) {
+        if (file == null) {
             return true;
         }
 
-        try {
-            return file.delete();
-        } catch (SecurityException se) {
-            try {
-                CmdExecute.exec("rm -fr -- \"" + file.getAbsolutePath() + "\'");
-                return true;
-            } catch (Exception e) {
-                logger.error("dir = {},se = {},e = {}", file.getAbsolutePath(), se.getMessage(),
-                        e.getMessage());
-                return false;
-            }
+        if (file.isFile()) {
+            return deleteFileInternal(file);
         }
+
+        File[] fileList = file.listFiles();
+        if (fileList == null || fileList.length <= 0) {
+            return deleteFileInternal(file);
+        }
+
+        boolean result = true;
+        for (File tmpFile : fileList) {
+            result &= deleteFile(tmpFile);
+        }
+        //删除最上层目录
+        result &= deleteFileInternal(file);
+
+        return result;
+    }
+
+    /**
+     * 删除文件，如果该文件是个目录，则会删除该目录以及该目录下所有文件
+     */
+    private static boolean deleteFileInternal(File file) {
+        try {
+            boolean delete = file.delete();
+            if (delete) {
+                return true;
+            }
+        } catch (SecurityException se) {
+            logger.error("dir = {},se = {}", file.getAbsolutePath(), se.getMessage());
+        }
+
+//        CmdExecute.exec("rm -fr -- \"" + file.getAbsolutePath() + "\"");
+        CmdExecute.exec("rm -fr " + file.getAbsolutePath());
+        return file.exists();
     }
 
     /**
