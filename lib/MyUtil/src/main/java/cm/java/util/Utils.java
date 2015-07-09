@@ -168,6 +168,20 @@ public final class Utils {
         return true;
     }
 
+    public static String getHeader(Header[] headers, String headerName) {
+        if (headers == null) {
+            return "";
+        }
+
+        for (Header header : headers) {
+            if (headerName.equals(header.getName())) {
+                return header.getValue();
+            }
+        }
+
+        return "";
+    }
+
     /**
      * 从登陆的HttpResponse结果中获取JSESSIONID
      */

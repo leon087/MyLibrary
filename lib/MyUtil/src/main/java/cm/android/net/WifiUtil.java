@@ -16,6 +16,10 @@ public class WifiUtil {
 
     private static final Logger logger = LoggerFactory.getLogger("WifiUtil");
 
+    /**
+     * <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+     * <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+     */
     public static boolean removeNetwork(Context context, int networkId, String ssid) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         if (!wifiManager.isWifiEnabled()) {

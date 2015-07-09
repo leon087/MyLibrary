@@ -97,7 +97,7 @@ public class AndroidIoUtil {
      * 移动Assets目录下的文件
      */
     public static void copyAssetFiles(Context context, String assetPath, File dir) {
-        if (cm.java.util.IoUtil.getFiles(dir).length == 0) {
+        if (cm.java.util.IoUtil.getFiles(dir).length != 0) {
             return;
         }
 

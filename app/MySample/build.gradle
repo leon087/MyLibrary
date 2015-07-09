@@ -79,8 +79,8 @@ dependencies {
     compile project(':lib:MyCommon')
     compile project(':lib:MyFramework')
 
-    compile 'com.android.support:multidex:1.0.0'
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
+    compile 'com.android.support:multidex:1.0.1'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
     androidTestCompile('com.android.support:multidex-instrumentation:1.0.1') {
         exclude group: 'com.android.support', module: 'multidex'
     }

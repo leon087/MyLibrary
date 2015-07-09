@@ -102,53 +102,70 @@ public class IoUtil {
             return false;
         }
 
-        boolean isSucceed = true;
-        for (File file : dir.listFiles()) {
-            isSucceed &= deleteFile(file);
+        File[] fileList = dir.listFiles();
+        if (fileList == null || fileList.length <= 0) {
+            return true;
         }
-        return isSucceed;
+
+        boolean result = true;
+        for (File tmpFile : fileList) {
+            result &= delete(tmpFile);
+        }
+        return result;
     }
 
-    public static boolean deleteFile(File file) {
+    public static boolean delete(File file) {
         if (file == null) {
             return true;
         }
 
         if (file.isFile()) {
-            return deleteFileInternal(file);
+            return deleteInternal(file);
         }
 
         File[] fileList = file.listFiles();
         if (fileList == null || fileList.length <= 0) {
-            return deleteFileInternal(file);
+            return deleteInternal(file);
         }
 
         boolean result = true;
         for (File tmpFile : fileList) {
-            result &= deleteFile(tmpFile);
+            result &= delete(tmpFile);
         }
         //删除最上层目录
-        result &= deleteFileInternal(file);
+        result &= deleteInternal(file);
 
         return result;
+    }
+
+    public static boolean deleteFile(File file) {
+        if (file == null) {
+            logger.error("file = null");
+            return true;
+        }
+
+        String[] cmd = new String[]{
+                "rm", "-fr", "--", file.getAbsolutePath()
+        };
+        CmdExecute.exec(cmd);
+
+        if (!file.exists()) {
+            return true;
+        }
+
+        return delete(file);
     }
 
     /**
      * 删除文件，如果该文件是个目录，则会删除该目录以及该目录下所有文件
      */
-    private static boolean deleteFileInternal(File file) {
+    private static boolean deleteInternal(File file) {
         try {
-            boolean delete = file.delete();
-            if (delete) {
-                return true;
-            }
+            return file.delete();
         } catch (SecurityException se) {
             logger.error("dir = {},se = {}", file.getAbsolutePath(), se.getMessage());
+            return false;
         }
-
-//        CmdExecute.exec("rm -fr -- \"" + file.getAbsolutePath() + "\"");
-        CmdExecute.exec("rm -fr " + file.getAbsolutePath());
-        return file.exists();
     }
 
     /**

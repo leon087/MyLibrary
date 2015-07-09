@@ -14,7 +14,6 @@ public class BaseAppTest extends InstrumentationTestCase {
         solo = new Solo(getInstrumentation());
     }
 
-
     public void testBaseApp() {
         assertEquals(true, true);
     }

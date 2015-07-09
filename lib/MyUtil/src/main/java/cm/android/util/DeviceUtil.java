@@ -167,29 +167,52 @@ public class DeviceUtil {
     }
 
     public static UUID getUUID(Context context) {
-        String appTag = "111";
+        String appTag = "cm_ggg";
         return getUUID(context, appTag);
     }
 
     public static UUID getUUID(Context context, String appTag) {
-        //需要通信模块
-        String imei = getIMEI(context);
+//        ro.boot.serialno
+//        String serialno = SystemPropertiesProxy.get("ro.serialno", "ro.serialno");
 
-        String macAddress = getMacAddress(context);
+        String board = Build.BOARD;
+
+        String display = Build.DISPLAY;
 
         //可能相同或为null
         String serial = getSerial();
 
         int appTagHashCode = Math.abs(appTag.hashCode());
-        int imeiHashCode = Math.abs(imei.hashCode());
-        int macAddressHashCode = Math.abs(macAddress.hashCode());
         int serialHashCode = Math.abs(serial.hashCode());
 
-        long mostSigBits = ((long) appTagHashCode) << 32 | imeiHashCode;
-        long leastSigBits = ((long) macAddressHashCode) << 32 | serialHashCode;
+        int boardHashCode = Math.abs(board.hashCode());
+        int displayHashCode = Math.abs(display.hashCode());
+
+        long mostSigBits = ((long) appTagHashCode) << 32 | serialHashCode;
+        long leastSigBits = ((long) boardHashCode) << 32 | displayHashCode;
         UUID deviceUuid = new UUID(mostSigBits, leastSigBits);
         return deviceUuid;
     }
+
+//    public static UUID getUUID(Context context, String appTag) {
+//        //需要通信模块
+////        String imei = getIMEI(context);
+//
+//        //可能相同或为null
+//        String serial = getSerial();
+//
+//        int appTagHashCode = Math.abs(appTag.hashCode());
+////        int imeiHashCode = Math.abs(imei.hashCode());
+//        int serialHashCode = Math.abs(serial.hashCode());
+//
+////        long mostSigBits = ((long) appTagHashCode) << 32 | imeiHashCode;
+////        long leastSigBits = ((long) macAddressHashCode) << 32 | serialHashCode;
+//
+//        long mostSigBits = ((long) appTagHashCode) << 32 | serialHashCode;
+//        long leastSigBits = ((long) macAddressHashCode) << 32 | serialHashCode;
+//        UUID deviceUuid = new UUID(mostSigBits, leastSigBits);
+//        return deviceUuid;
+//    }
 
     /**
      * 获取Mac地址
