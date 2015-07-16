@@ -21,14 +21,18 @@ public class NetworkStateChanged {
 
     private NetworkChangeObserver observer = defNetworkChangeObserver;
 
+    private Context context;
+
     public void init(Context context, NetworkChangeObserver observer) {
-        receiver.register(context);
+        this.context = context;
+        receiver.register(this.context);
         registerObserver(observer);
     }
 
     public void deInit() {
-        receiver.unregister();
+        receiver.unregister(context);
         observer = null;
+        context = null;
     }
 
     /**

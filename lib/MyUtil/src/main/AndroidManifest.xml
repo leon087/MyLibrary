@@ -2,7 +2,6 @@
           package="cm.android.util"
           android:versionCode="1"
           android:versionName="1.0">
-
     <application/>
 
 </manifest>

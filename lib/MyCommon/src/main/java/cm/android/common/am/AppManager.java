@@ -93,7 +93,7 @@ public class AppManager {
     }
 
     void deInit() {
-        packageIntentReceiver.unregister();
+        packageIntentReceiver.unregister(context);
         updateAppManager.deInit();
         threadPool.shutdown();
         context = null;

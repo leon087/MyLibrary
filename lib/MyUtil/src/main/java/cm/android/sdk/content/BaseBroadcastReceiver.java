@@ -7,8 +7,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
 
-    protected Context context;
-
     /**
      * 注册
      */
@@ -18,20 +16,19 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
     }
 
     public final void register(Context context, IntentFilter intentFilter) {
-        this.context = context;
-        context.registerReceiver(this, intentFilter);
+        register(context, intentFilter, getPermission());
+    }
+
+    public final void register(Context context, IntentFilter intentFilter,
+            String broadcastPermission) {
+        context.registerReceiver(this, intentFilter, broadcastPermission, null);
     }
 
     /**
      * 去注册
      */
-    public final void unregister() {
-        if (context == null) {
-            return;
-        }
-
+    public final void unregister(Context context) {
         context.unregisterReceiver(this);
-        context = null;
     }
 
     public void registerLocal(Context context, IntentFilter intentFilter) {
@@ -52,6 +49,10 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
      */
     public IntentFilter createIntentFilter() {
         return new IntentFilter();
+    }
+
+    public String getPermission() {
+        return null;
     }
 
 }

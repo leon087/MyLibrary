@@ -177,7 +177,7 @@ public class DeviceUtil {
 
         String board = Build.BOARD;
 
-        String display = Build.DISPLAY;
+        String model = Build.MODEL;
 
         //可能相同或为null
         String serial = getSerial();
@@ -186,10 +186,10 @@ public class DeviceUtil {
         int serialHashCode = Math.abs(serial.hashCode());
 
         int boardHashCode = Math.abs(board.hashCode());
-        int displayHashCode = Math.abs(display.hashCode());
+        int modelHashCode = Math.abs(model.hashCode());
 
         long mostSigBits = ((long) appTagHashCode) << 32 | serialHashCode;
-        long leastSigBits = ((long) boardHashCode) << 32 | displayHashCode;
+        long leastSigBits = ((long) boardHashCode) << 32 | modelHashCode;
         UUID deviceUuid = new UUID(mostSigBits, leastSigBits);
         return deviceUuid;
     }
@@ -216,6 +216,7 @@ public class DeviceUtil {
 
     /**
      * 获取Mac地址
+     * <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
      */
     public static String getMacAddress(Context context) {
         String macAddr = "";

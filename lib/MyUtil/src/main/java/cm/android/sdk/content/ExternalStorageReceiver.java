@@ -16,20 +16,23 @@ public class ExternalStorageReceiver extends BaseBroadcastReceiver {
 
     private ExternalStorageListener externalStorageListener;
 
+    private Context context;
+
     /**
      * 初始化
      */
-    public ExternalStorageReceiver(Context context,
-            ExternalStorageListener listener) {
+    public ExternalStorageReceiver(Context context, ExternalStorageListener listener) {
+        this.context = context;
         externalStorageListener = listener;
-        register(context);
+        register(this.context);
     }
 
     /**
      * 释放资源
      */
     public void release() {
-        unregister();
+        unregister(context);
+        this.context = null;
     }
 
     @Override

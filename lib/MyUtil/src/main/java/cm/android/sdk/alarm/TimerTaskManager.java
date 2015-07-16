@@ -64,7 +64,7 @@ public final class TimerTaskManager {
             return;
         }
         taskMap.clear();
-        timerReceiver.unregister();
+        timerReceiver.unregister(context);
         this.context = null;
 
         logger.info("TimerTaskManager:stop");

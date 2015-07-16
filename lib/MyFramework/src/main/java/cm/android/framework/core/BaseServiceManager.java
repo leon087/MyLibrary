@@ -4,6 +4,8 @@ import android.content.Context;
 
 public abstract class BaseServiceManager implements IServiceManager {
 
+    private Context context;
+
     private CoreReceiver coreReceiver = new CoreReceiver() {
         @Override
         public void restore() {
@@ -13,6 +15,7 @@ public abstract class BaseServiceManager implements IServiceManager {
 
     @Override
     public final void onCreate(Context context) {
+        this.context = context;
         create(context);
         startService();
         coreReceiver.register(context);
@@ -20,9 +23,10 @@ public abstract class BaseServiceManager implements IServiceManager {
 
     @Override
     public final void onDestroy() {
-        coreReceiver.unregister();
+        coreReceiver.unregister(context);
         stopService();
         destroy();
+        this.context = null;
     }
 
     protected abstract void create(Context context);

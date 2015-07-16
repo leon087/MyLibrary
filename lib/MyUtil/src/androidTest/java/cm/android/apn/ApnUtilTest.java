@@ -8,14 +8,26 @@ import android.test.InstrumentationTestCase;
 public class ApnUtilTest extends InstrumentationTestCase {
 
     public void testGetSimOperator() throws Exception {
+
         Context context = getInstrumentation().getContext();
         TelephonyManager tm = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);
         String SimOperator = tm.getSimOperator();
-        if (SimOperator.equals("")) {
-            assertEquals(true, false);
+        TelephonyManager mTelephonyManager = (TelephonyManager) context.getSystemService(
+                Context.TELEPHONY_SERVICE);
+        int simState = mTelephonyManager.getSimState();
+        if (0 == simState) {
+            if (SimOperator.equals("")) {
+                assertEquals(true, true);
+            } else {
+                assertEquals(true, false);
+            }
         } else {
-            assertEquals(true, true);
+            if (SimOperator.equals("")) {
+                assertEquals(true, false);
+            } else {
+                assertEquals(true, true);
+            }
         }
     }
 
@@ -27,11 +39,11 @@ public class ApnUtilTest extends InstrumentationTestCase {
 
     public void testQueryByApn() throws Exception {
         Context context = getInstrumentation().getContext();
-        int temp =ApnUtil.queryByApn(context,"ajsd");
-        if (temp==-1){
-            assertEquals(true,true);
-        }else{
-            assertEquals(true,false);
+        int temp = ApnUtil.queryByApn(context, "ajsd");
+        if (temp == -1) {
+            assertEquals(true, true);
+        } else {
+            assertEquals(true, false);
         }
     }
 }

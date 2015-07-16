@@ -52,7 +52,7 @@ public final class DaemonService extends PersistentService {
 
     @Override
     public void onDestroy() {
-        daemonReceiver.unregister();
+        daemonReceiver.unregister(this);
         super.onDestroy();
         logger.info("DaemonService:onDestroy");
     }
