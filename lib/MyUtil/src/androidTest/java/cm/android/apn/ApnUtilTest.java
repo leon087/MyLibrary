@@ -8,7 +8,6 @@ import android.test.InstrumentationTestCase;
 public class ApnUtilTest extends InstrumentationTestCase {
 
     public void testGetSimOperator() throws Exception {
-
         Context context = getInstrumentation().getContext();
         TelephonyManager tm = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);

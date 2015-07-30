@@ -1,5 +1,5 @@
 def computeVersionName() {
-    return project.versionName + "." + buildTime()
+    return project.versionName + "." + project.versionCode + "." + buildTime()
 }
 
 def buildTime() {

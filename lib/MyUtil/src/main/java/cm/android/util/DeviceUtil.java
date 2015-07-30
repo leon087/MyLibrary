@@ -167,7 +167,7 @@ public class DeviceUtil {
     }
 
     public static UUID getUUID(Context context) {
-        String appTag = "cm_ggg";
+        String appTag = "cm";
         return getUUID(context, appTag);
     }
 
