@@ -9,11 +9,13 @@ def buildTime() {
 }
 
 def isWindows() {
-    String osName = System.getProperty("os.name").toLowerCase();
-    if (osName.indexOf("windows") >= 0) {
-        return true;
-    }
-    return false;
+    return Os.isFamily(Os.FAMILY_WINDOWS);
+
+//    String osName = System.getProperty("os.name").toLowerCase();
+//    if (osName.indexOf("windows") >= 0) {
+//        return true;
+//    }
+//    return false;
 }
 
 if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.android.library')) {
@@ -35,20 +37,38 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
     }
 
     android {
-        packagingOptions {
-//        pickFirst 'META-INF/foo.txt'
+//        packagingOptions {
+////        pickFirst 'META-INF/foo.txt'
+//
+//            exclude 'META-INF/DEPENDENCIES.txt'
+//            exclude 'META-INF/LICENSE.txt'
+//            exclude 'META-INF/NOTICE.txt'
+//            exclude 'LICENSE.txt'
+//            exclude 'META-INF/LICENSE'
+//            exclude 'META-INF/license.txt'
+//            exclude 'META-INF/NOTICE'
+//            exclude 'META-INF/notice.txt'
+//            exclude 'META-INF/ASL2.0'
+//            exclude 'META-INF/RELEASE_NOTES.txt'
+//        }
 
-            exclude 'META-INF/DEPENDENCIES.txt'
-            exclude 'META-INF/LICENSE.txt'
-            exclude 'META-INF/NOTICE.txt'
-            exclude 'LICENSE.txt'
-            exclude 'META-INF/LICENSE'
-            exclude 'META-INF/license.txt'
-            exclude 'META-INF/NOTICE'
-            exclude 'META-INF/notice.txt'
-            exclude 'META-INF/ASL2.0'
-            exclude 'META-INF/RELEASE_NOTES.txt'
-        }
+        packagingOptions.excludes = [
+                '**/LICENSE.txt',
+                '**/license.txt',
+                '**/DEPENDENCIES.txt',
+                '**/NOTICE.txt',
+                '**/NOTICE',
+                '**/notice.txt',
+                '**/ASL2.0',
+                '**/RELEASE_NOTES.txt',
+
+                'LICENSE',
+                'LICENSE.txt',
+                'META-INF/LICENSE',
+                'META-INF/LICENSE.txt',
+                'META-INF/NOTICE',
+                'META-INF/NOTICE.txt',
+        ]
 
         lintOptions {
             abortOnError false
@@ -82,3 +102,83 @@ if (plugins.hasPlugin('com.android.library')) {
         archives androidSourcesJar
     }
 }
+
+if (plugins.hasPlugin('com.android.application')) {
+    android {
+        //修改apk名
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def appName = project.appName
+                appName += "-"
+                appName += defaultConfig.versionName
+                if (variant.buildType.versionNameSuffix != null) {
+                    appName += variant.buildType.versionNameSuffix
+                }
+                appName += ".apk"
+                output.outputFile = new File(output.outputFile.parent, appName)
+            }
+        }
+    }
+}
+
+def getKeyStore(def propertyFile, def storeFile) {
+    if (propertyFile == null || storeFile == "") {
+        return 'debug'
+    }
+
+    def props = new Properties();
+    try {
+        def signingConfig = 'release';
+
+        def ins = new BufferedInputStream(new FileInputStream(propertyFile));
+        props.load(ins);
+        ins.close();
+        project.android.signingConfigs {
+            "$signingConfig" {
+                storeFile = new File(storeFile);
+                storePassword = props.getProperty('storePassword');
+                keyAlias = props.getProperty('keyAlias');
+                keyPassword = props.getProperty('keyPassword');
+//                System.out.println(props.getProperty('storeFile') + '   ');
+            }
+        }
+        return "$signingConfig";
+    } catch (Exception e) {
+        return 'debug';
+    }
+}
+
+//class Ext implements Plugin<Project> {
+//
+//    void apply(Project project) {
+//        project.android.signingConfigs.release =
+//                getKeyStore(project.propertyFile_release, project.storeFile_release);
+//    }
+//
+//    def getKeyStore(def propertyFile, def storeFile) {
+//        if (releaseStoreFile == null || releaseStoreFile == "") {
+//            return 'debug'
+//        }
+//
+//        def props = new Properties();
+//        try {
+//            def signingConfig = 'release';
+//
+//            def ins = new BufferedInputStream(new FileInputStream(releasePropertyFile));
+//            props.load(ins);
+//            ins.close();
+//            project.android.signingConfigs {
+//                "$signingConfig" {
+//                    storeFile = new File(releaseStoreFile);
+//                    storePassword = props.getProperty('storePassword');
+//                    keyAlias = props.getProperty('keyAlias');
+//                    keyPassword = props.getProperty('keyPassword');
+////                System.out.println(props.getProperty('storeFile') + '   ');
+//                }
+//            }
+//            return "$signingConfig";
+//        } catch (Exception e) {
+//            return 'debug';
+//        }
+//    }
+//}

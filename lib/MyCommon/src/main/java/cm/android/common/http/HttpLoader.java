@@ -98,7 +98,7 @@ public class HttpLoader {
             }
         }
 
-        HttpUtil.exec(null, url, header, (RequestParams) null, httpHandler);
+        HttpUtil.exec(null, "", url, header, (RequestParams) null, httpHandler);
     }
 
     public static void saveCache(String key, HttpCacheEntry value) {

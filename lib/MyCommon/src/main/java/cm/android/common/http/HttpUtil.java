@@ -32,22 +32,28 @@ public final class HttpUtil {
         client.setURLEncodingEnabled(enable);
     }
 
-    public static void cancel(Context context) {
-        client.cancelRequests(context, true);
+//    public static void cancel(Context context) {
+//        client.cancelRequests(context, true);
+//    }
+
+    public static void cancel(String tag) {
+        client.cancelRequestsByTAG(tag, true);
     }
 
     public static void cancelAll() {
         client.cancelAllRequests(true);
     }
 
-    public static <T> void exec(Context context, String url, Header[] headers,
+    public static <T> void exec(Context context, String tag, String url, Header[] headers,
             RequestParams params, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
-        exec(context, url, headers, params, responseHandler);
+        exec(context, tag, url, headers, params, responseHandler);
     }
 
-    public static void exec(Context context, String url, Header[] headers,
+    public static void exec(Context context, String tag, String url, Header[] headers,
             RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        responseHandler.setTag(tag);
+
         logger.info("RequestParams = " + params);
         if (!Patterns.WEB_URL.matcher(url).matches()) {
             logger.error("url = " + url);
@@ -63,14 +69,38 @@ public final class HttpUtil {
         }
     }
 
-    public static <T> void exec(Context context, String url, Header[] header,
+//    public static <T> void exec(Context context, String url, Header[] header,
+//            byte[] data, HttpListener<T> httpListener) {
+//        MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
+//        exec(context, url, header, data, responseHandler);
+//    }
+//
+//    public static void exec(Context context, String url, Header[] header,
+//            byte[] data, AsyncHttpResponseHandler responseHandler) {
+//        if (!Patterns.WEB_URL.matcher(url).matches()) {
+//            logger.error("url = " + url);
+//            responseHandler.onFailure(0, null, null, new IllegalArgumentException("url = " + url));
+//            return;
+//        }
+//
+//        if (null == data) {
+//            client.post(context, url, header, (HttpEntity) null, null, responseHandler);
+//        } else {
+//            ByteArrayEntity entity = new ByteArrayEntity(data);
+//            client.post(context, url, header, entity, null, responseHandler);
+//        }
+//    }
+
+    public static <T> void exec(Context context, String tag, String url, Header[] header,
             byte[] data, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
-        exec(context, url, header, data, responseHandler);
+        exec(context, tag, url, header, data, responseHandler);
     }
 
-    public static void exec(Context context, String url, Header[] header,
-            byte[] data, AsyncHttpResponseHandler responseHandler) {
+    public static void exec(Context context, String tag, String url, Header[] header, byte[] data,
+            AsyncHttpResponseHandler responseHandler) {
+        responseHandler.setTag(tag);
+
         if (!Patterns.WEB_URL.matcher(url).matches()) {
             logger.error("url = " + url);
             responseHandler.onFailure(0, null, null, new IllegalArgumentException("url = " + url));

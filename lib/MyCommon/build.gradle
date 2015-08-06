@@ -11,6 +11,6 @@ dependencies {
     compile project(':lib:MyUtil')
 
     compile 'com.mcxiaoke.volley:library:1.0.17'
-    compile 'com.loopj.android:android-async-http:1.4.7'
+    compile 'com.loopj.android:android-async-http:1.4.8'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
 }

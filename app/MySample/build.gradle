@@ -1,6 +1,32 @@
 apply plugin: 'com.android.application'
-//apply from: '../../ext-android.gradle'
 apply from: "$rootDir/ext-android.gradle"
+
+def getKeyStore(def propertyFile, def storeFile) {
+    if (propertyFile == null || storeFile == "") {
+        return 'debug'
+    }
+
+    def props = new Properties();
+    try {
+        def signingConfig = 'release';
+
+        def ins = new BufferedInputStream(new FileInputStream(propertyFile));
+        props.load(ins);
+        ins.close();
+        project.android.signingConfigs {
+            "$signingConfig" {
+                storeFile = new File(storeFile);
+                storePassword = props.getProperty('storePassword');
+                keyAlias = props.getProperty('keyAlias');
+                keyPassword = props.getProperty('keyPassword');
+//                System.out.println(props.getProperty('storeFile') + '   ');
+            }
+        }
+        return "$signingConfig";
+    } catch (Exception e) {
+        return 'debug';
+    }
+}
 
 android {
     defaultConfig {
@@ -11,13 +37,6 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile file(project.storeFile)
-            storePassword project.storePassword
-            keyAlias project.keyAlias
-            keyPassword project.keyPassword
-        }
-
         debug {
             storeFile file(project.storeFile)
             storePassword project.storePassword
@@ -31,7 +50,8 @@ android {
             shrinkResources true
             zipAlignEnabled true
 
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.(
+                    getKeyStore(project.propertyFile_release, project.storeFile_release))
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
@@ -57,19 +77,19 @@ android {
         }
     }
 
-    //修改apk名
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def appName = project.appName
-            appName += "-"
-            appName += defaultConfig.versionName
-            if (variant.buildType.versionNameSuffix != null) {
-                appName += variant.buildType.versionNameSuffix
-            }
-            appName += ".apk"
-            output.outputFile = new File(output.outputFile.parent, appName)
-        }
-    }
+//    //修改apk名
+//    applicationVariants.all { variant ->
+//        variant.outputs.each { output ->
+//            def appName = project.appName
+//            appName += "-"
+//            appName += defaultConfig.versionName
+//            if (variant.buildType.versionNameSuffix != null) {
+//                appName += variant.buildType.versionNameSuffix
+//            }
+//            appName += ".apk"
+//            output.outputFile = new File(output.outputFile.parent, appName)
+//        }
+//    }
 }
 
 dependencies {
@@ -84,4 +104,8 @@ dependencies {
     androidTestCompile('com.android.support:multidex-instrumentation:1.0.1') {
         exclude group: 'com.android.support', module: 'multidex'
     }
+
+    betaCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 }

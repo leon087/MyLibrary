@@ -1,9 +1,12 @@
 package cm.android.app.core;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.content.Intent;
 
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
@@ -28,6 +31,7 @@ public class MainApp extends BaseApp {
         super.onCreate();
         logger.error("ggg application onCreate");
         sMainApp = this;
+        LeakCanary.install(this);
 
         daemonReceiver.registerLocal(this);
 
