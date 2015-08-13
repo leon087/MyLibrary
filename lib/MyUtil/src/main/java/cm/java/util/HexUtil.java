@@ -22,7 +22,8 @@ public class HexUtil {
         return result.toString();
     }
 
-    private final static String HEX = "0123456789ABCDEF";
+    //    private final static String HEX = "0123456789ABCDEF";
+    private final static String HEX = "0123456789abcdef";
 
     private static void appendHex(StringBuilder sb, byte b) {
         sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
