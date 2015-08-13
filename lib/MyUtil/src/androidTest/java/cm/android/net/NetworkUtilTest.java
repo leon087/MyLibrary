@@ -10,11 +10,8 @@ public class NetworkUtilTest extends InstrumentationTestCase {
         Context context = getInstrumentation().getContext();
         int temp = 0;
         temp = NetworkUtil.getNetWorkType(context);
-        if (temp != 0) {
-            assertEquals(true, true);
-        } else {
-            assertEquals(true, false);
-        }
+        boolean result = temp != 0;
+        assertEquals(true, result);
     }
 
     // sim卡是否可读

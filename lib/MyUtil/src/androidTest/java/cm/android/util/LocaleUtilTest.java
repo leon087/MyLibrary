@@ -8,12 +8,9 @@ import android.test.InstrumentationTestCase;
 public class LocaleUtilTest extends InstrumentationTestCase {
 
     public void testShowLocale() throws Exception {
-        String result = LocaleUtil.showLocale();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = LocaleUtil.showLocale();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
 //    public void testShowLocale2() throws Exception {
@@ -27,21 +24,14 @@ public class LocaleUtilTest extends InstrumentationTestCase {
 
     public void testShowTest() throws Exception {
         Context context = getInstrumentation().getContext();
-        String result = LocaleUtil.showTest(context);
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = LocaleUtil.showTest(context);
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetLocale() throws Exception {
-        String result = LocaleUtil.getLocale();
-        if (result.equals("en")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = LocaleUtil.getLocale();
+        boolean result = temp.equals("en");
+        assertEquals(result, false);
     }
-
 }

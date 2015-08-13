@@ -36,13 +36,13 @@ public class ValidateUtilTest extends InstrumentationTestCase {
     }
 
     public static void testIsValidate() throws Exception {
-        String[] temp = {"15700195027", ""};
+        String[] temp = {"13700195027", ""};
         boolean result = ValidateUtil.isValidate(temp);
         assertEquals(result, false);
     }
 
     public static void testIsValidate2() throws Exception {
-        String[] temp = {"15700195027"};
+        String[] temp = {"13700195027"};
         boolean result = ValidateUtil.isValidate(temp);
         assertEquals(result, true);
     }

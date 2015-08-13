@@ -34,13 +34,10 @@ public class SystemUtilTest extends InstrumentationTestCase {
 
     public void testGetRunningProcess() throws Exception {
         Context context = getInstrumentation().getContext();
-        List<ActivityManager.RunningAppProcessInfo> result;
-        result = SystemUtil.getRunningProcess(context);
-        if (result.isEmpty()) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        List<ActivityManager.RunningAppProcessInfo> temp;
+        temp = SystemUtil.getRunningProcess(context);
+        boolean result = temp.isEmpty();
+        assertEquals(result, false);
     }
 
 //    public void testGetActivities() throws Exception {
@@ -57,23 +54,18 @@ public class SystemUtilTest extends InstrumentationTestCase {
     public void testGetRunningProcessMemoryInfo() throws Exception {
         Context context = getInstrumentation().getContext();
         String packageName = context.getPackageName();
-        Debug.MemoryInfo result = SystemUtil.getRunningProcessMemoryInfo(context, packageName);
-        if (result == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        Debug.MemoryInfo temp = SystemUtil.getRunningProcessMemoryInfo(context, packageName);
+        boolean result = temp != null;
+        assertEquals(result, true);
     }
 
     public void testGetRunningAppProcessInfo() throws Exception {
         Context context = getInstrumentation().getContext();
         String packageName = context.getPackageName();
-        ActivityManager.RunningAppProcessInfo result = SystemUtil.getRunningAppProcessInfo(context, packageName);
-        if (result == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        ActivityManager.RunningAppProcessInfo temp = SystemUtil
+                .getRunningAppProcessInfo(context, packageName);
+        boolean result = temp != null;
+        assertEquals(result, true);
     }
 
 //    public void testIsRunningInEmulator() throws Exception {
@@ -84,30 +76,6 @@ public class SystemUtilTest extends InstrumentationTestCase {
     public void testIsRoot() throws Exception {
         boolean result = SystemUtil.isRoot();
         assertEquals(false, result);
-    }
-
-    public void testIsExecutable() throws Exception {
-        File file = EnvironmentUtil.getExternalStorageDirectory();
-        Process p = null;
-        try {
-            p = Runtime.getRuntime().exec("ls -l " + file.getPath());
-            // 获取返回内容
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    p.getInputStream()));
-            String str = in.readLine();
-            if (str != null && str.length() >= 4) {
-                char flag = str.charAt(3);
-                if (flag == 's' || flag == 'x') {
-                    assertEquals(true, true);
-                }
-            }
-        } catch (IOException e) {
-            assertEquals(true, false);
-        } finally {
-            if (p != null) {
-                p.destroy();
-            }
-        }
     }
 
 //    public void testGetFirstRunningTaskInfo() throws Exception {
@@ -133,13 +101,10 @@ public class SystemUtilTest extends InstrumentationTestCase {
 
     public void testGetCurProcessName() throws Exception {
         Context context = getInstrumentation().getContext();
-        String result = "";
-        result = SystemUtil.getCurProcessName(context);
-        if (result == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemUtil.getCurProcessName(context);
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
 //    public void testGetTopPackageNameCompat() throws Exception {

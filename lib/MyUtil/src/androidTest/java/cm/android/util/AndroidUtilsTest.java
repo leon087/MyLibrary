@@ -10,56 +10,43 @@ import java.util.Properties;
 
 public class AndroidUtilsTest extends InstrumentationTestCase {
 
-    public void testIsEmpty1() throws Exception {
+    public void testIsEmpty() throws Exception {
         Bundle bundle = new Bundle();
         boolean temp = AndroidUtils.isEmpty(bundle);
         assertEquals(temp, true);
-    }
 
-    public void testIsEmpty2() throws Exception {
-        Bundle bundle = new Bundle();
         bundle.putString("hjgde", "jhuds");
-        boolean temp = AndroidUtils.isEmpty(bundle);
+        temp = AndroidUtils.isEmpty(bundle);
         assertEquals(temp, false);
     }
 
     public void testGetVersionCode() throws Exception {
         Context context = getInstrumentation().getContext();
         int temp = AndroidUtils.getVersionCode(context);
-        if (temp == -1) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp != -1;
+        assertEquals(result, true);
     }
 
     public void testGetSystemProperties() throws Exception {
         String temp = AndroidUtils.getSystemProperties("sss");
-        if (temp.equals("")) {
-            assertEquals(true, true);
-        } else {
-            assertEquals(true, false);
-        }
+        assertEquals(temp, "");
     }
 
     public void testLoadProperties() throws Exception {
         Context context = getInstrumentation().getContext();
         Properties temp = AndroidUtils.loadProperties(context, "sss");
-        if (temp == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp != null;
+        assertEquals(true, result);
+
+        int value = temp.size();
+        assertEquals(0, value);
     }
 
     public void testGetDexCrc() throws Exception {
         Context context = getInstrumentation().getContext();
         long temp = AndroidUtils.getDexCrc(context);
-        if (temp == 0) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp != 0;
+        assertEquals(result, true);
     }
 
     public void testIsDebuggable() throws Exception {

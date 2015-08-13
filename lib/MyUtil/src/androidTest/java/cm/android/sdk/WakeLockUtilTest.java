@@ -12,11 +12,8 @@ public class WakeLockUtilTest extends InstrumentationTestCase {
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                 "dh");
-        if (wakeLock == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = wakeLock == null;
+        assertEquals(result, false);
     }
 
 //    public void testAcquire() throws Exception {//需要android.permission.WAKE_LOCK 权限

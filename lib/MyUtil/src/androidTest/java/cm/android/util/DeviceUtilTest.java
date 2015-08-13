@@ -19,78 +19,49 @@ public class DeviceUtilTest extends InstrumentationTestCase {
 //            assertEquals(true, true);
 //        }
 //    }
-    public void testGetPair() throws Exception {
-        String temp = "\n" + "123=321";
-        String key = "123" == null ? "" : "123".trim();
-        String value = "321" == null ? "" : "321".trim();
-        String temp1 = "\n" + key + "=" + value;
-        assertEquals(temp, temp1);
-    }
-
 
     public void testGetSdkInt() throws Exception {
         int temp = DeviceUtil.getSdkInt();
-        if (temp > 0) {
-            assertEquals(true, true);
-        } else {
-            assertEquals(true, false);
-        }
+        boolean result = temp > 0;
+        assertEquals(result, true);
     }
 
     public void testGetBootloader() throws Exception {
         String temp = DeviceUtil.getBootloader();
-        if (temp.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetCpuAbi2() throws Exception {
         String temp = DeviceUtil.getCpuAbi2();
-        if (temp.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetHardware() throws Exception {
         String temp = DeviceUtil.getHardware();
-        if (temp.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetSerial() throws Exception {
         String temp = DeviceUtil.getSerial();
-        if (temp.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetAndroidId() throws Exception {
         Context context = getInstrumentation().getContext();
         String temp = DeviceUtil.getAndroidId(context);
-        if (temp.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetUUID() throws Exception {
         Context context = getInstrumentation().getContext();
         UUID temp = DeviceUtil.getUUID(context);
-        if (temp == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean result = temp != null;
+        assertEquals(result, true);
     }
 
 //    public void testGetMacAddress() throws Exception {

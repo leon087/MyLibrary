@@ -13,25 +13,14 @@ public class IntentUtilTest extends InstrumentationTestCase {
     public void testLaunchApp() throws Exception {
         Context context = getInstrumentation().getContext();
         String packageName = context.getPackageName();
-        Intent intent = context.getPackageManager()
-                .getLaunchIntentForPackage(packageName);
-        if (null != intent) {
-//            context.startActivity(intent);
-            assertEquals(true, true);
-        }
+        boolean result = IntentUtil.launchApp(context, packageName);
+        assertEquals(false, result);
     }
 
     public void testDeletePackage() throws Exception {
         Context context = getInstrumentation().getContext();
         String packageName = context.getPackageName();
-        if (Utils.isEmpty(packageName)) {
-            assertEquals(true, false);
-        }
-        Uri packageURI = Uri.parse("package:" + packageName);
-        Intent apkintent = new Intent(Intent.ACTION_DELETE, packageURI);
-        apkintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        apkintent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-//        context.startActivity(apkintent);
-        assertEquals(true, true);
+        boolean result = IntentUtil.deletePackage(context, packageName);
+        assertEquals(true, result);
     }
 }

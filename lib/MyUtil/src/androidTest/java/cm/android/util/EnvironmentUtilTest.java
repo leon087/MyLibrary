@@ -43,78 +43,40 @@ public class EnvironmentUtilTest extends InstrumentationTestCase {
 
     public void testGetExternalStorageDirectory() {
         File result = EnvironmentUtil.getExternalStorageDirectory();
-        if (result == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean temp = result != null;
+        assertEquals(true, temp);
     }
 
     public void testGetExternalStoragePublicDirectory() {
         File result = EnvironmentUtil.getExternalStoragePublicDirectory("123");
-        if (result == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean temp = result != null;
+        assertEquals(true, temp);
     }
 
     public void testGetExternalCacheDir() {
         Context context = getInstrumentation().getContext();
         File result = EnvironmentUtil.getExternalCacheDir(context);
-        if (result == null) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        boolean temp = result != null;
+        assertEquals(true, temp);
     }
 
     public void testGetUsableSpace() {
         File file = EnvironmentUtil.getExternalStorageDirectory();
         long result = EnvironmentUtil.getUsableSpace(file);
-        if (result == 0) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
-    }
-
-    public void testGetAvailableSize() {
-        File file = EnvironmentUtil.getExternalStorageDirectory();
-        if (file == null || !file.exists()) {
-            assertEquals(true, false);
-        }
-        try {
-            StatFs statFs = new StatFs(file.getPath());
-            long availableBlocks = statFs.getAvailableBlocks();// 可用存储块的数量
-            long blockSize = statFs.getBlockSize();// 每块存储块的大小
-            long availableSize = availableBlocks * blockSize;// 可用容量
-            if (availableBlocks != 0) {
-                assertEquals(true, true);
-            } else {
-                assertEquals(true, false);
-            }
-        } catch (Exception e) {
-            assertEquals(true, false);
-        }
+        boolean temp = result != 0;
+        assertEquals(true, temp);
     }
 
     public void testGetTotalSize() {
         long result = EnvironmentUtil.getTotalSize("1");
-        if (result == -1) {
-            assertEquals(true, true);
-        } else {
-            assertEquals(true, false);
-        }
+        boolean temp = result == -1;
+        assertEquals(true, temp);
     }
 
     public void testGetUsedSize() {
         long result = EnvironmentUtil.getUsedSize("1");
-        if (result == 0) {
-            assertEquals(true, true);
-        } else {
-            assertEquals(true, false);
-        }
+        boolean temp = result == 0;
+        assertEquals(true, temp);
     }
 
     public void testIsTablet() {

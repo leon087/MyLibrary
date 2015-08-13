@@ -7,64 +7,45 @@ import android.test.InstrumentationTestCase;
 public class SystemInfoUtilTest extends InstrumentationTestCase {
 
     public void testGetSystemProperty() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getSystemProperty();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = SystemInfoUtil.getSystemProperty();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetDisplayMetrics() throws Exception {
         Context context = getInstrumentation().getContext();
-        String result = "";
-        result = SystemInfoUtil.getDisplayMetrics(context);
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getDisplayMetrics(context);
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetVersionInfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getVersionInfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getVersionInfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetCpuInfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getCpuInfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getCpuInfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetDiskInfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getDiskInfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getDiskInfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetDmesgInfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getDmesgInfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getDmesgInfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
 //    public void testGetNetConfigInfo() throws Exception {
@@ -77,76 +58,55 @@ public class SystemInfoUtilTest extends InstrumentationTestCase {
 //    }
 
     public void testGetNetStatusInfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getNetStatusInfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getNetStatusInfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetMountInfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getMountInfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getMountInfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetDumpsysMeminfo() throws Exception {
         Context context = getInstrumentation().getContext();
         String packagename = context.getPackageName();
-        String result = "";
-        result = SystemInfoUtil.getDumpsysMeminfo(packagename);
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getDumpsysMeminfo(packagename);
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetDumpsysCpuinfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getDumpsysCpuinfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getDumpsysCpuinfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetDumpsysBattery() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getDumpsysBattery();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getDumpsysBattery();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetMemoryInfo() throws Exception {
         Context context = getInstrumentation().getContext();
-        String result = "";
-        result = SystemInfoUtil.getMemoryInfo(context);
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getMemoryInfo(context);
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
     public void testGetProcessRunningInfo() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getProcessRunningInfo();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getProcessRunningInfo();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
 //    public void testGetTelStatus() throws Exception {
@@ -161,13 +121,10 @@ public class SystemInfoUtilTest extends InstrumentationTestCase {
 //    }
 
     public void testGetMacAddress() throws Exception {
-        String result = "";
-        result = SystemInfoUtil.getMacAddress();
-        if (result.equals("")) {
-            assertEquals(true, false);
-        } else {
-            assertEquals(true, true);
-        }
+        String temp = "";
+        temp = SystemInfoUtil.getMacAddress();
+        boolean result = temp.equals("");
+        assertEquals(result, false);
     }
 
 }
