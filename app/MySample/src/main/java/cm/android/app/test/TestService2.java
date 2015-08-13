@@ -27,8 +27,8 @@ public class TestService2 extends PersistentService {
             public void run() {
                 logger.error("ggg TestService2");
                 TimerManager timerTaskManager = MyManager.getTimerManager();
-                timerTaskManager.register(TestReceiver.ACTION, 5 * 1000, true);
-                timerTaskManager.register(TestReceiver2.ACTION, 10 * 1000, true);
+                timerTaskManager.register(TestReceiver.ACTION, 5 * 1000);
+                timerTaskManager.register(TestReceiver2.ACTION, 10 * 1000);
 
                 testReceiver.register(MainApp.getApp());
                 testReceiver2.register(MainApp.getApp());

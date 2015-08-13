@@ -13,6 +13,7 @@ import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.Parcelable;
 
+@Deprecated
 public class WifiStateChanged {
 
     private static final Logger logger = LoggerFactory.getLogger(WifiStateChanged.class);
@@ -69,10 +70,11 @@ public class WifiStateChanged {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            logger.info("intent.getAction() = " + intent.getAction());
+            String action = intent.getAction();
+            logger.info("intent.getAction() = " + action);
 
-            if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(intent
-                    .getAction())) {// 这个监听wifi的连接状态
+            if (WifiManager.NETWORK_STATE_CHANGED_ACTION
+                    .equals(action)) {// 监听wifi的连接状态即是否连上了一个有效无线路由
                 Parcelable parcelableExtra = intent
                         .getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (null != parcelableExtra) {
@@ -80,34 +82,33 @@ public class WifiStateChanged {
                     State state = networkInfo.getState();
                     if (state == State.CONNECTED) {
                         wifiListener.onConnected(context, intent);
-                    } else {
+                    } else if (state == State.DISCONNECTED) {
                         wifiListener.onDisConnected(context, intent);
                     }
-                }
-            }
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent
-                    .getAction())) {// 这个监听网络连接的设置，包括wifi和移动数据 的打开和关闭
-                NetworkInfo info = intent
-                        .getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
-                if (info != null) {
-                    logger.error("info.getType() = " + info.getType());
-                    if (NetworkInfo.State.CONNECTED == info.getState()) {
-                        logger.error("info.getState() = CONNECTED");
-                    } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {
-                        if (NetworkInfo.State.DISCONNECTED == info.getState()
-                                || NetworkInfo.State.DISCONNECTING == info
-                                .getState()) {
-                            // showWifiDisconnected(context);
-                            logger.error(
-                                    "info.getState() = " + info.getState());
+                } else if (ConnectivityManager.CONNECTIVITY_ACTION
+                        .equals(action)) {// 监听网络连接的设置，包括wifi和移动数据 的打开和关闭
+                    NetworkInfo info = intent
+                            .getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+                    if (info != null) {
+                        logger.error("info.getType() = " + info.getType());
+                        if (NetworkInfo.State.CONNECTED == info.getState()) {
+                            logger.error("info.getState() = CONNECTED");
+                        } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {
+                            if (NetworkInfo.State.DISCONNECTED == info.getState()
+                                    || NetworkInfo.State.DISCONNECTING == info
+                                    .getState()) {
+                                // showWifiDisconnected(context);
+                                logger.error(
+                                        "info.getState() = " + info.getState());
+                            }
                         }
                     }
+                } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {//监听wifi开关状态
+                    //wifi开关
+                    int wifistate = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
+                            WifiManager.WIFI_STATE_UNKNOWN);
+                    handleWifiStateChanged(wifistate, context, intent);
                 }
-            } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent
-                    .getAction())) {
-                handleWifiStateChanged(intent.getIntExtra(
-                        WifiManager.EXTRA_WIFI_STATE,
-                        WifiManager.WIFI_STATE_UNKNOWN), context, intent);
             }
         }
     }

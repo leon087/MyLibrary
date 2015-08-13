@@ -24,7 +24,7 @@ public final class TimerTaskManager {
     private Context context;
 
     public void register(String action, long period) {
-        register(action, period, false);
+        register(action, period, true);
     }
 
     public synchronized void register(String action, long period, boolean globalBroadcast) {
