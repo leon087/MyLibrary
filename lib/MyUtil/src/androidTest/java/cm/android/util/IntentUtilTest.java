@@ -1,12 +1,7 @@
 package cm.android.util;
 
-
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.test.InstrumentationTestCase;
-
-import cm.java.util.Utils;
 
 public class IntentUtilTest extends InstrumentationTestCase {
 

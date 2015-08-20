@@ -43,28 +43,24 @@ public class EnvironmentUtilTest extends InstrumentationTestCase {
 
     public void testGetExternalStorageDirectory() {
         File result = EnvironmentUtil.getExternalStorageDirectory();
-        boolean temp = result != null;
-        assertEquals(true, temp);
+        assertEquals(result, Environment.getExternalStorageDirectory());
     }
 
     public void testGetExternalStoragePublicDirectory() {
         File result = EnvironmentUtil.getExternalStoragePublicDirectory("123");
-        boolean temp = result != null;
-        assertEquals(true, temp);
+        assertEquals(result, Environment.getExternalStoragePublicDirectory("123"));
     }
 
     public void testGetExternalCacheDir() {
         Context context = getInstrumentation().getContext();
         File result = EnvironmentUtil.getExternalCacheDir(context);
-        boolean temp = result != null;
-        assertEquals(true, temp);
+        assertEquals(result, context.getExternalCacheDir());
     }
 
     public void testGetUsableSpace() {
         File file = EnvironmentUtil.getExternalStorageDirectory();
         long result = EnvironmentUtil.getUsableSpace(file);
-        boolean temp = result != 0;
-        assertEquals(true, temp);
+        assertEquals(result, file.getUsableSpace());
     }
 
     public void testGetTotalSize() {
@@ -88,6 +84,13 @@ public class EnvironmentUtilTest extends InstrumentationTestCase {
     public void testHasExternalStoragePermission() {
         Context context = getInstrumentation().getContext();
         boolean result = EnvironmentUtil.hasExternalStoragePermission(context);
+        assertEquals(false, result);
+    }
+
+    public void testHasPermission() {
+        Context context = getInstrumentation().getContext();
+        String permission = "android.permission.READ_PHONE_STATE";
+        boolean result = EnvironmentUtil.hasPermission(context, permission);
         assertEquals(false, result);
     }
 }

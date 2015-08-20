@@ -1,18 +1,21 @@
-package cm.android.framework.ext.ui.v4;
+package cm.android.framework.ext.ui;
 
+
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.annotation.NonNull;
 import android.test.InstrumentationTestCase;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.util.List;
+
 
 public class FragmentHelperTest extends InstrumentationTestCase {
 
     FragmentManager mFragmentManager = new FragmentManager() {
+        @NonNull
         @Override
         public FragmentTransaction beginTransaction() {
             return null;
@@ -60,12 +63,12 @@ public class FragmentHelperTest extends InstrumentationTestCase {
 
         @Override
         public boolean popBackStackImmediate(int id, int flags) {
-            return true;
+            return false;
         }
 
         @Override
         public int getBackStackEntryCount() {
-            return 1;
+            return 0;
         }
 
         @Override
@@ -79,7 +82,8 @@ public class FragmentHelperTest extends InstrumentationTestCase {
         }
 
         @Override
-        public void removeOnBackStackChangedListener(OnBackStackChangedListener listener) {
+        public void removeOnBackStackChangedListener(
+                OnBackStackChangedListener listener) {
 
         }
 
@@ -90,11 +94,6 @@ public class FragmentHelperTest extends InstrumentationTestCase {
 
         @Override
         public Fragment getFragment(Bundle bundle, String key) {
-            return null;
-        }
-
-        @Override
-        public List<Fragment> getFragments() {
             return null;
         }
 

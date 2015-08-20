@@ -248,7 +248,7 @@ final class ApplicationImpl {
             if (serviceBinder == null) {
                 return false;
             }
-            return true;
+            return serviceBinder.asBinder().isBinderAlive();
         }
 
         @Override

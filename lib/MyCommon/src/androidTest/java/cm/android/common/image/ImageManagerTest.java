@@ -3,11 +3,10 @@ package cm.android.common.image;
 import android.content.Context;
 import android.test.InstrumentationTestCase;
 
-
 public class ImageManagerTest extends InstrumentationTestCase {
 
     public void testGetOptions() throws Exception {
-        boolean result = ImageManager.getOptions(1) != null;
+        boolean result = ImageManager.getOptions(1).isCacheInMemory();
         assertEquals(true, result);
     }
 

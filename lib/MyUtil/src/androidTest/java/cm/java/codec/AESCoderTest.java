@@ -22,15 +22,10 @@ public class AESCoderTest extends InstrumentationTestCase {
         byte[] tmpData = AESCoder.decrypt(key, null, tmp);
 
         assertEquals(new String(data), new String(tmpData));
-    }
 
-    public void testEncryptAndDecrypt2() throws Exception {
-        byte[] data = "aes".getBytes();
-
-        byte[] key = AESCoder.generateKey().getEncoded();
-        byte[] tmp = AESCoder.encrypt(key, null, data);
-        byte[] tmpData = AESCoder.decrypt(key, null, tmp);
-
-        assertEquals(new String(data), new String(tmpData));
+        byte[] key1 = AESCoder.generateKey().getEncoded();
+        byte[] tmp1 = AESCoder.encrypt(key1, null, data);
+        byte[] tmpData1 = AESCoder.decrypt(key1, null, tmp1);
+        assertEquals(new String(data), new String(tmpData1));
     }
 }

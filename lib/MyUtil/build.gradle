@@ -5,6 +5,7 @@ apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
 
 version = project.versionName
+
 android {
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

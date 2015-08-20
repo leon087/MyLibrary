@@ -18,24 +18,24 @@ def isWindows() {
 //    return false;
 }
 
-if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.android.library')) {
+if (plugins.hasPlugin('com.android.application') ||
+        plugins.hasPlugin('com.android.library')) {
     android {
         compileSdkVersion Integer.parseInt(project.compileSdkVersion)
         buildToolsVersion project.buildToolsVersion
 
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
+            sourceCompatibility = JavaVersion.VERSION_1_7
+            targetCompatibility = JavaVersion.VERSION_1_7
         }
 
-        defaultConfig {
+        defaultConfig.with {
             minSdkVersion Integer.parseInt(project.minSdkVersion)
             targetSdkVersion Integer.parseInt(project.targetSdkVersion)
-            versionCode Integer.parseInt(project.versionCode)
-            versionName computeVersionName()
+            versionCode = Integer.parseInt(project.versionCode)
+            versionName = computeVersionName()
         }
     }
-
     android {
 //        packagingOptions {
 ////        pickFirst 'META-INF/foo.txt'
@@ -104,8 +104,8 @@ if (plugins.hasPlugin('com.android.library')) {
 }
 
 if (plugins.hasPlugin('com.android.application')) {
+    //修改apk名
     android {
-        //修改apk名
         applicationVariants.all { variant ->
             variant.outputs.each { output ->
                 def appName = project.appName

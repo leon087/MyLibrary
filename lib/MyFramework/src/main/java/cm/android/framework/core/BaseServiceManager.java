@@ -16,9 +16,9 @@ public abstract class BaseServiceManager implements IServiceManager {
     @Override
     public final void onCreate(Context context) {
         this.context = context;
-        create(context);
+        create(this.context);
         startService();
-        coreReceiver.register(context);
+        coreReceiver.register(this.context);
     }
 
     @Override

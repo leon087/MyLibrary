@@ -3,7 +3,6 @@ package cm.android.sdk;
 import android.os.Bundle;
 import android.test.InstrumentationTestCase;
 
-
 public class MyParcelableTest extends InstrumentationTestCase {
 
     public void testGetData() throws Exception {
@@ -26,5 +25,4 @@ public class MyParcelableTest extends InstrumentationTestCase {
         MyParcelable rusult = MyParcelable.getData(bundle, "123");
         assertEquals("value", rusult.getValue());
     }
-
 }

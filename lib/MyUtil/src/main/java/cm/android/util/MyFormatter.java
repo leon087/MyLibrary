@@ -6,19 +6,20 @@ import android.text.format.Formatter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 格式化工具
  */
 public class MyFormatter {
 
-    private static char ff[] = {'A', 'B', 'C', 'D', 'E', 'F'};
+//    private static char ff[] = {'A', 'B', 'C', 'D', 'E', 'F'};
 
-    private static SimpleDateFormat mDateFormat = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
+    private static SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+            Locale.getDefault());
 
-    private static SimpleDateFormat mDateFormat2 = new SimpleDateFormat(
-            "yyyyMMddHHmmss");
+    private static SimpleDateFormat mDateFormat2 = new SimpleDateFormat("yyyyMMddHHmmss",
+            Locale.getDefault());
 
     /**
      * 格式化文件大小
@@ -60,7 +61,7 @@ public class MyFormatter {
      */
     public static String formatDate(long time) {
         // 2009-10-09 10:15:55
-        return (mDateFormat.format(new Date(time))).toString();
+        return mDateFormat.format(new Date(time));
     }
 
     /**
@@ -68,14 +69,14 @@ public class MyFormatter {
      */
     public static String formatDate2(long time) {
         // 2009-10-09 10:15:55
-        return (mDateFormat2.format(new Date(time))).toString();
+        return mDateFormat2.format(new Date(time));
     }
 
     /**
      * 按自定义格式格式化时间
      */
     public static String formatDate(String formatStr, long time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(formatStr);
-        return (dateFormat.format(new Date(time))).toString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat(formatStr, Locale.getDefault());
+        return dateFormat.format(new Date(time));
     }
 }

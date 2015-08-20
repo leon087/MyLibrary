@@ -1,6 +1,5 @@
 package cm.android.common.cache.core;
 
-
 import android.content.Context;
 import android.support.v4.util.LruCache;
 import android.test.InstrumentationTestCase;
@@ -46,5 +45,4 @@ public class CacheLoaderTest extends InstrumentationTestCase {
 
         assertEquals("testContent", testEntry.getContent());
     }
-
 }

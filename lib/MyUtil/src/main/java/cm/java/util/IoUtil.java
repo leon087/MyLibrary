@@ -80,11 +80,19 @@ public class IoUtil {
 //    }
 
     public static boolean createFile(File file) {
+        if (file.isDirectory()) {
+            logger.error("file.isDirectory() = " + true);
+            return false;
+        }
+
+        if (file.exists()) {
+            return true;
+        }
+
         File parent = file.getParentFile();
         if (checkDirectory(parent)) {
             try {
-                file.createNewFile();
-                return true;
+                return file.createNewFile();
             } catch (IOException e) {
                 return false;
             }
@@ -312,12 +320,6 @@ public class IoUtil {
             return false;
         }
 
-        if (file.isDirectory()) {
-            logger.error("file.isDirectory() = " + true);
-            return false;
-        }
-
-        file.delete();
         boolean createFile = createFile(file);
         if (!createFile) {
             logger.error("createFile = false,file = " + file);
@@ -326,7 +328,7 @@ public class IoUtil {
 
         OutputStream outputStream = null;
         try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(file));
+            outputStream = new BufferedOutputStream(new FileOutputStream(file, false));
             outputStream.write(value);
             outputStream.flush();
             return true;

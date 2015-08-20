@@ -30,7 +30,7 @@ def getKeyStore(def propertyFile, def storeFile) {
 
 android {
     defaultConfig {
-        applicationId project.applicationId
+        applicationId = project.applicationId
         multiDexEnabled true
 
         testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
@@ -45,7 +45,7 @@ android {
         }
     }
 
-    buildTypes {
+    android.buildTypes {
         release {
             shrinkResources true
             zipAlignEnabled true
@@ -57,7 +57,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.pro'),
                     new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.pro'),
-                    'proguard-rules.pro'
+                    new File('proguard-rules.pro')
         }
 
         debug {
@@ -76,20 +76,6 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-
-//    //修改apk名
-//    applicationVariants.all { variant ->
-//        variant.outputs.each { output ->
-//            def appName = project.appName
-//            appName += "-"
-//            appName += defaultConfig.versionName
-//            if (variant.buildType.versionNameSuffix != null) {
-//                appName += variant.buildType.versionNameSuffix
-//            }
-//            appName += ".apk"
-//            output.outputFile = new File(output.outputFile.parent, appName)
-//        }
-//    }
 }
 
 dependencies {

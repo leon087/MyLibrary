@@ -1,10 +1,6 @@
 package cm.java.util;
 
-
 import android.test.InstrumentationTestCase;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ValidateUtilTest extends InstrumentationTestCase {
 
@@ -39,12 +35,9 @@ public class ValidateUtilTest extends InstrumentationTestCase {
         String[] temp = {"13700195027", ""};
         boolean result = ValidateUtil.isValidate(temp);
         assertEquals(result, false);
-    }
 
-    public static void testIsValidate2() throws Exception {
-        String[] temp = {"13700195027"};
-        boolean result = ValidateUtil.isValidate(temp);
-        assertEquals(result, true);
+        boolean result1 = ValidateUtil.isValidate(temp);
+        assertEquals(result1, true);
     }
 
     public static void testIsValidPostalCode() throws Exception {

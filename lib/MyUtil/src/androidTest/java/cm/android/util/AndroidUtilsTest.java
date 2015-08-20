@@ -1,11 +1,11 @@
 package cm.android.util;
 
-
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.test.InstrumentationTestCase;
 
+import java.util.Map;
 import java.util.Properties;
 
 public class AndroidUtilsTest extends InstrumentationTestCase {
@@ -18,6 +18,13 @@ public class AndroidUtilsTest extends InstrumentationTestCase {
         bundle.putString("hjgde", "jhuds");
         temp = AndroidUtils.isEmpty(bundle);
         assertEquals(temp, false);
+    }
+
+    public void testGetStubFile() throws Exception {
+        Context context = getInstrumentation().getContext();
+        Map<String, Object> temp = AndroidUtils.getStubFile(context, "sss");
+        boolean result = temp.isEmpty();
+        assertEquals(result, true);
     }
 
     public void testGetVersionCode() throws Exception {
@@ -45,8 +52,7 @@ public class AndroidUtilsTest extends InstrumentationTestCase {
     public void testGetDexCrc() throws Exception {
         Context context = getInstrumentation().getContext();
         long temp = AndroidUtils.getDexCrc(context);
-        boolean result = temp != 0;
-        assertEquals(result, true);
+        assertEquals(temp != 0, true);
     }
 
     public void testIsDebuggable() throws Exception {
@@ -67,5 +73,4 @@ public class AndroidUtilsTest extends InstrumentationTestCase {
         boolean temp = AndroidUtils.setAdbEnabled(context, 1);
         assertEquals(temp, false);
     }
-
 }

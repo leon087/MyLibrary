@@ -1,8 +1,6 @@
 package cm.android.apn;
 
-
 import android.content.Context;
-import android.telephony.TelephonyManager;
 import android.test.InstrumentationTestCase;
 
 public class ApnUtilTest extends InstrumentationTestCase {

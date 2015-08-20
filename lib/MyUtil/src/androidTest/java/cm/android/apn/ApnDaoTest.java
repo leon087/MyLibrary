@@ -1,26 +1,31 @@
 package cm.android.apn;
 
+import android.content.Context;
 import android.test.InstrumentationTestCase;
 
 public class ApnDaoTest extends InstrumentationTestCase {
 
-//    public void testSetDataEnabled() throws Exception {
-//        ApnDao mApnDao = new ApnDao(getInstrumentation().getContext().getContentResolver());
-//        boolean temp = mApnDao.setDataEnabled(false);
-//        assertEquals(temp, true);
+//    public void testIsDataEnabled() throws Exception {//android.permission.WRITE_APN_SETTINGS
+//        Context context = getInstrumentation().getContext();
+//        ApnDao mApnDao = new ApnDao(context.getContentResolver());
+//        boolean result = mApnDao.isDataEnabled();
+//        assertEquals(true, result);
 //    }
 
-//    public void testSetMmsEnabled() throws Exception {
-//        ApnDao mApnDao = new ApnDao(getInstrumentation().getContext().getContentResolver());
-//        boolean temp = mApnDao.setMmsEnabled(true);
-//        assertEquals(temp, true);
+//    public void testIsDataEnabled() throws Exception {//android.permission.WRITE_APN_SETTINGS.
+//        Context context = getInstrumentation().getContext();
+//        ApnDao mApnDao = new ApnDao(context.getContentResolver());
+//        boolean result = mApnDao.isMmsEnabled();
+//        assertEquals(true, result);
 //    }
-//
-//    public void testSetMmsEnabled1() throws Exception {
-//        ApnDao mApnDao = new ApnDao(getInstrumentation().getContext().getContentResolver());
-//        boolean temp = mApnDao.setMmsEnabled(false);
-//        assertEquals(temp, true);
-//    }
+
+    public void testAddComplexSuffix() throws Exception {
+        Context context = getInstrumentation().getContext();
+        ApnDao mApnDao = new ApnDao(context.getContentResolver());
+        String temp = mApnDao.addComplexSuffix("sdajhaj");
+        boolean result = temp.equals("");
+        assertEquals(false, result);
+    }
 
     public void testAddSuffix() throws Exception {
         String temp = ApnDao.addSuffix("ace");

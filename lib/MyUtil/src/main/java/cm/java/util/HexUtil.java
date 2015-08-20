@@ -3,6 +3,8 @@ package cm.java.util;
 public class HexUtil {
 
     public static byte[] decode(String hexString) {
+        hexString = hexString.toLowerCase();
+
         int len = hexString.length() / 2;
         byte[] result = new byte[len];
         for (int i = 0; i < len; i++) {
@@ -11,6 +13,9 @@ public class HexUtil {
         return result;
     }
 
+    /**
+     * 返回小写16进制
+     */
     public static String encode(byte[] buf) {
         if (buf == null) {
             return "";
@@ -22,7 +27,13 @@ public class HexUtil {
         return result.toString();
     }
 
-    //    private final static String HEX = "0123456789ABCDEF";
+    /**
+     * 返回大写16进制
+     */
+    public static String encodeUC(byte[] buf) {
+        return encode(buf).toUpperCase();
+    }
+
     private final static String HEX = "0123456789abcdef";
 
     private static void appendHex(StringBuilder sb, byte b) {

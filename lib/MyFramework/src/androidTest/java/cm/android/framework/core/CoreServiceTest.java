@@ -1,15 +1,13 @@
 package cm.android.framework.core;
 
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.test.InstrumentationTestCase;
 
-
-
 public class CoreServiceTest extends InstrumentationTestCase {
+
     public void testSetApn() throws Exception {
         Context context = getInstrumentation().getContext();
         boolean result = CoreService.bind(context, mServiceConnection, "123");
