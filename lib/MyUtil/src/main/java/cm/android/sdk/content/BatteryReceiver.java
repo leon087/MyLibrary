@@ -28,19 +28,9 @@ public class BatteryReceiver extends BaseBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        BatteryInfo betteryInfo = new BatteryInfo();
-        betteryInfo.status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);//API:5
-        betteryInfo.health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0);
-        betteryInfo.present = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
-        betteryInfo.level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-        betteryInfo.scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
-        betteryInfo.icon_small = intent.getIntExtra(BatteryManager.EXTRA_ICON_SMALL, 0);
-        betteryInfo.plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
-        betteryInfo.voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
-        betteryInfo.temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
-        betteryInfo.technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
+        BatteryInfo batteryInfo = parseBattery(intent);
 
-        listener.batteryChanged(betteryInfo);
+        listener.batteryChanged(batteryInfo);
     }
 
     @Override
@@ -92,6 +82,34 @@ public class BatteryReceiver extends BaseBroadcastReceiver {
                     ", technology='" + technology + '\'' +
                     '}';
         }
+    }
+
+    public static BatteryInfo getBattery(Context context) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent intent = context.getApplicationContext().registerReceiver(null, filter);
+
+        BatteryInfo batteryInfo = parseBattery(intent);
+        return batteryInfo;
+    }
+
+    public static BatteryInfo parseBattery(Intent intent) {
+        BatteryInfo batteryInfo = new BatteryInfo();
+        if (intent == null) {
+            return batteryInfo;
+        }
+
+        batteryInfo.status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);//API:5
+        batteryInfo.health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0);
+        batteryInfo.present = intent.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
+        batteryInfo.level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        batteryInfo.scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
+        batteryInfo.icon_small = intent.getIntExtra(BatteryManager.EXTRA_ICON_SMALL, 0);
+        batteryInfo.plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
+        batteryInfo.voltage = intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0);
+        batteryInfo.temperature = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0);
+        batteryInfo.technology = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
+
+        return batteryInfo;
     }
 
 }

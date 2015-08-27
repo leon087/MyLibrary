@@ -20,15 +20,10 @@ public class ValidateUtilTest extends InstrumentationTestCase {
         String temp = "15700195027";
         boolean result = ValidateUtil.checkMobilePhone(temp);
         assertEquals(result, true);
-    }
 
-    /**
-     * 判断是否为移动手机号
-     */
-    public static void testCheckMobilePhone2() throws Exception {
-        String temp = "13200195027";
-        boolean result = ValidateUtil.checkMobilePhone(temp);
-        assertEquals(result, false);
+        String temp1 = "13200195027";
+        boolean result1 = ValidateUtil.checkMobilePhone(temp1);
+        assertEquals(result1, false);
     }
 
     public static void testIsValidate() throws Exception {

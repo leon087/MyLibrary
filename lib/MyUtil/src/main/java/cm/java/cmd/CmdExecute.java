@@ -14,6 +14,7 @@ public final class CmdExecute {
 
     private static final Logger logger = LoggerFactory.getLogger("cmd");
 
+    @Deprecated
     public static String run(String[] cmd, String workdirectory) {
         if (null == workdirectory) {
             return null;

@@ -12,7 +12,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Debug;
+import android.os.Environment;
+import android.os.StatFs;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -321,4 +324,27 @@ public class SystemUtil {
         return null;
     }
 
+    @TargetApi(18)
+    public static String getRomAvailableSize(Context context) {
+        StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
+        if (EnvironmentUtil.SdkUtil.hasJellyBeanMr2()) {
+            return Formatter.formatFileSize(context,
+                    statFs.getBlockSizeLong() * statFs.getAvailableBlocksLong());
+        }
+
+        return Formatter.formatFileSize(context,
+                statFs.getBlockSize() * statFs.getAvailableBlocks());
+    }
+
+    @TargetApi(18)
+    public static String getRomTotalSize(Context context) {
+        StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
+        if (EnvironmentUtil.SdkUtil.hasJellyBeanMr2()) {
+            return Formatter.formatFileSize(context,
+                    statFs.getBlockSizeLong() * statFs.getBlockCountLong());
+        }
+
+        return Formatter.formatFileSize(context,
+                statFs.getBlockSize() * statFs.getBlockCount());
+    }
 }

@@ -2,7 +2,6 @@ package cm.android.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.test.InstrumentationTestCase;
 
 import java.io.ByteArrayOutputStream;

@@ -27,8 +27,9 @@ public class SystemPropertiesProxy {
             cl = this.getClass().getClassLoader();
         }
         SystemProperties = cl.loadClass("android.os.SystemProperties");
-        getString = SystemProperties.getMethod("get", new Class[]{String.class, String.class});
-        getBoolean = SystemProperties.getMethod("getBoolean",
+        getString = SystemProperties.getDeclaredMethod("get",
+                new Class[]{String.class, String.class});
+        getBoolean = SystemProperties.getDeclaredMethod("getBoolean",
                 new Class[]{String.class, boolean.class});
     }
 
@@ -52,9 +53,7 @@ public class SystemPropertiesProxy {
         return ret;
     }
 
-    public Boolean getBoolean(String key, boolean def)
-            throws IllegalArgumentException {
-
+    public Boolean getBoolean(String key, boolean def) throws IllegalArgumentException {
         if (SystemProperties == null || getBoolean == null) {
             return def;
         }
@@ -71,5 +70,9 @@ public class SystemPropertiesProxy {
 
     public static String get(String key, String def) {
         return getInstance().getInternal(key, def);
+    }
+
+    public static Boolean get(String key, boolean def) {
+        return getInstance().getBoolean(key, def);
     }
 }

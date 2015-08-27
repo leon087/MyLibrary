@@ -4,6 +4,9 @@ import android.test.InstrumentationTestCase;
 
 import javax.crypto.SecretKey;
 
+import cm.java.util.Base64;
+import cm.java.util.Utils;
+
 public class AESCoderTest extends InstrumentationTestCase {
 
     public void testGenerateKey() throws Exception {
@@ -11,7 +14,9 @@ public class AESCoderTest extends InstrumentationTestCase {
         byte[] key1 = AESCoder.generateKey(password, null, 16).getEncoded();
         byte[] key2 = AESCoder.generateKey(password, null, 16).getEncoded();
 
-        assertEquals(new String(key1), new String(key2));
+        String result1 = Utils.encodeBase64(key1);
+        String result2 = Utils.encodeBase64(key2);
+        assertEquals(result1, result2);
     }
 
     public void testEncryptAndDecrypt() throws Exception {

@@ -96,6 +96,7 @@ public final class AndroidUtils {
         return String.valueOf(packageInfo.versionName);
     }
 
+    @Deprecated
     public static String getSystemProperties(String key) {
         String str = null;
         try {

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class MapUtilTest extends InstrumentationTestCase {
 
-    public void testGetString1() throws Exception {
+    public void testGetString() throws Exception {
         Map<String, String> map = new HashMap<String, String>();
         map.put("123key", "456value");
         String result = MapUtil.getString(map, "123key");
@@ -33,10 +33,10 @@ public class MapUtilTest extends InstrumentationTestCase {
         Map<String, Long> map = new HashMap<String, Long>();
         map.put("123key", (long) 34567890);
         long result = MapUtil.getLong(map, "123key");
-        assertEquals(result, (long) 34567890);
+        assertEquals(result, 34567890l);
 
         long result1 = MapUtil.getLong(map, "22222");
-        assertEquals(result1, (long) -1);
+        assertEquals(result1, -1);
     }
 
     public void testGetInt() throws Exception {
@@ -51,19 +51,19 @@ public class MapUtilTest extends InstrumentationTestCase {
 
     public void testGetDouble() throws Exception {
         Map<String, Double> map = new HashMap<String, Double>();
-        map.put("123key", 3.1415927);
+        map.put("123key", 3.1415927d);
         Double result = MapUtil.getDouble(map, "123key");
-        assertEquals(result, 3.1415927);
+        assertEquals(result, 3.1415927d);
     }
 
     public void testGetFloat() throws Exception {
         Map<String, Float> map = new HashMap<String, Float>();
-        map.put("123key", (float) 3.1415927);
+        map.put("123key", 3.1415927f);
         Float result = MapUtil.getFloat(map, "123key");
-        assertEquals(result, (float) 3.1415927);
+        assertEquals(result, 3.1415927f);
 
         Float result1 = MapUtil.getFloat(map, "213");
-        assertEquals(result1, (float) -1);
+        assertEquals(result1, -1);
     }
 
     public void testGetList() throws Exception {
