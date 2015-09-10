@@ -20,8 +20,8 @@ public final class TimerServer extends ITimerServer.Stub {
     }
 
     @Override
-    public void register(String action, long period) throws RemoteException {
-        timerTaskManager.register(action, period);
+    public void register(String action, long period, long delay) throws RemoteException {
+        timerTaskManager.register(action, period, delay);
     }
 
     @Override

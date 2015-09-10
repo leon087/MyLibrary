@@ -339,17 +339,21 @@ public class AppUtil {
         }
     }
 
-    public static void parseSignature(byte[] signature) {
+    public static byte[] getPublicKey(Signature signature) {
+        if (signature == null) {
+            return null;
+        }
+
         try {
             CertificateFactory certFactory = CertificateFactory
                     .getInstance("X.509");
             X509Certificate cert = (X509Certificate) certFactory
-                    .generateCertificate(new ByteArrayInputStream(signature));
-            String pubKey = cert.getPublicKey().toString();
-            String signNumber = cert.getSerialNumber().toString();
+                    .generateCertificate(new ByteArrayInputStream(signature.toByteArray()));
+            byte[] pubKey = cert.getPublicKey().getEncoded();
+            return pubKey;
         } catch (CertificateException e) {
             logger.error(e.getMessage(), e);
-
+            return null;
         }
     }
 

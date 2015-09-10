@@ -148,7 +148,7 @@
     java.lang.Object readResolve();  
 } 
 
-#去除调试日志，将所有Log.d()改为Log.i():
+#去除调试日志:
 #-assumenosideeffects class android.util.Log{
 #  public static *** d(...); 
 #  public static *** i(...);

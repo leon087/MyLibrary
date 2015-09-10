@@ -24,17 +24,22 @@ public final class TimerTaskManager {
     private Context context;
 
     public void register(String action, long period) {
-        register(action, period, true);
+        register(action, period, 0);
     }
 
-    public synchronized void register(String action, long period, boolean globalBroadcast) {
+    public void register(String action, long period, long delay) {
+        register(action, period, delay, true);
+    }
+
+    public synchronized void register(String action, long period, long delay,
+            boolean globalBroadcast) {
         if (taskMap.get(action) != null) {
             return;
         }
 
         TimerTask alarmTask = new MyAlarmTask(action, period, globalBroadcast);
         taskMap.put(action, alarmTask);
-        alarmTask.start(context);
+        alarmTask.start(context, delay);
 
         logger.info("action = " + action);
     }

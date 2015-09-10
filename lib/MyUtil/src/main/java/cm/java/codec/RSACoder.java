@@ -9,8 +9,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.crypto.Cipher;
 
@@ -19,9 +17,7 @@ public final class RSACoder {
     // 非对称密钥算法
     public static final String ALG_RSA = "RSA";
 
-    public static final int KEY_LENGTH = 512 / 8;
-
-    public static Map<RsaKeyType, byte[]> initKey(int keyLength) throws Exception {
+    public static Key initKey(int keyLength) throws Exception {
         int keySizeBit = SecureUtil.convertSize(keyLength);
 
         // 实例化密钥生成器
@@ -34,11 +30,9 @@ public final class RSACoder {
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         // 甲方私钥
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        // 将密钥存储在map中
-        Map<RsaKeyType, byte[]> keyMap = new HashMap<RsaKeyType, byte[]>();
-        keyMap.put(RsaKeyType.PUBLIC_KEY, publicKey.getEncoded());
-        keyMap.put(RsaKeyType.PRIVATE_KEY, privateKey.getEncoded());
-        return keyMap;
+
+        Key key = new Key(publicKey.getEncoded(), privateKey.getEncoded());
+        return key;
     }
 
     public static byte[] encryptByPrivateKey(byte[] data, byte[] key) throws Exception {
@@ -53,9 +47,7 @@ public final class RSACoder {
         return cipher.doFinal(data);
     }
 
-    public static byte[] encryptByPublicKey(byte[] data, byte[] key)
-            throws Exception {
-
+    public static byte[] encryptByPublicKey(byte[] data, byte[] key) throws Exception {
         // 实例化密钥工厂
         KeyFactory keyFactory = KeyFactory.getInstance(ALG_RSA);
         // 初始化公钥
@@ -96,19 +88,8 @@ public final class RSACoder {
         return cipher.doFinal(data);
     }
 
-    private static byte[] getPrivateKey(Map<RsaKeyType, byte[]> keyMap) {
-        byte[] key = keyMap.get(RsaKeyType.PRIVATE_KEY);
-        return key;
-    }
-
-    private static byte[] getPublicKey(Map<RsaKeyType, byte[]> keyMap)
-            throws Exception {
-        byte[] key = keyMap.get(RsaKeyType.PUBLIC_KEY);
-        return key;
-    }
-
-    public static byte[] encrypt(RsaKeyType rsaKey, byte[] data, byte[] key) throws Exception {
-        if (rsaKey.equals(RsaKeyType.PUBLIC_KEY)) {
+    public static byte[] encrypt(Type rsaKey, byte[] data, byte[] key) throws Exception {
+        if (rsaKey.equals(Type.PUBLIC)) {
             byte[] value = encryptByPublicKey(data, key);
             return value;
         } else {
@@ -117,9 +98,8 @@ public final class RSACoder {
         }
     }
 
-    public static byte[] decrypt(RsaKeyType rsaKey, byte[] data, byte[] key) throws Exception {
-
-        if (rsaKey.equals(RsaKeyType.PUBLIC_KEY)) {
+    public static byte[] decrypt(Type rsaKey, byte[] data, byte[] key) throws Exception {
+        if (rsaKey.equals(Type.PUBLIC)) {
             byte[] value = decryptByPublicKey(data, key);
             return value;
         } else {
@@ -131,8 +111,20 @@ public final class RSACoder {
     /**
      * key
      */
-    public static enum RsaKeyType {
-        PUBLIC_KEY(), // 公钥
-        PRIVATE_KEY();// 私钥
+    public static enum Type {
+        PUBLIC, // 公钥
+        PRIVATE;// 私钥
+    }
+
+    public static class Key {
+
+        public final byte[] publicKey;
+
+        public final byte[] privateKey;
+
+        Key(byte[] publicKey, byte[] privateKey) {
+            this.publicKey = publicKey;
+            this.privateKey = privateKey;
+        }
     }
 }

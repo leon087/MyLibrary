@@ -14,9 +14,9 @@ public final class TimerManager extends ITimerServer.Stub implements BinderFacto
     private ITimerServer timerManager;
 
     @Override
-    public void register(String action, long period) {
+    public void register(String action, long period, long delay) {
         try {
-            timerManager.register(action, period);
+            timerManager.register(action, period, delay);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

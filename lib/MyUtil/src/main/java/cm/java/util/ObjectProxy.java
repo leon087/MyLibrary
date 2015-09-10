@@ -3,8 +3,6 @@ package cm.java.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ObjectProxy {
@@ -45,40 +43,10 @@ public class ObjectProxy {
 //    }
 
     public <T> T doMethod(Method method, Object... params) {
-        try {
-            return (T) method.invoke(target, params);
-        } catch (IllegalAccessException e) {
-            logger.error(e.getMessage(), e);
-            return null;
-        } catch (InvocationTargetException e) {
-            logger.error(e.getMessage(), e);
-            return null;
-        }
+        return ReflectUtil.doMethod(target, method, params);
     }
 
     public Method getMethod(String methodName, Class<?>... parameterTypes) {
-        try {
-            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
-            method.setAccessible(true);
-            return method;
-        } catch (NoSuchMethodException e) {
-            logger.error(e.getMessage(), e);
-            return null;
-        }
+        return ReflectUtil.getMethod(clazz, methodName, parameterTypes);
     }
-
-    /**
-     * 获取方法上的注解
-     *
-     * @param anClazz 注解类
-     */
-    public Annotation getAnnotation(Class anClazz, String methodName, Class<?>... parameterTypes) {
-        Method method = getMethod(methodName, parameterTypes);
-        if (method != null) {
-            return method.getAnnotation(anClazz);
-        }
-
-        return null;
-    }
-
 }
