@@ -7,16 +7,31 @@ public class RSACoderTest extends InstrumentationTestCase {
     public void testInitKeyAndEncryptByPublicKeyAndDecryptByPrivateKey() throws Exception {
         RSACoder.Key key = RSACoder.initKey(512 / 8);
         String data = "hello";
-        byte[] temp = RSACoder.encryptByPublicKey(data.getBytes(), key.publicKey);
-        byte[] temp1 = RSACoder.decryptByPrivateKey(temp, key.privateKey);
+        byte[] temp = RSACoder.encryptByPublicKey(key.publicKey, data.getBytes());
+        byte[] temp1 = RSACoder.decryptByPrivateKey(key.privateKey, temp);
         assertEquals(data, new String(temp1));
     }
 
-    public void testInitKeyAndEncryptByPrivateKeyAndDecryptByPublicKey() throws Exception {
-        RSACoder.Key key = RSACoder.initKey(512 / 8);
+    public void testRSA() throws Exception {
         String data = "hello";
-        byte[] temp = RSACoder.encryptByPrivateKey(data.getBytes(), key.privateKey);
-        byte[] temp1 = RSACoder.decryptByPublicKey(temp, key.publicKey);
-        assertEquals(data, new String(temp1));
+        RSACoder.Key keyA = RSACoder.initKey(512 / 8);
+        RSACoder.Key keyB = RSACoder.initKey(512 / 8);
+
+        // 发送方消息
+        String test = "hello";
+
+        // 发送方消息加密
+        byte[] en = RSACoder.encryptByPublicKey(keyB.publicKey, test.getBytes());
+        // 发送方私钥签名
+        byte[] sign = RSACoder.sign(test.getBytes(), keyA.privateKey);
+
+        // 接收方私钥解密
+        byte[] de = RSACoder.decryptByPrivateKey(keyB.privateKey, en);
+
+        // 接收方公钥解密hash
+        boolean verify = RSACoder.verify(de, keyA.publicKey, sign);
+
+        assertEquals(true, verify);
+        assertEquals(test, new String(de));
     }
 }

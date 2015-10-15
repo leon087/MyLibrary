@@ -1,59 +1,38 @@
-# To enable ProGuard in your project, edit project.properties
-# to define the proguard.config property as described in that file.
-#
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in ${sdk.dir}/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the ProGuard
-# include property in project.properties.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# Add any project specific keep options here:
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-#避免使用泛型的位置混淆后出现类型转换错误:
--keepattributes Signature
-
- #混淆时是否记录日志
+#一般选项
+#输出更多信息，如果处理过程中报错，会输出跟踪错误的所有信息
 -verbose
-
-#保留源码的行号、源文件信息
--renamesourcefileattribute Source
--keepattributes SourceFile,LineNumberTable
-
-#忽略警告：
+#打印出所有的关于错误引用或任何重要的警告，但是proguard继续处理
 -ignorewarnings
-
-#不优化输入的类文件
--dontoptimize
-
-#混淆时所采用的算法
--optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
-
-#优化：设置混淆的压缩比率 0 ~ 7 
--optimizationpasses 5
-
--allowaccessmodification
 
 #不预校验
 -dontpreverify
 
-#不使用混合的类名:混淆时不会产生形形色色的类名
+#初始参数
+#混淆时不会产生大小写混合的类名
 -dontusemixedcaseclassnames
-
-#不要跳过非公共类库:如果应用程序引入的有jar包,并且想混淆jar包里面的class
+#指定不去忽略非公共的库类。在4.5版本中是默认配置。
 -dontskipnonpubliclibraryclasses
 
+#保留源码的行号、源文件信息
+-renamesourcefileattribute Source
+
+#保留给定的可选属性，例如LineNumberTable, LocalVariableTable, SourceFile, Deprecated, Synthetic, Signature, and InnerClasses.
+-keepattributes SourceFile,LineNumberTable
 #保留注解:
 -keepattributes *Annotation*
+#避免使用泛型的位置混淆后出现类型转换错误:
+-keepattributes Signature
+
+#混淆时所采用的算法
+-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
+
+#优化
+#不优化输入的类文件
+#-dontoptimize
+#优化：设置混淆的压缩比率 0 ~ 7 
+-optimizationpasses 5
+#优化时允许访问并修改有修饰符的类和类的成员
+-allowaccessmodification
 
 #所有activity的子类不要去混淆
 -keep public class * extends android.app.Activity

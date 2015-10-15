@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
-import android.content.Intent;
 
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
