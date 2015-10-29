@@ -4,6 +4,10 @@ import android.os.Handler;
 
 import java.util.Date;
 
+/**
+ * 基于hanlder实现的timer
+ * cancel之后无需重新new
+ */
 public final class Timer {
 
     private static final class TimerImpl implements Runnable {
@@ -267,7 +271,6 @@ public final class Timer {
         }
 
         public synchronized void reset() {
-            cancelled = false;
             tasks.reset();
             handler.removeCallbacks(this);
         }
@@ -484,7 +487,8 @@ public final class Timer {
     private void scheduleImpl(TimerTask task, long delay, long period, boolean fixed) {
         synchronized (impl) {
             if (impl.cancelled) {
-                throw new IllegalStateException("Timer was canceled");
+//                throw new IllegalStateException("Timer was canceled");
+                impl.cancelled = false;
             }
 
             long when = delay + System.currentTimeMillis();

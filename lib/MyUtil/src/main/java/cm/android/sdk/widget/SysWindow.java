@@ -10,6 +10,8 @@ import android.view.WindowManager;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cm.android.util.EnvironmentUtil;
+
 public abstract class SysWindow {
 
     private static final Logger logger = LoggerFactory.getLogger("SysWindow");
@@ -33,7 +35,11 @@ public abstract class SysWindow {
 
     protected WindowManager.LayoutParams initLayoutParams() {
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        if (EnvironmentUtil.SdkUtil.hasKitkat()) {
+            layoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+        } else {
+            layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+        }
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.gravity = Gravity.CENTER;

@@ -19,7 +19,7 @@ public class Proxy {
 
         public DynamicHandler(Object obj) {
             this.obj = obj;
-        }RS
+        }
 
         public Object getObj() {
             return obj;

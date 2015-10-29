@@ -12,6 +12,9 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -19,6 +22,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.UUID;
 
+import cm.java.util.IoUtil;
 import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
 
@@ -324,5 +328,37 @@ public class DeviceUtil {
     public static int getAdbEnabled(Context context) {
         return Settings.Secure.getInt(context.getContentResolver(),
                 Settings.Global.ADB_ENABLED, 0);
+    }
+
+    private static String getDeviceCid(String block) {
+        BufferedReader cidFile = null;
+        try {
+            File input = new File("/sys/block/" + block + "/device");
+            cidFile = new BufferedReader(new FileReader(new File(input, "cid")));
+            String sd_cid = cidFile.readLine();
+            logger.info("CID of the MMC = {}", sd_cid);
+            return sd_cid;
+        } catch (Exception e) {
+            logger.error("Can not read SD-card cid", e);
+            return "";
+        } finally {
+            IoUtil.closeQuietly(cidFile);
+        }
+    }
+
+    public static String getSdcardId() {
+        if (!EnvironmentUtil.isExternalStorageWritable()) {
+            return "";
+        }
+
+        return getDeviceCid("mmcblk0");
+    }
+
+    public static String getExtSdcardId() {
+//        if (!EnvironmentUtil.hasExtSdcard()) {
+//            return "";
+//        }
+
+        return getDeviceCid("mmcblk1");
     }
 }

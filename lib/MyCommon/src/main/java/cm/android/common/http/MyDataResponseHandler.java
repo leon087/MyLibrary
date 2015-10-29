@@ -1,10 +1,10 @@
 package cm.android.common.http;
 
-import org.apache.http.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cm.java.util.Utils;
+import cz.msebera.android.httpclient.Header;
 
 public class MyDataResponseHandler<T> extends HttpResponseHandler<T> {
 

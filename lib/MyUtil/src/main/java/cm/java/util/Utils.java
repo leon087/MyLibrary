@@ -338,7 +338,7 @@ public final class Utils {
         }
     }
 
-    public static Header[] genHeader(Map<String, String> map) {
+    public static org.apache.http.Header[] genHeader(Map<String, String> map) {
         Set<Entry<String, String>> set = map.entrySet();
         List<Header> headerList = ObjectUtil.newArrayList();
         for (Entry<String, String> entry : set) {
@@ -348,7 +348,7 @@ public final class Utils {
         return headerList.toArray(new Header[headerList.size()]);
     }
 
-    public static Map<String, String> genHeaderMap(Header[] headers) {
+    public static Map<String, String> genHeaderMap(org.apache.http.Header[] headers) {
         Map<String, String> headMap = ObjectUtil.newHashMap();
         for (Header header : headers) {
             headMap.put(header.getName(), header.getValue());

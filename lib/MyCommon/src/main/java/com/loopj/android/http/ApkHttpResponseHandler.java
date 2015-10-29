@@ -1,8 +1,5 @@
 package com.loopj.android.http;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-
 import android.content.Context;
 
 import java.io.BufferedOutputStream;
@@ -10,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
 
 public abstract class ApkHttpResponseHandler extends AsyncHttpResponseHandler {
 

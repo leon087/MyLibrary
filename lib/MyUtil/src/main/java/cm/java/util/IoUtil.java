@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,6 +20,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -240,6 +242,29 @@ public class IoUtil {
             return new String[0];
         }
         return fir.list();
+    }
+
+    public static List<File> getDirs(File dir) {
+        List<File> dirs = ObjectUtil.newArrayList();
+        if (!dir.isDirectory()) {
+            return dirs;
+        }
+        dirs.add(dir);
+
+        File[] files = dir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory() && !pathname.getName().equals(".")
+                        && !pathname.getName().equals("..");
+            }
+        });
+
+        for (File tmpDir : files) {
+            List<File> tmpDirList = getDirs(tmpDir);
+            dirs.addAll(tmpDirList);
+        }
+
+        return dirs;
     }
 
     /**

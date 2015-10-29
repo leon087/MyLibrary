@@ -3,11 +3,11 @@ package cm.android.common.http;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.apache.http.Header;
-
 import android.content.Context;
 
 import java.lang.ref.WeakReference;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MyHttp {
 

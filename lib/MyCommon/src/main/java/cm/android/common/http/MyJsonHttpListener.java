@@ -3,10 +3,9 @@ package cm.android.common.http;
 import com.alibaba.fastjson.JSON;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.apache.http.Header;
-
 import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
+import cz.msebera.android.httpclient.Header;
 
 public abstract class MyJsonHttpListener<T> extends HttpListener<T> {
 

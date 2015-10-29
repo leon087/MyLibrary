@@ -5,15 +5,19 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.CookieStore;
-import org.apache.http.entity.ByteArrayEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
 import android.util.Patterns;
+
+import java.util.Map;
+
+import cm.java.util.ObjectUtil;
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 
 public final class HttpUtil {
 
@@ -187,5 +191,27 @@ public final class HttpUtil {
             // httpClient.setHttpRequestRetryHandler(new
             // RetryHandler(DEFAULT_MAX_RETRIES));
         }
+    }
+
+    public static Map<String, String> genHeaderMap(Header[] headers) {
+        Map<String, String> headMap = ObjectUtil.newHashMap();
+        for (Header header : headers) {
+            headMap.put(header.getName(), header.getValue());
+        }
+        return headMap;
+    }
+
+    public static String getHeader(Header[] headers, String headerName) {
+        if (headers == null) {
+            return "";
+        }
+
+        for (Header header : headers) {
+            if (headerName.equals(header.getName())) {
+                return header.getValue();
+            }
+        }
+
+        return "";
     }
 }

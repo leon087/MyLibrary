@@ -3,6 +3,8 @@ package cm.android.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -48,6 +50,16 @@ public class IntentUtil {
             logger.error("packageName = " + packageName, e);
         }
         return false;
+    }
+
+    public static void startActivitySafely(Activity activity, Intent intent) {
+        try {
+            activity.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            logger.error("intent = " + intent, e);
+        } catch (SecurityException e) {
+            logger.error("intent = " + intent, e);
+        }
     }
 
     /**

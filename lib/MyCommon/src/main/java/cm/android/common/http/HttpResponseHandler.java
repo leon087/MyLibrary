@@ -2,10 +2,11 @@ package cm.android.common.http;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.apache.http.Header;
-import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpStatus;
 
 public abstract class HttpResponseHandler<DATA_TYPE> extends
         AsyncHttpResponseHandler {

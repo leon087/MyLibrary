@@ -39,6 +39,11 @@ public class BaseDao {
         return count;
     }
 
+    public int update(ContentValues values, String where, String[] selectionArgs) {
+        int count = resolver.update(contentUri, values, where, selectionArgs);
+        return count;
+    }
+
     public int delete(int id) {
         int count = delete(id, null, null);
         return count;

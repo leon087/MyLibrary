@@ -2,7 +2,6 @@ package cm.android.util;
 
 import android.content.Context;
 import android.os.Environment;
-import android.os.StatFs;
 import android.test.InstrumentationTestCase;
 
 import java.io.File;
@@ -63,14 +62,14 @@ public class EnvironmentUtilTest extends InstrumentationTestCase {
         assertEquals(result, file.getUsableSpace());
     }
 
-    public void testGetTotalSize() {
-        long result = EnvironmentUtil.getTotalSize("1");
+    public void testGetTotalSpace() {
+        long result = EnvironmentUtil.getTotalSpace(new File("1"));
         boolean temp = result == -1;
         assertEquals(true, temp);
     }
 
     public void testGetUsedSize() {
-        long result = EnvironmentUtil.getUsedSize("1");
+        long result = EnvironmentUtil.getUsedSize(new File("1"));
         boolean temp = result == 0;
         assertEquals(true, temp);
     }

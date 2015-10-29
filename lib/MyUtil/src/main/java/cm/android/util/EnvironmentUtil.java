@@ -11,10 +11,15 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+import android.os.storage.StorageManager;
 
 import java.io.File;
+import java.lang.reflect.Method;
+import java.util.List;
 
 import cm.java.util.IoUtil;
+import cm.java.util.ObjectProxy;
+import cm.java.util.ObjectUtil;
 
 public class EnvironmentUtil {
 
@@ -46,7 +51,7 @@ public class EnvironmentUtil {
      * otherwise.
      */
     @TargetApi(9)
-    private static boolean isExternalStorageRemovable() {
+    public static boolean isExternalStorageRemovable() {
         if (SdkUtil.hasGingerbread()) {
             return Environment.isExternalStorageRemovable();
         }
@@ -210,10 +215,18 @@ public class EnvironmentUtil {
         }
     }
 
+    public static long getTotalSpace(File file) {
+        if (SdkUtil.hasGingerbread()) {
+            return file.getTotalSpace();
+        }
+
+        return getTotalSize(file.getAbsolutePath());
+    }
+
     /**
      * 获取存储总内存大小
      */
-    public static long getTotalSize(String root) {
+    private static long getTotalSize(String root) {
         if (root == null || "".equals(root)) {
             return -1;
         }
@@ -232,8 +245,8 @@ public class EnvironmentUtil {
     /**
      * 获取已用存储大小
      */
-    public static long getUsedSize(String root) {
-        long size = getTotalSize(root) - getUsableSpace(new File(root));
+    public static long getUsedSize(File root) {
+        long size = getTotalSpace(root) - getUsableSpace(root);
         if (size >= 0) {
             return size;
         }
@@ -312,6 +325,64 @@ public class EnvironmentUtil {
     public static boolean hasPermission(Context context, String permission) {
         int perm = context.checkCallingOrSelfPermission(permission);
         return perm == PackageManager.PERMISSION_GRANTED;
+    }
+
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    public static boolean isSupportInternalSdcard(Context context) {
+//        String[] paths = getVolumePaths(context);
+//        if (SdkUtil.hasLollipop()) {
+//            File internalSdcardFile = new File(paths[0]);
+//            boolean removable = Environment.isExternalStorageRemovable(internalSdcardFile);
+//            String state = Environment.getExternalStorageState(internalSdcardFile);
+//            if (Environment.MEDIA_MOUNTED.equals(state) && !removable) {
+//                return true;
+//            }
+//        }
+//        return !EnvironmentUtil.isExternalStorageRemovable();
+//    }
+
+    public static String[] getVolumePaths(Context context) {
+        StorageManager storageManager = (StorageManager) context.getSystemService(
+                Context.STORAGE_SERVICE);
+        ObjectProxy proxy = new ObjectProxy(storageManager);
+        Method method = proxy.getMethod("getVolumePaths");
+        String[] paths = proxy.doMethod(method);
+        return paths;
+    }
+
+    /**
+     * 获取外置sdcard目录
+     */
+    public static List<File> getExtSdcardDirectory(Context context) {
+        List<File> fileList = ObjectUtil.newArrayList();
+
+        File file = getExternalStorageDirectory();
+        if (EnvironmentUtil.isExternalStorageRemovable()) {
+            fileList.add(file);
+        }
+
+        String[] array = getVolumePaths(context);
+        for (String dir : array) {
+            if (file.getAbsolutePath().equals(dir)) {
+                continue;
+            }
+
+            File extSdcard = new File(dir);
+//            if (SdkUtil.hasKitkat()) {
+//                String state = Environment.getStorageState(extSdcard);
+//                if (Environment.MEDIA_MOUNTED.equals(state)) {
+//                    fileList.add(extSdcard);
+//                }
+//            } else {
+            //判断该目录是否可写
+            long usable = getUsableSpace(extSdcard);
+            if (usable > 0) {
+                fileList.add(extSdcard);
+//                }
+            }
+        }
+
+        return fileList;
     }
 
     /**

@@ -1,11 +1,9 @@
 package cm.android.common.http;
 
-import org.apache.http.Header;
-
 import java.util.Map;
 
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
-import cm.java.util.Utils;
+import cz.msebera.android.httpclient.Header;
 
 public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
 
@@ -28,7 +26,7 @@ public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
         // Map<String, Object> responseMap = JSON.parseObject(
         // responseBody.getBytes(), Map.class);
 
-        Map<String, String> headMap = Utils.genHeaderMap(headers);
+        Map<String, String> headMap = HttpUtil.genHeaderMap(headers);
 
         // 保存缓存
         cacheHolder.saveCache(headMap, responseBytes);
