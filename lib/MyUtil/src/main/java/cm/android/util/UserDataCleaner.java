@@ -95,7 +95,17 @@ public class UserDataCleaner {
      * 删除方法
      */
     private static void deleteFilesByDirectory(File directory) {
-        cm.java.util.IoUtil.deleteFile(directory);
+        if (directory == null) {
+            return;
+        }
+
+        File to = new File(directory.getAbsolutePath() + System.currentTimeMillis());
+        boolean flag = directory.renameTo(to);
+        if (flag) {
+            cm.java.util.IoUtil.deleteFile(to);
+        } else {
+            cm.java.util.IoUtil.deleteFile(directory);
+        }
 //        IoUtil.deleteFiles(directory);
     }
 

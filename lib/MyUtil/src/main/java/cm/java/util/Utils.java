@@ -1,9 +1,5 @@
 package cm.java.util;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +14,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,8 +58,8 @@ public final class Utils {
         return false;
     }
 
-    public static <T> boolean isEmpty(List<T> list) {
-        if (list == null || list.isEmpty()) {
+    public static <T> boolean isEmpty(Collection<T> collection) {
+        if (collection == null || collection.isEmpty()) {
             return true;
         }
 
@@ -152,62 +144,6 @@ public final class Utils {
                 | ((addrBytes[1] & 0xff) << 8) | (addrBytes[0] & 0xff);
     }
 
-    /**
-     * check the http response data
-     */
-    public static boolean checkResponseEntity(HttpResponse response) {
-        if (response == null) {
-            return false;
-        }
-        if (response.getEntity().getContentLength() == 0
-                || (response.getEntity().getContentType() != null && response
-                .getEntity().getContentType().getValue()
-                .contains("wml"))) {
-            return false;
-        }
-        return true;
-    }
-
-    public static String getHeader(Header[] headers, String headerName) {
-        if (headers == null) {
-            return "";
-        }
-
-        for (Header header : headers) {
-            if (headerName.equals(header.getName())) {
-                return header.getValue();
-            }
-        }
-
-        return "";
-    }
-
-    /**
-     * 从登陆的HttpResponse结果中获取JSESSIONID
-     */
-    public static String getSessionID(HttpResponse response) {
-        String sessionID = "";
-        if (response == null) {
-            return sessionID;
-        }
-
-        Header[] headers = response.getHeaders("Set-Cookie");
-        if (headers == null) {
-            return sessionID;
-        }
-        for (Header header : headers) {
-            if (header.getName() != null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug(header.getName() + " = " + header.getValue());
-                }
-                // Set-Cookie = JSESSIONID=5C50DF19F1DE7BA88B6A30CACEA3A2B6;
-                // Path=/market
-                sessionID = header.getValue().split(";")[0];
-                break;
-            }
-        }
-        return sessionID;
-    }
 
     /**
      * @param text
@@ -235,23 +171,6 @@ public final class Utils {
         return lineCount;
     }
 
-    public static String encodeURL(String str, String defaultValue) {
-        try {
-            return URLEncoder.encode(str, HTTP.UTF_8);
-        } catch (Exception e) {
-            logger.error("str = " + str, e);
-            return defaultValue;
-        }
-    }
-
-    public static String decodeURL(String str, String defaultValue) {
-        try {
-            return URLDecoder.decode(str, HTTP.UTF_8);
-        } catch (Exception e) {
-            logger.error("str = " + str, e);
-            return defaultValue;
-        }
-    }
 
     public static String newRandomUUID() {
         String uuidRaw = UUID.randomUUID().toString();
@@ -336,24 +255,6 @@ public final class Utils {
             logger.error("Encoding response into string failed", e);
             return "";
         }
-    }
-
-    public static org.apache.http.Header[] genHeader(Map<String, String> map) {
-        Set<Entry<String, String>> set = map.entrySet();
-        List<Header> headerList = ObjectUtil.newArrayList();
-        for (Entry<String, String> entry : set) {
-            Header header = new BasicHeader(entry.getKey(), entry.getValue());
-            headerList.add(header);
-        }
-        return headerList.toArray(new Header[headerList.size()]);
-    }
-
-    public static Map<String, String> genHeaderMap(org.apache.http.Header[] headers) {
-        Map<String, String> headMap = ObjectUtil.newHashMap();
-        for (Header header : headers) {
-            headMap.put(header.getName(), header.getValue());
-        }
-        return headMap;
     }
 
     public static String replaceBlank(String str) {

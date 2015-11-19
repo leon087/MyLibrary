@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -15,6 +16,15 @@ public class BaseDao {
     protected Uri contentUri;
 
     protected String[] projection;
+
+    public void register(Context context, ContentObserver observer) {
+        context.getContentResolver()
+                .registerContentObserver(contentUri, true, observer);
+    }
+
+    public void unregister(Context context, ContentObserver observer) {
+        context.getContentResolver().unregisterContentObserver(observer);
+    }
 
     public BaseDao(Uri uri, String[] projection, Context context) {
         resolver = context.getContentResolver();
@@ -70,9 +80,7 @@ public class BaseDao {
                 insert(values);
             }
         } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+            DBUtil.closeQuietly(cursor);
         }
     }
 

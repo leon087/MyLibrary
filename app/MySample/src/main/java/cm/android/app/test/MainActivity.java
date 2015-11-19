@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import cm.android.app.core.MyManager;
+import cm.android.app.dm.PolicyManagerImpl;
 import cm.android.framework.core.ServiceManager;
-
 
 public class MainActivity extends Activity {
 
@@ -23,6 +23,8 @@ public class MainActivity extends Activity {
                 startService(new Intent(MyManager.getAppContext(), TestService1.class));
             }
         });
+
+        PolicyManagerImpl.getInstance(this).checkActive();
     }
 
     @Override

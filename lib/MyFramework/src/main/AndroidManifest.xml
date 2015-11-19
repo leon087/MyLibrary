@@ -14,9 +14,10 @@
 
     <application>
         <service android:name="cm.android.framework.core.daemon.DaemonService"
-                 android:persistent="true" android:exported="false" android:stopWithTask="false"
+                 android:persistent="true" android:exported="true" android:stopWithTask="false"
                  android:process=":framework"
-                 android:permission="cm.android.framework"/>
+                 />
+        <!--android:permission="cm.android.framework"-->
 
         <receiver android:name="cm.android.framework.core.daemon.DaemonReceiver"
                   android:process=":framework">

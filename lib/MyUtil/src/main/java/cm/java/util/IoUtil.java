@@ -159,7 +159,9 @@ public class IoUtil {
         };
         CmdExecute.exec(cmd);
 
-        if (!file.exists()) {
+        boolean exist = file.exists();
+        logger.info("file.exists() = ", exist);
+        if (!exist) {
             return true;
         }
 

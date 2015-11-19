@@ -10,4 +10,6 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
+    <string name="device_des">正常使用MDM产品，请点击激活。</string>
+
 </resources>

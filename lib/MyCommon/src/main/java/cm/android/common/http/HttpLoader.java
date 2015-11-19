@@ -2,7 +2,6 @@ package cm.android.common.http;
 
 import com.loopj.android.http.RequestParams;
 
-import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,8 +10,6 @@ import android.support.v4.util.LruCache;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -20,7 +17,6 @@ import cm.android.common.cache.core.CacheLoader;
 import cm.android.common.cache.disk.cache.HttpCache;
 import cm.android.common.cache.disk.entry.HttpCacheEntry;
 import cm.android.util.EnvironmentUtil;
-import cm.java.util.ObjectUtil;
 import cm.java.util.Utils;
 import cz.msebera.android.httpclient.Header;
 
@@ -74,7 +70,7 @@ public class HttpLoader {
                     String content = entry.getContent();
                     if (!Utils.isEmpty(content)) {
                         byte[] responseBytes = content.getBytes();
-                        Header[] headers = genHeader(entry.getHeaders());
+                        Header[] headers = HttpUtil.genHeader(entry.getHeaders());
                         T responseMap = httpHandler.parseResponse(headers,
                                 responseBytes);
                         if (null != responseMap) {
@@ -103,16 +99,6 @@ public class HttpLoader {
         }
 
         HttpUtil.exec(null, "", url, header, (RequestParams) null, httpHandler);
-    }
-
-    public static Header[] genHeader(Map<String, String> map) {
-        Set<Entry<String, String>> set = map.entrySet();
-        List<org.apache.http.Header> headerList = ObjectUtil.newArrayList();
-        for (Entry<String, String> entry : set) {
-            org.apache.http.Header header = new BasicHeader(entry.getKey(), entry.getValue());
-            headerList.add(header);
-        }
-        return headerList.toArray(new Header[headerList.size()]);
     }
 
     public static void saveCache(String key, HttpCacheEntry value) {

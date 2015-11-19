@@ -13,11 +13,4 @@ public class NetworkUtilTest extends InstrumentationTestCase {
 
         assertEquals(true, result);
     }
-
-    // sim卡是否可读
-    public void testIsSimReady() {
-        Context context = getInstrumentation().getContext();//在有sim卡中的手机测试
-        boolean temp = NetworkUtil.isSimReady(context);
-        assertEquals(temp, true);
-    }
 }

@@ -5,8 +5,11 @@ import android.test.InstrumentationTestCase;
 public class CmdExecuteTest extends InstrumentationTestCase {
 
     public void testExec() throws Exception {
-        String temp = CmdExecute.exec("cat /proc/cpuinfo");
-        boolean result = temp.equals("");
+        String[] args = new String[]{
+                "cat", "/proc/cpuinfo"
+        };
+        String temp = CmdExecute.exec(args);
+        boolean result = "".equals(temp);
         assertEquals(result, false);
     }
 }

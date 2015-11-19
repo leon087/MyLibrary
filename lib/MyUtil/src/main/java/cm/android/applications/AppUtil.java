@@ -40,9 +40,9 @@ public class AppUtil {
 
         @Override
         public boolean filterApp(ApplicationInfo info) {
-            if ((info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) {
+            if (isSystemUpdateApp(info)) {
                 return true;
-            } else if ((info.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+            } else if (!isSystemApp(info)) {
                 return true;
             }
             return false;
@@ -460,15 +460,20 @@ public class AppUtil {
         return false;
     }
 
-    public static boolean isSystemApp(PackageManager packageManager,
-            String packageName) {
+    public static boolean isSystemUpdateApp(ApplicationInfo applicationInfo) {
+        if (applicationInfo == null) {
+            return false;
+        }
+        return ((applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0);
+    }
+
+    public static boolean isSystemApp(PackageManager packageManager, String packageName) {
         if (Utils.isEmpty(packageName)) {
             return false;
         }
 
         try {
-            ApplicationInfo app = packageManager.getApplicationInfo(
-                    packageName, 0);
+            ApplicationInfo app = packageManager.getApplicationInfo(packageName, 0);
             return AppUtil.isSystemApp(app);
         } catch (NameNotFoundException e) {
             logger.error("packageName = " + packageName, e);

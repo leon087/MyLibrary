@@ -37,9 +37,28 @@ public final class DaemonService extends PersistentService {
 
         if (ACTION_START.equals(action)) {
             DaemonManager.getInstance().startDaemon(this);
+            //开启守护进程
+            Daemon.startDaemon(this, DaemonService.class, Daemon.INTERVAL_ONE_MINUTE);
+
+//            final Context context = this;
+//            //测试功能
+//            Thread thread = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        Thread.sleep(60000L);
+//                        Daemon.stopDaemon(context, DaemonService.class, Daemon.INTERVAL_ONE_MINUTE);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//            thread.start();
+
         } else if (ACTION_STOP.equals(action)) {
             DaemonManager.getInstance().stopDaemon(this);
             stopSelf();
+            Daemon.stopDaemon(this, DaemonService.class, Daemon.INTERVAL_ONE_MINUTE);
         }
     }
 

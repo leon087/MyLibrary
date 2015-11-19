@@ -361,4 +361,17 @@ public class DeviceUtil {
 
         return getDeviceCid("mmcblk1");
     }
+
+    // sim卡是否可读
+    public static boolean isSimReady(Context context) {
+        try {
+            TelephonyManager mgr = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+
+            return TelephonyManager.SIM_STATE_READY == mgr.getSimState();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return false;
+        }
+    }
 }

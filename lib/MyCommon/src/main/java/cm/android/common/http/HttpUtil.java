@@ -11,13 +11,20 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.util.Patterns;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cm.java.util.ObjectUtil;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.client.CookieStore;
 import cz.msebera.android.httpclient.entity.ByteArrayEntity;
+import cz.msebera.android.httpclient.message.BasicHeader;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 public final class HttpUtil {
 
@@ -213,5 +220,76 @@ public final class HttpUtil {
         }
 
         return "";
+    }
+
+    /**
+     * check the http response data
+     */
+    public static boolean checkResponseEntity(HttpResponse response) {
+        if (response == null) {
+            return false;
+        }
+        if (response.getEntity().getContentLength() == 0
+                || (response.getEntity().getContentType() != null && response
+                .getEntity().getContentType().getValue()
+                .contains("wml"))) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 从登陆的HttpResponse结果中获取JSESSIONID
+     */
+    public static String getSessionID(HttpResponse response) {
+        String sessionID = "";
+        if (response == null) {
+            return sessionID;
+        }
+
+        Header[] headers = response.getHeaders("Set-Cookie");
+        if (headers == null) {
+            return sessionID;
+        }
+        for (Header header : headers) {
+            if (header.getName() != null) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug(header.getName() + " = " + header.getValue());
+                }
+                // Set-Cookie = JSESSIONID=5C50DF19F1DE7BA88B6A30CACEA3A2B6;
+                // Path=/market
+                sessionID = header.getValue().split(";")[0];
+                break;
+            }
+        }
+        return sessionID;
+    }
+
+    public static String encodeURL(String str, String defaultValue) {
+        try {
+            return URLEncoder.encode(str, HTTP.UTF_8);
+        } catch (Exception e) {
+            logger.error("str = " + str, e);
+            return defaultValue;
+        }
+    }
+
+    public static String decodeURL(String str, String defaultValue) {
+        try {
+            return URLDecoder.decode(str, HTTP.UTF_8);
+        } catch (Exception e) {
+            logger.error("str = " + str, e);
+            return defaultValue;
+        }
+    }
+
+    public static Header[] genHeader(Map<String, String> map) {
+        Set<Map.Entry<String, String>> set = map.entrySet();
+        List<Header> headerList = ObjectUtil.newArrayList();
+        for (Map.Entry<String, String> entry : set) {
+            Header header = new BasicHeader(entry.getKey(), entry.getValue());
+            headerList.add(header);
+        }
+        return headerList.toArray(new Header[headerList.size()]);
     }
 }

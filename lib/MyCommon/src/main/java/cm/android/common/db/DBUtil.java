@@ -9,4 +9,11 @@ public class DBUtil {
             cursor.close();
         }
     }
+
+    public static int queryCount(Cursor cursor) {
+        if (cursor != null && cursor.moveToFirst()) {
+            return cursor.getCount();
+        }
+        return 0;
+    }
 }

@@ -103,13 +103,19 @@ public class SystemInfoUtil {
     }
 
     public static String getVersionInfo() {
-        String args = "cat /proc/version";
+//        String args = "cat /proc/version";
+        String[] args = new String[]{
+                "cat", "/proc/version"
+        };
         return CmdExecute.exec(args);
     }
 
     public static String getCpuInfo() {
-        String args = "cat /proc/cpuinfo";
-        return CmdExecute.exec(args);
+//        String args = "cat /proc/cpuinfo";
+        String[] cmd = new String[]{
+                "cat", "/proc/cpuinfo"
+        };
+        return CmdExecute.exec(cmd);
     }
 
     public static String getDiskInfo() {
@@ -133,27 +139,42 @@ public class SystemInfoUtil {
     }
 
     public static String getMountInfo() {
-        String args = "mount";
+//        String args = "mount";
+        String[] args = new String[]{
+                "mount"
+        };
         return CmdExecute.exec(args);
     }
 
     public static String getDumpsysMeminfo(String packageName) {
-        String args = "dumpsys meminfo " + packageName;
+//        String args = "dumpsys meminfo " + packageName;
+        String[] args = new String[]{
+                "dumpsys", "meminfo", packageName
+        };
         return CmdExecute.exec(args);
     }
 
     public static String getDumpsysCpuinfo() {
-        String args = "dumpsys cpuinfo";
+//        String args = "dumpsys cpuinfo";
+        String[] args = new String[]{
+                "dumpsys", "cpuinfo"
+        };
         return CmdExecute.exec(args);
     }
 
     public static String getDumpsysBattery() {
-        String args = "dumpsys battery";
+//        String args = "dumpsys battery";
+        String[] args = new String[]{
+                "dumpsys", "battery"
+        };
         return CmdExecute.exec(args);
     }
 
     public static String getMemoryInfo(Context context) {
-        String args = "cat /proc/meminfo";
+//        String args = "cat /proc/meminfo";
+        String[] args = new String[]{
+                "cat", "/proc/meminfo"
+        };
         return CmdExecute.exec(args);
     }
 
@@ -172,7 +193,7 @@ public class SystemInfoUtil {
     // 直接复制的反编译结果，未整理。
     public static String getTelStatus(Context context) {
         TelephonyManager telephonymanager = (TelephonyManager) context
-                .getSystemService("phone");
+                .getSystemService(Context.TELEPHONY_SERVICE);
         String s = String.valueOf("");
         StringBuilder stringbuilder = (new StringBuilder(s))
                 .append("DeviceId(IMEI) = ");

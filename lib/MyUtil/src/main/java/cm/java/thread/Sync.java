@@ -1,35 +1,42 @@
 package cm.java.thread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Sync<T> extends Object {
+
+    private static final Logger logger = LoggerFactory.getLogger("Sync");
 
     private volatile T result = null;
 
     private volatile boolean completed = false;
 
+    public void reset() {
+        completed = false;
+        result = null;
+    }
+
     public void set(T res) {
-        // log.d("sync.set() called from " + Thread.currentThread().getName());
+        logger.debug("sync.set() called from {}", Thread.currentThread().getName());
         result = res;
         completed = true;
         synchronized (this) {
-            notify();
+            notifyAll();
         }
-        // log.d("sync.set() returned from notify "
-        // + Thread.currentThread().getName());
+        logger.debug("sync.set() returned from notify {}", Thread.currentThread().getName());
     }
 
     public T get(long time) {
-        // log.d("sync.get() called from " + Thread.currentThread().getName());
+        logger.debug("sync.get() called from {}", Thread.currentThread().getName());
         while (!completed) {
             try {
-                // log.d("sync.get() before wait "
-                // + Thread.currentThread().getName());
+                logger.debug("sync.get() before wait {}", Thread.currentThread().getName());
                 synchronized (this) {
                     if (!completed) {
-                        wait(time);
+                        waitInternal(time);
                     }
                 }
-                // log.d("sync.get() after wait wait "
-                // + Thread.currentThread().getName());
+                logger.debug("sync.get() after wait wait {}", Thread.currentThread().getName());
             } catch (InterruptedException e) {
                 // log.d("sync.get() exception", e);
                 // ignore
@@ -38,7 +45,15 @@ public class Sync<T> extends Object {
                 // ignore
             }
         }
-        // log.d("sync.get() returning " + Thread.currentThread().getName());
+        logger.debug("sync.get() returning {}", Thread.currentThread().getName());
         return result;
+    }
+
+    private void waitInternal(long time) throws InterruptedException {
+        if (time <= 0) {
+            wait();
+        } else {
+            wait(time);
+        }
     }
 }

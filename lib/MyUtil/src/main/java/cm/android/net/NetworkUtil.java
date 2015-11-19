@@ -9,9 +9,9 @@ import android.net.NetworkInfo;
 import android.support.v4.net.ConnectivityManagerCompat;
 import android.telephony.TelephonyManager;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import cm.java.util.ObjectProxy;
 
 public class NetworkUtil {
 
@@ -24,19 +24,6 @@ public class NetworkUtil {
         TelephonyManager tm = (TelephonyManager) context
                 .getSystemService(Context.TELEPHONY_SERVICE);
         return tm.getNetworkType();
-    }
-
-    // sim卡是否可读
-    public static boolean isSimReady(Context context) {
-        try {
-            TelephonyManager mgr = (TelephonyManager) context
-                    .getSystemService(Context.TELEPHONY_SERVICE);
-
-            return TelephonyManager.SIM_STATE_READY == mgr.getSimState();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     /**
@@ -208,36 +195,59 @@ public class NetworkUtil {
      * <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
      * <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
      * <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+     * <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
      */
     public static void setMobileDataEnabled(Context context, boolean enabled) {
-        final ConnectivityManager conman = (ConnectivityManager) context
+        final ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        Field iConnectivityManagerField;
-        try {
-            final Class conmanClass = Class.forName(conman.getClass().getName());
-            iConnectivityManagerField = conmanClass.getDeclaredField("mService");
-            iConnectivityManagerField.setAccessible(true);
-            final Object iConnectivityManager = iConnectivityManagerField.get(conman);
-            final Class iConnectivityManagerClass = Class
-                    .forName(iConnectivityManager.getClass().getName());
-            final Method setMobileDataEnabledMethod = iConnectivityManagerClass
-                    .getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
-            setMobileDataEnabledMethod.setAccessible(true);
-            setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
-        } catch (SecurityException e) {
-            logger.error("", e);
-        } catch (NoSuchFieldException e) {
-            logger.error("", e);
-        } catch (ClassNotFoundException e) {
-            logger.error("", e);
-        } catch (IllegalArgumentException e) {
-            logger.error("", e);
-        } catch (IllegalAccessException e) {
-            logger.error("", e);
-        } catch (NoSuchMethodException e) {
-            logger.error("", e);
-        } catch (InvocationTargetException e) {
-            logger.error("", e);
+
+        ObjectProxy proxy = new ObjectProxy(cm);
+        Method setMobileDataEnabledMethod = proxy
+                .getMethod("setMobileDataEnabled", Boolean.TYPE);
+        if (setMobileDataEnabledMethod != null) {
+            proxy.doMethod(setMobileDataEnabledMethod, enabled);
         }
+
+//            Object iConnectivityManager = ReflectUtil.getFieldValue(conman, "mService");
+//        Field iConnectivityManagerField;
+//        try {
+//            final Class conmanClass = Class.forName(conman.getClass().getName());
+//            iConnectivityManagerField = conmanClass.getDeclaredField("mService");
+//            iConnectivityManagerField.setAccessible(true);
+//            final Object iConnectivityManager = iConnectivityManagerField.get(conman);
+//
+//            final Class iConnectivityManagerClass = Class
+//                    .forName(iConnectivityManager.getClass().getName());
+//            final Method setMobileDataEnabledMethod = iConnectivityManagerClass
+//                    .getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
+//            setMobileDataEnabledMethod.setAccessible(true);
+//            setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
+//        } catch (SecurityException e) {
+//            logger.error("", e);
+//        } catch (NoSuchFieldException e) {
+//            logger.error("", e);
+//        } catch (ClassNotFoundException e) {
+//            logger.error("", e);
+//        } catch (IllegalArgumentException e) {
+//            logger.error("", e);
+//        } catch (IllegalAccessException e) {
+//            logger.error("", e);
+//        } catch (NoSuchMethodException e) {
+//            logger.error("", e);
+//        } catch (InvocationTargetException e) {
+//            logger.error("", e);
+//        }
+    }
+
+    public static boolean getMobileDataEnabled(Context context) {
+        final ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        ObjectProxy proxy = new ObjectProxy(cm);
+        Method getMobileDataEnabledMethod = proxy.getMethod("getMobileDataEnabled");
+        if (getMobileDataEnabledMethod != null) {
+            return proxy.doMethod(getMobileDataEnabledMethod);
+        }
+        return true;
     }
 }

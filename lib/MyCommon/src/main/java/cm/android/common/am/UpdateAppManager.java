@@ -35,7 +35,7 @@ public class UpdateAppManager {
                 return;
             }
 
-            sendMsg();
+            sendMsg(PERIOD);
             request();
         }
     };
@@ -100,15 +100,15 @@ public class UpdateAppManager {
         this.asynRequest = defaultAsynRequest;
     }
 
-    private void sendMsg() {
+    private void sendMsg(long delay) {
         if (!taskHandler.getHandler().hasMessages(0)) {
-            taskHandler.getHandler().sendEmptyMessageDelayed(0, PERIOD);
+            taskHandler.getHandler().sendEmptyMessageDelayed(0, delay);
         }
     }
 
     void initSucceed() {
         if (initFlag.get()) {
-            sendMsg();
+            sendMsg(0);
         }
     }
 
