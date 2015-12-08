@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import cm.android.sdk.PersistentService;
 import cm.android.sdk.WakeLockUtil;
@@ -20,6 +21,7 @@ public final class DaemonService extends PersistentService {
 
     public static final String ACTION_STOP = "cm.android.framework.intent.action.DAEMON_STOP";
 
+    private PowerManager.WakeLock lock;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,9 +38,10 @@ public final class DaemonService extends PersistentService {
         logger.info("intent = " + intent);
 
         if (ACTION_START.equals(action)) {
+            logger.info("start daemon");
             DaemonManager.getInstance().startDaemon(this);
             //开启守护进程
-            Daemon.startDaemon(this, DaemonService.class, Daemon.INTERVAL_ONE_MINUTE);
+            Daemon.startDaemon(this, DaemonService.class, Daemon.INTERVAL_ON_SECOND);
 
 //            final Context context = this;
 //            //测试功能
@@ -46,7 +49,7 @@ public final class DaemonService extends PersistentService {
 //                @Override
 //                public void run() {
 //                    try {
-//                        Thread.sleep(60000L);
+//                        Thread.sleep(40000);
 //                        Daemon.stopDaemon(context, DaemonService.class, Daemon.INTERVAL_ONE_MINUTE);
 //                    } catch (InterruptedException e) {
 //                        e.printStackTrace();
@@ -57,14 +60,15 @@ public final class DaemonService extends PersistentService {
 
         } else if (ACTION_STOP.equals(action)) {
             DaemonManager.getInstance().stopDaemon(this);
+            Daemon.stopDaemon(this, DaemonService.class, Daemon.INTERVAL_ON_SECOND);
             stopSelf();
-            Daemon.stopDaemon(this, DaemonService.class, Daemon.INTERVAL_ONE_MINUTE);
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+//        lock = WakeLockUtil.acquire(this, "daemon");
         daemonReceiver.register(this);
         logger.info("DaemonService:onCreate");
     }
@@ -72,6 +76,7 @@ public final class DaemonService extends PersistentService {
     @Override
     public void onDestroy() {
         daemonReceiver.unregister(this);
+//        WakeLockUtil.release(lock);
         super.onDestroy();
         logger.info("DaemonService:onDestroy");
     }

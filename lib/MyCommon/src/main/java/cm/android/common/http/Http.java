@@ -4,6 +4,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SyncHttpClient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,20 +27,33 @@ import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
-public final class HttpUtil {
+public final class Http {
 
     private static final Logger logger = LoggerFactory.getLogger("HTTP");
 
-    private final static AsyncHttpClient client = new AsyncHttpClient();
+    private AsyncHttpClient client;
 
-    private HttpUtil() {
+    private Http(AsyncHttpClient client) {
+        this.client = client;
+        HttpConfig.initConfig(this.client);
     }
 
-    static {
-        HttpConfig.initConfig(client);
+    private static final class Singleton {
+
+        private static final Http INSTANCE = new Http(new AsyncHttpClient());
+
+        private static final Http INSTANCE_SYNC = new Http(new SyncHttpClient());
     }
 
-    public static void setURLEncodingEnabled(boolean enable) {
+    public static Http getAsync() {
+        return Singleton.INSTANCE;
+    }
+
+    public static Http getSync() {
+        return Singleton.INSTANCE_SYNC;
+    }
+
+    public void setURLEncodingEnabled(boolean enable) {
         client.setURLEncodingEnabled(enable);
     }
 
@@ -47,21 +61,21 @@ public final class HttpUtil {
 //        client.cancelRequests(context, true);
 //    }
 
-    public static void cancel(String tag) {
+    public void cancel(String tag) {
         client.cancelRequestsByTAG(tag, true);
     }
 
-    public static void cancelAll() {
+    public void cancelAll() {
         client.cancelAllRequests(true);
     }
 
-    public static <T> void exec(Context context, String tag, String url, Header[] headers,
+    public <T> void exec(Context context, String tag, String url, Header[] headers,
             RequestParams params, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
         exec(context, tag, url, headers, params, responseHandler);
     }
 
-    public static void exec(Context context, String tag, String url, Header[] headers,
+    public void exec(Context context, String tag, String url, Header[] headers,
             RequestParams params, AsyncHttpResponseHandler responseHandler) {
         responseHandler.setTag(tag);
 
@@ -102,13 +116,13 @@ public final class HttpUtil {
 //        }
 //    }
 
-    public static <T> void exec(Context context, String tag, String url, Header[] header,
+    public <T> void exec(Context context, String tag, String url, Header[] header,
             byte[] data, HttpListener<T> httpListener) {
         MyDataResponseHandler<T> responseHandler = new MyDataResponseHandler<T>(httpListener);
         exec(context, tag, url, header, data, responseHandler);
     }
 
-    public static void exec(Context context, String tag, String url, Header[] header, byte[] data,
+    public void exec(Context context, String tag, String url, Header[] header, byte[] data,
             AsyncHttpResponseHandler responseHandler) {
         responseHandler.setTag(tag);
 
@@ -129,28 +143,28 @@ public final class HttpUtil {
     /**
      * 设置Cookie，之后从Server获取到的cookies将被保存至PersistentCookieStore
      */
-    public static void setCookieStore(Context context) {
+    public void setCookieStore(Context context) {
         PersistentCookieStore myCookieStore = new PersistentCookieStore(context);
         setCookieStore(myCookieStore);
     }
 
-    public static void setCookieStore(CookieStore cookieStore) {
+    public void setCookieStore(CookieStore cookieStore) {
         client.setCookieStore(cookieStore);
     }
 
-    public static void setUserAgent(String userAgent) {
+    public void setUserAgent(String userAgent) {
         client.setUserAgent(userAgent);
     }
 
-    public static void addHeader(String header, String value) {
+    public void addHeader(String header, String value) {
         client.addHeader(header, value);
     }
 
-    public static void removeHeader(String header) {
+    public void removeHeader(String header) {
         client.removeHeader(header);
     }
 
-    public static void setProxy(String hostname, int port) {
+    public void setProxy(String hostname, int port) {
         client.setProxy(hostname, port);
     }
 

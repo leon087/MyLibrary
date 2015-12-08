@@ -11,7 +11,7 @@ public class BuildConfigUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(BuildConfigUtil.class);
 
-    public static Object getBuildConfigValue(Context context, String fieldName) {
+    public static <T> T getBuildConfigValue(Context context, String fieldName, T defValue) {
         try {
             Class<?> clazz = Class.forName(context.getPackageName() + ".BuildConfig");
             return ReflectUtil.getStaticFieldValue(clazz, fieldName);
@@ -23,14 +23,11 @@ public class BuildConfigUtil {
             logger.error(e.getMessage(), e);
         }
 
-        return null;
+        return defValue;
     }
 
     public static boolean isDebug(Context context) {
-        Object obj = getBuildConfigValue(context, "DEBUG");
-        if (obj == null) {
-            return false;
-        }
-        return (Boolean) obj;
+        Boolean debug = getBuildConfigValue(context, "DEBUG", false);
+        return debug;
     }
 }

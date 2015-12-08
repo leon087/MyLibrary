@@ -9,15 +9,17 @@ import java.io.File;
 import java.io.IOException;
 
 public class Daemon {
+
     private static final Logger logger = LoggerFactory.getLogger("Daemon");
 
     private static final String BIN_DIR_NAME = "bin";
 
     private static final String DAEMON_BIN_NAME = "daemon";
 
-    public static final int INTERVAL_ONE_MINUTE = 60;
-
-    public static final int INTERVAL_ONE_HOUR = 3600;
+    /**
+     * 一小时
+     */
+    public static final int INTERVAL_ON_SECOND = 60 * 60;
 
     private static final int MODE_RUN = 0;
 

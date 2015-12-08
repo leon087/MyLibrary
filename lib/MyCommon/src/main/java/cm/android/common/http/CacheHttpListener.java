@@ -26,7 +26,7 @@ public abstract class CacheHttpListener<T> extends MyJsonHttpListener<T> {
         // Map<String, Object> responseMap = JSON.parseObject(
         // responseBody.getBytes(), Map.class);
 
-        Map<String, String> headMap = HttpUtil.genHeaderMap(headers);
+        Map<String, String> headMap = Http.genHeaderMap(headers);
 
         // 保存缓存
         cacheHolder.saveCache(headMap, responseBytes);

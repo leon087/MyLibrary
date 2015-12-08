@@ -28,7 +28,7 @@ public class MyHttp {
     }
 
     public void cancel() {
-        HttpUtil.cancel(tag);
+        Http.getAsync().cancel(tag);
     }
 
     public <T> void exec(String url, RequestParams params, HttpListener<T> httpHandler) {
@@ -37,12 +37,12 @@ public class MyHttp {
 
     public <T> void exec(String url, Header[] headers, RequestParams params,
             HttpListener<T> httpListener) {
-        HttpUtil.exec(context.get(), tag, url, headers, params, httpListener);
+        Http.getAsync().exec(context.get(), tag, url, headers, params, httpListener);
     }
 
     public void exec(String url, Header[] headers, RequestParams params,
             AsyncHttpResponseHandler responseHandler) {
-        HttpUtil.exec(context.get(), tag, url, headers, params, responseHandler);
+        Http.getAsync().exec(context.get(), tag, url, headers, params, responseHandler);
     }
 
     public <T> void exec(String url, byte[] data, HttpListener<T> httpListener) {
@@ -50,11 +50,11 @@ public class MyHttp {
     }
 
     public <T> void exec(String url, Header[] header, byte[] data, HttpListener<T> httpListener) {
-        HttpUtil.exec(context.get(), tag, url, header, data, httpListener);
+        Http.getAsync().exec(context.get(), tag, url, header, data, httpListener);
     }
 
     public void exec(String url, Header[] header, byte[] data,
             AsyncHttpResponseHandler responseHandler) {
-        HttpUtil.exec(context.get(), tag, url, header, data, responseHandler);
+        Http.getAsync().exec(context.get(), tag, url, header, data, responseHandler);
     }
 }

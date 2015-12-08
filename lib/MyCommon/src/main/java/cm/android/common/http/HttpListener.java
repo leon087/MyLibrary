@@ -20,7 +20,7 @@ public abstract class HttpListener<T> {
 
     void onSuccess(int statusCode, Header[] headers, byte[] responseBytes,
             T responseMap) {
-        Map<String, String> headMap = HttpUtil.genHeaderMap(headers);
+        Map<String, String> headMap = Http.genHeaderMap(headers);
         onSuccess(statusCode, headMap, responseBytes, responseMap);
     }
 

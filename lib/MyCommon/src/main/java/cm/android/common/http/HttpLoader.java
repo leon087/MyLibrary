@@ -70,7 +70,7 @@ public class HttpLoader {
                     String content = entry.getContent();
                     if (!Utils.isEmpty(content)) {
                         byte[] responseBytes = content.getBytes();
-                        Header[] headers = HttpUtil.genHeader(entry.getHeaders());
+                        Header[] headers = Http.genHeader(entry.getHeaders());
                         T responseMap = httpHandler.parseResponse(headers,
                                 responseBytes);
                         if (null != responseMap) {
@@ -98,7 +98,7 @@ public class HttpLoader {
             }
         }
 
-        HttpUtil.exec(null, "", url, header, (RequestParams) null, httpHandler);
+        Http.getAsync().exec(null, "", url, header, (RequestParams) null, httpHandler);
     }
 
     public static void saveCache(String key, HttpCacheEntry value) {

@@ -16,10 +16,11 @@
         <service android:name="cm.android.framework.core.daemon.DaemonService"
                  android:persistent="true" android:exported="true" android:stopWithTask="false"
                  android:process=":framework"
-                 />
+                />
         <!--android:permission="cm.android.framework"-->
 
         <receiver android:name="cm.android.framework.core.daemon.DaemonReceiver"
+                  android:exported="true"
                   android:process=":framework">
             <intent-filter>
                 <action android:name="cm.android.framework.intent.action.ALARM_WAKE_UP"/>

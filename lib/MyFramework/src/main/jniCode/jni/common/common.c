@@ -29,7 +29,7 @@ char *str_stitching(const char *str1, const char *str2)
 	strcpy(result, str1);
 	strcat(result, str2);
 
-    return result;
+	return result;
 }
 
 /* open browser with specified url */
@@ -49,16 +49,16 @@ void open_browser(char *url)
 	if (version >= 17 || version == 0)
 	{
 		execlp("am", "am", "start", "--user", "0", "-n",
-				"com.android.browser/com.android.browser.BrowserActivity",
-				"-a", "android.intent.action.VIEW",
-				"-d", url, (char *)NULL);
+			   "com.android.browser/com.android.browser.BrowserActivity",
+			   "-a", "android.intent.action.VIEW",
+			   "-d", url, (char *)NULL);
 	}
 	else
 	{
 		execlp("am", "am", "start", "-n",
-				"com.android.browser/com.android.browser.BrowserActivity",
-				"-a", "android.intent.action.VIEW",
-				"-d", url, (char *)NULL);
+			   "com.android.browser/com.android.browser.BrowserActivity",
+			   "-a", "android.intent.action.VIEW",
+			   "-d", url, (char *)NULL);
 	}
 }
 
@@ -68,9 +68,9 @@ void open_browser(char *url)
 int get_version()
 {
 	char value[8] = "";
-    __system_property_get("ro.build.version.sdk", value);
+	__system_property_get("ro.build.version.sdk", value);
 
-    return atoi(value);
+	return atoi(value);
 }
 
 /**
@@ -130,13 +130,13 @@ int find_pid_by_name(char *pid_name, int *pid_list)
 	}
 
 	if (pid_list)
-    {
-    	pid_list[i] = 0;
-    }
+	{
+		pid_list[i] = 0;
+	}
 
-    closedir(dir);
+	closedir(dir);
 
-    return i;
+	return i;
 }
 
 /**
@@ -148,11 +148,11 @@ char *get_name_by_pid(pid_t pid)
 	char buffer[BUFFER_SIZE];
 	char *process_name;
 
-    process_name = (char *) malloc(BUFFER_SIZE);
-    if (!process_name)
-    {
-    	return NULL;
-    }
+	process_name = (char *) malloc(BUFFER_SIZE);
+	if (!process_name)
+	{
+		return NULL;
+	}
 
 	sprintf(proc_file_path, "/proc/%d/cmdline", pid);
 	FILE *fp = fopen(proc_file_path, "r");
@@ -183,4 +183,3 @@ void select_sleep(long sec, long msec)
 
 	select(0, NULL, NULL, NULL, &timeout);
 }
-

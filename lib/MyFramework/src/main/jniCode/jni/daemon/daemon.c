@@ -13,31 +13,34 @@
 #include "common.h"
 
 #define LOG_TAG         "Daemon"
-#define MAXFILE         3
+#define	MAXFILE         3
 #define SLEEP_INTERVAL  2 * 60
 
 volatile int sig_running = 1;
 
 /* signal term handler */
-static void sigterm_handler(int signo) {
+static void sigterm_handler(int signo)
+{
     LOGI("handle signal: %d ", signo);
     sig_running = 0;
 }
 
-/**
- * 创建子进程来重启service
- */
-static void start_service(char *package_name, char *service_name) {
+/* start daemon service */
+static void start_service(char *package_name, char *service_name)
+{
     /* get the sdk version */
     int version = get_version();
 
     pid_t pid;
 
-    if ((pid = fork()) < 0) {
+    if ((pid = fork()) < 0)
+    {
         exit(EXIT_SUCCESS);
-    } else if (pid == 0) {
-        //子进程执行
-        if (package_name == NULL || service_name == NULL) {
+    }
+    else if (pid == 0)
+    {
+        if (package_name == NULL || service_name == NULL)
+        {
             LOGI("package name or service name is null");
             return;
         }
@@ -46,18 +49,22 @@ static void start_service(char *package_name, char *service_name) {
         char *s_name = str_stitching(p_name, service_name);
         LOGI("service: %s", s_name);
 
-        if (version >= 17 || version == 0) {
+        if (version >= 17 || version == 0)
+        {
             int ret = execlp("am", "am", "startservice",
                              "--user", "0", "-n", s_name, (char *) NULL);
             LOGI("result %d", ret);
-        } else {
+        }
+        else
+        {
             execlp("am", "am", "startservice", "-n", s_name, (char *) NULL);
         }
 
         LOGI("exit start-service child process");
         exit(EXIT_SUCCESS);
-    } else {
-        //父进程等待子进程执行结束再返回
+    }
+    else
+    {
         waitpid(pid, NULL, 0);
     }
 }
@@ -72,7 +79,7 @@ void cleanProcess(char *processName) {
         int retval = 0;
         int daemon_pid = pid_list[i];
         if (daemon_pid > 1 && daemon_pid != getpid()) {
-            retval = kill(daemon_pid, SIGTERM);
+            retval = kill(daemon_pid, SIGKILL);
             if (!retval) {
                 LOGI("kill daemon process success: %d", daemon_pid);
             } else {
@@ -83,7 +90,8 @@ void cleanProcess(char *processName) {
     }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int i;
     pid_t pid;
     char *package_name = NULL;
@@ -131,64 +139,72 @@ int main(int argc, char *argv[]) {
     }
 
     /* package name and service name should not be null */
-    if (package_name == NULL || service_name == NULL) {
+    if (package_name == NULL || service_name == NULL)
+    {
         LOGI("package name or service name is null");
         return;
     }
 
-    if ((pid = fork()) < 0) {
+    if ((pid = fork()) < 0)
+    {
         exit(EXIT_SUCCESS);
-    } else if (pid == 0) {
-        LOGI("child process");
+    }
+    else if (pid == 0)
+    {
         /* add signal */
-        signal(SIGTERM, sigterm_handler);
+        signal(SIGKILL, sigterm_handler);
 
         /* become session leader */
         setsid();
         /* change work directory */
         chdir("/");
 
-        for (i = 0; i < MAXFILE; i++) {
+        for (i = 0; i < MAXFILE; i ++)
+        {
             close(i);
         }
 
         /* find pid by name and kill them */
-//        int pid_list[100];
-//        int total_num = find_pid_by_name(argv[0], pid_list);
-//        LOGI("total num %d", total_num);
-//        for (i = 0; i < total_num; i++) {
-//            int retval = 0;
-//            int daemon_pid = pid_list[i];
-//            if (daemon_pid > 1 && daemon_pid != getpid()) {
-//                retval = kill(daemon_pid, SIGTERM);
-//                if (!retval) {
-//                    LOGI("kill daemon process success: %d", daemon_pid);
-//                }
-//                else {
-//                    LOGI("kill daemon process %d fail: %s", daemon_pid, strerror(errno));
-//                    exit(EXIT_SUCCESS);
-//                }
-//            }
-//        }
-        cleanProcess(argv[0]);
+//		int pid_list[100];
+//		int total_num = find_pid_by_name(argv[0], pid_list);
+//		LOGD(LOG_TAG, "total num %d", total_num);
+//		for (i = 0; i < total_num; i ++)
+//		{
+//			int retval = 0;
+//			int daemon_pid = pid_list[i];
+//			if (daemon_pid > 1 && daemon_pid != getpid())
+//			{
+//				retval = kill(daemon_pid, SIGTERM);
+//				if (!retval)
+//				{
+//					LOGD(LOG_TAG, "kill daemon process success: %d", daemon_pid);
+//				}
+//				else
+//				{
+//					LOGD(LOG_TAG, "kill daemon process %d fail: %s", daemon_pid, strerror(errno));
+//					exit(EXIT_SUCCESS);
+//				}
+//			}
+//		}
 
+        cleanProcess(argv[0]);
         LOGI("child process fork ok, daemon start: %d", getpid());
 
-        while (sig_running) {
+        while(sig_running)
+        {
             interval = interval < SLEEP_INTERVAL ? SLEEP_INTERVAL : interval;
             select_sleep(interval, 0);
 
             LOGI("check the service once, interval: %d", interval);
 
-            /* start service 检查到父进程已经挂了*/
-            pid_t ppid = getppid();
-            if (ppid == 1) {
-                start_service(package_name, service_name);
-            }
+            /* start service */
+            start_service(package_name, service_name);
         }
+
         exit(EXIT_SUCCESS);
-    } else {
-        LOGI("parent process");
+    }
+    else
+    {
         /* parent process */
         exit(EXIT_SUCCESS);
     }

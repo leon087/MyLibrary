@@ -566,6 +566,7 @@ public class IoUtil {
         try {
             GZIPOutputStream gos = new GZIPOutputStream(os);
             write(is, gos);
+            gos.finish();
             return true;
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
