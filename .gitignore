@@ -10,3 +10,10 @@ build
 .DS_Store
 *.iml
 local.properties
+
+
+MyCommonDemo
+MyTool
+PhoneGuard
+MyCommonExt
+MyCommonUI
