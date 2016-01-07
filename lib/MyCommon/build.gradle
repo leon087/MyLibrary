@@ -1,10 +1,11 @@
 tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
+apply plugin: 'maven'
+//apply plugin: 'maven-publish'
+
 apply plugin: 'com.android.library'
 //apply from: '../../ext-android.gradle'
 apply from: "$rootDir/ext-android.gradle"
-
-version = project.versionName
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -14,4 +15,20 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'cz.msebera.android:httpclient:4.3.6'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: RELEASE_REPOSITORY_URL) {
+            authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+        }
+//        snapshotRepository(url: "http://xxx.xxx.xxx.xx:8080/content/repositories/snapshots") {
+//            authentication(userName: "xxxx", password: "xxxx")
+//        }
+        pom.version = versionName + "." + versionCode
+        pom.artifactId = POM_ARTIFACT_ID
+        pom.groupId = GROUP
+        pom.name = POM_NAME
+        pom.packaging = POM_PACKAGING
+    }
 }

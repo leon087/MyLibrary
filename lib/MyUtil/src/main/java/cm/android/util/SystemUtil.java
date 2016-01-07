@@ -60,9 +60,10 @@ public class SystemUtil {
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> list = am
                 .getRunningAppProcesses();
-        if (list != null && list.isEmpty()) {
+        if (Utils.isEmpty(list)) {
             return false;
         }
+
         for (ActivityManager.RunningAppProcessInfo process : list) {
             if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
                     && process.processName.equals(ctx.getPackageName())) {
@@ -79,7 +80,7 @@ public class SystemUtil {
      * @param processName 该service所在进程名
      */
     public static boolean isServiceRunning(Context ctx, String serviceName,
-            String processName) {
+                                           String processName) {
         ActivityManager manager = (ActivityManager) ctx
                 .getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager
@@ -132,7 +133,7 @@ public class SystemUtil {
 
     @TargetApi(5)
     public static Debug.MemoryInfo getRunningProcessMemoryInfo(Context context,
-            String packageName) {
+                                                               String packageName) {
         ActivityManager am = (ActivityManager) context
                 .getSystemService(Context.ACTIVITY_SERVICE);
         List<RunningAppProcessInfo> list2 = am.getRunningAppProcesses();

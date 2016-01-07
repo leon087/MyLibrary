@@ -1,32 +1,42 @@
 package cm.java.thread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 public abstract class Task<V> implements Runnable, Callable<V> {
+    private volatile int state;
+    //    private static final int IDLE = 0;
+    private static final int NORMAL = 0;
+    //    private static final int WORK = 1;
+    private static final int CANCELLED = 2;
 
-    private FutureTask task = null;
+    private static final Logger logger = LoggerFactory.getLogger("thread");
 
     public Task() {
-        task = new FutureTask<V>(this);
-//        task = new FutureTask<V>(this, null);
     }
 
     @Override
     public final void run() {
-        task.run();
+        reset();
+        try {
+            call();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    public final void reset() {
+        state = NORMAL;
     }
 
     public final void cancel() {
-        task.cancel(true);
+        state = CANCELLED;
     }
 
     public final boolean isCancelled() {
-        return task.isCancelled();
-    }
-
-    public final boolean isDone() {
-        return task.isDone();
+        return state == CANCELLED;
     }
 
 //    @Override

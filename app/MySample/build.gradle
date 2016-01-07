@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply from: "$rootDir/ext-android.gradle"
 
-def getKeyStore(def propertyFile, def storeFile) {
-    if (propertyFile == null || storeFile == "") {
+def getKeyStore(def propertyFile) {
+    if (propertyFile == null) {
         return 'debug'
     }
 
@@ -15,11 +15,10 @@ def getKeyStore(def propertyFile, def storeFile) {
         ins.close();
         project.android.signingConfigs {
             "$signingConfig" {
-                storeFile = new File(storeFile);
+                storeFile = new File(props.getProperty('storeFile'));
                 storePassword = props.getProperty('storePassword');
                 keyAlias = props.getProperty('keyAlias');
                 keyPassword = props.getProperty('keyPassword');
-//                System.out.println(props.getProperty('storeFile') + '   ');
             }
         }
         return "$signingConfig";
@@ -50,8 +49,7 @@ android {
             shrinkResources true
             zipAlignEnabled true
 
-            signingConfig signingConfigs.(
-                    getKeyStore(project.propertyFile_release, project.storeFile_release))
+            signingConfig signingConfigs.(getKeyStore(project.jks_properties))
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),

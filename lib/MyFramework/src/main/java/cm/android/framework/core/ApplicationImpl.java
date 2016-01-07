@@ -45,7 +45,7 @@ final class ApplicationImpl {
     }
 
     void appInit(Context context, ServiceManager.AppConfig appConfig,
-            Class<? extends IServiceManager> serviceClass) {
+                 Class<? extends IServiceManager> serviceClass) {
         if (appContext != null) {
             logger.error(
                     "old.appContext = {},old.processName = {},new.context = {},new.processName = {}",
@@ -272,7 +272,7 @@ final class ApplicationImpl {
 
             try {
                 serviceBinder.destroy();
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
         }

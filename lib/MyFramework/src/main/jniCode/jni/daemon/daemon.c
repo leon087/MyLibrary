@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     char *service_name = NULL;
     char *daemon_file_dir = NULL;
     int interval = SLEEP_INTERVAL;
-    int mode = 0;  // 0£º´´½¨×Ó½ø³Ì  1£ºÉ±ËÀ×Ó½ø³Ì
+    int mode = 0;  // 0ï¼šåˆ›å»ºå­è¿›ç¨‹  1ï¼šæ€æ­»å­è¿›ç¨‹
 
     if (argc < 9) {
         LOGI("usage: %s -p package-name -s "
@@ -108,32 +108,32 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < argc; i++) {
         LOGI("argv %d = %s", i, argv[i]);
-        //°üÃû
+        //åŒ…å
         if (!strcmp("-p", argv[i])) {
             package_name = argv[i + 1];
             LOGI("package name: %s", package_name);
         }
 
-        //·şÎñÃû
+        //æœåŠ¡å
         if (!strcmp("-s", argv[i])) {
             service_name = argv[i + 1];
             LOGI("service name: %s", service_name);
         }
 
-        //ÂÖÑ¯¼ä¸ô
+        //è½®è¯¢é—´éš”
         if (!strcmp("-t", argv[i])) {
             interval = atoi(argv[i + 1]);
             LOGI("interval: %d", interval);
         }
 
-        //´´½¨×Ó½ø³Ì»òÕßÉ±ËÀ×Ó½ø³Ì
+        //åˆ›å»ºå­è¿›ç¨‹æˆ–è€…æ€æ­»å­è¿›ç¨‹
         if (!strcmp("-m", argv[i])) {
             mode = atoi(argv[i + 1]);
             LOGI("mode: %d", mode);
         }
     }
     if (mode == 1) {
-        // É±ËÀËùÓĞ×Ó½ø³Ì
+        // æ€æ­»æ‰€æœ‰å­è¿›ç¨‹
         cleanProcess(argv[0]);
         sig_running = 0;
     }

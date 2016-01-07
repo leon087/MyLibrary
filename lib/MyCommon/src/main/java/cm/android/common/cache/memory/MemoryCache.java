@@ -7,9 +7,9 @@ public class MemoryCache<V> implements ICache<String, V> {
     private android.support.v4.util.LruCache<String, V> cache;
 
     public MemoryCache(int maxSize) {
-        cache = new android.support.v4.util.LruCache(maxSize) {
+        cache = new android.support.v4.util.LruCache<String, V>(maxSize) {
             @Override
-            public int sizeOf(Object key, Object value) {
+            public int sizeOf(String key, V value) {
                 return super.sizeOf(key, value);
             }
         };

@@ -41,7 +41,7 @@ public abstract class MemoryCache<K, V> {
 
             @Override
             protected void entryRemoved(boolean evicted, K key, V oldValue,
-                    V newValue) {
+                                        V newValue) {
                 if (oldValue != null) {
                     // 硬引用缓存容量满的时候，会根据LRU算法把最近没有被使用的对象转入此软引用缓存
                     mSoftCache.put(key, new SoftReference<V>(oldValue));
@@ -133,7 +133,7 @@ public abstract class MemoryCache<K, V> {
         }
     }
 
-    public void clearCache() {
+    public void clear() {
         logger.info("mLruCache = {},mSoftCache = {}", mLruCache.size(), mSoftCache.size());
         synchronized (mLruCache) {
             mLruCache.evictAll();
@@ -141,10 +141,8 @@ public abstract class MemoryCache<K, V> {
         mSoftCache.clear();
     }
 
-    /**
-     * 释放资源
-     */
-    public void release() {
-        clearCache();
+    public void remove(K key) {
+        mLruCache.remove(key);
+        mSoftCache.remove(key);
     }
 }

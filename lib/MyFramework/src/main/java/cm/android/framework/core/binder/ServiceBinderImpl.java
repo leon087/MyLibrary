@@ -73,10 +73,13 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
 
         serviceHolder.resetService();
 
-        if (serviceManager != null) {
-            serviceManager.onCreate(context);
+        try {
+            if (serviceManager != null) {
+                serviceManager.onCreate(context);
+            }
+        } finally {
+            isInitAtomic.set(true);
         }
-        isInitAtomic.set(true);
     }
 
     @Override
@@ -87,11 +90,14 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
             return;
         }
 
-        if (serviceManager != null) {
-            serviceManager.onDestroy();
+        try {
+            if (serviceManager != null) {
+                serviceManager.onDestroy();
+            }
+        } finally {
+            serviceHolder.resetService();
+            isInitAtomic.set(false);
         }
-        serviceHolder.resetService();
-        isInitAtomic.set(false);
     }
 
     @Override

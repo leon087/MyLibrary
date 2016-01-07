@@ -16,17 +16,23 @@ public abstract class BaseServiceManager implements IServiceManager {
     @Override
     public final void onCreate(Context context) {
         this.context = context;
-        create(this.context);
-        startService();
-        coreReceiver.register(this.context);
+        try {
+            create(this.context);
+            startService();
+        } finally {
+            coreReceiver.register(this.context);
+        }
     }
 
     @Override
     public final void onDestroy() {
         coreReceiver.unregister(context);
-        stopService();
-        destroy();
-        this.context = null;
+        try {
+            stopService();
+            destroy();
+        } finally {
+            this.context = null;
+        }
     }
 
     protected abstract void create(Context context);

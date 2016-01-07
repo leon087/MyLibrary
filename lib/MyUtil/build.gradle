@@ -1,20 +1,17 @@
 tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
-//apply from: '../../ext-android.gradle'
 apply from: "$rootDir/ext-android.gradle"
-
-version = project.versionName
 
 android {
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        consumerProguardFiles 'proguard.txt'
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile 'com.android.support:appcompat-v7:22.+'
     compile 'com.android.support:appcompat-v7:23.1.1'
 
     //log
@@ -44,4 +41,21 @@ dependencies {
 //            exclude module: 'support-annotations'
 //            exclude group: 'javax.inject'
 //        }
+}
+
+apply plugin: 'maven'
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: RELEASE_REPOSITORY_URL) {
+            authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+        }
+//        snapshotRepository(url: "http://xxx.xxx.xxx.xx:8080/content/repositories/snapshots") {
+//            authentication(userName: "xxxx", password: "xxxx")
+//        }
+        pom.version = versionName + "." + versionCode
+        pom.artifactId = POM_ARTIFACT_ID
+        pom.groupId = GROUP
+        pom.name = POM_NAME
+        pom.packaging = POM_PACKAGING
+    }
 }
