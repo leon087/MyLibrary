@@ -222,6 +222,10 @@ final class ApplicationImpl {
 
         private static boolean readState(Context context) {
             File file = new File(context.getFilesDir(), STATE_FILE_NAME);
+            if (!file.exists()) {
+                return false;
+            }
+
             Properties properties = IoUtil.loadProperties(file);
             boolean state = Boolean.valueOf(
                     properties.getProperty(TAG_STATE, String.valueOf(false)));

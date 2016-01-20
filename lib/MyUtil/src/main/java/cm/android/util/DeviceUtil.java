@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -14,7 +15,9 @@ import android.util.DisplayMetrics;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -338,8 +341,10 @@ public class DeviceUtil {
             String sd_cid = cidFile.readLine();
             logger.info("CID of the MMC = {}", sd_cid);
             return sd_cid;
-        } catch (Exception e) {
-            logger.error("Can not read SD-card cid", e);
+        } catch (FileNotFoundException e) {
+            return "";
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
             return "";
         } finally {
             IoUtil.closeQuietly(cidFile);
@@ -374,4 +379,16 @@ public class DeviceUtil {
             return false;
         }
     }
+
+    /**
+     * 精确获取屏幕尺寸（例如：3.5、4.0、5.0寸屏幕）
+     */
+    public static double getScreenPhysicalSize(Activity ctx) {
+        DisplayMetrics dm = new DisplayMetrics();
+        ctx.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        double diagonalPixels = Math.sqrt(Math.pow(dm.widthPixels, 2)
+                + Math.pow(dm.heightPixels, 2));
+        return diagonalPixels / (160 * dm.density);
+    }
+
 }

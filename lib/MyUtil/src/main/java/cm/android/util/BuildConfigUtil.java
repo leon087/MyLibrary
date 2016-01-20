@@ -12,8 +12,12 @@ public class BuildConfigUtil {
     private static final Logger logger = LoggerFactory.getLogger(BuildConfigUtil.class);
 
     public static <T> T getBuildConfigValue(Context context, String fieldName, T defValue) {
+        return getBuildConfigValue(context.getPackageName(), fieldName, defValue);
+    }
+
+    public static <T> T getBuildConfigValue(String appPkg, String fieldName, T defValue) {
         try {
-            Class<?> clazz = Class.forName(context.getPackageName() + ".BuildConfig");
+            Class<?> clazz = Class.forName(appPkg + ".BuildConfig");
             return ReflectUtil.getStaticFieldValue(clazz, fieldName);
         } catch (ClassNotFoundException e) {
             logger.error(e.getMessage(), e);
@@ -26,8 +30,8 @@ public class BuildConfigUtil {
         return defValue;
     }
 
-    public static boolean isDebug(Context context) {
-        Boolean debug = getBuildConfigValue(context, "DEBUG", false);
+    public static boolean isDebug(String appPkg, Context context) {
+        Boolean debug = getBuildConfigValue(appPkg, "DEBUG", false);
         return debug;
     }
 }

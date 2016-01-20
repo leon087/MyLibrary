@@ -7,6 +7,7 @@ android {
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        consumerProguardFiles 'proguard.txt'
+//         archivesBaseName += ("-" + versionName)
     }
 }
 
@@ -41,6 +42,23 @@ dependencies {
 //            exclude module: 'support-annotations'
 //            exclude group: 'javax.inject'
 //        }
+}
+
+android.libraryVariants.all { variant ->
+    def name = variant.buildType.name
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.javaCompile.destinationDir
+    artifacts.add('archives', task);
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives androidSourcesJar
 }
 
 apply plugin: 'maven'

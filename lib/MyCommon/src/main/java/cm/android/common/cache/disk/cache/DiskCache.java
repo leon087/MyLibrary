@@ -33,9 +33,8 @@ public abstract class DiskCache<V> implements ICache<String, V> {
     public void release() {
         try {
             cache.flush();
-            cache.close();
         } catch (IOException e) {
-            logger.error("", e);
+            logger.error(e.getMessage(), e);
         }
         IoUtil.closeQuietly(cache);
     }
@@ -56,13 +55,12 @@ public abstract class DiskCache<V> implements ICache<String, V> {
     }
 
     private void abortQuietly(DiskLruCache.Editor editor) {
-        // Give up because the cache cannot be written.
         try {
             if (editor != null) {
                 editor.abort();
             }
-        } catch (IOException ignored) {
-            logger.error("", ignored);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -97,7 +95,7 @@ public abstract class DiskCache<V> implements ICache<String, V> {
         try {
             cache.delete();
         } catch (IOException e) {
-            logger.error("", e);
+            logger.error(e.getMessage(), e);
         }
     }
 

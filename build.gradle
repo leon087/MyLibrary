@@ -19,5 +19,5 @@ allprojects {
         }
     }
 }
-task wrapper(type: Wrapper) { gradleVersion = '2.5' }
+task wrapper(type: Wrapper) { gradleVersion = '2.10' }
 //apply plugin: 'android-reporting'

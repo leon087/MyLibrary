@@ -6,11 +6,17 @@ import org.slf4j.LoggerFactory;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.net.ConnectivityManagerCompat;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import cm.android.util.EnvironmentUtil;
 import cm.java.util.ObjectProxy;
 
 public class NetworkUtil {
@@ -249,5 +255,168 @@ public class NetworkUtil {
             return proxy.doMethod(getMobileDataEnabledMethod);
         }
         return true;
+    }
+
+
+    /**
+     * android.permission.MODIFY_PHONE_STATE (only system apps can use that)
+     */
+    public static void setMobileDataEnabledCompat(Context context, boolean enabled) {
+        if (context == null) {
+            return;
+        }
+
+        if (!EnvironmentUtil.SdkUtil.hasLollipop()) {
+            setMobileDataEnabled(context, enabled);
+        }
+
+        try {
+            TelephonyManager telephonyService = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+
+            Method setMobileDataEnabledMethod = telephonyService.getClass()
+                    .getDeclaredMethod("setDataEnabled", boolean.class);
+
+            if (null != setMobileDataEnabledMethod) {
+                setMobileDataEnabledMethod.invoke(telephonyService, enabled);
+            }
+        } catch (Exception ex) {
+            logger.error("Error setting mobile data state", ex);
+        }
+    }
+
+    public static boolean getMobileDataEnabledCompat(Context context) {
+
+        if (!EnvironmentUtil.SdkUtil.hasLollipop()) {
+            return getMobileDataEnabled(context);
+        }
+
+        try {
+            TelephonyManager telephonyService = (TelephonyManager) context.getSystemService(
+                    Context.TELEPHONY_SERVICE);
+
+            Method getMobileDataEnabledMethod = telephonyService.getClass()
+                    .getDeclaredMethod("getDataEnabled");
+
+            if (null != getMobileDataEnabledMethod) {
+                boolean mobileDataEnabled = (Boolean) getMobileDataEnabledMethod
+                        .invoke(telephonyService);
+
+                return mobileDataEnabled;
+            }
+        } catch (Exception ex) {
+            logger.error("Error getting mobile data state", ex);
+        }
+
+        return false;
+    }
+
+
+    /**
+     * need rooted devices
+     */
+    public static void setMobileDataEnabledCompat1(Context context, boolean enabled) {
+        if (context == null) {
+            return;
+        }
+
+        if (!EnvironmentUtil.SdkUtil.hasLollipop()) {
+            setMobileDataEnabled(context, enabled);
+        }
+
+        String command = null;
+        int state = 0;
+        try {
+            // Get the current state of the mobile network.
+            state = getMobileDataEnabledCompat1(context) ? 0 : 1;
+            // Get the value of the "TRANSACTION_setDataEnabled" field.
+            String transactionCode = getTransactionCode(context);
+            // Android 5.1+ (API 22) and later.
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                SubscriptionManager mSubscriptionManager = (SubscriptionManager) context
+                        .getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+                // Loop through the subscription list i.e. SIM list.
+                for (int i = 0; i < mSubscriptionManager.getActiveSubscriptionInfoCountMax(); i++) {
+                    if (transactionCode != null && transactionCode.length() > 0) {
+                        // Get the active subscription ID for a given SIM card.
+                        int subscriptionId = mSubscriptionManager.getActiveSubscriptionInfoList()
+                                .get(i).getSubscriptionId();
+                        // Execute the command via `su` to turn off
+                        // mobile network for a subscription service.
+                        command = "service call phone " + transactionCode + " i32 " + subscriptionId
+                                + " i32 " + state;
+                        executeCommandViaSu("-c", command);
+                    }
+                }
+            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+                // Android 5.0 (API 21) only.
+                if (transactionCode != null && transactionCode.length() > 0) {
+                    // Execute the command via `su` to turn off mobile network.
+                    command = "service call phone " + transactionCode + " i32 " + state;
+                    executeCommandViaSu("-c", command);
+                }
+            }
+        } catch (Exception e) {
+            // Oops! Something went wrong, so we throw the exception here.
+            throw e;
+        }
+    }
+
+    public static boolean getMobileDataEnabledCompat1(Context context) {
+
+        if (!EnvironmentUtil.SdkUtil.hasLollipop()) {
+            return getMobileDataEnabled(context);
+        }
+
+        return Settings.Global.getInt(context.getContentResolver(), "mobile_data", 0) == 1;
+    }
+
+    private static String getTransactionCode(Context context) {
+        try {
+            final TelephonyManager mTelephonyManager = (TelephonyManager) context
+                    .getSystemService(Context.TELEPHONY_SERVICE);
+            final Class<?> mTelephonyClass = Class.forName(mTelephonyManager.getClass().getName());
+            final Method mTelephonyMethod = mTelephonyClass.getDeclaredMethod("getITelephony");
+            mTelephonyMethod.setAccessible(true);
+            final Object mTelephonyStub = mTelephonyMethod.invoke(mTelephonyManager);
+            final Class<?> mTelephonyStubClass = Class.forName(mTelephonyStub.getClass().getName());
+            final Class<?> mClass = mTelephonyStubClass.getDeclaringClass();
+            final Field field = mClass.getDeclaredField("TRANSACTION_setDataEnabled");
+            field.setAccessible(true);
+            return String.valueOf(field.getInt(null));
+        } catch (Exception e) {
+            // The "TRANSACTION_setDataEnabled" field is not available,
+            // or named differently in the current API level, so we throw
+            // an exception and inform users that the method is not available.
+            logger.error("The TRANSACTION_setDataEnabled field is not available : ", e);
+        }
+        return null;
+    }
+
+    private static void executeCommandViaSu(String option, String command) {
+        boolean success = false;
+        String su = "su";
+        for (int i = 0; i < 3; i++) {
+            // Default "su" command executed successfully, then quit.
+            if (success) {
+                break;
+            }
+            // Else, execute other "su" commands.
+            if (i == 1) {
+                su = "/system/xbin/su";
+            } else if (i == 2) {
+                su = "/system/bin/su";
+            }
+            try {
+                // Execute command as "su".
+                Runtime.getRuntime().exec(new String[]{su, option, command});
+            } catch (IOException e) {
+                success = false;
+                // Oops! Cannot execute `su` for some reason.
+                // Log error here.
+            } finally {
+                success = true;
+            }
+        }
     }
 }

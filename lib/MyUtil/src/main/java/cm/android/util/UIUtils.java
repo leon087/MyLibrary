@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextPaint;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -112,24 +110,5 @@ public class UIUtils {
             height = display.getHeight();
         }
         return height;
-    }
-
-    /**
-     * 精确获取屏幕尺寸（例如：3.5、4.0、5.0寸屏幕）
-     */
-    public static double getScreenPhysicalSize(Activity ctx) {
-        DisplayMetrics dm = new DisplayMetrics();
-        ctx.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        double diagonalPixels = Math.sqrt(Math.pow(dm.widthPixels, 2)
-                + Math.pow(dm.heightPixels, 2));
-        return diagonalPixels / (160 * dm.density);
-    }
-
-    /**
-     * dip转px
-     */
-    public static int dipToPx(final Context ctx, float dip) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                dip, ctx.getResources().getDisplayMetrics());
     }
 }

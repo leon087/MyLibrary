@@ -16,6 +16,7 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.TypedValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +52,7 @@ public final class AndroidUtils {
      * 桩模块(Stub), 获取假数据，用于各个子功能单元测试
      */
     public static Map<String, Object> getStubFile(Context cxt,
-            String stubFileName) {
+                                                  String stubFileName) {
         if (Utils.isEmpty(stubFileName)) {
             return ObjectUtil.newHashMap();
         }
@@ -117,7 +118,7 @@ public final class AndroidUtils {
      * 加载Properties
      */
     public static Properties loadProperties(Context context,
-            String propertiesName) {
+                                            String propertiesName) {
         Properties props = new Properties();
         try {
             int id = context.getResources().getIdentifier(propertiesName,
@@ -219,5 +220,13 @@ public final class AndroidUtils {
             logger.error(e.getMessage(), e);
             return false;
         }
+    }
+
+    /**
+     * dip转px
+     */
+    public static int dipToPx(final Context ctx, float dip) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dip, ctx.getResources().getDisplayMetrics());
     }
 }

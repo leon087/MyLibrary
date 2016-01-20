@@ -1,8 +1,5 @@
 tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
-apply plugin: 'maven'
-//apply plugin: 'maven-publish'
-
 apply plugin: 'com.android.library'
 //apply from: '../../ext-android.gradle'
 apply from: "$rootDir/ext-android.gradle"
@@ -11,12 +8,31 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':lib:MyUtil')
 
+    compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.mcxiaoke.volley:library:1.0.17'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'cz.msebera.android:httpclient:4.3.6'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
 }
 
+android.libraryVariants.all { variant ->
+    def name = variant.buildType.name
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.javaCompile.destinationDir
+    artifacts.add('archives', task);
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+apply plugin: 'maven'
 uploadArchives {
     repositories.mavenDeployer {
         repository(url: RELEASE_REPOSITORY_URL) {

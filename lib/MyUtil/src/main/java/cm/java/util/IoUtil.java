@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
@@ -55,31 +54,9 @@ public class IoUtil {
         } catch (RuntimeException rethrown) {
             throw rethrown;
         } catch (Exception e) {
-            // e.printStackTrace();
-            logger.error("", e);
+            logger.error(e.getMessage(), e);
         }
     }
-
-//    /**
-//     * 创建文件,fileName为文件全路径加文件名
-//     */
-//    public static boolean createFile(String fileName) {
-//        String[] dirStructor = parseDirSturctor(fileName);
-//        File file;
-//        for (int i = 0; i < dirStructor.length; i++) {
-//            file = new File(dirStructor[i]);
-//            if (i == dirStructor.length - 1) {
-//                if (!file.isFile()) {
-//                    return createNewFile(file);
-//                }
-//            } else {
-//                if (!file.exists()) {
-//                    file.mkdir();
-//                }
-//            }
-//        }
-//        return false;
-//    }
 
     public static boolean createFile(File file) {
         if (file.isDirectory()) {
@@ -124,6 +101,9 @@ public class IoUtil {
         return result;
     }
 
+    /**
+     * API方式删除文件
+     */
     public static boolean delete(File file) {
         if (file == null) {
             return true;
@@ -148,6 +128,9 @@ public class IoUtil {
         return result;
     }
 
+    /**
+     * 通过rm命令删除文件
+     */
     public static boolean deleteFile(File file) {
         if (file == null) {
             logger.error("file = null");
@@ -218,27 +201,6 @@ public class IoUtil {
         return false;
     }
 
-    /**
-     * @param remotePathName
-     * @return
-     */
-    private static String[] parseDirSturctor(String remotePathName) {
-        ArrayList<String> dirList = new ArrayList<String>();
-        String path = remotePathName;
-        int index = 0;
-        for (int i = 0; i < path.length(); i++) {
-            if (path.charAt(i) == File.separatorChar && i > 0) {
-                dirList.add(path.substring(0, i));
-                index = i;
-            }
-        }
-        if (index < path.length()) {
-            dirList.add(path.substring(0, path.length()));
-        }
-        String[] retStr = new String[dirList.size()];
-        return (String[]) dirList.toArray(retStr);
-    }
-
     public static String[] getFiles(File fir) {
         if (!fir.isDirectory()) {
             return new String[0];
@@ -280,7 +242,7 @@ public class IoUtil {
     }
 
     /**
-     * 获取指定目录下文件大小
+     * 获取指定目录下文件大小，不包含目录
      */
     public static long getDirTotalSize(File rootDir) {
         File[] files = rootDir.listFiles();
@@ -373,8 +335,7 @@ public class IoUtil {
      * @param zipfile   zip压缩包
      * @param entryName 需要读取的压缩包中文件文件名
      */
-    public static boolean writeZipFile(ZipFile zipfile, String entryName,
-            File soFile) {
+    public static boolean writeZipFile(ZipFile zipfile, String entryName, File soFile) {
         InputStream is = null;
         OutputStream os = null;
         try {
@@ -388,9 +349,8 @@ public class IoUtil {
                 // + " is up to date");
             }
             return true;
-        } catch (Exception e) { // I am still lazy ~~~
-            logger.error("zipfile = " + zipfile + ",entryName = " + entryName
-                    + ",soFile = " + soFile, e);
+        } catch (IOException e) {
+            logger.error("zipfile = {},entryName = {},soFile = {},e = {}", zipfile, entryName, soFile, e);
             return false;
         } finally {
             closeQuietly(is);
@@ -424,7 +384,7 @@ public class IoUtil {
             write(inputStream, baos, BUF_SIZE);
             return baos.toByteArray();
         } catch (IOException e) {
-            logger.error("", e);
+            logger.error(e.getMessage(), e);
             return null;
         } finally {
             closeQuietly(baos);
@@ -445,8 +405,8 @@ public class IoUtil {
             oos = new ObjectOutputStream(baos);
             oos.writeObject(obj);
             return baos.toByteArray();
-        } catch (Exception e) {
-            logger.error("", e);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
             return null;
         } finally {
             IoUtil.closeQuietly(baos);
@@ -468,8 +428,11 @@ public class IoUtil {
             ois = new ObjectInputStream(baos);
             Object o = ois.readObject();
             return o;
-        } catch (Exception e) {
-            logger.error("", e);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return null;
+        } catch (ClassNotFoundException e) {
+            logger.error(e.getMessage(), e);
             return null;
         } finally {
             IoUtil.closeQuietly(baos);
