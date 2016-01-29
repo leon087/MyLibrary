@@ -9,10 +9,12 @@ dependencies {
     compile project(':lib:MyUtil')
 
     compile 'com.jakewharton:disklrucache:2.0.2'
-    compile 'com.mcxiaoke.volley:library:1.0.17'
-    compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'cz.msebera.android:httpclient:4.3.6'
+//    compile 'com.mcxiaoke.volley:library:1.0.17'
+//    compile 'com.loopj.android:android-async-http:1.4.9'
+//    compile 'cz.msebera.android:httpclient:4.3.6'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
 }
 
 android.libraryVariants.all { variant ->

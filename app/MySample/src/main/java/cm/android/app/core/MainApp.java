@@ -34,6 +34,14 @@ public class MainApp extends BaseApp {
 
         daemonReceiver.registerLocal(this);
 
+        String pName = SystemUtil.getCurProcessName(this);
+        if (getPackageName().equals(pName)) {
+        }
+
+//        testSIM();
+//
+//        testNewImsi();
+
 //        Intent intent = new Intent(this, LockScreenService.class);
 //        this.startService(intent);
     }

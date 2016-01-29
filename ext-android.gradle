@@ -2,10 +2,6 @@ def computeVersionName() {
     return project.versionName + "." + project.versionCode + "." + buildTime()
 }
 
-def computeVersion() {
-    return project.versionName + "." + project.versionCode
-}
-
 def buildTime() {
     def date = new Date()
     def formattedDate = date.format('MMddHH')
@@ -39,6 +35,11 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
     }
 
     android {
+        aaptOptions {
+//            noCompress 'foo', 'bar'
+            ignoreAssetsPattern "!.svn:!.git:!.ds_store:!*.scc:.*:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"
+        }
+
 //        packagingOptions {
 ////        pickFirst 'META-INF/foo.txt'
 //

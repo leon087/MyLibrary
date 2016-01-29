@@ -20,207 +20,204 @@ public class MapUtil {
     }
 
     /**
-     * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_STRING}
+     * 根据key获取value,不存在或异常返回{@value #DEF_VALUE_STRING}
      */
     public static <K, V> String getString(Map<K, V> map, K key) {
         return getString(map, key, DEF_VALUE_STRING);
     }
 
     public static <K, V> String getString(Map<K, V> map, K key, String defaultValue) {
-        if (map == null) {
+        try {
+            return Parse.getString(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
             return defaultValue;
-        }
-        V value = map.get(key);
-        if (value == null) {
-            return defaultValue;
-        }
-
-        if (value instanceof String) {
-            return (String) value;
-        } else {
-            try {
-                return String.valueOf(value);
-            } catch (Exception e) {
-                logger.error("value = " + value, e);
-                return defaultValue;
-            }
         }
     }
 
     /**
-     * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_BOOLEAN}
+     * 根据key获取value,不存在或异常返回{@value #DEF_VALUE_BOOLEAN}
      */
     public static <K, V> boolean getBoolean(Map<K, V> map, K key) {
         return getBoolean(map, key, DEF_VALUE_BOOLEAN);
     }
 
     public static <K, V> boolean getBoolean(Map<K, V> map, K key, boolean defaultValue) {
-        if (map == null) {
+        try {
+            return Parse.getBoolean(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
             return defaultValue;
-        }
-        V value = map.get(key);
-        if (value == null) {
-            return defaultValue;
-        }
-
-        if (value instanceof Boolean) {
-            // 数据类型匹配直接强转
-            return (Boolean) value;
-        } else {
-            // 数据类型不匹配则格式化，异常返回默认值
-            try {
-                return Boolean.valueOf(value.toString());
-            } catch (NumberFormatException e) {
-                logger.error("value = " + value, e);
-                return defaultValue;
-            }
         }
     }
 
     /**
-     * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
+     * 根据key获取value,不存在或异常返回{@value #DEF_VALUE_INT}
      */
     public static <K, V> long getLong(Map<K, V> map, K key) {
         return getLong(map, key, DEF_VALUE_INT);
     }
 
     public static <K, V> long getLong(Map<K, V> map, K key, long defaultValue) {
-        if (map == null) {
+        try {
+            return Parse.getLong(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
             return defaultValue;
-        }
-        V value = map.get(key);
-        if (value == null) {
-            return defaultValue;
-        }
-
-        if (value instanceof Long) {
-            return (Long) value;
-        } else {
-            try {
-                return Long.valueOf(value.toString());
-            } catch (NumberFormatException e) {
-                logger.error("value = " + value, e);
-                return defaultValue;
-            }
         }
     }
 
     /**
-     * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
+     * 根据key获取value,不存在或异常返回{@value #DEF_VALUE_INT}
      */
     public static <K, V> int getInt(Map<K, V> map, K key) {
         return getInt(map, key, DEF_VALUE_INT);
     }
 
     public static <K, V> int getInt(Map<K, V> map, K key, int defaultValue) {
-        if (map == null) {
+        try {
+            return Parse.getInt(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
             return defaultValue;
-        }
-        V value = map.get(key);
-        if (value == null) {
-            return defaultValue;
-        }
-
-        if (value instanceof Integer) {
-            return (Integer) value;
-        } else {
-            try {
-                return Integer.valueOf(value.toString());
-            } catch (NumberFormatException e) {
-                logger.error("value = " + value, e);
-                return defaultValue;
-            }
         }
     }
 
     /**
-     * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
+     * 根据key获取value,不存在或异常返回{@value #DEF_VALUE_INT}
      */
     public static <K, V> double getDouble(Map<K, V> map, K key) {
         return getDouble(map, key, DEF_VALUE_INT);
     }
 
     public static <K, V> double getDouble(Map<K, V> map, K key, double defaultValue) {
-        if (map == null) {
+        try {
+            return Parse.getDouble(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
             return defaultValue;
-        }
-        V value = map.get(key);
-        if (value == null) {
-            return defaultValue;
-        }
-
-        if (value instanceof Double) {
-            return (Double) value;
-        } else {
-            try {
-                return Double.valueOf(value.toString());
-            } catch (NumberFormatException e) {
-                logger.error("value = " + value, e);
-                return defaultValue;
-            }
         }
     }
 
     /**
-     * 根据key获取map中的value,不存在或异常返回{@value #DEF_VALUE_INT}
+     * 根据key获取value,不存在或异常返回{@value #DEF_VALUE_INT}
      */
     public static <K, V> float getFloat(Map<K, V> map, K key) {
         return getFloat(map, key, DEF_VALUE_INT);
     }
 
     public static <K, V> float getFloat(Map<K, V> map, K key, float defaultValue) {
-        if (map == null) {
+        try {
+            return Parse.getFloat(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
             return defaultValue;
-        }
-        V value = map.get(key);
-        if (value == null) {
-            return defaultValue;
-        }
-
-        if (value instanceof Float) {
-            return (Float) value;
-        } else {
-            try {
-                return Float.valueOf(value.toString());
-            } catch (NumberFormatException e) {
-                logger.error("value = " + value, e);
-                return defaultValue;
-            }
         }
     }
 
     /**
-     * 根据key获取map中的List，如果不存在，返回空List(不返回null);只获取List类型的值，其他类型空List(不返回null)
+     * 根据key获取value，如果不存在，返回空List(不返回null);只获取List类型的值，其他类型空List(不返回null)
      */
     public static <K, V, P> List<P> getList(Map<K, V> map, K key) {
-        if (map == null) {
-            return ObjectUtil.newArrayList();
-        }
-        V value = map.get(key);
-        if (value instanceof List) {
-            return (List<P>) value;
-        } else {
-            return ObjectUtil.newArrayList();
+        try {
+            return Parse.getList(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
+            return ObjectUtil.newArrayList(0);
         }
     }
 
-    /**
-     * @param <K>
-     * @param <V>
-     * @param <T>
-     * @param map
-     * @param key
-     * @return
-     */
     public static <K, V, T, P> Map<T, P> getMap(Map<K, V> map, K key) {
-        if (map == null) {
-            return ObjectUtil.newHashMap();
+        try {
+            return Parse.getMap(map, key);
+        } catch (ParseUtil.ParseException e) {
+            logger.error(e.getMessage(), e);
+            return ObjectUtil.newHashMap(0);
         }
-        V value = map.get(key);
-        if (value instanceof Map) {
-            return (Map<T, P>) value;
-        } else {
-            return ObjectUtil.newHashMap();
+    }
+
+    private static class Parse {
+        public static <K, V> Object get(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            if (map == null) {
+                throw new ParseUtil.ParseException("map = null");
+            }
+            Object result = map.get(name);
+            if (result == null) {
+                throw new ParseUtil.ParseException("No value for " + name);
+            }
+            return result;
+        }
+
+        public static <K, V> boolean getBoolean(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            Boolean result = ParseUtil.toBoolean(object);
+            if (result == null) {
+                throw ParseUtil.typeMismatch(name, object, "boolean");
+            }
+            return result;
+        }
+
+        public static <K, V> float getFloat(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            Float result = ParseUtil.toFloat(object);
+            if (result == null) {
+                throw ParseUtil.typeMismatch(name, object, "float");
+            }
+            return result;
+        }
+
+        public static <K, V> double getDouble(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            Double result = ParseUtil.toDouble(object);
+            if (result == null) {
+                throw ParseUtil.typeMismatch(name, object, "double");
+            }
+            return result;
+        }
+
+        public static <K, V> long getLong(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            Long result = ParseUtil.toLong(object);
+            if (result == null) {
+                throw ParseUtil.typeMismatch(name, object, "long");
+            }
+            return result;
+        }
+
+        public static <K, V> int getInt(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            Integer result = ParseUtil.toInteger(object);
+            if (result == null) {
+                throw ParseUtil.typeMismatch(name, object, "int");
+            }
+            return result;
+        }
+
+        public static <K, V> String getString(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            String result = ParseUtil.toString(object);
+            if (result == null) {
+                throw ParseUtil.typeMismatch(name, object, "String");
+            }
+            return result;
+        }
+
+        public static <K, V, P> List<P> getList(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            if (object instanceof List) {
+                return (List<P>) object;
+            } else {
+                throw ParseUtil.typeMismatch(name, object, "List");
+            }
+        }
+
+        public static <K, V, T, P> Map<T, P> getMap(Map<K, V> map, K name) throws ParseUtil.ParseException {
+            Object object = get(map, name);
+            if (object instanceof Map) {
+                return (Map<T, P>) object;
+            } else {
+                throw ParseUtil.typeMismatch(name, object, "Map");
+            }
         }
     }
 }

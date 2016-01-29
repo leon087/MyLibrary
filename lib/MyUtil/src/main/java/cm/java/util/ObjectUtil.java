@@ -53,6 +53,10 @@ public class ObjectUtil {
         return new ArrayList<E>();
     }
 
+    public static <E> ArrayList<E> newArrayList(int capacity) {
+        return new ArrayList<E>(capacity);
+    }
+
     /**
      * Creates a resizable {@code ArrayList} instance containing the given
      * elements.

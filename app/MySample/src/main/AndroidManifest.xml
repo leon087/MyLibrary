@@ -22,6 +22,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
 
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
 
@@ -39,11 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <service android:name="cm.android.app.test.TestService1"
-                 android:process=":test1"/>
-        <service android:name="cm.android.app.test.TestService2"
-                 android:process="cm.android.app.sample.test2"/>
 
         <receiver android:name="cm.android.app.core.DaemonReceiver">
             <intent-filter android:priority="90000">

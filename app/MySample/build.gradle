@@ -31,6 +31,7 @@ android {
     defaultConfig {
         applicationId = project.applicationId
         multiDexEnabled true
+        buildConfigField("String", "ROOT_API", '""')
 
         testInstrumentationRunner "com.android.test.runner.MultiDexTestRunner"
     }
@@ -74,6 +75,35 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "type_server", "type_xx"
+    productFlavors {
+        //type_server：平台配置
+        dev {
+            dimension "type_server"
+            buildConfigField("String", "ROOT_API", root_api_dev)
+        }
+
+        devtest {
+            dimension "type_server"
+            buildConfigField("String", "ROOT_API", root_api_devtest)
+        }
+
+        demo {
+            dimension "type_server"
+            buildConfigField("String", "ROOT_API", root_api_demo)
+        }
+
+        //type_xx：配置
+        lite {
+            dimension "type_xx"
+        }
+
+        plus {
+            dimension "type_xx"
+        }
+    }
+
 }
 
 dependencies {
@@ -82,6 +112,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':lib:MyCommon')
     compile project(':lib:MyFramework')
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
 
     compile 'com.android.support:multidex:1.0.1'
 
