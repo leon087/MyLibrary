@@ -6,10 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.os.StrictMode;
 
 import cm.android.framework.core.BaseApp;
 import cm.android.framework.core.IServiceManager;
 import cm.android.framework.core.ServiceManager;
+import cm.android.util.AndroidUtils;
+import cm.android.util.SystemUtil;
 
 public class MainApp extends BaseApp {
 
@@ -30,6 +33,7 @@ public class MainApp extends BaseApp {
         super.onCreate();
         logger.error("ggg application onCreate");
         sMainApp = this;
+        setStrictMode(this);
         LeakCanary.install(this);
 
         daemonReceiver.registerLocal(this);
@@ -37,13 +41,6 @@ public class MainApp extends BaseApp {
         String pName = SystemUtil.getCurProcessName(this);
         if (getPackageName().equals(pName)) {
         }
-
-//        testSIM();
-//
-//        testNewImsi();
-
-//        Intent intent = new Intent(this, LockScreenService.class);
-//        this.startService(intent);
     }
 
     public static MainApp getApp() {
@@ -58,5 +55,21 @@ public class MainApp extends BaseApp {
     @Override
     protected Class<? extends IServiceManager> initServiceManager() {
         return MyServiceManager.class;
+    }
+
+
+    private void setStrictMode(Context context) {
+        if (AndroidUtils.isDebuggable(context)) {
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .penaltyDeathOnNetwork()
+                    .build());
+        }
     }
 }

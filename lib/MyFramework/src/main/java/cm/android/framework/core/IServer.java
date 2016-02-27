@@ -17,4 +17,28 @@ public interface IServer {
 //    public void onStartService(Intent intent, int flags, int startId);
 
     public void onHandleIntent(Intent intent);
+
+    public static final IServer emptyServer = new IServer() {
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
+
+        @Override
+        public void onCreate(Context context) {
+        }
+
+        @Override
+        public void onDestroy() {
+        }
+
+        @Override
+        public boolean checkAction(String action) {
+            return false;
+        }
+
+        @Override
+        public void onHandleIntent(Intent intent) {
+        }
+    };
 }

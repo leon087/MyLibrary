@@ -31,11 +31,20 @@
             android:name="cm.android.app.core.MainApp"
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
+            android:label="@string/app_label"
             android:theme="@style/AppTheme">
         <activity
                 android:name="cm.android.app.test.MainActivity"
-                android:label="@string/app_name">
+                android:label="@string/app_label">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+                android:name="cm.android.app.flux.FluxActivity"
+                android:label="@string/app_label_flux">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -54,31 +63,6 @@
                  android:stopWithTask="false"
                  android:exported="false"
                  android:persistent="true"/>
-
-        <!-- 设备管理器 -->
-        <receiver
-                android:name="cm.android.app.dm.AdminReceiver"
-                android:description="@string/device_des"
-                android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data
-                    android:name="android.app.device_admin"
-                    android:resource="@xml/device_admin_mdm"/>
-
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED"/>
-            </intent-filter>
-        </receiver>
-
-        <activity
-                android:name="cm.android.app.dm.AdminDaemonActivity"
-                android:label="@string/app_name"
-                android:launchMode="singleTask">
-        </activity>
-        <service
-                android:name="cm.android.app.dm.AdminDaemonService"
-                android:exported="false"
-                android:permission="cm.mdm.android.permission.PRIVATE"
-                android:persistent="true"/>
 
     </application>
 

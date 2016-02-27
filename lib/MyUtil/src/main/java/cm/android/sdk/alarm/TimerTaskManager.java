@@ -116,7 +116,7 @@ public final class TimerTaskManager {
 
         public static final String ACTION_ALARM_TASK = "cm.android.sdk.alarm.AlarmTaskReceiver";
 
-        public static final String INTENT_DATA = "data";
+        public static final String INTENT_DATA_DELAY = "intent_data_delay";
 
         public static final String INTENT_ACTION = "action";
 
@@ -127,13 +127,15 @@ public final class TimerTaskManager {
             String action = intent.getStringExtra(INTENT_ACTION);
             String alarmAction = action;
             TimerTask task = taskMap.get(alarmAction);
+            long delay = 0;
             if (task != null) {
                 task.schedule(context);
+                delay = task.getDelayAtMillis();
             }
 
             Intent realIntent = new Intent(action);
-//            realIntent.putExtras(intent.getBundleExtra(INTENT_DATA));
-            boolean globalBroadcast = intent.getBooleanExtra(INTENT_BROADCAST_TYPE, false);
+            realIntent.putExtra(INTENT_DATA_DELAY, delay);
+            boolean globalBroadcast = intent.getBooleanExtra(INTENT_BROADCAST_TYPE, true);
             if (globalBroadcast) {
                 IntentUtil.sendBroadcastInternal(context, realIntent);
             } else {
