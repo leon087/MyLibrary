@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.content.Intent;
 
 import cm.android.app.test.TestContext;
 import cm.android.app.test.server.TestManagerServer;
@@ -43,5 +44,10 @@ public class MyServiceManager extends BaseServiceManager {
     @Override
     protected void stopService() {
         MainService.stop();
+    }
+
+    @Override
+    public void onHandleIntent(Intent intent, int flags, int startId) {
+
     }
 }

@@ -1,6 +1,7 @@
 package cm.android.framework.core;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.IBinder;
 
 public final class ServiceManager {
@@ -36,8 +37,7 @@ public final class ServiceManager {
 
     private static final ApplicationImpl mApplication = new ApplicationImpl();
 
-    static void appInit(Context context, AppConfig appConfig,
-            Class<? extends IServiceManager> serviceClass) {
+    static void appInit(Context context, AppConfig appConfig, Class<? extends IServiceManager> serviceClass) {
         mApplication.appInit(context, appConfig, serviceClass);
     }
 //    static void appInit(Context context, AppConfig appConfig,
@@ -71,6 +71,10 @@ public final class ServiceManager {
 
     public static void restoreService(Context context, String processName) {
         CoreReceiver.restore(context, processName);
+    }
+
+    public static void handleAction(String action, Bundle bundle) {
+        mApplication.handleAction(action, bundle);
     }
 
 }

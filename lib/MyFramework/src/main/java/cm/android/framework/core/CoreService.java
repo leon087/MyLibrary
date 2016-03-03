@@ -83,6 +83,7 @@ public final class CoreService extends PersistentService {
     @Override
     public void onServiceStart(Intent intent, int flags, int startId) {
         logger.info("intent = {},flags = {},startId = {}", intent, flags, startId);
+        serviceBinder.handleIntent(intent, flags, startId);
     }
 
     @Override
@@ -99,8 +100,7 @@ public final class CoreService extends PersistentService {
         super.onDestroy();
     }
 
-    public final static boolean bind(Context context,
-            ServiceConnection connection, String serviceManagerName) {
+    public final static boolean bind(Context context, ServiceConnection connection, String serviceManagerName) {
         Intent intent = new Intent(context, CoreService.class);
         Bundle bundle = new Bundle();
         bundle.putString(TAG_SERVICE_MANAGER, serviceManagerName);
@@ -112,5 +112,14 @@ public final class CoreService extends PersistentService {
 
     public final static void unBind(Context context, ServiceConnection connection) {
         context.getApplicationContext().unbindService(connection);
+    }
+
+    public static final void start(Context context, String action, Bundle bundle) {
+        Intent intent = new Intent(context, CoreService.class);
+        intent.setAction(action);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.startService(intent);
     }
 }

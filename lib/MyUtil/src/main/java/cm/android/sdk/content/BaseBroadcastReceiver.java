@@ -7,27 +7,21 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
 
-    /**
-     * 注册
-     */
-    public final void register(Context context) {
+    public void register(Context context) {
         IntentFilter intentFilter = createIntentFilter();
         register(context, intentFilter);
     }
 
-    public final void register(Context context, IntentFilter intentFilter) {
+    public void register(Context context, IntentFilter intentFilter) {
         register(context, intentFilter, getPermission());
     }
 
-    public final void register(Context context, IntentFilter intentFilter,
-            String broadcastPermission) {
+    public void register(Context context, IntentFilter intentFilter,
+                         String broadcastPermission) {
         context.registerReceiver(this, intentFilter, broadcastPermission, null);
     }
 
-    /**
-     * 去注册
-     */
-    public final void unregister(Context context) {
+    public void unregister(Context context) {
         context.unregisterReceiver(this);
     }
 
@@ -44,9 +38,6 @@ public abstract class BaseBroadcastReceiver extends BroadcastReceiver {
         LocalBroadcastManager.getInstance(context).unregisterReceiver(this);
     }
 
-    /**
-     * 创建IntentFilter
-     */
     public IntentFilter createIntentFilter() {
         return new IntentFilter();
     }

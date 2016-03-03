@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -63,10 +64,15 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
         }
     }
 
+    public void handleIntent(Intent intent, int flags, int startId) {
+        if (serviceManager != null) {
+            serviceManager.onHandleIntent(intent, flags, startId);
+        }
+    }
+
     @Override
     public final void create() throws RemoteException {
-        logger.info("create:isStarted = {},serviceManager = {}", isInitAtomic.get(),
-                serviceManager);
+        logger.info("create:isStarted = {},serviceManager = {}", isInitAtomic.get(), serviceManager);
         if (isInitAtomic.get()) {
             return;
         }
@@ -84,8 +90,7 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
 
     @Override
     public final void destroy() throws RemoteException {
-        logger.info("destroy:isStarted = {},serviceManager = {}", isInitAtomic.get(),
-                serviceManager);
+        logger.info("destroy:isStarted = {},serviceManager = {}", isInitAtomic.get(), serviceManager);
         if (!isInitAtomic.get()) {
             return;
         }

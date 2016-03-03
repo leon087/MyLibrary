@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -74,6 +75,10 @@ final class ApplicationImpl {
                     packageInfo.versionCode, packageInfo.versionName,
                     SystemUtil.getCurProcessName(appContext));
         }
+    }
+
+    final void handleAction(String action, Bundle bundle) {
+        CoreService.start(appContext, action, bundle);
     }
 
     final void start(ServiceManager.InitListener initListener) {
