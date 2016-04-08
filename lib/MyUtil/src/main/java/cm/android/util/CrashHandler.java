@@ -12,14 +12,17 @@ import android.os.Environment;
 import android.os.Looper;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -122,7 +125,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
         if (ex == null) {
             return true;
         }
-        final String msg = ex.getLocalizedMessage();
+//        final String msg = ex.getLocalizedMessage();
         // 使用Toast来显示异常信息
         new Thread() {
             @Override
@@ -137,7 +140,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 // 收集设备信息
                 collectCrashDeviceInfo(mContext);
                 // 保存错误报告文件
-                String crashFileName = saveCrashInfoToFile(ex);
+//                String crashFileName = saveCrashInfoToFile(ex);
                 // saveCrashInfo(ex);
                 // 发送错误报告到服务器
                 sendCrashReportsToServer(mContext);
@@ -184,7 +187,10 @@ public class CrashHandler implements UncaughtExceptionHandler {
             for (String fileName : sortedFiles) {
                 File cr = new File(ctx.getFilesDir(), fileName);
                 postReport(cr);
-                cr.delete();// 删除已发送的报告
+                boolean delete = cr.delete();// 删除已发送的报告
+                if (!delete) {
+                    logger.debug("delete failed:cr = {}", cr.getAbsoluteFile());
+                }
             }
         }
     }
@@ -239,14 +245,15 @@ public class CrashHandler implements UncaughtExceptionHandler {
                 trace = mContext.openFileOutput(fileName, Context.MODE_PRIVATE);
             }
             mDeviceCrashInfo.store(trace, "");
-            trace.write(exceptionLog.getBytes());
+            trace.write(exceptionLog.getBytes(Charset.defaultCharset()));
 
             trace.flush();
             trace.close();
             return fileName;
-        } catch (Exception e) {
-            logger.error(
-                    "an error occured while writing report file...", e);
+        } catch (FileNotFoundException e) {
+            logger.error("an error occured while writing report file...", e);
+        } catch (IOException e) {
+            logger.error("an error occured while writing report file...", e);
         }
         return null;
     }

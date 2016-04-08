@@ -24,10 +24,10 @@ import cm.java.util.Utils;
 
 public final class Media {
 
-    public static final String[] EXTENSIONS;
+    static final String[] EXTENSIONS;
 
     // http://www.fileinfo.com/filetypes/video
-    public static final String[] VIDEO_EXTENSIONS = {"\\.264", "\\.3g2",
+    static final String[] VIDEO_EXTENSIONS = {"\\.264", "\\.3g2",
             "\\.3gp", "\\.3gp2", "\\.3gpp", "\\.3gpp2", "\\.3mm", "\\.3p2",
             "\\.60d", "\\.aep", "\\.ajp", "\\.amv", "\\.amx", "\\.arf",
             "\\.asf", "\\.asx", "\\.avb", "\\.avd", "\\.avi", "\\.avs",
@@ -74,7 +74,7 @@ public final class Media {
             "\\.xvid", "\\.yuv", "\\.zm1", "\\.zm2", "\\.zm3", "\\.zmv"};
 
     // http://www.fileinfo.com/filetypes/audio
-    public static final String[] AUDIO_EXTENSIONS = {"\\.4mp", "\\.669",
+    static final String[] AUDIO_EXTENSIONS = {"\\.4mp", "\\.669",
             "\\.6cm", "\\.8cm", "\\.8med", "\\.8svx", "\\.a2m", "\\.aa",
             "\\.aa3", "\\.aac", "\\.aax", "\\.abc", "\\.abm", "\\.ac3",
             "\\.acd", "\\.acd-bak", "\\.acd-zip", "\\.acm", "\\.act", "\\.adg",
@@ -140,14 +140,14 @@ public final class Media {
             "\\.xm", "\\.xmf", "\\.xmi", "\\.xmz", "\\.xp", "\\.xrns",
             "\\.xsb", "\\.xspf", "\\.xt", "\\.xwb", "\\.ym", "\\.zvd", "\\.zvr"};
 
-    public static final String[] SUBTRACK_EXTENSIONS = {".srt", ".ssa",
+    static final String[] SUBTRACK_EXTENSIONS = {".srt", ".ssa",
             ".smi", ".txt", ".sub", ".ass", ".webvtt"};
 
-    public static final Pattern VIDEO_EXTENSIONS_PATTERN;
+    static final Pattern VIDEO_EXTENSIONS_PATTERN;
 
-    public static final Pattern AUDIO_EXTENSIONS_PATTERN;
+    static final Pattern AUDIO_EXTENSIONS_PATTERN;
 
-    public static final Pattern EXTENSIONS_PATTERN;
+    static final Pattern EXTENSIONS_PATTERN;
 
     public static final Pattern SUBTRACK_EXTENSIONS_PATTERN;
 

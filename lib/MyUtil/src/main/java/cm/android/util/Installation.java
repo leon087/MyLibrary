@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 public class Installation {
@@ -35,14 +36,13 @@ public class Installation {
         byte[] bytes = new byte[(int) f.length()];
         f.readFully(bytes);
         f.close();
-        return new String(bytes);
+        return new String(bytes, Charset.defaultCharset());
     }
 
-    private static void writeInstallationFile(File installation)
-            throws IOException {
+    private static void writeInstallationFile(File installation) throws IOException {
         FileOutputStream out = new FileOutputStream(installation);
         String id = UUID.randomUUID().toString();
-        out.write(id.getBytes());
+        out.write(id.getBytes(Charset.defaultCharset()));
         out.close();
     }
 }

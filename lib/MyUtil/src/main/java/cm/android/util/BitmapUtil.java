@@ -79,6 +79,8 @@ public class BitmapUtil {
             case 1: // 垂直反转
                 floats = new float[]{1f, 0f, 0f, 0f, -1f, 0f, 0f, 0f, 1f};
                 break;
+            default:
+                break;
         }
 
         if (floats != null) {
@@ -245,7 +247,7 @@ public class BitmapUtil {
      * @return Bitmap
      */
     public static Bitmap getPicFromBytes(byte[] bytes,
-            BitmapFactory.Options opts) {
+                                         BitmapFactory.Options opts) {
         if (bytes != null) {
             if (opts != null) {
                 return BitmapFactory.decodeByteArray(bytes, 0, bytes.length,
@@ -290,7 +292,7 @@ public class BitmapUtil {
      * 根据File返回Bitmap
      */
     public static Bitmap decodeBitmap(File imgFile, int displayWidth,
-            int displayHeight) throws OutOfMemoryError {
+                                      int displayHeight) throws OutOfMemoryError {
         if (imgFile == null) {
             return null;
         }
@@ -332,7 +334,7 @@ public class BitmapUtil {
      * 解析图片
      */
     public static Bitmap decodeBitmap(String path, int displayWidth,
-            int displayHeight) throws OutOfMemoryError {
+                                      int displayHeight) throws OutOfMemoryError {
         BitmapFactory.Options op = getOptions(path, displayWidth, displayHeight);
         InputStream is = null;
         try {
@@ -360,7 +362,7 @@ public class BitmapUtil {
      * 读取Assets资源Drawable/AssetManager
      */
     public static Bitmap readAssetsBitmap(Context context, String path,
-            int displayWidth, int displayHeight) throws OutOfMemoryError {
+                                          int displayWidth, int displayHeight) throws OutOfMemoryError {
         Bitmap bitmap = null;
         InputStream is = null;
         try {
@@ -388,7 +390,7 @@ public class BitmapUtil {
      * 解析图片（待测试）
      */
     public static Bitmap decodeBitmap(InputStream is, int displayWidth,
-            int displayHeight) throws OutOfMemoryError {
+                                      int displayHeight) throws OutOfMemoryError {
         BitmapFactory.Options op = getOptions(is, displayWidth, displayHeight);
         return BitmapFactory.decodeStream(is, null, op);
     }
@@ -424,7 +426,7 @@ public class BitmapUtil {
      * 获得设置信息
      */
     public static BitmapFactory.Options getOptions(InputStream is,
-            int displayWidth, int displayHeight) {
+                                                   int displayWidth, int displayHeight) {
         BitmapFactory.Options op = new BitmapFactory.Options();
         op.inJustDecodeBounds = true;// 只读取Bitmap的宽高等信息，不读取像素。
         BitmapFactory.decodeStream(is, null, op); // 获取尺寸信息
@@ -455,7 +457,7 @@ public class BitmapUtil {
      * 获得设置信息
      */
     public static BitmapFactory.Options getOptions(String path,
-            int displayWidth, int displayHeight) {
+                                                   int displayWidth, int displayHeight) {
         BitmapFactory.Options op = new BitmapFactory.Options();
         op.inJustDecodeBounds = true;// 只读取Bitmap的宽高等信息，不读取像素。
         BitmapFactory.decodeFile(path, op); // 获取尺寸信息
@@ -564,7 +566,7 @@ public class BitmapUtil {
      * @return The value to be used for inSampleSize
      */
     public static int calculateInSampleSize(BitmapFactory.Options options,
-            int reqWidth, int reqHeight) {
+                                            int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int width = options.outWidth;
         final int height = options.outHeight;
@@ -612,7 +614,7 @@ public class BitmapUtil {
      * @param reflectionGap    原图与倒影之间的间距
      */
     public static Bitmap createBitmapWithReflection2(Bitmap srcBitmap,
-            int reflectionHeight, int reflectionGap) {
+                                                     int reflectionHeight, int reflectionGap) {
         // 原始宽高
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
@@ -644,7 +646,7 @@ public class BitmapUtil {
      * 创建带有渐变效果的bitmap（canva中先画好原bitmap和反转bitmap后再处理渐变），推荐使用
      */
     public static Bitmap createBitmapWithReflection(Bitmap srcBitmap,
-            int reflectionHeight, int reflectionGap) {
+                                                    int reflectionHeight, int reflectionGap) {
         // 原始宽高
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
@@ -682,7 +684,7 @@ public class BitmapUtil {
      * @param reflectionHeight 倒影高
      */
     public static Bitmap createReflectionBitmapWithGradient(Bitmap srcBitmap,
-            int reflectionHeight) {
+                                                            int reflectionHeight) {
         Bitmap reflectionBitmap = createReflectionBitmap(srcBitmap,
                 reflectionHeight);
         return createLinearGradient(reflectionBitmap);
@@ -692,7 +694,7 @@ public class BitmapUtil {
      * 创建倒影图片（无渐变）
      */
     public static Bitmap createReflectionBitmap(Bitmap srcBitmap,
-            int reflectionHeight) {
+                                                int reflectionHeight) {
         // 原始宽高
         int srcWidth = srcBitmap.getWidth();
         int srcHeight = srcBitmap.getHeight();
@@ -725,7 +727,7 @@ public class BitmapUtil {
      * 竖直方向渐变
      */
     public static void processLinearGradient(Canvas canvas, float top,
-            float width, float bottom) {
+                                             float width, float bottom) {
         /**
          * 渐变<br>
          * 参数一：为渐变起点坐标的x轴位置.<br>
@@ -752,8 +754,8 @@ public class BitmapUtil {
      */
     public static Bitmap createRotateBitmap(Bitmap srcBitmap, float angle) {
         // 旋转角度
-        double angleRadians = Math.toRadians(angle);
-        int width = (int) (Math.cos(angleRadians) * srcBitmap.getWidth());
+//        double angleRadians = Math.toRadians(angle);
+//        int width = (int) (Math.cos(angleRadians) * srcBitmap.getWidth());
 
         Matrix matrix = new Matrix();
         // // 对称轴翻转

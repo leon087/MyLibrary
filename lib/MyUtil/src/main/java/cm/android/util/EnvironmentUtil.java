@@ -60,6 +60,7 @@ public class EnvironmentUtil {
 
     public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
+//        String state = EnvironmentCompat.getStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY
                 .equals(state)) {
             return true;

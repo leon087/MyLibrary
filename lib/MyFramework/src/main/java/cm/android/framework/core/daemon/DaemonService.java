@@ -41,7 +41,7 @@ public final class DaemonService extends PersistentService {
             logger.info("start daemon");
             DaemonManager.getInstance().startDaemon(this);
             //开启守护进程
-            Daemon.startDaemon(this, DaemonService.class, Daemon.INTERVAL_ON_SECOND);
+//            Daemon.startDaemon(this, DaemonService.class, Daemon.INTERVAL_ON_SECOND);
 
 //            final Context context = this;
 //            //测试功能
@@ -60,7 +60,7 @@ public final class DaemonService extends PersistentService {
 
         } else if (ACTION_STOP.equals(action)) {
             DaemonManager.getInstance().stopDaemon(this);
-            Daemon.stopDaemon(this, DaemonService.class, Daemon.INTERVAL_ON_SECOND);
+//            Daemon.stopDaemon(this, DaemonService.class, Daemon.INTERVAL_ON_SECOND);
             stopSelf();
         }
     }

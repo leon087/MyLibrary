@@ -1,0 +1,31 @@
+apply plugin: "findbugs"
+
+repositories {
+    mavenCentral()
+}
+
+task customFindbugs(type: FindBugs) {
+    //toolVersion = "3.0.1"
+    ignoreFailures = true
+    effort = "max"
+    reportLevel = "medium"
+    excludeFilter = file("$rootProject.rootDir/findbugs/findbugs-exclude-android.xml")
+    includeFilter = file("$rootProject.rootDir/findbugs/findbugs-include.xml")
+    classes = files("$project.buildDir/intermediates/classes")
+    source fileTree('src/main/java/')
+    include '**/*.java'
+    classpath = files()
+    reports {
+        xml {
+            enabled = true
+            withMessages = true
+            destination "$project.buildDir/outputs/findbugs/findbugs_result.xml"
+        }
+
+        html {
+            enabled = false
+            destination "$project.buildDir/outputs/findbugs/findbugs_result.html"
+        }
+    }
+}
+//build.dependsOn customFindbugs

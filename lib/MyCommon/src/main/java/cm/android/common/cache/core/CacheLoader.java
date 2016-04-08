@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import android.support.v4.util.LruCache;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -63,7 +64,7 @@ public class CacheLoader {
     private String toKey(String uri) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            byte[] md5bytes = messageDigest.digest(uri.getBytes());
+            byte[] md5bytes = messageDigest.digest(uri.getBytes(Charset.defaultCharset()));
             return HexUtil.encode(md5bytes);
         } catch (NoSuchAlgorithmException e) {
             // throw new AssertionError(e);

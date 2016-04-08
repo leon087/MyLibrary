@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+	<!--  所有类使用以下bug category -->        
+	<Match>
+		<Bug category="I18N"/>
+	</Match>
+	<Match>
+		<Bug category="PERFORMANCE"/>
+	</Match>
+	<Match>
+		<Bug category="SECURITY"/>
+	</Match>
+	<Match>
+		<Bug category="MT_CORRECTNESS"/>
+	</Match>	 
+	<!-- 过滤掉了R文件、manifest文件和测试用例类-->
+	<Match>
+		<Class name="~.*\.R\$.*"/>
+	</Match>
+	<!--过滤掉一些bug-->
+	<Match>
+		<Or>
+			<!--Field names should start with a lower case letter-->
+			<BugCode name="Nm"/>
+			<!--Method ignores exceptional return value or Return value of method without side effect is ignored-->
+			<BugCode name="RV"/>
+			<!--国际化-->
+			<BugCode name="Dm"/>
+			<!-- EI: May expose internal representation by returning reference to mutable object (EI_EXPOSE_REP) -->
+			<BugCode name ="EI"/>
+			<!-- EI2: May expose internal representation by incorporating reference to mutable object (EI_EXPOSE_REP2) -->
+			<BugCode name ="EI2"/>
+		</Or>
+	</Match>
+	<Match>
+		<Class name="~.*\.Manifest\$.*"/>
+	</Match>
+	<Match>
+		<Package name="~org\.jivesoftware\.smack.*"/>
+	</Match>
+	<Match>
+		<Package name="~de\.measite\.smack.*"/>
+	</Match>	
+	<Match>
+		<Package name="~org\.apache\.harmony.*"/>
+	</Match>
+	<Match>
+		<Package name="~com\.novell\.sasl.*"/>
+	</Match>	
+	<Match>
+		<Package name="~test.*"/>
+	</Match>	
+	<Match>
+		<Class name="~.*\.*Test"/>
+	</Match>
+</FindBugsFilter>

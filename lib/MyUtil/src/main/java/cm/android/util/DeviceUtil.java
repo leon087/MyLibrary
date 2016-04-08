@@ -15,13 +15,16 @@ import android.util.DisplayMetrics;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.UUID;
 
@@ -159,7 +162,9 @@ public class DeviceUtil {
                 return "";
             }
             return serial;
-        } catch (Exception e) {
+        } catch (NoSuchFieldException e) {
+            return "";
+        } catch (IllegalAccessException e) {
             return "";
         }
     }
@@ -189,11 +194,11 @@ public class DeviceUtil {
         //可能相同或为null
         String serial = getSerial();
 
-        int appTagHashCode = Math.abs(appTag.hashCode());
-        int serialHashCode = Math.abs(serial.hashCode());
+        int appTagHashCode = appTag.hashCode();
+        int serialHashCode = serial.hashCode();
 
-        int boardHashCode = Math.abs(board.hashCode());
-        int modelHashCode = Math.abs(model.hashCode());
+        int boardHashCode = board.hashCode();
+        int modelHashCode = model.hashCode();
 
         long mostSigBits = ((long) appTagHashCode) << 32 | serialHashCode;
         long leastSigBits = ((long) boardHashCode) << 32 | modelHashCode;
@@ -308,11 +313,17 @@ public class DeviceUtil {
             Method getString = Build.class.getDeclaredMethod("getString", String.class);
             getString.setAccessible(true);
             return getString.invoke(null, "net.hostname").toString();
-        } catch (Exception ex) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
-            return sb.toString();
+        } catch (NoSuchMethodException e) {
+            logger.debug(e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            logger.debug(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            logger.debug(e.getMessage(), e);
         }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
+        return sb.toString();
     }
 
     public static String getHostName2() {
@@ -321,11 +332,19 @@ public class DeviceUtil {
             Method get = clazz.getDeclaredMethod("get", String.class);
             get.setAccessible(true);
             return get.invoke(null, "net.hostname").toString();
-        } catch (Exception e) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
-            return sb.toString();
+        } catch (ClassNotFoundException e) {
+            logger.debug(e.getMessage(), e);
+        } catch (NoSuchMethodException e) {
+            logger.debug(e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            logger.debug(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            logger.debug(e.getMessage(), e);
         }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
+        return sb.toString();
     }
 
     public static int getAdbEnabled(Context context) {
@@ -337,7 +356,9 @@ public class DeviceUtil {
         BufferedReader cidFile = null;
         try {
             File input = new File("/sys/block/" + block + "/device");
-            cidFile = new BufferedReader(new FileReader(new File(input, "cid")));
+            FileInputStream fis = new FileInputStream(new File(input, "cid"));
+            cidFile = new BufferedReader(new InputStreamReader(fis, Charset.defaultCharset()));
+//            cidFile = new BufferedReader(new FileReader(fis,""));
             String sd_cid = cidFile.readLine();
             logger.info("CID of the MMC = {}", sd_cid);
             return sd_cid;

@@ -1,7 +1,8 @@
-package cm.android.thread;
+package cm.java.thread;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
@@ -21,28 +22,19 @@ public class ThreadPool {
 
     private final BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>();
 
-    private int CORE_POOL_SIZE = 5;
-
-    private int MAX_POOL_SIZE = 5;
-
-    private int KEEP_ALIVE_TIME = 2; // 10 seconds
+    private static final int KEEP_ALIVE_TIME = 10 * 1000;
 
     public ThreadPool(int corePoolSize, int maximumPoolSize) {
-        StackTraceElement stackTraceElement = Thread.currentThread()
-                .getStackTrace()[3];
-        StringBuilder sb = new StringBuilder();
-        sb.append(stackTraceElement.getFileName());
-        sb.append(":");
-        sb.append(stackTraceElement.getMethodName());
-        sb.append(":");
-        sb.append(stackTraceElement.getLineNumber());
-
-        RejectedExecutionHandler rejectedExecutionHandler
-                = new ThreadPoolExecutor.CallerRunsPolicy();
-        ThreadFactory threadFactory = new PriorityThreadFactory(sb.toString(),
-                android.os.Process.THREAD_PRIORITY_LOWEST);
+        RejectedExecutionHandler rejectedExecutionHandler = new ThreadPoolExecutor.CallerRunsPolicy();
         executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
-                KEEP_ALIVE_TIME, TimeUnit.SECONDS, workQueue, threadFactory,
+                KEEP_ALIVE_TIME, TimeUnit.MILLISECONDS, workQueue, Executors.defaultThreadFactory(),
+                rejectedExecutionHandler);
+    }
+
+    public ThreadPool(int corePoolSize, int maximumPoolSize, ThreadFactory threadFactory) {
+        RejectedExecutionHandler rejectedExecutionHandler = new ThreadPoolExecutor.CallerRunsPolicy();
+        executor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
+                KEEP_ALIVE_TIME, TimeUnit.MILLISECONDS, workQueue, threadFactory,
                 rejectedExecutionHandler);
     }
 

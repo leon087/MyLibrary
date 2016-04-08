@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.util.Arrays;
+
 public class BaseDao {
 
     protected ContentResolver resolver = null;
@@ -29,7 +31,7 @@ public class BaseDao {
     public BaseDao(Uri uri, String[] projection, Context context) {
         resolver = context.getContentResolver();
         this.contentUri = uri;
-        this.projection = projection;
+        this.projection = Arrays.copyOf(projection, projection.length);
     }
 
     public int deleteAll() {

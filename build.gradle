@@ -4,8 +4,7 @@ buildscript {
     }
 
     dependencies {
-//        classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath 'com.android.tools.build:gradle:2.0.0-beta6'
+        classpath 'com.android.tools.build:gradle:2.0.0'
 //        classpath 'com.android.tools.build:gradle-experimental:0.2.0'
     }
 }
@@ -19,10 +18,14 @@ allprojects {
             dirs "$rootDir/aars"
         }
     }
+
+    task findbugs {
+        dependsOn tasks.withType(FindBugs)
+    }
 }
 task wrapper(type: Wrapper) { gradleVersion = '2.11' }
 //apply plugin: 'android-reporting'
 
-ext{
+ext {
 //    supportLibVersion = '23.2.0'
 }

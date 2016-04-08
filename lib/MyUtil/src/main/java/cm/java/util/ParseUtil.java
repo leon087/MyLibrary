@@ -30,7 +30,7 @@ public class ParseUtil {
                 return false;
             }
         }
-        return null;
+        return false;
     }
 
     public static Double toDouble(Object value) {

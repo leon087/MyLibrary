@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A utility available to control APN settings The utility object requires a
@@ -30,6 +31,8 @@ public class NetworkManager {
      * Object used to interact with APN
      */
     private ApnDao mApnDao;
+
+    private volatile AtomicBoolean wait = new AtomicBoolean(false);
 
     /**
      * Context used to interface with APN settings
@@ -98,7 +101,10 @@ public class NetworkManager {
         while (!mDataConnectionStatus.isDataConnection()) {
             try {
                 synchronized (mDataConnectionStatus) {
-                    mDataConnectionStatus.wait();
+                    wait.set(true);
+                    while (wait.get()) {
+                        mDataConnectionStatus.wait();
+                    }
                 }
             } catch (InterruptedException e) {
                 // If interrupt doesn't change connectivity carry on
@@ -120,7 +126,10 @@ public class NetworkManager {
         while (mDataConnectionStatus.isDataConnection()) {
             try {
                 synchronized (mDataConnectionStatus) {
-                    mDataConnectionStatus.wait();
+                    wait.set(true);
+                    while (wait.get()) {
+                        mDataConnectionStatus.wait();
+                    }
                 }
             } catch (InterruptedException e) {
                 // If interrupt doesn't change connectivity carry on
@@ -139,6 +148,7 @@ public class NetworkManager {
         @Override
         public void run() {
             synchronized (mDataConnectionStatus) {
+                wait.set(false);
                 mDataConnectionStatus.notifyAll();
             }
             cancel();

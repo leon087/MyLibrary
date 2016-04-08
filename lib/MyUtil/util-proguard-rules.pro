@@ -155,7 +155,7 @@
 }
 
 #保留class名字的时候同时混淆该class
--keepnames class cm.android.thread.ThreadPool
+-keepnames class cm.java.thread.ThreadPool
 
 -dontwarn android.support.**
 -keep class * extends android.support.**

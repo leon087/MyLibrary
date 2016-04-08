@@ -2,14 +2,14 @@ package cm.android.framework.core.global;
 
 import java.util.Map;
 
-import cm.java.util.ObjectUtil;
+import cm.android.util.AndroidUtils;
 
 /**
  * 用户保存全局数据
  */
 public class GlobalData {
 
-    private Map<String, Object> mData = ObjectUtil.newHashMap();
+    private Map<String, Object> mData = AndroidUtils.newMap();
 
     private GlobalData() {
     }

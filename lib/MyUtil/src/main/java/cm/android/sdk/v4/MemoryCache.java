@@ -1,4 +1,4 @@
-package cm.android.sdk;
+package cm.android.sdk.v4;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

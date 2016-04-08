@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import cm.android.util.AndroidUtils;
 import cm.java.codec.HashUtil;
 import cm.java.util.ObjectUtil;
 import cm.java.util.Utils;
@@ -73,7 +74,7 @@ public class AppUtil {
      * @return PackageInfo列表
      */
     public static List<PackageInfo> getInstalledPackages(PackageManager pm,
-            int flag) {
+                                                         int flag) {
         List<PackageInfo> packages = getInstalledPackages(pm);
 
         List<PackageInfo> appList = new ArrayList<PackageInfo>();
@@ -122,7 +123,7 @@ public class AppUtil {
      * @return ApplicationInfo列表
      */
     public static List<ApplicationInfo> getInstalledApps(PackageManager pm,
-            int flag) {
+                                                         int flag) {
         List<ApplicationInfo> apps = getInstalledApplications(pm);
         List<ApplicationInfo> appList = ObjectUtil.newArrayList();
 
@@ -155,7 +156,7 @@ public class AppUtil {
     public static Map<String, ApplicationInfo> getInstalledAppsMap(
             PackageManager pm, int flag) {
         List<ApplicationInfo> apps = getInstalledApplications(pm);
-        Map<String, ApplicationInfo> appMap = ObjectUtil.newHashMap();
+        Map<String, ApplicationInfo> appMap = AndroidUtils.newMap();
 
         if (flag == APP_USER) {
             for (int i = 0; i < apps.size(); i++) {
@@ -189,7 +190,7 @@ public class AppUtil {
     public static Map<String, PackageInfo> getInstalledPackagesMap(
             PackageManager pm, int flag) {
         List<PackageInfo> packages = getInstalledPackages(pm);
-        Map<String, PackageInfo> appMap = ObjectUtil.newHashMap();
+        Map<String, PackageInfo> appMap = AndroidUtils.newMap();
 
         if (flag == APP_USER) {
             for (int i = 0; i < packages.size(); i++) {
@@ -219,7 +220,7 @@ public class AppUtil {
      * 同时获取用户应用和系统应用
      */
     public static void getPackages(PackageManager pm,
-            List<PackageInfo> userAppList, List<PackageInfo> sysAppList) {
+                                   List<PackageInfo> userAppList, List<PackageInfo> sysAppList) {
         List<PackageInfo> packages = getInstalledPackages(pm);
 
         if (null != userAppList) {
@@ -250,7 +251,7 @@ public class AppUtil {
      * @param archiveFilePath APK文件的路径。如：/sdcard /download/XX.apk
      */
     public static PackageInfo getArchiveInfo(PackageManager pm,
-            String archiveFilePath) {
+                                             String archiveFilePath) {
         PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath,
                 PackageManager.GET_ACTIVITIES);
         return info;
@@ -384,7 +385,7 @@ public class AppUtil {
             sb.append(signatures[0].toCharsString());
         }
 
-        byte[] fingerprint = HashUtil.getHmac(tag.getBytes(), sb.toString().getBytes());
+        byte[] fingerprint = HashUtil.getHmac(Utils.getBytes(tag), Utils.getBytes(sb.toString()));
         return fingerprint;
     }
 

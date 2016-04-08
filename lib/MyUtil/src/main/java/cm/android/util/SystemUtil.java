@@ -22,9 +22,11 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import cm.java.util.IoUtil;
 import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
 
@@ -50,6 +52,14 @@ public class SystemUtil {
             if (app.processName.equals(name)) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public static boolean isMainProcess(Context context) {
+        String processName = SystemUtil.getCurProcessName(context);
+        if (context.getPackageName().equals(processName)) {
+            return true;
         }
         return false;
     }
@@ -172,24 +182,26 @@ public class SystemUtil {
     public static boolean isRunningInEmulator() {
         Process process = null;
         DataOutputStream os = null;
+        BufferedReader in = null;
         try {
             process = Runtime.getRuntime().exec("getprop ro.kernel.qemu");
             os = new DataOutputStream(process.getOutputStream());
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(process.getInputStream(), "UTF-8"));
+            in = new BufferedReader(new InputStreamReader(process.getInputStream(), "UTF-8"));
             os.writeBytes("exit\n");
             os.flush();
             process.waitFor();
             // getprop ro.kernel.qemu == 1  在模拟器
             // getprop ro.product.model == "sdk"  在模拟器
             // getprop ro.build.tags == "test-keys"  在模拟器
-            boolean qemuKernel = (Integer.valueOf(in.readLine()) != 0);
+            int value = Integer.parseInt(in.readLine());
+            boolean qemuKernel = (value != 0);
             return qemuKernel;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return true;
         } finally {
             cm.java.util.IoUtil.closeQuietly(os);
+            cm.java.util.IoUtil.closeQuietly(in);
             if (process != null) {
                 process.destroy();
             }
@@ -202,6 +214,7 @@ public class SystemUtil {
     public static boolean isRoot() {
         String binPath = "/system/bin/su";
         String xBinPath = "/system/xbin/su";
+
         if (new File(binPath).exists() && isExecutable(binPath)) {
             return true;
         }
@@ -213,11 +226,11 @@ public class SystemUtil {
 
     private static boolean isExecutable(String filePath) {
         Process p = null;
+        BufferedReader in = null;
         try {
             p = Runtime.getRuntime().exec("ls -l " + filePath);
             // 获取返回内容
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    p.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(p.getInputStream(), Charset.defaultCharset()));
             String str = in.readLine();
             logger.info("str = " + str);
             if (str != null && str.length() >= 4) {
@@ -229,6 +242,7 @@ public class SystemUtil {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         } finally {
+            IoUtil.closeQuietly(in);
             if (p != null) {
                 p.destroy();
             }
@@ -272,8 +286,7 @@ public class SystemUtil {
     public static String getCurProcessName(Context context) {
         int pid = android.os.Process.myPid();
         logger.info("pid = " + pid);
-        ActivityManager am = (ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningAppProcessInfo appProcess : am.getRunningAppProcesses()) {
             if (appProcess.pid == pid) {
                 return appProcess.processName;

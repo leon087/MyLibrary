@@ -1,17 +1,15 @@
 tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
-//apply from: '../../ext-android.gradle'
 apply from: "$rootDir/ext-android.gradle"
+apply from: "$rootDir/findbugs/findbugs.gradle"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':lib:MyUtil')
 
     compile 'com.jakewharton:disklrucache:2.0.2'
-//    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
-
-    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
 }
 
 android.libraryVariants.all { variant ->

@@ -38,7 +38,7 @@ final class ApplicationImpl {
     private final ServiceBinderProxy serviceBidnerProxy = new ServiceBinderProxy();
 
     //    private ServiceManager.InitListener initListener;
-    private WeakReference<ServiceManager.InitListener> initListener;
+    private volatile WeakReference<ServiceManager.InitListener> initListener;
 
     final synchronized boolean isStarted() {
 //        return startAtomic.get();
@@ -90,7 +90,9 @@ final class ApplicationImpl {
 
         StateHolder.writeState(appContext, true);
 
-        this.initListener = new WeakReference<ServiceManager.InitListener>(initListener);
+        synchronized (this) {
+            this.initListener = new WeakReference<ServiceManager.InitListener>(initListener);
+        }
 
         if (isSystemReady()) {
             startInternal();
@@ -112,7 +114,9 @@ final class ApplicationImpl {
     }
 
     private synchronized void stopInternal() {
-        this.initListener = null;
+        synchronized (this) {
+            this.initListener = null;
+        }
         serviceBidnerProxy.destroy();
 
         if (startAtomic.get()) {
@@ -191,8 +195,17 @@ final class ApplicationImpl {
     }
 
     private void notifyInitSucceed() {
-        if (null != initListener && initListener.get() != null) {
-            initListener.get().initSucceed();
+        synchronized (this) {
+            if (initListener == null) {
+                return;
+            }
+
+            ServiceManager.InitListener listener = initListener.get();
+            if (listener == null) {
+                return;
+            }
+
+            listener.initSucceed();
             this.initListener = null;
         }
     }

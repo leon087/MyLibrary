@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-import cm.java.util.ObjectUtil;
+import cm.android.util.AndroidUtils;
 import cm.java.util.StrictLineReader;
 import cm.java.util.Utils;
 
@@ -30,7 +30,7 @@ public class HttpCacheEntry extends DiskCacheEntry {
             return null;
         }
 
-        Map<String, String> headMap = ObjectUtil.newHashMap();
+        Map<String, String> headMap = AndroidUtils.newMap();
         for (int i = 0; i < length; i++) {
             String line = reader.readLine();
             String[] head = line.split(":");
@@ -60,8 +60,8 @@ public class HttpCacheEntry extends DiskCacheEntry {
         if (!Utils.isEmpty(headers)) {
             writer.write(String.valueOf(headers.size()) + '\n');
             // 写header
-            for (String name : headers.keySet()) {
-                writer.write(name + ":" + headers.get(name) + '\n');
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                writer.write(entry.getKey() + ":" + entry.getValue() + '\n');
             }
         } else {
             writer.write("0" + '\n');

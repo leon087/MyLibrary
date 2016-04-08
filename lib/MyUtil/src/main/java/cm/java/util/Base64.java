@@ -17,6 +17,7 @@
 package cm.java.util;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 /**
  * Utilities for encoding and decoding the Base64 representation of
@@ -116,7 +117,7 @@ public class Base64 {
      *                                  incorrect padding
      */
     public static byte[] decode(String str, int flags) {
-        return decode(str.getBytes(), flags);
+        return decode(str.getBytes(Charset.defaultCharset()), flags);
     }
 
     /**
@@ -534,6 +535,8 @@ public class Base64 {
                     break;
                 case 2:
                     output_len += 3;
+                    break;
+                default:
                     break;
             }
         }

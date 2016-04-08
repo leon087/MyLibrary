@@ -12,6 +12,7 @@ import java.util.List;
 
 import cm.java.util.Utils;
 
+@SuppressWarnings("MissingPermission")
 public class WifiUtil {
 
     private static final Logger logger = LoggerFactory.getLogger("WifiUtil");

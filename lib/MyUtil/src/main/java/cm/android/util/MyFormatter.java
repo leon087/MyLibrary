@@ -15,11 +15,8 @@ public class MyFormatter {
 
 //    private static char ff[] = {'A', 'B', 'C', 'D', 'E', 'F'};
 
-    private static SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
-            Locale.getDefault());
-
-    private static SimpleDateFormat mDateFormat2 = new SimpleDateFormat("yyyyMMddHHmmss",
-            Locale.getDefault());
+    public static final String FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String FORMAT_2 = "yyyyMMddHHmmss";
 
     /**
      * 格式化文件大小
@@ -56,27 +53,32 @@ public class MyFormatter {
         return Formatter.formatFileSize(context, size);
     }
 
+    private static SimpleDateFormat getFormat(String format) {
+        return new SimpleDateFormat(format, Locale.getDefault());
+    }
+
     /**
      * 格式化日期成"yyyy-MM-dd HH:mm:ss"
      */
     public static String formatDate(long time) {
         // 2009-10-09 10:15:55
-        return mDateFormat.format(new Date(time));
+        SimpleDateFormat dateFormat = getFormat(FORMAT);
+        return dateFormat.format(new Date(time));
     }
 
     /**
      * 格式化日期成"yyyyMMddHHmmss"
      */
     public static String formatDate2(long time) {
-        // 2009-10-09 10:15:55
-        return mDateFormat2.format(new Date(time));
+        SimpleDateFormat dateFormat = getFormat(FORMAT_2);
+        return dateFormat.format(new Date(time));
     }
 
     /**
      * 按自定义格式格式化时间
      */
     public static String formatDate(String formatStr, long time) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(formatStr, Locale.getDefault());
+        SimpleDateFormat dateFormat = getFormat(formatStr);
         return dateFormat.format(new Date(time));
     }
 }

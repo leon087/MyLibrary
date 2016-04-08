@@ -97,8 +97,7 @@ public class CameraUtil {
         return intent;
     }
 
-    private static Intent cropImageIntent(Uri uri, Uri outputUri, int width,
-            int height) {
+    public static Intent cropImageIntent(Uri uri, Uri outputUri, int width, int height) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
@@ -208,13 +207,13 @@ public class CameraUtil {
     // ////////////////////////////////
 
     public static void cropImage(Uri uri, int width, int height,
-            Activity activity) {
+                                 Activity activity) {
         Intent intent = cropImageIntent(uri, width, height);
         activity.startActivityForResult(intent, REQUEST_CODE_CROP);
     }
 
     public static void cropImage(Uri uri, int width, int height,
-            android.support.v4.app.Fragment fragment) {
+                                 android.support.v4.app.Fragment fragment) {
         Intent intent = cropImageIntent(uri, width, height);
         fragment.startActivityForResult(intent, REQUEST_CODE_CROP);
     }

@@ -29,8 +29,8 @@ public abstract class AbstractAdapter<T> extends BaseAdapter {
      * </br><b>description : </b> 创建Adapter，需要给定View创建接口。
      */
     public AbstractAdapter(Context context) {
-        mInflater = LayoutInflater.from(context);
         this.context = context;
+        mInflater = LayoutInflater.from(this.context);
     }
 
     /**

@@ -31,7 +31,9 @@ public class NetworkStateChanged {
 
     public void deInit() {
         receiver.unregister(context);
-        observer = null;
+        synchronized (this) {
+            observer = defNetworkChangeObserver;
+        }
         context = null;
     }
 
@@ -46,7 +48,7 @@ public class NetworkStateChanged {
     }
 
     private synchronized void notifyObserver(boolean isNetworkAvailable,
-            NetworkUtil.NetType netType) {
+                                             NetworkUtil.NetType netType) {
         if (isNetworkAvailable) {
             observer.onConnect(netType);
         } else {

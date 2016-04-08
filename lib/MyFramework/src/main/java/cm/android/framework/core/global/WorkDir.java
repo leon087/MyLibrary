@@ -7,11 +7,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.Map;
 
+import cm.android.util.AndroidUtils;
 import cm.android.util.EnvironmentUtil;
 import cm.java.util.IoUtil;
-import cm.java.util.ObjectUtil;
 
 /**
  * 目录管理基类
@@ -69,7 +69,7 @@ public class WorkDir {
 
         public static final String WORK_PATH = "workpath";
 
-        private final HashMap<String, File> dirs = ObjectUtil.newHashMap();
+        private final Map<String, File> dirs = AndroidUtils.newMap();
 
         protected File workDir = null;
 

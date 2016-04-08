@@ -223,6 +223,10 @@ public class IoUtil {
             }
         });
 
+        if (files == null || files.length == 0) {
+            return dirs;
+        }
+
         for (File tmpDir : files) {
             List<File> tmpDirList = getDirs(tmpDir);
             dirs.addAll(tmpDirList);
@@ -455,6 +459,18 @@ public class IoUtil {
             }
         }
         return true;
+    }
+
+    public static File buildPath(File base, String... segments) {
+        File cur = base;
+        for (String segment : segments) {
+            if (cur == null) {
+                cur = new File(segment);
+            } else if (segment != null) {
+                cur = new File(cur, segment);
+            }
+        }
+        return cur;
     }
 
     private static int getShort(byte[] data) {

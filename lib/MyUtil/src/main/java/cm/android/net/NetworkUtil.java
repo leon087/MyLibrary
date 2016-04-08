@@ -3,6 +3,7 @@ package cm.android.net;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -204,6 +205,14 @@ public class NetworkUtil {
      * <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
      */
     public static void setMobileDataEnabled(Context context, boolean enabled) {
+        if (EnvironmentUtil.SdkUtil.has(21)) {
+
+        } else {
+            setMobileDataEnabledLow(context, enabled);
+        }
+    }
+
+    private static void setMobileDataEnabledLow(Context context, boolean enabled) {
         final ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -213,39 +222,9 @@ public class NetworkUtil {
         if (setMobileDataEnabledMethod != null) {
             proxy.doMethod(setMobileDataEnabledMethod, enabled);
         }
-
-//            Object iConnectivityManager = ReflectUtil.getFieldValue(conman, "mService");
-//        Field iConnectivityManagerField;
-//        try {
-//            final Class conmanClass = Class.forName(conman.getClass().getName());
-//            iConnectivityManagerField = conmanClass.getDeclaredField("mService");
-//            iConnectivityManagerField.setAccessible(true);
-//            final Object iConnectivityManager = iConnectivityManagerField.get(conman);
-//
-//            final Class iConnectivityManagerClass = Class
-//                    .forName(iConnectivityManager.getClass().getName());
-//            final Method setMobileDataEnabledMethod = iConnectivityManagerClass
-//                    .getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
-//            setMobileDataEnabledMethod.setAccessible(true);
-//            setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
-//        } catch (SecurityException e) {
-//            logger.error("", e);
-//        } catch (NoSuchFieldException e) {
-//            logger.error("", e);
-//        } catch (ClassNotFoundException e) {
-//            logger.error("", e);
-//        } catch (IllegalArgumentException e) {
-//            logger.error("", e);
-//        } catch (IllegalAccessException e) {
-//            logger.error("", e);
-//        } catch (NoSuchMethodException e) {
-//            logger.error("", e);
-//        } catch (InvocationTargetException e) {
-//            logger.error("", e);
-//        }
     }
 
-    public static boolean getMobileDataEnabled(Context context) {
+    private static boolean getMobileDataEnabledLow(Context context) {
         final ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -255,6 +234,14 @@ public class NetworkUtil {
             return proxy.doMethod(getMobileDataEnabledMethod);
         }
         return true;
+    }
+
+    public static boolean getMobileDataEnabled(Context context) {
+        if (EnvironmentUtil.SdkUtil.has(21)) {
+            return false;
+        } else {
+            return getMobileDataEnabledLow(context);
+        }
     }
 
 
@@ -322,6 +309,7 @@ public class NetworkUtil {
 
         if (!EnvironmentUtil.SdkUtil.hasLollipop()) {
             setMobileDataEnabled(context, enabled);
+            return;
         }
 
         String command = null;
@@ -362,8 +350,8 @@ public class NetworkUtil {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static boolean getMobileDataEnabledCompat1(Context context) {
-
         if (!EnvironmentUtil.SdkUtil.hasLollipop()) {
             return getMobileDataEnabled(context);
         }

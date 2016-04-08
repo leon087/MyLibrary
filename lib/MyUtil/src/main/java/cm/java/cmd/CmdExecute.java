@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import cm.java.util.IoUtil;
 
@@ -78,7 +79,7 @@ public final class CmdExecute {
             outputStream = new ByteArrayOutputStream();
             IoUtil.write(inputStream, outputStream);
             byte[] bytes = outputStream.toByteArray();
-            return new String(bytes);
+            return new String(bytes, Charset.defaultCharset().name());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return null;

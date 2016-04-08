@@ -67,8 +67,7 @@ public final class AESCoder {
         return decrypt(secret, iv, encrypted);
     }
 
-    public static byte[] encrypt(SecretKey secretKey, byte[] iv, byte[] src)
-            throws Exception {
+    public static byte[] encrypt(SecretKey secretKey, byte[] iv, byte[] src) throws Exception {
         IvParameterSpec ivSpec = SecureUtil.getIv(iv);
 
         Cipher cipher = Cipher.getInstance(C_AES_CBC_PKCS5PADDING);

@@ -10,14 +10,14 @@ import android.content.IntentFilter;
 import java.util.Map;
 
 import cm.android.sdk.content.BaseBroadcastReceiver;
+import cm.android.util.AndroidUtils;
 import cm.android.util.IntentUtil;
-import cm.java.util.ObjectUtil;
 
 public final class TimerTaskManager {
 
     private static final Logger logger = LoggerFactory.getLogger("timer");
 
-    private final Map<String, TimerTask> taskMap = ObjectUtil.newHashMap();
+    private final Map<String, TimerTask> taskMap = AndroidUtils.newMap();
 
     private final TimerReceiver timerReceiver = new TimerReceiver();
 
@@ -32,7 +32,7 @@ public final class TimerTaskManager {
     }
 
     public synchronized void register(String action, long period, long delay,
-            boolean globalBroadcast) {
+                                      boolean globalBroadcast) {
         if (taskMap.get(action) != null) {
             return;
         }
@@ -75,7 +75,7 @@ public final class TimerTaskManager {
         logger.info("TimerTaskManager:stop");
     }
 
-    private class MyAlarmTask extends TimerTask {
+    private static class MyAlarmTask extends TimerTask {
 
         private String action;
 

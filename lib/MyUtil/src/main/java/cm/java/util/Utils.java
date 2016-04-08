@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
@@ -64,6 +65,13 @@ public final class Utils {
         }
 
         return false;
+    }
+
+    public static byte[] getBytes(String s) {
+        if (isEmpty(s)) {
+            return new byte[0];
+        }
+        return s.getBytes(Charset.defaultCharset());
     }
 
     /**
@@ -157,10 +165,9 @@ public final class Utils {
         String[] br = text.split("<br>");
         System.out.println("br.length = " + br.length);
         for (int i = 0; i < br.length; i++) {
-            System.out.println(i + "br[i].getBytes().length = "
-                    + br[i].getBytes().length);
+            System.out.println(i + "br[i].getBytes().length = " + br[i].getBytes(Charset.defaultCharset()).length);
 
-            int line = (int) Math.ceil(((double) br[i].getBytes().length) / 46);
+            int line = (int) Math.ceil(((double) br[i].getBytes(Charset.defaultCharset()).length) / 46);
             if (line == 0) {
                 line = 1;
             }

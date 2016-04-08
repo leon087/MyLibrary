@@ -17,6 +17,8 @@ import android.text.TextUtils;
 
 import java.util.List;
 
+import cm.java.util.IoUtil;
+
 /**
  * 桌面快捷方式有关的工具类
  */
@@ -49,7 +51,7 @@ public class ShortcutUtil {
      * <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
      */
     public static void addShortCut(Context context, String shortCutName, int resourceId,
-            Class<?> cls) {
+                                   Class<?> cls) {
         Intent shortCutIntent = new Intent(SHORTCUT_ADD_ACTION);
         //添加快捷方式的名字
         shortCutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortCutName);
@@ -130,12 +132,18 @@ public class ShortcutUtil {
         } catch (NameNotFoundException e) {
             logger.error("", e);
         }
-        Cursor c = context.getContentResolver()
-                .query(CONTENT_URI, new String[]{"title"}, "title=?", new String[]{appName}, null);
-        if (c != null && c.getCount() > 0) {
-            return true;
+        Cursor c = null;
+        try {
+            c = context.getContentResolver()
+                    .query(CONTENT_URI, new String[]{"title"}, "title=?", new String[]{appName},
+                            null);
+            if (c != null && c.getCount() > 0) {
+                return true;
+            }
+            return false;
+        } finally {
+            IoUtil.closeQuietly(c);
         }
-        return false;
     }
 
 
@@ -167,7 +175,7 @@ public class ShortcutUtil {
      */
     @TargetApi(4)
     private static String obtatinAppName(Context context) throws NameNotFoundException {
-        PackageManager packageManager = context.getPackageManager();
+//        PackageManager packageManager = context.getPackageManager();
         return context.getApplicationInfo().loadLabel(context.getPackageManager()).toString();
 //        return packageManager.getApplicationLabel(packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)).toString();
     }

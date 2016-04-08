@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
@@ -21,16 +22,16 @@ import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
  */
 public class LogConfig {
 
-    public static void test() {
-        configLogback(Level.OFF, new File("/sdcard"));
-        //LogConfig.configLogbackByString(LogConfig.genXml(LogLevel.OFF,new File("/sdcard")));
-        // BasicLogcatConfigurator.configureDefaultContext();
-
-        Logger log = LoggerFactory.getLogger(LogConfig.class);
-        log.debug("gggg1,{},{}", "ggggg2", "ggggg3");
-        log.info("gggg1,{},{}", "ggggg2", "ggggg3");
-        log.error("gggg1,{},{}", "ggggg2", "ggggg3");
-    }
+//    public static void test() {
+//        configLogback(Level.OFF, new File("/sdcard"));
+//        //LogConfig.configLogbackByString(LogConfig.genXml(LogLevel.OFF,new File("/sdcard")));
+//        // BasicLogcatConfigurator.configureDefaultContext();
+//
+//        Logger log = LoggerFactory.getLogger(LogConfig.class);
+//        log.debug("gggg1,{},{}", "ggggg2", "ggggg3");
+//        log.info("gggg1,{},{}", "ggggg2", "ggggg3");
+//        log.error("gggg1,{},{}", "ggggg2", "ggggg3");
+//    }
 
     private static volatile boolean configFlag = false;
 
@@ -66,7 +67,7 @@ public class LogConfig {
     }
 
     private static void setFileMode(ch.qos.logback.classic.Logger root,
-            LoggerContext lc, File logDir) {
+                                    LoggerContext lc, File logDir) {
         // setup FileAppender
         PatternLayoutEncoder encoder1 = new PatternLayoutEncoder();
         encoder1.setContext(lc);
@@ -95,7 +96,7 @@ public class LogConfig {
     }
 
     private static void setLogcatMode(ch.qos.logback.classic.Logger root,
-            LoggerContext lc) {
+                                      LoggerContext lc) {
         // setup LogcatAppender
         PatternLayoutEncoder encoder2 = new PatternLayoutEncoder();
         encoder2.setContext(lc);
@@ -184,7 +185,7 @@ public class LogConfig {
         config.setContext(lc);
 
         try {
-            InputStream stream = new ByteArrayInputStream(xmlString.getBytes());
+            InputStream stream = new ByteArrayInputStream(xmlString.getBytes(Charset.defaultCharset()));
             config.doConfigure(stream);
         } catch (Exception e) {
             e.printStackTrace();

@@ -5,6 +5,7 @@ import android.os.Environment;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.charset.Charset;
 
 import cm.android.log.MyLog.MyLogManager;
 import cm.android.log.MyLog.MyLogManager.Level;
@@ -108,7 +109,7 @@ public class MyLog {
      */
     public static class MyLogManager {
 
-        static volatile String MY_TRACE = "MY_TRACE: ";
+        volatile String MY_TRACE = "MY_TRACE: ";
 
         // 可配参数
         Level logLevel = Level.MAX;
@@ -125,6 +126,10 @@ public class MyLog {
 
         static MyLogManager getLogger() {
             return SingletonHolder.INSTANCE;
+        }
+
+        public String getMyTrace() {
+            return MY_TRACE;
         }
 
         void log(Level level, String msg) {
@@ -331,7 +336,7 @@ class FileLogger extends MyBaseLogger {
 
     private String getName() {
         String fileNameFormat = "%s_%s.%s";
-        String fileName = String.format(fileNameFormat, MyLogManager.MY_TRACE,
+        String fileName = String.format(fileNameFormat, MyLogManager.getLogger().getMyTrace(),
                 getCurrDateStr(), FILE_EXT);
         return fileName;
     }
@@ -397,10 +402,10 @@ class FileLogger extends MyBaseLogger {
         }
 
         if (null != outputStream) {
-            String str = formatLogStr(level, MyLogManager.MY_TRACE, msg);
+            String str = formatLogStr(level, MyLogManager.getLogger().getMyTrace(), msg);
 
             try {
-                outputStream.write(str.getBytes());
+                outputStream.write(str.getBytes(Charset.defaultCharset()));
             } catch (Exception e) {
                 initSdcardSuccess = false;
                 logcatLogger.log(Level.ERROR,

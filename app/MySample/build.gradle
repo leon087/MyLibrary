@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply from: "$rootDir/ext-android.gradle"
+apply from: "$rootDir/findbugs/findbugs.gradle"
 
 def getKeyStore(def propertyFile) {
     if (propertyFile == null) {
@@ -82,18 +83,19 @@ android {
         }
 
         debug {
-            shrinkResources true
-            zipAlignEnabled true
+            initWith(buildTypes.release)
+            debuggable true
+            minifyEnabled false
 
             versionNameSuffix "-debug"
             signingConfig signingConfigs.debug
         }
 
-        beta {
+        rtest {
             initWith(buildTypes.release)
             debuggable true
 
-            versionNameSuffix "-beta"
+            versionNameSuffix "-rtest"
             signingConfig signingConfigs.debug
         }
     }
@@ -150,7 +152,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'multidex'
     }
 
-    betaCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
+    rtestCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 

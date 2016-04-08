@@ -79,6 +79,8 @@ public class NetworkManagementService extends Service {
                             case NM_CONNECTIVITY_OFF_VALUE:
                                 mNetworkManager.disableNetwork();
                                 break;
+                            default:
+                                break;
                         }
                         try {
                             mClients.get(i).send(Message.obtain(null, MSG_SET_VALUE, mValue, 0));

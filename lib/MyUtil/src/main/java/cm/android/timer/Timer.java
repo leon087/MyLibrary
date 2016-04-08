@@ -241,12 +241,10 @@ public final class Timer {
             }
 
             boolean taskCompletedNormally = false;
-            android.util.Log.e("ggg", "ggg cancelled = " + cancelled);
             try {
                 task.run();
                 taskCompletedNormally = true;
             } finally {
-                android.util.Log.e("ggg", "ggg taskCompletedNormally = " + taskCompletedNormally);
                 if (!taskCompletedNormally) {
                     synchronized (this) {
                         cancelled = true;

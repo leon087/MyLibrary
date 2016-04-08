@@ -8,26 +8,33 @@ import android.content.res.AssetManager;
 import android.os.Build;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import cm.java.util.IoUtil;
 
 public class Command {
     private static final Logger logger = LoggerFactory.getLogger("Command");
 
     /** copy file to destination */
-    private static void copyFile(File file, InputStream is, String mode)
-            throws IOException, InterruptedException {
-        final String abspath = file.getAbsolutePath();
-        final FileOutputStream out = new FileOutputStream(file);
-        byte buf[] = new byte[1024];
-        int len;
-        while ((len = is.read(buf)) > 0) {
-            out.write(buf, 0, len);
+    private static void copyFile(File file, InputStream is, String mode) throws IOException, InterruptedException {
+        FileOutputStream out = null;
+        try {
+            final String abspath = file.getAbsolutePath();
+            out = new FileOutputStream(file);
+            byte buf[] = new byte[1024];
+            int len;
+            while ((len = is.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            Runtime.getRuntime().exec("chmod " + mode + " " + abspath).waitFor();
+        } catch (FileNotFoundException e) {
+            throw new IOException(e);
+        } finally {
+            IoUtil.closeQuietly(out);
         }
-        out.close();
-        is.close();
-        Runtime.getRuntime().exec("chmod " + mode + " " + abspath).waitFor();
     }
 
     /**
@@ -42,7 +49,11 @@ public class Command {
             throws IOException, InterruptedException {
         AssetManager manager = context.getAssets();
         final InputStream is = manager.open(assetsFilename);
-        copyFile(file, is, mode);
+        try {
+            copyFile(file, is, mode);
+        } finally {
+            IoUtil.closeQuietly(is);
+        }
     }
 
     /**

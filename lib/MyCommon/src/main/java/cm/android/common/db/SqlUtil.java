@@ -149,10 +149,11 @@ public class SqlUtil {
             typeClass = getBasicClass(typeClass);
             if (isBasicType(typeClass)) {
                 String _str = c.getString(c.getColumnIndex(_field.getName()));
-                if (_str == null) {
-                    break;
-                }
-                _str = _str == null ? "" : _str;
+//                if (_str == null) {
+//                    break;
+//                }
+                _str = (_str == null) ? "" : _str;
+
                 Constructor<? extends Object> cons = typeClass
                         .getConstructor(String.class);
                 Object attribute = cons.newInstance(_str);

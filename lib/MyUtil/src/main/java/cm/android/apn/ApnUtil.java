@@ -92,11 +92,9 @@ public class ApnUtil {
         Cursor cursor = null;
         try {
             resolver.update(PREFER_APN_URI, values, null, null);
-            Cursor c = resolver
-                    .query(PREFER_APN_URI, new String[]{"name", "apn"}, "_id=" + apnId, null,
-                            null);
-            if (c != null) {
-                return true;
+            cursor = resolver.query(PREFER_APN_URI, new String[]{"name", "apn"}, "_id=" + apnId, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getCount() > 0;
             }
             return false;
         } catch (SQLException e) {

@@ -178,15 +178,14 @@ public class ValidateUtil {
 
     public static String addAdrToMobile(String mobileCode) {
         String firstcode = "86";
-        if (mobileCode != null) {
-            mobileCode = mobileCode.trim();
-        }
-        String mobile = mobileCode;
-        if (mobileCode == null || mobileCode.length() == 12
-                || mobileCode.length() < 11 || mobileCode.length() > 14
-                || mobileCode.length() == 0) {
+        if (Utils.isEmpty(mobileCode)) {
             return "";
         }
+        mobileCode = mobileCode.trim();
+        if (mobileCode.length() == 12 || mobileCode.length() < 11 || mobileCode.length() > 14) {
+            return "";
+        }
+        String mobile = mobileCode;
         if (mobileCode.length() == 14) {
             if (!mobileCode.startsWith("+86")) {
                 return "";

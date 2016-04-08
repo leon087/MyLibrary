@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import cm.java.util.IoUtil;
@@ -73,7 +74,7 @@ public class ShellUtil {
      * @see cm.java.cmd.ShellUtil#exec(String[], boolean, boolean)
      */
     public static CommandResult exec(String command, boolean isRoot,
-            boolean isNeedResultMsg) {
+                                     boolean isNeedResultMsg) {
         return exec(new String[]{command}, isRoot, isNeedResultMsg);
     }
 
@@ -86,7 +87,7 @@ public class ShellUtil {
      * @see cm.java.cmd.ShellUtil#exec(String[], boolean, boolean)
      */
     public static CommandResult exec(List<String> commands, boolean isRoot,
-            boolean isNeedResultMsg) {
+                                     boolean isNeedResultMsg) {
         return exec(
                 commands == null ? null : commands.toArray(new String[]{}),
                 isRoot, isNeedResultMsg);
@@ -106,7 +107,7 @@ public class ShellUtil {
      * </ul>
      */
     public static CommandResult exec(String[] commands, boolean isRoot,
-            boolean isNeedResultMsg) {
+                                     boolean isNeedResultMsg) {
         int result = -1;
         if (commands == null || commands.length == 0) {
             return new CommandResult(result, null, null);
@@ -130,7 +131,7 @@ public class ShellUtil {
 
                 // donnot use os.writeBytes(commmand), avoid chinese charset
                 // error
-                os.write(command.getBytes());
+                os.write(command.getBytes(Charset.defaultCharset()));
                 os.writeBytes(COMMAND_LINE_END);
                 os.flush();
             }
@@ -142,10 +143,8 @@ public class ShellUtil {
             if (isNeedResultMsg) {
                 successMsg = new StringBuilder();
                 errorMsg = new StringBuilder();
-                successResult = new BufferedReader(new InputStreamReader(
-                        process.getInputStream()));
-                errorResult = new BufferedReader(new InputStreamReader(
-                        process.getErrorStream()));
+                successResult = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.defaultCharset().name()));
+                errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream(), Charset.defaultCharset()));
                 String s;
                 while ((s = successResult.readLine()) != null) {
                     successMsg.append(s);

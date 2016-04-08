@@ -20,6 +20,7 @@ import android.util.TypedValue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Properties;
@@ -27,7 +28,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cm.android.applications.AppUtil;
-import cm.java.util.ObjectUtil;
 import cm.java.util.Utils;
 
 /**
@@ -51,10 +51,9 @@ public final class AndroidUtils {
     /**
      * 桩模块(Stub), 获取假数据，用于各个子功能单元测试
      */
-    public static Map<String, Object> getStubFile(Context cxt,
-                                                  String stubFileName) {
+    public static Map<String, Object> getStubFile(Context cxt, String stubFileName) {
         if (Utils.isEmpty(stubFileName)) {
-            return ObjectUtil.newHashMap();
+            return AndroidUtils.newMap();
         }
         Map<String, Object> stubMap = null;
         InputStream inputStream = null;
@@ -74,7 +73,7 @@ public final class AndroidUtils {
         // TODO:
         if (stubMap == null) {
             logger.error("stubMap = null");
-            return ObjectUtil.newHashMap();
+            return AndroidUtils.newMap();
         }
         return stubMap;
     }
@@ -102,9 +101,17 @@ public final class AndroidUtils {
         String str = null;
         try {
             Class<?> c = Class.forName("android.os.SystemProperties");
-            Method get = c.getMethod("get", String.class);
+            Method get = c.getDeclaredMethod("get", String.class);
+            get.setAccessible(true);
             str = (String) get.invoke(c, key);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException e) {
+            logger.error(e.getMessage(), e);
+        } catch (NoSuchMethodException e) {
+            logger.error(e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            logger.error(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            logger.error(e.getMessage(), e);
         }
 
         logger.debug("getSystemProperties key = {},str = {}", key, str);
@@ -139,13 +146,22 @@ public final class AndroidUtils {
     @TargetApi(8)
     public static long getDexCrc(Context context) {
         long crc = 0;
+        ZipFile zf = null;
         try {
-            ZipFile zf = new ZipFile(context.getApplicationContext().getPackageCodePath());
+            zf = new ZipFile(context.getApplicationContext().getPackageCodePath());
             ZipEntry ze = zf.getEntry("classes.dex");
             crc = ze.getCrc();
             return crc;
         } catch (IOException e) {
             logger.error("", e);
+        } finally {
+            if (zf != null) {
+                try {
+                    zf.close();
+                } catch (IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
         }
         return 0;
     }
@@ -228,5 +244,19 @@ public final class AndroidUtils {
     public static int dipToPx(final Context ctx, float dip) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 dip, ctx.getResources().getDisplayMetrics());
+    }
+
+    public static <K, V> android.support.v4.util.ArrayMap<K, V> newMap() {
+        return new android.support.v4.util.ArrayMap<>();
+    }
+
+    public static <K, V> android.support.v4.util.ArrayMap<K, V> newMap(int capacity) {
+        return new android.support.v4.util.ArrayMap<>(capacity);
+    }
+
+    public static <K, V> android.support.v4.util.ArrayMap<K, V> newMap(Map<K, V> map) {
+        android.support.v4.util.ArrayMap<K, V> arrayMap = new android.support.v4.util.ArrayMap<>();
+        arrayMap.putAll(map);
+        return arrayMap;
     }
 }

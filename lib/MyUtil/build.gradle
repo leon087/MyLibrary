@@ -2,6 +2,7 @@ tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
+apply from: "$rootDir/findbugs/findbugs.gradle"
 
 android {
     defaultConfig {
@@ -13,7 +14,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.2.1'
 
     //log
     compile 'com.github.tony19:logback-android-classic:1.1.1-4'

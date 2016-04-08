@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.zip.ZipFile;
 
@@ -22,17 +23,18 @@ public class LibLoader {
         File sopath = context.getDir("libs", Context.MODE_PRIVATE);
         File soname = new File(sopath, soFileName);
         try {
-            sopath.mkdirs();
+            if (!sopath.exists()) {
+                boolean result = sopath.mkdirs();
+            }
             File zip = new File(context.getPackageCodePath());
             ZipFile zipfile = new ZipFile(zip);
-            boolean result = IoUtil.writeZipFile(zipfile, entryName,
-                    soname);
+            boolean result = IoUtil.writeZipFile(zipfile, entryName, soname);
             if (result) {
                 System.load(soname.getAbsolutePath());
             }
             // System.load(LIBRARY_NAME);
             // setHyphenationMethod(HYPH_NONE, new byte[] {});
-        } catch (Exception e) {
+        } catch (IOException e) {
             // log.e("cannot install " + LIBRARY_NAME + " library", e);
         }
     }
@@ -56,9 +58,12 @@ public class LibLoader {
             if (result) {
                 System.load(soname.getAbsolutePath());
             }
-            soname.delete();
+            boolean delete = soname.delete();
+            if (!delete) {
+//                logger.debug("delete failed:cr = {}", cr.getAbsoluteFile());
+            }
         } catch (Exception e) { // I am still lazy ~~~
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 }

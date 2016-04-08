@@ -46,7 +46,7 @@ public final class HashUtil {
     private static final int KEY_LENGTH = 16;
 
     public static SecretKey generateHash(char[] password, byte[] salt, int iterationCount,
-            int keyLength) throws InvalidKeySpecException {
+                                         int keyLength) throws InvalidKeySpecException {
         try {
             SecretKey key = generatePBEKey(password, salt, ALG_PBK, iterationCount, keyLength);
             return key;
@@ -66,7 +66,7 @@ public final class HashUtil {
     public static SecretKey generateHash(char[] password, byte[] salt)
             throws InvalidKeySpecException {
         if (null == salt) {
-            salt = SecureUtil.SALT_DEF;
+            salt = SecureUtil.getSaltDef();
         }
         return generateHash(password, salt, KEY_LENGTH);
     }
@@ -74,13 +74,13 @@ public final class HashUtil {
     public static SecretKey generateHash(char[] password, byte[] salt, int keyLength)
             throws InvalidKeySpecException {
         if (null == salt) {
-            salt = SecureUtil.SALT_DEF;
+            salt = SecureUtil.getSaltDef();
         }
         return generateHash(password, salt, ITERATIONS, keyLength);
     }
 
     private static SecretKey generatePBEKey(char[] password, byte[] salt, String algorthm,
-            int iterations, int keyLength)
+                                            int iterations, int keyLength)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         int keySizeBit = SecureUtil.convertSize(keyLength);
 

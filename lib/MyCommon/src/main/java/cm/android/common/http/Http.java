@@ -53,7 +53,7 @@ public final class Http {
         return builder.build();
     }
 
-    private static OkHttpClient client;
+    private static volatile OkHttpClient client;
 
     public static OkHttpClient getClient() {
         if (client == null) {
