@@ -1,0 +1,143 @@
+package cm.android.gradle.util
+
+import org.gradle.api.Action
+import org.gradle.api.Project
+import org.gradle.api.file.CopySpec
+
+public class Util {
+    public static def computeVersionName(Project project) {
+        return project.versionName + "." + project.versionCode + "." + buildTime()
+    }
+
+    public static def buildTime() {
+        def date = new Date()
+        def formattedDate = date.format('MMddHH')
+        return formattedDate
+    }
+
+    public static def isWindows() {
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.indexOf("windows") >= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static void rename(def variant, def appName) {
+        def versionName = variant.getVersionName()
+
+        def productFlavorName = ''
+        if (variant.productFlavors.size() > 0) {
+            productFlavorName = variant.productFlavors.name
+        }
+
+        def outName = "${appName}-${versionName}${productFlavorName}.apk"
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent + "/${variant.buildType.name}", outName)
+        }
+    }
+
+//    public static void deleteUnaligned(def output) {
+//        File unaligned = output.packageApplication.outputFile;
+//        File aligned = output.outputFile
+//        if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
+//            println "deleting " + unaligned.getName()
+//            unaligned.delete()
+//        }
+//    }
+
+    public static void deleteUnaligned(def outputs) {
+        outputs.each { output ->
+            File unaligned = output.packageApplication.outputFile;
+            File aligned = output.outputFile
+            if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
+                println "deleting " + unaligned.getName()
+                unaligned.delete()
+            }
+        }
+    }
+
+    public static def pack(Project project, outName) {
+        //copy
+        def buildRoot = project.buildDir
+        def outputs = "outputs"
+        def apk = 'apk'
+        def mapping = 'mapping'
+
+        def buildOutputs = new File(buildRoot, outputs)
+        def buildApk = new File(buildOutputs, apk)
+        def buildMapping = new File(buildOutputs, mapping)
+//        def outName = "${project.appName}-${project.defaultConfig.versionName}"
+
+        def out = new File(buildRoot, outName)
+        def outApk = new File(out, apk)
+        def outMapping = new File(out, mapping)
+
+        project.copy(new Action<CopySpec>() {
+            @Override
+            void execute(CopySpec copySpec) {
+                copySpec.from(buildApk)
+                copySpec.into(outApk)
+            }
+        })
+
+        //删除debug
+        File debug = new File(outApk, "debug")
+        if (debug.exists()) {
+            def result = debug.deleteDir()
+        }
+        //删除旧版本
+        File rtest = new File(outApk, "rtest")
+        File release = new File(outApk, "release")
+        File[] rtestFiles = rtest.listFiles(new FilenameFilter() {
+            @Override
+            boolean accept(File dir, String name) {
+                if (name.contains(outName)) {
+                    return false
+                }
+                return true
+            }
+        })
+        if (rtestFiles != null) {
+            for (int i = 0; i < rtestFiles.size(); i++) {
+                rtestFiles[i].delete()
+            }
+        }
+        File[] releaseFiles = release.listFiles(new FilenameFilter() {
+            @Override
+            boolean accept(File dir, String name) {
+                if (name.contains(outName)) {
+                    return false
+                }
+                return true
+            }
+        })
+        if (releaseFiles != null) {
+            for (int i = 0; i < releaseFiles.size(); i++) {
+                releaseFiles[i].delete()
+            }
+        }
+        //copy mapping
+//        copy {
+//            from buildMapping
+//            into outMapping
+//        }
+        project.copy(new Action<CopySpec>() {
+            @Override
+            void execute(CopySpec copySpec) {
+                copySpec.from(buildMapping)
+                copySpec.into(outMapping)
+            }
+        })
+
+        return out
+    }
+
+    public static def wrapStr(def str) {
+        return '"' + str + '"';
+    }
+
+    public static def wrapString(def str) {
+        return '"' + str + '"';
+    }
+}

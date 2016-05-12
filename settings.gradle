@@ -1,6 +1,7 @@
+include ':lib:MyGradlePlugin'
+
 include ':lib:MyCommonExt'
 include ':lib:MyCommonUI'
-
 
 include ':lib:MyFramework'
 include ':lib:MyUtil'

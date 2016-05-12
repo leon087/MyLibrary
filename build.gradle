@@ -7,22 +7,10 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'ggg.android:cm.android.gradle:1.0.3'
-//        classpath group: 'cm.android.gradle', name: 'MyGradlePlugin', version: '1.0.0'
+//        classpath 'ggg.android:cm.android.gradle:1.0.3'
+        classpath group: 'ggg.android', name: 'cm.android.gradle', version: '1.0.3'
     }
 }
-//本地repo
-//buildscript {
-//    repositories {
-//        maven {
-//            url uri(new File(rootDir, 'local_repo'))
-//        }
-//    }
-//
-//    dependencies {
-//        classpath group: 'cm.android.gradle', name: 'MyGradlePlugin', version: '1.0.0'
-//    }
-//}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
