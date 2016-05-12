@@ -2,7 +2,8 @@ tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
-apply from: "$rootDir/findbugs/findbugs.gradle"
+apply from: "$rootDir/config/findbugs/findbugs.gradle"
+apply from: "$rootDir/config/checkstyle/checkstyle.gradle"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

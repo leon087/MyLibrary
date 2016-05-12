@@ -1,0 +1,45 @@
+apply plugin: 'checkstyle'
+
+repositories {
+    mavenCentral()
+}
+
+check.dependsOn 'checkstyle'
+
+task checkstyle(type: Checkstyle) {
+    showViolations true
+    ignoreFailures = true
+    configFile file("$rootProject.rootDir/config/checkstyle/checkstyle.xml")
+    source fileTree('src/main/java/')
+    include '**/*.java'
+    classpath = files()
+
+    reports {
+        xml {
+            enabled = true
+            destination "$project.buildDir/outputs/checkstyle/checkstyle_result.xml"
+        }
+        html {
+            enabled = false
+            destination "$project.buildDir/outputs/checkstyle/checkstyle_result.html"
+        }
+    }
+}
+
+//project.gradle.buildFinished { buildResult ->
+//    if (buildResult.getFailure() != null) {
+//        println "Reports: " + checkstyleMain.reports.getXml().getDestination().text
+//    }
+//}
+
+//android.libraryVariants.all { variant ->
+//    def name = variant.buildType.name
+//
+//    def checkstyle = project.tasks.create "checkstyle${name.capitalize()}", Checkstyle
+//    checkstyle.dependsOn variant.javaCompile
+//    checkstyle.source variant.javaCompile.source
+//    checkstyle.classpath = project.fileTree(variant.javaCompile.destinationDir)
+//    checkstyle.exclude('**/BuildConfig.java')
+//    checkstyle.exclude('**/R.java')
+//    project.tasks.getByName("check").dependsOn checkstyle
+//}

@@ -55,8 +55,6 @@ public class AppUtil {
      */
     public static final int APP_USER = 0;
 
-    ;
-
     /**
      * 系统应用
      */
@@ -250,8 +248,7 @@ public class AppUtil {
      *
      * @param archiveFilePath APK文件的路径。如：/sdcard /download/XX.apk
      */
-    public static PackageInfo getArchiveInfo(PackageManager pm,
-                                             String archiveFilePath) {
+    public static PackageInfo getArchiveInfo(PackageManager pm, String archiveFilePath) {
         PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath,
                 PackageManager.GET_ACTIVITIES);
         return info;
@@ -483,7 +480,17 @@ public class AppUtil {
     }
 
     public static boolean isAppInstalled(PackageManager pm, String packageName) {
-        return getPackageInfo(pm, packageName, PackageManager.GET_UNINSTALLED_PACKAGES) != null;
+        int mRetrieveFlags = 0;
+//            Process.myUserHandle()== UserHandle.
+//        if (myUserId() == 0) {
+//            mRetrieveFlags = PackageManager.GET_UNINSTALLED_PACKAGES |
+//                    PackageManager.GET_DISABLED_COMPONENTS |
+//                    PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS;
+//        } else {
+        mRetrieveFlags = PackageManager.GET_DISABLED_COMPONENTS |
+                PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS;
+//        }
+        return getPackageInfo(pm, packageName, mRetrieveFlags) != null;
     }
 
     public static interface AppFilter {

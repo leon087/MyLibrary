@@ -64,6 +64,15 @@
                  android:exported="false"
                  android:persistent="true"/>
 
+        <activity
+                android:name="cm.android.app.mvp.login.LoginActivity"
+                android:label="@string/app_label_mvp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

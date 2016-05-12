@@ -89,8 +89,7 @@ public class SystemUtilTest extends InstrumentationTestCase {
 //    }
 
     public void testGetCurProcessName() throws Exception {
-        Context context = getInstrumentation().getContext();
-        String temp = SystemUtil.getCurProcessName(context);
+        String temp = SystemUtil.getCurProcessName();
         boolean result = temp.equals("");
         assertEquals(result, false);
     }

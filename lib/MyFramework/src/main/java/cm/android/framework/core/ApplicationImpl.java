@@ -47,11 +47,9 @@ final class ApplicationImpl {
 
     void appInit(Context context, ServiceManager.AppConfig appConfig,
                  Class<? extends IServiceManager> serviceClass) {
+        String processName = SystemUtil.getCurProcessName();
         if (appContext != null) {
-            logger.error(
-                    "old.appContext = {},old.processName = {},new.context = {},new.processName = {}",
-                    appContext, SystemUtil.getCurProcessName(appContext),
-                    context, SystemUtil.getCurProcessName(context));
+            logger.error("processName = {},old.appContext = {},new.context = {}", processName, appContext, context);
             throw new IllegalArgumentException("appContext = " + appContext);
         }
 
@@ -68,12 +66,9 @@ final class ApplicationImpl {
                 appContext.getPackageManager(), appContext.getPackageName(),
                 PackageManager.GET_ACTIVITIES);
         if (packageInfo == null) {
-            logger.error("packageInfo = null,getPackageName() = {},processName = {}",
-                    appContext.getPackageName(), SystemUtil.getCurProcessName(appContext));
+            logger.error("packageInfo = null,getPackageName() = {},processName = {}", appContext.getPackageName(), SystemUtil.getCurProcessName());
         } else {
-            logger.info("versionCode = {},versionName = {},processName = {}",
-                    packageInfo.versionCode, packageInfo.versionName,
-                    SystemUtil.getCurProcessName(appContext));
+            logger.info("versionCode = {},versionName = {},processName = {}", packageInfo.versionCode, packageInfo.versionName, processName);
         }
     }
 
@@ -156,8 +151,7 @@ final class ApplicationImpl {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            logger.info("onServiceConnected:iBinder = {},processName = {}", iBinder,
-                    SystemUtil.getCurProcessName(appContext));
+            logger.info("onServiceConnected:iBinder = {},processName = {}", iBinder, SystemUtil.getCurProcessName());
 
             if (iBinder == null) {
                 logger.error("iBinder = null");
@@ -170,8 +164,7 @@ final class ApplicationImpl {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            logger.error("onServiceDisconnected:processName = {}",
-                    SystemUtil.getCurProcessName(appContext));
+            logger.error("onServiceDisconnected:processName = {}", SystemUtil.getCurProcessName());
             serviceBidnerProxy.bindServiceBinder(null);
 
             systemFailed();

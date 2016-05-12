@@ -38,7 +38,7 @@ public class MainApp extends BaseApp {
 
         daemonReceiver.registerLocal(this);
 
-        String pName = SystemUtil.getCurProcessName(this);
+        String pName = SystemUtil.getCurProcessName();
         if (getPackageName().equals(pName)) {
         }
     }

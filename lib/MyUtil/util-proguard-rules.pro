@@ -125,10 +125,12 @@
     private void readObject(java.io.ObjectInputStream);  
     java.lang.Object writeReplace();  
     java.lang.Object readResolve();  
-} 
+}
+
+-keep class * extends java.lang.annotation.Annotation { *; }
 
 #去除调试日志:
-#-assumenosideeffects class android.util.Log{
+#-assumenosideeffects class android.util.Log {
 #  public static *** d(...); 
 #  public static *** i(...);
 #}
@@ -155,7 +157,7 @@
 }
 
 #保留class名字的时候同时混淆该class
--keepnames class cm.java.thread.ThreadPool
+#-keepnames class cm.java.thread.ThreadPool
 
 -dontwarn android.support.**
 -keep class * extends android.support.**
@@ -165,5 +167,8 @@
 -keep class ch.qos.** { *; }
 -keep class org.slf4j.** { *; }
 -dontwarn ch.qos.logback.core.net.*
+-assumenosideeffects class org.slf4j.Logger {
+    public void debug(...);
+}
 
 #================================框架======================================

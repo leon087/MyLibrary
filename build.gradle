@@ -1,21 +1,43 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'http://127.0.0.1:9091/nexus/content/repositories/' }
+        maven { url uri(new File(rootDir, 'local_repo')) }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0'
-//        classpath 'com.android.tools.build:gradle-experimental:0.2.0'
+        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'ggg.android:cm.android.gradle:1.0.3'
+//        classpath group: 'cm.android.gradle', name: 'MyGradlePlugin', version: '1.0.0'
     }
 }
+//本地repo
+//buildscript {
+//    repositories {
+//        maven {
+//            url uri(new File(rootDir, 'local_repo'))
+//        }
+//    }
+//
+//    dependencies {
+//        classpath group: 'cm.android.gradle', name: 'MyGradlePlugin', version: '1.0.0'
+//    }
+//}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+//Project
 allprojects {
     tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
     repositories {
         jcenter()
+        maven { url 'http://127.0.0.1:9091/nexus/content/repositories/' }
 
         flatDir {
-            dirs "$rootDir/aars"
+            dirs "$rootDir/local_repo"
         }
     }
 
@@ -27,5 +49,7 @@ task wrapper(type: Wrapper) { gradleVersion = '2.11' }
 //apply plugin: 'android-reporting'
 
 ext {
-//    supportLibVersion = '23.2.0'
+    supportLibraryVersion = '23.3.0'
+    logbackAndroidVersion = '1.1.1-4'
+    slf4jVersion = '1.7.14'
 }

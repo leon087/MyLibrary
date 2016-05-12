@@ -8,14 +8,6 @@ def buildTime() {
     return formattedDate
 }
 
-def isWindows() {
-    String osName = System.getProperty("os.name").toLowerCase();
-    if (osName.indexOf("windows") >= 0) {
-        return true;
-    }
-    return false;
-}
-
 if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.android.library')) {
     android {
         compileSdkVersion Integer.parseInt(project.compileSdkVersion)
@@ -105,27 +97,32 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
 //        archives androidSourcesJar
 //    }
 //}
-
-if (plugins.hasPlugin('com.android.application')) {
-    android {
-        //修改apk名
-        applicationVariants.all { variant ->
-            variant.outputs.each { output ->
-                def appName = project.appName
-                appName += "-"
-                appName += defaultConfig.versionName
-                if (variant.buildType.versionNameSuffix != null) {
-                    appName += variant.buildType.versionNameSuffix
-                }
-                if (!'[]'.equals(String.valueOf(productFlavors.name))) {
-                    appName += productFlavors.name
-                }
-                appName += ".apk"
-                output.outputFile = new File(output.outputFile.parent, appName)
-            }
-        }
-    }
-}
+//
+//if (plugins.hasPlugin('com.android.application')) {
+//    android {
+//        //修改apk名
+//        applicationVariants.all { variant ->
+//            variant.outputs.each { output ->
+//                def appName = project.appName
+//                def versionName = defaultConfig.versionName
+//                def versionNameSuffix = ''
+//                if (variant.buildType.versionNameSuffix != null) {
+//                    versionNameSuffix = variant.buildType.versionNameSuffix
+//                }
+//                println("gggg productFlavors = " + productFlavors)
+//                println("gggg productFlavors.name = " + applicationVariants.productFlavors)
+//                println("gggg productFlavors.name = " + variant.productFlavors)
+//                def productFlavorsName = ''
+//                if (!'[]'.equals(String.valueOf(productFlavors.name))) {
+//                    productFlavorsName = productFlavors.name
+//                }
+//                def outName = "${appName}-${versionName}${versionNameSuffix}${productFlavorsName}.apk"
+//
+//                output.outputFile = new File(output.outputFile.parent + "/${variant.buildType.name}", outName)
+//            }
+//        }
+//    }
+//}
 
 def getKeyStore(def propertyFile) {
     if (propertyFile == null) {
@@ -152,38 +149,3 @@ def getKeyStore(def propertyFile) {
         return 'debug';
     }
 }
-
-//class Ext implements Plugin<Project> {
-//
-//    void apply(Project project) {
-//        project.android.signingConfigs.release =
-//                getKeyStore(project.propertyFile_release, project.storeFile_release);
-//    }
-//
-//    def getKeyStore(def propertyFile, def storeFile) {
-//        if (releaseStoreFile == null || releaseStoreFile == "") {
-//            return 'debug'
-//        }
-//
-//        def props = new Properties();
-//        try {
-//            def signingConfig = 'release';
-//
-//            def ins = new BufferedInputStream(new FileInputStream(releasePropertyFile));
-//            props.load(ins);
-//            ins.close();
-//            project.android.signingConfigs {
-//                "$signingConfig" {
-//                    storeFile = new File(releaseStoreFile);
-//                    storePassword = props.getProperty('storePassword');
-//                    keyAlias = props.getProperty('keyAlias');
-//                    keyPassword = props.getProperty('keyPassword');
-////                System.out.println(props.getProperty('storeFile') + '   ');
-//                }
-//            }
-//            return "$signingConfig";
-//        } catch (Exception e) {
-//            return 'debug';
-//        }
-//    }
-//}

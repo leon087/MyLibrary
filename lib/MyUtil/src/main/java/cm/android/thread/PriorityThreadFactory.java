@@ -25,25 +25,40 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PriorityThreadFactory implements ThreadFactory {
 
+    private static final AtomicInteger poolNumber = new AtomicInteger(1);
+    private final ThreadGroup group;
+    private final AtomicInteger threadNumber = new AtomicInteger(1);
+    private final String namePrefix;
+
     private final int mPriority;
 
-    private final AtomicInteger mNumber = new AtomicInteger();
+    public PriorityThreadFactory(String name, int processPriority) {
+        mPriority = processPriority;
 
-    private final String mName;
+        SecurityManager s = System.getSecurityManager();
+        group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
 
-    public PriorityThreadFactory(String name, int priority) {
-        mName = name;
-        mPriority = priority;
+        namePrefix = new StringBuilder().append(name).append(":pool-").append(poolNumber.getAndIncrement()).append("-thread-").toString();
+//        namePrefix = name + ":pool-" + poolNumber.getAndIncrement() + "-thread-";
     }
 
     public Thread newThread(Runnable r) {
-        return new Thread(r, mName + '-' + mNumber.getAndIncrement()) {
+        Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0) {
             @Override
             public void run() {
                 Process.setThreadPriority(mPriority);
                 super.run();
             }
         };
+//        if (t.isDaemon()) {
+//            t.setDaemon(false);
+//        }
+
+//        if (t.getPriority() != Thread.NORM_PRIORITY) {
+//            t.setPriority(Thread.NORM_PRIORITY);
+//        }
+
+        return t;
     }
 
 }

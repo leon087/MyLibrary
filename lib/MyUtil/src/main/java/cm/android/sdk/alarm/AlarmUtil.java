@@ -15,14 +15,13 @@ public class AlarmUtil {
     }
 
     @Deprecated
-    public static void startImmediately(Context context, Intent broadcastIntent, int requestCode,
-            long period) {
+    public static void startImmediately(Context context, Intent broadcastIntent, int requestCode, long period) {
         start(context, broadcastIntent, requestCode, 0, period);
     }
 
     @Deprecated
     public static void start(Context context, Intent broadcastIntent, int requestCode,
-            long delayAtMillis, long period) {
+                             long delayAtMillis, long period) {
         PendingIntent sender = genPendingBroadcast(context, requestCode, broadcastIntent);
         long currentTime = SystemClock.elapsedRealtime();
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -33,8 +32,7 @@ public class AlarmUtil {
                 period, sender);
     }
 
-    public static void schedule(Context context, Intent broadcastIntent, int requestCode,
-            long delayAtMillis) {
+    public static void schedule(Context context, Intent broadcastIntent, int requestCode, long delayAtMillis) {
         PendingIntent sender = genPendingBroadcast(context, requestCode, broadcastIntent);
         long currentTime = SystemClock.elapsedRealtime();
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -44,9 +42,8 @@ public class AlarmUtil {
     }
 
     @TargetApi(19)
-    private static void setCompat(AlarmManager am, int type, long triggerAtMillis,
-            android.app.PendingIntent operation) {
-        if (EnvironmentUtil.SdkUtil.hasKitkat()) {
+    public static void setCompat(AlarmManager am, int type, long triggerAtMillis, android.app.PendingIntent operation) {
+        if (EnvironmentUtil.SdkUtil.has(19)) {
             am.setExact(type, triggerAtMillis, operation);
         } else {
             am.set(type, triggerAtMillis, operation);
@@ -61,7 +58,7 @@ public class AlarmUtil {
     }
 
     private static PendingIntent genPendingBroadcast(Context context, int requestCode,
-            Intent broadcastIntent) {
+                                                     Intent broadcastIntent) {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode,
                 broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;

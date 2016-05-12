@@ -67,6 +67,14 @@ public final class Utils {
         return false;
     }
 
+    public static <T> boolean isEmpty(T... array) {
+        if (array == null || array.length == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static byte[] getBytes(String s) {
         if (isEmpty(s)) {
             return new byte[0];

@@ -6,6 +6,7 @@ import android.os.Message;
 
 import java.lang.ref.WeakReference;
 
+@Deprecated
 public abstract class MyHandler {
 
     private WeakHandler handler = null;

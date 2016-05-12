@@ -17,7 +17,7 @@ public class DaemonReceiver extends BaseBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String processName = SystemUtil.getCurProcessName(context);
+        String processName = SystemUtil.getCurProcessName();
         logger.info("processName = {},intent = {}", processName, intent);
         if (!context.getPackageName().equals(processName)) {
             return;

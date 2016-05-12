@@ -34,7 +34,7 @@ public abstract class CoreReceiver extends BaseBroadcastReceiver {
 
         //守护action
 //        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
-        filter.addAction(Intent.ACTION_SCREEN_ON);
+//        filter.addAction(Intent.ACTION_SCREEN_ON);
 //        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
 //        filter.addAction(Intent.ACTION_USER_PRESENT);
 

@@ -4,7 +4,6 @@ import android.test.InstrumentationTestCase;
 
 import javax.crypto.SecretKey;
 
-import cm.java.util.Base64;
 import cm.java.util.HexUtil;
 import cm.java.util.Utils;
 
@@ -12,7 +11,7 @@ public class HashUtilTest extends InstrumentationTestCase {
 
     public void testGenerateHash() throws Exception {
         char[] pwd = "hello".toCharArray();
-        byte[] salt = SecureUtil.SALT_DEF;
+        byte[] salt = SecureUtil.getSaltDef();
         SecretKey secretKey1 = HashUtil.generateHash(pwd, salt);
         SecretKey secretKey2 = HashUtil.generateHash(pwd, salt);
 

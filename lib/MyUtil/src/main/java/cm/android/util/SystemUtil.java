@@ -26,6 +26,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import cm.java.cmd.CmdExecute;
 import cm.java.util.IoUtil;
 import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
@@ -57,7 +58,7 @@ public class SystemUtil {
     }
 
     public static boolean isMainProcess(Context context) {
-        String processName = SystemUtil.getCurProcessName(context);
+        String processName = SystemUtil.getCurProcessName();
         if (context.getPackageName().equals(processName)) {
             return true;
         }
@@ -283,6 +284,7 @@ public class SystemUtil {
         return activityName;
     }
 
+    @Deprecated
     public static String getCurProcessName(Context context) {
         int pid = android.os.Process.myPid();
         logger.info("pid = " + pid);
@@ -293,6 +295,17 @@ public class SystemUtil {
             }
         }
         return null;
+    }
+
+    public static String getCurProcessName() {
+        String[] cmd = new String[]{
+                "cat", "/proc/" + android.os.Process.myPid() + "/cmdline"
+        };
+        String processName = CmdExecute.exec(cmd);
+        if (Utils.isEmpty(processName)) {
+            return null;
+        }
+        return processName.trim();
     }
 
     public static String getTopPackageNameCompat(Context context) {

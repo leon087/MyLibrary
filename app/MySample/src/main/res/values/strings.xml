@@ -3,6 +3,8 @@
 
     <string name="app_label">MySample</string>
     <string name="app_label_flux">MyFlux</string>
+    <string name="app_label_mvp">MyMvp</string>
+
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>

@@ -1,0 +1,65 @@
+apply plugin: ProductPlugin
+
+public class ProductPlugin implements Plugin<Project> {
+    void apply(Project project) {
+        List<Product> products = ProductFactory.initProducts()
+        for (Product product : products) {
+            project.extensions.add(product.name, product)
+        }
+    }
+}
+
+public class Product {
+    public Product(String name) {
+        this.name = name;
+    }
+
+    public String name;
+
+    public String root_api_online = ''
+
+    //开发环境
+    public String root_api_dev = ''
+
+    //测试环境
+    public String root_api_devtest = ''
+
+    //演示环境
+    public String root_api_demo = ''
+
+    public String applicationId = ''
+}
+
+public class ProductFactory {
+    public static List<Product> initProducts() {
+        List<Product> list = new ArrayList<>()
+        list.add(create());
+        return list;
+    }
+
+//    public static final List<Product> list = new ArrayList<>()
+//
+//    public static void add(Product product) {
+//        list.add(product)
+//    }
+
+    public static Product create() {
+        Product product = new Product('gg')
+        product.applicationId = 'cm.android.app.sample'
+
+        //#现网环境
+        product.root_api_online = 'http://xx.com/online/'
+
+        //#开发环境
+        product.root_api_dev = 'http://xx.com/dev/'
+
+        //#测试环境
+        product.root_api_devtest = 'http://xx.com/devtest/'
+
+        //#演示环境
+        product.root_api_demo = 'http://xx.com/demo/'
+
+        return product
+    }
+
+}

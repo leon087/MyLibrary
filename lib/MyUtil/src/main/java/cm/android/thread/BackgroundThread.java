@@ -7,11 +7,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Process;
 
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import cm.android.sdk.MyHandler;
+import cm.android.sdk.WeakHandler;
 import cm.java.thread.SimpleLock;
 
 public final class BackgroundThread {
@@ -31,7 +32,7 @@ public final class BackgroundThread {
 
     public static synchronized void init() {
 //        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[3];
-        sThread = new HandlerThread("BackgroundThread");
+        sThread = new HandlerThread("BackgroundThread", Process.THREAD_PRIORITY_BACKGROUND);
         sThread.start();
         sHandler = new AsyncHandler();
         logger.info("init");
@@ -57,10 +58,10 @@ public final class BackgroundThread {
             return new Handler();
         }
 
-        return sHandler.getHandler();
+        return sHandler.get();
     }
 
-    public static class AsyncHandler extends MyHandler {
+    public static class AsyncHandler extends WeakHandler {
         public AsyncHandler() {
             this(BackgroundThread.getLooper());
         }
@@ -90,7 +91,7 @@ public final class BackgroundThread {
         private final SimpleLock lock = new SimpleLock();
 
         public void exit() {
-            this.getHandler().removeCallbacksAndMessages(null);
+            this.get().removeCallbacksAndMessages(null);
             logger.info("{}:exit:begin", this);
             if (handleFlag.get()) {
                 lock.await();

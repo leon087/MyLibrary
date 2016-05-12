@@ -29,6 +29,8 @@ public class MyServiceManager extends BaseServiceManager {
         timerServer.start(MyManager.getAppContext());
 
         ServiceManager.addService(TestContext.TIMER_TASK_SERVER, timerServer);
+
+//        AppContext.register(TestContext.TEST, testManager);
     }
 
     @Override
