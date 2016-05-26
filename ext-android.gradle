@@ -79,51 +79,6 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
     }
 }
 
-//if (plugins.hasPlugin('com.android.library')) {
-//    android.libraryVariants.all { variant ->
-//        def name = variant.buildType.name
-//        def task = project.tasks.create "jar${name.capitalize()}", Jar
-//        task.dependsOn variant.javaCompile
-//        task.from variant.javaCompile.destinationDir
-//        artifacts.add('archives', task);
-//    }
-//
-//    task androidSourcesJar(type: Jar) {
-//        classifier = 'sources'
-//        from android.sourceSets.main.java.srcDirs
-//    }
-//
-//    artifacts {
-//        archives androidSourcesJar
-//    }
-//}
-//
-//if (plugins.hasPlugin('com.android.application')) {
-//    android {
-//        //修改apk名
-//        applicationVariants.all { variant ->
-//            variant.outputs.each { output ->
-//                def appName = project.appName
-//                def versionName = defaultConfig.versionName
-//                def versionNameSuffix = ''
-//                if (variant.buildType.versionNameSuffix != null) {
-//                    versionNameSuffix = variant.buildType.versionNameSuffix
-//                }
-//                println("gggg productFlavors = " + productFlavors)
-//                println("gggg productFlavors.name = " + applicationVariants.productFlavors)
-//                println("gggg productFlavors.name = " + variant.productFlavors)
-//                def productFlavorsName = ''
-//                if (!'[]'.equals(String.valueOf(productFlavors.name))) {
-//                    productFlavorsName = productFlavors.name
-//                }
-//                def outName = "${appName}-${versionName}${versionNameSuffix}${productFlavorsName}.apk"
-//
-//                output.outputFile = new File(output.outputFile.parent + "/${variant.buildType.name}", outName)
-//            }
-//        }
-//    }
-//}
-
 def getKeyStore(def propertyFile) {
     if (propertyFile == null) {
         return 'debug'

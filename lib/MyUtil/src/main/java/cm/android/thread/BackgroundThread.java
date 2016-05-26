@@ -93,7 +93,7 @@ public final class BackgroundThread {
         public void exit() {
             this.get().removeCallbacksAndMessages(null);
             logger.info("{}:exit:begin", this);
-            if (handleFlag.get()) {
+            while (handleFlag.get()) {
                 lock.await();
             }
             logger.info("{}:exit:end", this);

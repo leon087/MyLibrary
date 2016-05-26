@@ -99,30 +99,22 @@ android {
 
     flavorDimensions 'type_product', 'type_server', 'type_xx'
     productFlavors {
-        def product
         //type_product
         gg {
             dimension 'type_product'
-
-            product = project.extensions.getByName('gg')
-
-            applicationId product.applicationId
         }
 
         //type_server：平台配置
         dev {
             dimension 'type_server'
-            buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_dev))
         }
 
         devtest {
             dimension 'type_server'
-            buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_devtest))
         }
 
         demo {
             dimension "type_server"
-            buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_demo))
         }
 
         //type_xx：配置
@@ -132,6 +124,24 @@ android {
 
         full {
             dimension 'type_xx'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        def productName = variant.productFlavors.get(0).name //"type_product"
+        def product = project.extensions.getByName(productName)
+
+        variant.mergedFlavor.applicationId = product.applicationId
+//        variant.mergedFlavor.manifestPlaceholders = [BAIDU_LOCATION_API_KEY: product.baidu_location_api_key]
+
+        def typeServer = variant.productFlavors.get(1).name //"type_server"
+
+        if (typeServer.equals("dev")) {
+            variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_dev))
+        } else if (typeServer.equals("devtest")) {
+            variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_devtest))
+        } else if (typeServer.equals("demo")) {
+            variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_demo))
         }
     }
 }
