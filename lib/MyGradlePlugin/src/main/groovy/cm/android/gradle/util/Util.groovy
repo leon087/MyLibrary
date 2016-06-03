@@ -24,6 +24,13 @@ public class Util {
     }
 
     public static void rename(def variant, def appName) {
+        def outName = createName(variant, appName)
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent, "${variant.buildType.name}/" + outName)
+        }
+    }
+
+    public static def createName(def variant, def appName) {
         def versionName = variant.getVersionName()
 
         def productFlavorName = ''
@@ -32,32 +39,32 @@ public class Util {
         }
 
         def outName = "${appName}-${versionName}${productFlavorName}.apk"
-        variant.outputs.each { output ->
-            output.outputFile = new File(output.outputFile.parent + "/${variant.buildType.name}", outName)
+//        return "${variant.buildType.name}" + '/' + outName;
+        return outName;
+    }
+
+    public static void deleteUnaligned(def output) {
+        File unaligned = output.packageApplication.outputFile;
+        File aligned = output.outputFile
+        println("ggggg unaligned = " + unaligned + ",aligned = " + aligned)
+        if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
+//            println "deleting " + unaligned.getName()
+//            unaligned.delete()
         }
     }
 
-//    public static void deleteUnaligned(def output) {
-//        File unaligned = output.packageApplication.outputFile;
-//        File aligned = output.outputFile
-//        if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
-//            println "deleting " + unaligned.getName()
-//            unaligned.delete()
+//    public static void deleteUnaligned(def outputs) {
+//        outputs.each { output ->
+//            File unaligned = output.packageApplication.outputFile;
+//            File aligned = output.outputFile
+//            if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
+//                println "deleting " + unaligned.getName()
+//                unaligned.delete()
+//            }
 //        }
 //    }
 
-    public static void deleteUnaligned(def outputs) {
-        outputs.each { output ->
-            File unaligned = output.packageApplication.outputFile;
-            File aligned = output.outputFile
-            if (!unaligned.getName().equalsIgnoreCase(aligned.getName())) {
-                println "deleting " + unaligned.getName()
-                unaligned.delete()
-            }
-        }
-    }
-
-    public static def pack(Project project, outName) {
+    public static def pack(Project project, def outName) {
         //copy
         def buildRoot = project.buildDir
         def outputs = "outputs"
@@ -80,6 +87,9 @@ public class Util {
                 copySpec.into(outApk)
             }
         })
+
+        //TODO ggg 遍历rtest与release，并过滤掉其下的旧版本
+        println("ggg ")
 
         //删除debug
         File debug = new File(outApk, "debug")
@@ -133,6 +143,54 @@ public class Util {
         return out
     }
 
+    public static def pack2(Project project, def outName) {
+        def buildRoot = project.buildDir
+        def outputs = "outputs"
+        def mapping = 'mapping'
+        def apk = 'apk'
+
+        def buildOutputs = new File(buildRoot, outputs)
+        def buildApk = new File(buildOutputs, apk)
+        def buildMapping = new File(buildOutputs, mapping)
+//        def outName = "${project.appName}-${project.defaultConfig.versionName}"
+
+        def out = new File(buildRoot, outName)
+        def outApk = new File(out, apk)
+        def outMapping = new File(out, mapping)
+
+        //清理旧包
+        out.delete();
+
+        //copy apk
+        project.copy(new Action<CopySpec>() {
+            @Override
+            void execute(CopySpec copySpec) {
+//                new FileTreeBuilder(buildApk).
+
+                copySpec.include('**/*' + outName + '*')
+                copySpec.exclude('debug')
+
+                copySpec.from(buildApk)
+                copySpec.into(outApk)
+            }
+        })
+
+        //copy mapping
+//        copy {
+//            from buildMapping
+//            into outMapping
+//        }
+        project.copy(new Action<CopySpec>() {
+            @Override
+            void execute(CopySpec copySpec) {
+                copySpec.from(buildMapping)
+                copySpec.into(outMapping)
+            }
+        })
+
+        return out
+    }
+
     public static def wrapStr(def str) {
         return '"' + str + '"';
     }
@@ -140,4 +198,5 @@ public class Util {
     public static def wrapString(def str) {
         return '"' + str + '"';
     }
+
 }

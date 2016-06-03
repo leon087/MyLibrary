@@ -4,6 +4,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ggg.android</groupId>
   <artifactId>cm.android.gradle</artifactId>
-  <version>1.0.3</version>
+  <version>local.5</version>
   <name>MyGradlePlugin</name>
 </project>

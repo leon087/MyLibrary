@@ -12,22 +12,11 @@ repositories {
     mavenCentral()
 }
 
-//repo到本地
-//group = 'cm.android.gradle'
-//version = '1.0.0'
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            repository(url: uri(new File(rootDir, 'local_repo')))
-//        }
-//    }
-//}
-
 //repo到maven
 uploadArchives {
     repositories.mavenDeployer {
         //repo到本地
-        repository(url: uri(new File(rootDir, 'local_repo')))
+      repository(url: uri(new File(rootDir, 'local_repo')))
 
 //        repository(url: RELEASE_REPOSITORY_URL) {
 //            authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
