@@ -105,9 +105,9 @@ android {
         }
 
         //type_server：平台配置
-        dev {
-            dimension 'type_server'
-        }
+//        dev {
+//            dimension 'type_server'
+//        }
 
         devtest {
             dimension 'type_server'
@@ -126,6 +126,22 @@ android {
             dimension 'type_xx'
         }
     }
+
+//    variantFilter { variant ->
+//        logger.debug('gggggggggg1 variant.getFlavors() = ' + variant.getFlavors())
+//        def typeServer =  variant.getFlavors.get(1).name
+//        switch (variant.buildType.name) {
+//            case 'debug':
+//                variant.setIgnore(!variant.getFlavors().get(1).name.equals('distrib'));
+//                break
+//            case 'rtest':
+//                break
+//            case 'release':
+//                break
+//            default:
+//                break
+//        }
+//    }
 
     applicationVariants.all { variant ->
         def productName = variant.productFlavors.get(0).name //"type_product"

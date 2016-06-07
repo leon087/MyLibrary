@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
+        classpath 'com.android.tools.build:gradle:2.1.2'
 //        classpath 'ggg.android:cm.android.gradle:1.0.5'
         classpath 'ggg.android:cm.android.gradle:local.5'
 //        classpath group: 'ggg.android', name: 'cm.android.gradle', version: 'local.1.0.4'
