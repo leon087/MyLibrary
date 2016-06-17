@@ -17,15 +17,15 @@
 
 package cm.android.apn;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * @author Martin Adamek <martin.adamek@gmail.com>
@@ -35,7 +35,7 @@ public final class ApnDao {
 
     public static final int STATE_OFF = 0;
     public static final int STATE_ON = 1;
-    
+
     private static final String SUFFIX = "apndroid";
     private static final String ID = "_id";
     private static final String APN = "apn";
@@ -45,9 +45,9 @@ public final class ApnDao {
     private static final Uri CONTENT_URI = Uri.parse("content://telephony/carriers");
 
     private static final String DB_LIKE_SUFFIX = "%" + SUFFIX;
-    private static final String DB_LIKE_TYPE_SUFFIX = "%" +SUFFIX + "%";
+    private static final String DB_LIKE_TYPE_SUFFIX = "%" + SUFFIX + "%";
 
-    private static final String[] DB_LIKE_MMS_TYPE_SUFFIX = new String[]{"%mms"+SUFFIX+"%"};    
+    private static final String[] DB_LIKE_MMS_TYPE_SUFFIX = new String[]{"%mms" + SUFFIX + "%"};
 
     private final ContentResolver mContentResolver;
     private int mMmsTarget = STATE_ON;
@@ -72,7 +72,7 @@ public final class ApnDao {
     public boolean setDataEnabled(boolean enableData, boolean enableMms) {
         setMmsEnabled(enableMms);
         if (enableData) {
-        	return enableAllInDb();
+            return enableAllInDb();
         } else {
             return disableAllInDb();
         }
@@ -111,16 +111,16 @@ public final class ApnDao {
     }
 
     private List<ApnInfo> getDisabledApnsMap() {
-        return selectApnInfo("apn like ? or type like ?", new String[] { DB_LIKE_SUFFIX, DB_LIKE_TYPE_SUFFIX });
+        return selectApnInfo("apn like ? or type like ?", new String[]{DB_LIKE_SUFFIX, DB_LIKE_TYPE_SUFFIX});
     }
 
     private List<ApnInfo> selectApnInfo(String whereQuery, String[] whereParams) {
         Cursor cursor = null;
         try {
-            cursor = mContentResolver.query(CONTENT_URI, new String[] { ID, APN, TYPE }, whereQuery, whereParams, null);
-
-            if (cursor == null) return Collections.emptyList();
-            
+            cursor = mContentResolver.query(CONTENT_URI, new String[]{ID, APN, TYPE}, whereQuery, whereParams, null);
+            if (cursor == null) {
+                return Collections.emptyList();
+            }
             return createApnList(cursor);
         } finally {
             if (cursor != null) {
@@ -136,9 +136,8 @@ public final class ApnDao {
 
     /**
      * Creates list of apn dtos from a DB cursor
-     * 
-     * @param mCursor
-     *            db cursor with select result set
+     *
+     * @param mCursor db cursor with select result set
      * @return list of APN dtos
      */
     private List<ApnInfo> createApnList(Cursor mCursor) {
@@ -156,8 +155,9 @@ public final class ApnDao {
 
     /**
      * Tries to disable apn's according to user preferences.
-     * 
-     * @return {@code true} if one o more apns changed and {@code false} if all APNs did not changed their states
+     *
+     * @return {@code true} if one o more apns changed and {@code false} if all APNs did not changed
+     * their states
      */
     private boolean disableAllInDb() {
         List<ApnInfo> apns = getEnabledApnsMap();
@@ -172,9 +172,8 @@ public final class ApnDao {
 
     /**
      * Use this one if you have fresh list of APNs already and you can save one query to DB
-     * 
-     * @param apns
-     *            list of apns data to modify
+     *
+     * @param apns list of apns data to modify
      * @return {@code true} if switch was successfull and {@code false} otherwise
      */
     private boolean enableApnList(List<ApnInfo> apns) {
@@ -189,7 +188,7 @@ public final class ApnDao {
             } else {
                 values.put(TYPE, newApnType);
             }
-            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[] { String.valueOf(apnInfo.id) });
+            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[]{String.valueOf(apnInfo.id)});
 
         }
         return true;// we always return true because in any situation we can
@@ -204,13 +203,13 @@ public final class ApnDao {
             values.put(APN, newApnName);
             String newApnType = addComplexSuffix(apnInfo.type);
             values.put(TYPE, newApnType);
-            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[] { String.valueOf(apnInfo.id) });
+            contentResolver.update(CONTENT_URI, values, ID + "=?", new String[]{String.valueOf(apnInfo.id)});
         }
         return true;
     }
 
     private int countDisabledApns() {
-        return executeCountQuery("apn like ? or type like ?", new String[] { DB_LIKE_SUFFIX, DB_LIKE_TYPE_SUFFIX });
+        return executeCountQuery("apn like ? or type like ?", new String[]{DB_LIKE_SUFFIX, DB_LIKE_TYPE_SUFFIX});
     }
 
     private int countMmsApns() {
@@ -224,7 +223,7 @@ public final class ApnDao {
     private int executeCountQuery(String whereQuery, String[] whereParams) {
         Cursor cursor = null;
         try {
-            cursor = mContentResolver.query(CONTENT_URI, new String[] { "count(*)" }, whereQuery, whereParams, null);
+            cursor = mContentResolver.query(CONTENT_URI, new String[]{"count(*)"}, whereQuery, whereParams, null);
             if (cursor != null && cursor.moveToFirst()) {
                 return cursor.getInt(0);
             } else {
@@ -242,7 +241,7 @@ public final class ApnDao {
     }
 
     private List<ApnInfo> selectEnabledMmsApns() {
-        return selectApnInfo("type like ? and type not like ?" + getCurrentCriteria(), new String[] { "%mms%", DB_LIKE_MMS_TYPE_SUFFIX[0] });
+        return selectApnInfo("type like ? and type not like ?" + getCurrentCriteria(), new String[]{"%mms%", DB_LIKE_MMS_TYPE_SUFFIX[0]});
     }
 
     private String getCurrentCriteria() {
@@ -257,20 +256,22 @@ public final class ApnDao {
         }
     }
 
-    public String addComplexSuffix(String complexString){
-        if (complexString == null) return SUFFIX;
+    public String addComplexSuffix(String complexString) {
+        if (complexString == null) {
+            return SUFFIX;
+        }
 
         StringBuilder builder = new StringBuilder(complexString.length());
         StringTokenizer tokenizer = new StringTokenizer(complexString, ",");
         boolean leaveMmsEnabled = mMmsTarget == STATE_OFF;
-        while (tokenizer.hasMoreTokens()){
+        while (tokenizer.hasMoreTokens()) {
             String str = tokenizer.nextToken().trim();
-            if (leaveMmsEnabled && "mms".equals(str)){
+            if (leaveMmsEnabled && "mms".equals(str)) {
                 builder.append(str);
-            }else{
+            } else {
                 builder.append(addSuffix(str));
             }
-            if (tokenizer.hasMoreTokens()){
+            if (tokenizer.hasMoreTokens()) {
                 builder.append(",");
             }
         }
@@ -285,14 +286,16 @@ public final class ApnDao {
         }
     }
 
-    public static String removeComplexSuffix(String complexString){
-        if (complexString == null) return "";
+    public static String removeComplexSuffix(String complexString) {
+        if (complexString == null) {
+            return "";
+        }
 
         StringBuilder builder = new StringBuilder(complexString.length());
         StringTokenizer tokenizer = new StringTokenizer(complexString, ",");
-        while (tokenizer.hasMoreTokens()){
+        while (tokenizer.hasMoreTokens()) {
             builder.append(removeSuffix(tokenizer.nextToken().trim()));
-            if (tokenizer.hasMoreTokens()){
+            if (tokenizer.hasMoreTokens()) {
                 builder.append(",");
             }
         }

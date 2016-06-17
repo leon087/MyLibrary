@@ -1,4 +1,4 @@
-include ':lib:MyGradlePlugin'
+include ':MyGradlePlugin'
 
 include ':lib:MyCommonExt'
 include ':lib:MyCommonUI'

@@ -14,7 +14,7 @@ public class DaemonManager {
 
     private static final long DELAY = 1 * 60 * 60 * 1000;
 
-    private static final AtomicBoolean startFlag = new AtomicBoolean(false);
+    private final AtomicBoolean startFlag = new AtomicBoolean(false);
 
     private DaemonManager() {
     }

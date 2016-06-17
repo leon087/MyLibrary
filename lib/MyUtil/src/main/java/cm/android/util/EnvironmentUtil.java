@@ -174,7 +174,8 @@ public class EnvironmentUtil {
      * 判断是否有足够的空间
      */
     public static boolean hasEnoughSpace(File file) {
-        if (getUsableSpace(file) > REMAIN_SPACE) {
+        long usable = getUsableSpace(file);
+        if (usable > REMAIN_SPACE) {
             return true;
         } else {
             return false;

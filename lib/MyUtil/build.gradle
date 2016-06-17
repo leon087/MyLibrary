@@ -4,6 +4,7 @@ apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
 apply from: "$rootDir/config/findbugs/findbugs.gradle"
 apply from: "$rootDir/config/checkstyle/checkstyle.gradle"
+apply from: "$rootDir/config/unittest/unittest.gradle"
 
 android {
     defaultConfig {
@@ -26,19 +27,24 @@ dependencies {
 //    compile 'com.alibaba:fastjson:1.1.46.android'
     compile 'com.alibaba:fastjson:1.2.7'
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
+    // Dependencies for local unit tests
+//    testCompile "junit:junit:$rootProject.ext.junitVersion"
+//    testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
+//    testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
+
+//    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
     //    https://github.com/vgrec/EspressoExamples
-    androidTestCompile 'junit:junit:4.12'
-    testCompile 'junit:junit:4.12'
+//    androidTestCompile 'junit:junit:4.12'
+//    testCompile 'junit:junit:4.12'
 
-    androidTestCompile('com.android.support.test:rules:0.3') {
-        exclude module: 'support-v4'
-        exclude module: 'support-annotations'
-    }
-
-    androidTestCompile('com.android.support.test:runner:0.3') {
-        exclude module: 'support-annotations'
-    }
+//    androidTestCompile('com.android.support.test:rules:0.3') {
+//        exclude module: 'support-v4'
+//        exclude module: 'support-annotations'
+//    }
+//
+//    androidTestCompile('com.android.support.test:runner:0.3') {
+//        exclude module: 'support-annotations'
+//    }
 
 //        androidTestCompile('com.android.support.test.espresso:espresso-core:2.0') {
 //            exclude module: 'testing-support-lib'

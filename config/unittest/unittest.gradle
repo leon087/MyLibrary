@@ -1,0 +1,14 @@
+
+dependencies {
+    //test framework
+    compile "com.google.dagger:dagger:$rootProject.daggerVersion"
+    compile "javax.annotation:jsr250-api:$rootProject.jsr250Version"
+//    apt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+
+    testCompile "junit:junit:$rootProject.junitVersion"
+    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
+    testCompile "org.robolectric:shadows-support-v4:$rootProject.robolectricVersion"
+    testCompile "org.robolectric:shadows-core:$rootProject.robolectricVersion"
+    testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
+}

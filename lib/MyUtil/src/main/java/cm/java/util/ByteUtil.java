@@ -11,28 +11,32 @@ public class ByteUtil {
     /**
      * TENS[i] contains the tens digit of the number i, 0 <= i <= 99.
      */
-    private static final char[] TENS = {'0', '0', '0', '0', '0', '0', '0',
-            '0', '0', '0', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
-            '2', '2', '2', '2', '2', '2', '2', '2', '2', '2', '3', '3', '3',
-            '3', '3', '3', '3', '3', '3', '3', '4', '4', '4', '4', '4', '4',
-            '4', '4', '4', '4', '5', '5', '5', '5', '5', '5', '5', '5', '5',
-            '5', '6', '6', '6', '6', '6', '6', '6', '6', '6', '6', '7', '7',
-            '7', '7', '7', '7', '7', '7', '7', '7', '8', '8', '8', '8', '8',
-            '8', '8', '8', '8', '8', '9', '9', '9', '9', '9', '9', '9', '9',
-            '9', '9'};
+    private static final char[] TENS = {
+            '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+            '1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+            '2', '2', '2', '2', '2', '2', '2', '2', '2', '2',
+            '3', '3', '3', '3', '3', '3', '3', '3', '3', '3',
+            '4', '4', '4', '4', '4', '4', '4', '4', '4', '4',
+            '5', '5', '5', '5', '5', '5', '5', '5', '5', '5',
+            '6', '6', '6', '6', '6', '6', '6', '6', '6', '6',
+            '7', '7', '7', '7', '7', '7', '7', '7', '7', '7',
+            '8', '8', '8', '8', '8', '8', '8', '8', '8', '8',
+            '9', '9', '9', '9', '9', '9', '9', '9', '9', '9'};
 
     /**
      * Ones [i] contains the tens digit of the number i, 0 <= i <= 99.
      */
-    private static final char[] ONES = {'0', '1', '2', '3', '4', '5', '6',
-            '7', '8', '9', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1', '2',
-            '3', '4', '5', '6', '7', '8', '9', '0', '1', '2', '3', '4', '5',
-            '6', '7', '8', '9', '0', '1', '2', '3', '4', '5', '6', '7', '8',
-            '9', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1',
-            '2', '3', '4', '5', '6', '7', '8', '9', '0', '1', '2', '3', '4',
-            '5', '6', '7', '8', '9', '0', '1', '2', '3', '4', '5', '6', '7',
-            '8', '9',};
+    private static final char[] ONES = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',};
 
     /**
      * Table for MOD / DIV 10 computation described in Section 10-21 of Hank
@@ -53,9 +57,8 @@ public class ByteUtil {
     /**
      * 将byte流转换为long
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return long 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static long toLong(byte[] b, int pos) {
         return toLong(b, pos, 8);
@@ -64,10 +67,9 @@ public class ByteUtil {
     /**
      * 将byte流转换为long
      *
-     * @param byte[] b 二进制流
-     * @param int    pos 开始转换位置
-     * @param int    width 转换字节数
-     * @return long 转换后的值
+     * byte[] b 二进制流
+     * int    pos 开始转换位置
+     * int    width 转换字节数
      */
     public static long toLong(byte[] b, int pos, int width) {
         long ret = 0;
@@ -80,10 +82,9 @@ public class ByteUtil {
     /**
      * 将byte流按照网络字节序转换为long
      *
-     * @param byte[] b 二进制流
-     * @param int    pos 开始转换位置
-     * @param int    width 转换字节数
-     * @return long 转换后的值
+     * byte[] b 二进制流
+     * int    pos 开始转换位置
+     * int    width 转换字节数
      */
     public static long toBigEndianLong(byte[] b, int pos, int width) {
         long ret = 0;
@@ -96,9 +97,8 @@ public class ByteUtil {
     /**
      * 将byte流转换为double
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return double 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static double toDouble(byte[] b, int pos) {
         long l;
@@ -125,9 +125,8 @@ public class ByteUtil {
     /**
      * 将byte流转换为short
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return short 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static short toShort(byte[] b, int pos) {
         short ret = 0;
@@ -139,9 +138,8 @@ public class ByteUtil {
     /**
      * 将两个byte流转换为int
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return int 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static int toIntFromTwoBytes(byte[] b, int pos) {
         int ret = 0;
@@ -154,9 +152,8 @@ public class ByteUtil {
     /**
      * 将两个byte流转换为int,大字端
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return int 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static int toBigEndianIntFromTwoBytes(byte[] b, int pos) {
         int ret = 0;
@@ -169,9 +166,8 @@ public class ByteUtil {
     /**
      * 将byte流按照网络字节序转换为short
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return short 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static short toBigEndianShort(byte[] b, int pos) {
         short ret = 0;
@@ -183,9 +179,8 @@ public class ByteUtil {
     /**
      * 将byte流按照网络字节序转换为int
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return int 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static int toBigEndianInteger(byte[] b, int pos) {
         int ret = 0;
@@ -198,9 +193,9 @@ public class ByteUtil {
     /**
      * 将int按网络字节流转换为byte数组
      *
-     * @param int    val 要转换的源
-     * @param byte[] b 目标数组
-     * @param short  pos 开始存放位置下标
+     * int    val 要转换的源
+     * byte[] b 目标数组
+     * short  pos 开始存放位置下标
      */
     public static void toBigEndianByteArray(int val, byte[] b, int pos) {
         assert (pos + 4 <= b.length);
@@ -213,9 +208,9 @@ public class ByteUtil {
     /**
      * 将short按网络字节序转换为byte数组
      *
-     * @param short  val 要转换的源
-     * @param byte[] b 目标数组
-     * @param short  pos 开始存放位置下标
+     * short  val 要转换的源
+     * byte[] b 目标数组
+     * short  pos 开始存放位置下标
      */
     public static void toBigEndianByteArray(short val, byte[] b, int pos) {
         assert (pos + 2 <= b.length);
@@ -226,9 +221,9 @@ public class ByteUtil {
     /**
      * 将long按网络字节序转换为byte数组
      *
-     * @param long   val 要转换的源
-     * @param byte[] b 目标数组
-     * @param short  pos 开始存放位置下标
+     * long   val 要转换的源
+     * byte[] b 目标数组
+     * short  pos 开始存放位置下标
      */
     public static void toBigEndianByteArray(long val, byte[] b, int pos) {
         assert (pos + 8 <= b.length);
@@ -241,9 +236,8 @@ public class ByteUtil {
     /**
      * 将byte流转换为int
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
-     * @return int 转换后的值
+     * byte[] b 二进制流
+     * short  pos 开始转换位置
      */
     public static int toInteger(byte[] b, int pos) {
         int ret = 0;
@@ -256,10 +250,9 @@ public class ByteUtil {
     /**
      * 将byte流转换为int
      *
-     * @param byte[] b 二进制流
-     * @param int    pos 开始转换位置
-     * @param int    width 从几个byte转
-     * @return int 转换后的值
+     * byte[] b 二进制流
+     * int    pos 开始转换位置
+     * int    width 从几个byte转
      */
     public static double toDouble(byte[] b, int pos, int width) {
         double retVal = Double.MAX_VALUE;
@@ -323,8 +316,8 @@ public class ByteUtil {
     /**
      * 将byte流转换为float
      *
-     * @param byte[] b 二进制流
-     * @param short  pos 开始转换位置
+     * @param b   二进制流
+     * @param pos 开始转换位置
      * @return float 转换后的值
      */
     public static float toFloat(byte[] b, int pos) {
@@ -374,9 +367,9 @@ public class ByteUtil {
     /**
      * 将long转换为byte数组
      *
-     * @param long   val 要转换的源
-     * @param byte[] b 目标数组
-     * @param short  pos 开始存放位置下标
+     * @param val 要转换的源
+     * @param b   目标数组
+     * @param pos 开始存放位置下标
      */
     public static void toByteArray(long val, byte[] b, int pos) {
         assert (pos + 8 <= b.length);
@@ -389,9 +382,9 @@ public class ByteUtil {
     /**
      * 将long的指定长度字节转换为byte数组
      *
-     * @param long   val 要转换的源 int w 要转化宽度
-     * @param byte[] b 目标数组
-     * @param short  pos 开始存放位置下标
+     * @param val 要转换的源 int w 要转化宽度
+     * @param b   目标数组
+     * @param pos 开始存放位置下标
      */
     public static void toByteArray(long val, int w, byte[] b, int pos) {
         assert (pos + 8 <= b.length);
@@ -404,9 +397,9 @@ public class ByteUtil {
     /**
      * 将int转换为byte数组
      *
-     * @param int    val 要转换的源
-     * @param byte[] b 目标数组
-     * @param short  pos 开始存放位置下标
+     * @param val 要转换的源
+     * @param b   目标数组
+     * @param pos 开始存放位置下标
      */
     public static void toByteArray(int val, byte[] b, int pos) {
         assert (pos + 4 <= b.length);
@@ -419,9 +412,9 @@ public class ByteUtil {
     /**
      * 将short转换为byte数组
      *
-     * @param short  val 要转换的源
-     * @param byte[] b 目标数组
-     * @param short  pos 开始存放位置下标
+     * @param val 要转换的源
+     * @param b   目标数组
+     * @param pos 开始存放位置下标
      */
     public static void toByteArray(short val, byte[] b, int pos) {
         assert (pos + 2 <= b.length);
@@ -471,7 +464,7 @@ public class ByteUtil {
      * 从指定位置开始，返回指定的第N个字符串，字符串之间以空格作为间隔符 最后一个字符串可能以length处为结束 index：从0开始计数
      */
     public static String indexStringDevidedBySpace(byte[] b, int pos,
-            int length, int index) {
+                                                   int length, int index) {
         StringBuilder str = new StringBuilder();
 
         int spaceNum = 0;

@@ -396,7 +396,7 @@ class FileLogger extends MyBaseLogger {
     }
 
     public synchronized void log(Level level, String msg) {
-        if (false == initSdcardSuccess) {
+        if (!initSdcardSuccess) {
             logcatLogger.log(Level.ERROR, "Try open logfile.");
             initSdcardMode();
         }

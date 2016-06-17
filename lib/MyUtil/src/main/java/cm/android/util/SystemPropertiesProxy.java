@@ -8,7 +8,8 @@ public class SystemPropertiesProxy {
 
     private Class<?> SystemProperties;
 
-    private Method getString, getBoolean;
+    private Method getString;
+    private Method getBoolean;
 
     private SystemPropertiesProxy(ClassLoader cl) {
         try {

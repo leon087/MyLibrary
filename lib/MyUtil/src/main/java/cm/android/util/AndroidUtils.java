@@ -70,7 +70,6 @@ public final class AndroidUtils {
             cm.java.util.IoUtil.closeQuietly(inputStream);
         }
 
-        // TODO:
         if (stubMap == null) {
             logger.error("stubMap = null");
             return AndroidUtils.newMap();

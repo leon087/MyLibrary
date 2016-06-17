@@ -18,7 +18,7 @@ public interface IServer {
 
     public void onHandleIntent(Intent intent);
 
-    public static final IServer emptyServer = new IServer() {
+    public static final IServer EMPTY_SERVER = new IServer() {
         @Override
         public IBinder onBind(Intent intent) {
             return null;

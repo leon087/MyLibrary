@@ -87,6 +87,8 @@ public class ExitHelper {
                         iExitInterface.showExitTip();
                         return true;
                     }
+                default:
+                    break;
             }
             return false;
         }

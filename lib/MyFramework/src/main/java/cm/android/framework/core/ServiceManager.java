@@ -35,38 +35,38 @@ public final class ServiceManager {
         }
     }
 
-    private static final ApplicationImpl mApplication = new ApplicationImpl();
+    private static final ApplicationImpl APPLICATION = new ApplicationImpl();
 
     static void appInit(Context context, AppConfig appConfig, Class<? extends IServiceManager> serviceClass) {
-        mApplication.appInit(context, appConfig, serviceClass);
+        APPLICATION.appInit(context, appConfig, serviceClass);
     }
 //    static void appInit(Context context, AppConfig appConfig,
 //            Class<? extends AbstractCoreService> clazz) {
-//        mApplication.appInit(context, appConfig, clazz);
+//        APPLICATION.appInit(context, appConfig, clazz);
 //    }
 
     public static void addService(String name, IBinder binder) {
-        mApplication.addService(name, binder);
+        APPLICATION.addService(name, binder);
     }
 
     public static IBinder getService(String name) {
-        return mApplication.getService(name);
+        return APPLICATION.getService(name);
     }
 
     public static boolean isSystemReady() {
-        return mApplication.isSystemReady();
+        return APPLICATION.isSystemReady();
     }
 
     public static void start(InitListener initListener) {
-        mApplication.start(initListener);
+        APPLICATION.start(initListener);
     }
 
     public static void stop() {
-        mApplication.stop();
+        APPLICATION.stop();
     }
 
     public static boolean isStarted() {
-        return mApplication.isStarted();
+        return APPLICATION.isStarted();
     }
 
     public static void restoreService(Context context, String processName) {
@@ -74,7 +74,7 @@ public final class ServiceManager {
     }
 
     public static void handleAction(String action, Bundle bundle) {
-        mApplication.handleAction(action, bundle);
+        APPLICATION.handleAction(action, bundle);
     }
 
 }

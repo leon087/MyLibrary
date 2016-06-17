@@ -7,9 +7,8 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
-//        classpath 'ggg.android:cm.android.gradle:1.0.5'
-        classpath 'ggg.android:cm.android.gradle:local.5'
-//        classpath group: 'ggg.android', name: 'cm.android.gradle', version: 'local.1.0.4'
+//        classpath 'ggg.android:cm.android.gradle:1.0.8'
+        classpath 'ggg.android:cm.android.gradle:local.local'
     }
 }
 
@@ -41,4 +40,11 @@ ext {
     supportLibraryVersion = '23.4.0'
     logbackAndroidVersion = '1.1.1-4'
     slf4jVersion = '1.7.14'
+    junitVersion = '4.12'
+
+    //test framework
+    daggerVersion = '2.0.2'
+    jsr250Version = '1.0'
+    mockitoVersion = '1.10.19'
+    robolectricVersion = '3.1-rc1'
 }

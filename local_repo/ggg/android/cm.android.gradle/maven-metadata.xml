@@ -3,12 +3,14 @@
   <groupId>ggg.android</groupId>
   <artifactId>cm.android.gradle</artifactId>
   <versioning>
-    <release>local.5</release>
+    <release>local.local</release>
     <versions>
       <version>1.0.3</version>
       <version>1.0.5</version>
       <version>local.5</version>
+      <version>local.8</version>
+      <version>local.local</version>
     </versions>
-    <lastUpdated>20160603085140</lastUpdated>
+    <lastUpdated>20160617072844</lastUpdated>
   </versioning>
 </metadata>

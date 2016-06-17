@@ -4,6 +4,7 @@ apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
 apply from: "$rootDir/config/findbugs/findbugs.gradle"
 apply from: "$rootDir/config/checkstyle/checkstyle.gradle"
+apply from: "$rootDir/config/unittest/unittest.gradle"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

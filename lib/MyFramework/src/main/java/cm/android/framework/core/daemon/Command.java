@@ -24,7 +24,7 @@ public class Command {
         try {
             final String abspath = file.getAbsolutePath();
             out = new FileOutputStream(file);
-            byte buf[] = new byte[1024];
+            byte[] buf = new byte[1024 * 8];
             int len;
             while ((len = is.read(buf)) > 0) {
                 out.write(buf, 0, len);

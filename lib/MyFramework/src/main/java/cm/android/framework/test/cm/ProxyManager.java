@@ -4,10 +4,10 @@ import cm.android.framework.core.ProxyFacoty;
 
 public class ProxyManager implements IProxy {
 
-    private static final ProxyManager proxyManager = new ProxyManager();
+    private static final ProxyManager PROXY_MANAGER = new ProxyManager();
 
     public static ProxyManager getInstance() {
-        return proxyManager;
+        return PROXY_MANAGER;
     }
 
     @Override

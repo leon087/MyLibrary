@@ -26,7 +26,7 @@ public final class CoreService extends PersistentService {
 
     private static final String TAG_SERVICE_MANAGER = "SERVICE_MANAGER";
 
-    private static final IServiceBinder.Stub emptyServiceBinder = new IServiceBinder.Stub() {
+    private static final IServiceBinder.Stub EMPTY_BINDER = new IServiceBinder.Stub() {
 
         @Override
         public void create() throws RemoteException {
@@ -59,13 +59,13 @@ public final class CoreService extends PersistentService {
         Bundle bundle = intent.getExtras();
         if (bundle == null) {
             logger.error("bundle = null,intent = {}", intent);
-            return emptyServiceBinder;
+            return EMPTY_BINDER;
         }
 
         String action = bundle.getString(TAG_ACTION);
         if (!ACTION_BIND.equals(action)) {
             logger.error("intent = {}", intent);
-            return emptyServiceBinder;
+            return EMPTY_BINDER;
         }
 
         logger.info("CoreService:onBind:initService:intent = {}", intent);

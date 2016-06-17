@@ -6,6 +6,7 @@ apply from: "$rootDir/config/findbugs/findbugs.gradle"
 apply from: "product.gradle"
 
 apply plugin: 'cm.android.gradle'
+apply plugin: 'cm.android.gradle.sign'
 
 def getKeyStore(def propertyFile) {
     if (propertyFile == null) {
@@ -152,12 +153,18 @@ android {
 
         def typeServer = variant.productFlavors.get(1).name //"type_server"
 
-        if (typeServer.equals("dev")) {
-            variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_dev))
-        } else if (typeServer.equals("devtest")) {
-            variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_devtest))
-        } else if (typeServer.equals("demo")) {
-            variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_demo))
+        switch (typeServer) {
+            case 'dev':
+                variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_dev))
+                break
+            case 'devtest':
+                variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_devtest))
+                break
+            case 'demo':
+                variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_demo))
+                break
+            default:
+                break
         }
     }
 }
@@ -190,7 +197,7 @@ dependencies {
 
     compile 'com.android.support:multidex:1.0.1'
 
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
+//    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
     androidTestCompile('com.android.support:multidex-instrumentation:1.0.1') {
         exclude group: 'com.android.support', module: 'multidex'
     }

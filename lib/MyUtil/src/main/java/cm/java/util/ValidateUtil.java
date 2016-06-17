@@ -219,47 +219,47 @@ public class ValidateUtil {
     // return m.matches();
     // }
 
-    /**
-     * 判断各字段是否为数字或者为字母 ，长度
-     *
-     * @param str 需要判断的字符串
-     * @return 字段是数字或者为字母长度符合规则, 返回true，否则返回 false
-     */
-    public static boolean isChannelId(String str) {
-
-        if (str != null && !"".equals(str)) {
-            // 如果是默认的channelId则返回成功
-            if (str.equals("0_10010001001")) {
-                return true;
-            }
-
-            String strs[] = str.split("_");
-            if (strs.length == 3 || strs.length == 2) {
-                for (int i = 0; i < strs.length; i++) {
-                    // 判断各字段是否为数字或者为字母
-                    if (!isChar(strs[i], i)) {
-                        return false;
-                    }
-                }
-            } else if (strs.length == 1) {
-                if (strs[0].length() != 11 && strs[0].length() != 4) {
-                    return false;
-                }
-
-                for (int i = 0; i < strs[0].length(); i++) {
-                    if (!(strs[0].charAt(i) >= '0' && strs[0].charAt(i) <= '9')) {
-                        return false;
-                    }
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
-        return true;
-    }
+//    /**
+//     * 判断各字段是否为数字或者为字母 ，长度
+//     *
+//     * @param str 需要判断的字符串
+//     * @return 字段是数字或者为字母长度符合规则, 返回true，否则返回 false
+//     */
+//    public static boolean isChannelId(String str) {
+//
+//        if (str != null && !"".equals(str)) {
+//            // 如果是默认的channelId则返回成功
+//            if (str.equals("0_10010001001")) {
+//                return true;
+//            }
+//
+//            String strs[] = str.split("_");
+//            if (strs.length == 3 || strs.length == 2) {
+//                for (int i = 0; i < strs.length; i++) {
+//                    // 判断各字段是否为数字或者为字母
+//                    if (!isChar(strs[i], i)) {
+//                        return false;
+//                    }
+//                }
+//            } else if (strs.length == 1) {
+//                if (strs[0].length() != 11 && strs[0].length() != 4) {
+//                    return false;
+//                }
+//
+//                for (int i = 0; i < strs[0].length(); i++) {
+//                    if (!(strs[0].charAt(i) >= '0' && strs[0].charAt(i) <= '9')) {
+//                        return false;
+//                    }
+//                }
+//            } else {
+//                return false;
+//            }
+//        } else {
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     /**
      * 判断各字段是否为数字或者为字母

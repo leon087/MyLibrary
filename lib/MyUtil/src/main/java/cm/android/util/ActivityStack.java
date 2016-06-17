@@ -11,7 +11,7 @@ import cm.java.util.ObjectUtil;
  */
 public final class ActivityStack {
 
-    private static final LinkedList<Activity> activityList = ObjectUtil.newLinkedList();
+    private static final LinkedList<Activity> ACTIVITY_LIST = ObjectUtil.newLinkedList();
 
     private ActivityStack() {
     }
@@ -27,22 +27,22 @@ public final class ActivityStack {
      * 添加Activity到栈中中
      */
     public synchronized void addActivity(Activity activity) {
-        activityList.addFirst(activity);
+        ACTIVITY_LIST.addFirst(activity);
     }
 
     /**
      * 从栈中移除Activity
      */
     public synchronized void removeActivity(Activity activity) {
-        activityList.remove(activity);
+        ACTIVITY_LIST.remove(activity);
     }
 
     /**
      * 移除栈顶的Activity
      */
     public synchronized void removeTopActivity() {
-        if (activityList.size() > 0) {
-            Activity currentActivity = activityList.removeFirst();
+        if (ACTIVITY_LIST.size() > 0) {
+            Activity currentActivity = ACTIVITY_LIST.removeFirst();
             currentActivity.finish();
         }
     }
@@ -51,10 +51,10 @@ public final class ActivityStack {
      * 遍历所有Activity并finish
      */
     public synchronized void finishAll() {
-        for (Activity activity : activityList) {
+        for (Activity activity : ACTIVITY_LIST) {
             activity.finish();
         }
-        activityList.clear();
+        ACTIVITY_LIST.clear();
     }
 
     private static final class ActivityStackHolder {
