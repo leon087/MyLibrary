@@ -151,9 +151,6 @@ public class IoUtil {
         return delete(file);
     }
 
-    /**
-     * 删除文件，如果该文件是个目录，则会删除该目录以及该目录下所有文件
-     */
     private static boolean deleteInternal(File file) {
         try {
             return file.delete();

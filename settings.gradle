@@ -1,5 +1,3 @@
-include ':MyGradlePlugin'
-
 include ':lib:MyCommonExt'
 include ':lib:MyCommonUI'
 

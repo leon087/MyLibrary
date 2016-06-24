@@ -86,7 +86,8 @@ android {
             minifyEnabled false
 
             versionNameSuffix "-debug"
-            signingConfig signingConfigs.debug
+//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.cm
         }
 
         rtest {
@@ -94,7 +95,8 @@ android {
             debuggable true
 
             versionNameSuffix "-rtest"
-            signingConfig signingConfigs.debug
+//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.cm
         }
     }
 
@@ -110,13 +112,17 @@ android {
 //            dimension 'type_server'
 //        }
 
+        online {
+            dimension 'type_server'
+        }
+
         devtest {
             dimension 'type_server'
         }
 
-        demo {
-            dimension "type_server"
-        }
+//        demo {
+//            dimension "type_server"
+//        }
 
         //type_xx：配置
         lite {
@@ -128,23 +134,34 @@ android {
         }
     }
 
-//    variantFilter { variant ->
+    variantFilter { variant ->
+        //online/trial:release/rtest
+        //demo:rtest
+        //devtest:rtest/debug
+
 //        logger.debug('gggggggggg1 variant.getFlavors() = ' + variant.getFlavors())
-//        def typeServer =  variant.getFlavors.get(1).name
-//        switch (variant.buildType.name) {
-//            case 'debug':
-//                variant.setIgnore(!variant.getFlavors().get(1).name.equals('distrib'));
-//                break
-//            case 'rtest':
-//                break
-//            case 'release':
-//                break
-//            default:
-//                break
-//        }
-//    }
+        def typeServer = variant.getFlavors().get(1).name
+        def buildTypeName = variant.buildType.name
+        switch (typeServer) {
+            case 'online':
+                if ('release'.equals(buildTypeName)) {
+                    variant.setIgnore(false)
+                } else {
+                    variant.setIgnore(true)
+                }
+                break
+            case 'devtest':
+                if ('release'.equals(buildTypeName)) {
+                    variant.setIgnore(true)
+                }
+                break
+            default:
+                break
+        }
+    }
 
     applicationVariants.all { variant ->
+
         def productName = variant.productFlavors.get(0).name //"type_product"
         def product = project.extensions.getByName(productName)
 
@@ -168,6 +185,15 @@ android {
         }
     }
 }
+
+//def count1 = 0
+//tasks.getByName("check") {
+//    it.doLast {
+//        count1 += 1
+//        println("------------assemble do Last-------------")
+//        println("------------count 1 = " + count1 + "-------------")
+//    }
+//}
 
 buildscript {
     repositories {

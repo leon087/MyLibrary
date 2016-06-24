@@ -1,11 +1,27 @@
-def computeVersionName() {
-    return project.versionName + "." + project.versionCode + "." + buildTime()
-}
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url RELEASE_REPOSITORY_URL
+            credentials {
+                username NEXUS_USERNAME
+                password NEXUS_PASSWORD
+            }
+        }
+        maven { url uri(new File(rootDir, 'local_repo')) }
+    }
 
-def buildTime() {
-    def date = new Date()
-    def formattedDate = date.format('MMddHH')
-    return formattedDate
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.2'
+//        classpath 'ggg.android:cm.android.gradle:1.0.19'
+        classpath 'ggg.android:cm.android.gradle:local'
+    }
+}
+//----------------------
+import cm.android.gradle.util.Util;
+
+def computeVersion() {
+    return Util.computeVersion(project.versionName, project.versionCode, Util.getSvnRevision(rootProject.getRootDir()));
 }
 
 if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.android.library')) {
@@ -22,7 +38,7 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
             minSdkVersion Integer.parseInt(project.minSdkVersion)
             targetSdkVersion Integer.parseInt(project.targetSdkVersion)
             versionCode Integer.parseInt(project.versionCode)
-            versionName computeVersionName()
+            versionName computeVersion()
         }
     }
 
@@ -76,31 +92,5 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
             incremental true
             javaMaxHeapSize "2g"
         }
-    }
-}
-
-def getKeyStore(def propertyFile) {
-    if (propertyFile == null) {
-        return 'debug'
-    }
-
-    def props = new Properties();
-    try {
-        def signingConfig = 'release';
-
-        def ins = new BufferedInputStream(new FileInputStream(propertyFile));
-        props.load(ins);
-        ins.close();
-        project.android.signingConfigs {
-            "$signingConfig" {
-                storeFile = new File(props.getProperty('storeFile'));
-                storePassword = props.getProperty('storePassword');
-                keyAlias = props.getProperty('keyAlias');
-                keyPassword = props.getProperty('keyPassword');
-            }
-        }
-        return "$signingConfig";
-    } catch (Exception e) {
-        return 'debug';
     }
 }

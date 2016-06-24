@@ -13,6 +13,6 @@ public class CmdExecuteTest {
         };
         String temp = CmdExecute.exec(args);
         boolean result = "".equals(temp);
-        assertEquals(result, true);
+        assertEquals(result, false);
     }
 }

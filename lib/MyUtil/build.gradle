@@ -71,6 +71,12 @@ artifacts {
     archives androidSourcesJar
 }
 
+def computeVersion(String versionName, String versionCode) {
+    return versionName + "." + versionCode
+}
+
+version = computeVersion(project.versionName, project.versionCode)
+
 apply plugin: 'maven'
 uploadArchives {
     repositories.mavenDeployer {
@@ -80,7 +86,7 @@ uploadArchives {
 //        snapshotRepository(url: "http://xxx.xxx.xxx.xx:8080/content/repositories/snapshots") {
 //            authentication(userName: "xxxx", password: "xxxx")
 //        }
-        pom.version = versionName + "." + versionCode
+        pom.version = project.version
         pom.artifactId = POM_ARTIFACT_ID
         pom.groupId = GROUP
         pom.name = POM_NAME

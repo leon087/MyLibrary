@@ -9,7 +9,7 @@ public class ShellUtilTest {
     @Test
     public void testCheckRootPermission() throws Exception {
         boolean result = ShellUtil.checkRootPermission();
-        assertEquals(result, true);
+        assertEquals(result, false);
     }
 
 //    public void testExec() throws Exception {
