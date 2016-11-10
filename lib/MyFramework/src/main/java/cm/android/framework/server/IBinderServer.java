@@ -4,7 +4,6 @@ import android.content.Context;
 
 import cm.java.proguard.annotations.Keep;
 
-@Keep
 public interface IBinderServer {
 
     void onCreate(Context context);

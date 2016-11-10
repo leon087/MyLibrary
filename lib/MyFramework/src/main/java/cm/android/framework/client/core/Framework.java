@@ -105,14 +105,11 @@ public class Framework {
         }
     }
 
-    private void init(Class<? extends IBinderServer> serviceClass) {
-        String processName = SystemUtil.getCurProcessName();
-
-        if (serviceClass == null) {
-            throw new IllegalArgumentException("serviceClass = null");
+    private void init(Class<? extends IBinderServer> serverClass) {
+        if (serverClass == null) {
+            throw new IllegalArgumentException("serverClass = null");
         }
-        String serviceName = serviceClass.getName();
-        SERVER_NAME = serviceName;
+        SERVER_NAME = serverClass.getName();
 
         DaemonService.bind(context, serviceConnection);
 
@@ -142,10 +139,6 @@ public class Framework {
     public void start() {
         LogUtil.getLogger().info("framework:start");
         StateHelper.writeState(context, true);
-        startInternal();
-    }
-
-    private void startInternal() {
         ServerProvider.Proxy.create(context);
     }
 

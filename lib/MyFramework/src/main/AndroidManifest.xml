@@ -34,14 +34,14 @@
 
         <provider
                 android:name="cm.android.framework.server.ServerProvider"
-                android:authorities="framework.ServerProvider"
+                android:authorities="framework.provider"
                 android:exported="false"
                 android:process=":framework"/>
 
         <!--xmlns:tools="http://schemas.android.com/tools"-->
         <!--<provider-->
         <!--android:name="cm.android.framework.server.ServerProvider"-->
-        <!--android:authorities="${applicationId}.framework.ServerProvider"-->
+        <!--android:authorities="${applicationId}.framework.provider"-->
         <!--tools:replace="android:authorities"/>-->
     </application>
 </manifest>

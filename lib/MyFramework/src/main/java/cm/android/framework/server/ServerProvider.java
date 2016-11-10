@@ -19,15 +19,15 @@ public final class ServerProvider extends BaseContentProvider {
     public static final String M_isActive = "@isActive";
     public static final String M_getServiceFetcher = "@getServiceFetcher";
 
-    public static String SERVICE_AUTH = "framework.ServerProvider";
+    public static String SERVICE_AUTH = "framework.provider";
 
     public static final String KEY_BINDER = "_framework_|_binder_";
 
     private final ServiceFetcher mServiceFetcher = new ServiceFetcher();
     private final BinderServerAgent binderServer = new BinderServerAgent();
 
-    public static void authoritiy(String authoritiy) {
-        SERVICE_AUTH = authoritiy;
+    public static void authorities(String authorities) {
+        SERVICE_AUTH = authorities;
     }
 
     @Override
