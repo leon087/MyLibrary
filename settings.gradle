@@ -1,7 +1,5 @@
-include ':lib:MyCommonExt'
-include ':lib:MyCommonUI'
-
 include ':lib:MyFramework'
 include ':lib:MyUtil'
 include ':lib:MyCommon'
+
 include ':app:MySample'

@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.os.Bundle;
 
-import cm.android.framework.core.ServiceManager;
+import cm.android.app.core.ObjectPool;
+import cm.android.app.test.server.TestManager;
+import cm.android.framework.client.core.Framework;
+import cm.android.framework.client.core.LogUtil;
 
 public class MainActivity extends Activity {
 
@@ -13,22 +16,23 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ServiceManager.start(new ServiceManager.InitListener() {
-            @Override
-            public void initSucceed() {
-            }
-        });
+        Framework.get().start();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ServiceManager.stop();
+        Framework.get().stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        TestManager tm = ObjectPool.getTestManager();
+        LogUtil.getLogger().error("gggg test = " + Framework.get().getService("test"));
+        LogUtil.getLogger().error("gggg onCreate");
+        tm.count();
     }
 
     @Override

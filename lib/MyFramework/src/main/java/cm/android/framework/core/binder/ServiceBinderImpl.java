@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.framework.core.IServiceManager;
 
+@Deprecated
 public final class ServiceBinderImpl extends cm.android.framework.core.IServiceBinder.Stub {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
@@ -47,9 +48,8 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
     }
 
     public void initService(String serviceName) {
-        logger.info("serviceName = {}", serviceName);
+        logger.info("serviceName = {},serviceManager = {}", serviceName, serviceManager);
         if (serviceManager != null) {
-            logger.info("serviceManager = {}", serviceManager);
             return;
         }
 
@@ -58,7 +58,7 @@ public final class ServiceBinderImpl extends cm.android.framework.core.IServiceB
             Constructor constructor = klass.getDeclaredConstructor();
             constructor.setAccessible(true);
             serviceManager = (IServiceManager) constructor.newInstance();
-            logger.info("serviceManager = {}", serviceManager);
+            logger.info("constructor:serviceManager = {}", serviceManager);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

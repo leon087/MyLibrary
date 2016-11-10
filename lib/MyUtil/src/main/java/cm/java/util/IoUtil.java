@@ -3,6 +3,8 @@ package cm.java.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.database.Cursor;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -19,6 +21,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
@@ -55,6 +59,12 @@ public class IoUtil {
             throw rethrown;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+        }
+    }
+
+    public static void closeQuietly(Cursor cursor) {
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
         }
     }
 
@@ -458,16 +468,20 @@ public class IoUtil {
         return true;
     }
 
-    public static File buildPath(File base, String... segments) {
-        File cur = base;
-        for (String segment : segments) {
-            if (cur == null) {
-                cur = new File(segment);
-            } else if (segment != null) {
-                cur = new File(cur, segment);
+    public static File join(File dir, String... paths) {
+        Iterator<String> iterator = Arrays.asList(paths).iterator();
+        StringBuilder appendable = new StringBuilder();
+
+        if (iterator.hasNext()) {
+            appendable.append(iterator.next());
+
+            while (iterator.hasNext()) {
+                appendable.append(File.separator);
+                appendable.append(iterator.next());
             }
         }
-        return cur;
+
+        return paths.length == 0 ? dir : new File(dir, appendable.toString());
     }
 
     private static int getShort(byte[] data) {
@@ -514,6 +528,9 @@ public class IoUtil {
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage(), e);
             return false;
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return false;
         } finally {
             IoUtil.closeQuietly(is);
             IoUtil.closeQuietly(os);
@@ -532,33 +549,26 @@ public class IoUtil {
         } catch (FileNotFoundException e) {
             logger.error(e.getMessage(), e);
             return false;
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            return false;
         } finally {
             IoUtil.closeQuietly(is);
             IoUtil.closeQuietly(os);
         }
     }
 
-    public static boolean compress(InputStream is, OutputStream os) {
-        try {
-            GZIPOutputStream gos = new GZIPOutputStream(os);
-            write(is, gos);
-            gos.finish();
-            return true;
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            return false;
-        }
+    public static boolean compress(InputStream is, OutputStream os) throws IOException {
+        GZIPOutputStream gos = new GZIPOutputStream(os);
+        write(is, gos);
+        gos.finish();
+        return true;
     }
 
-    public static boolean decompress(InputStream is, OutputStream os) {
-        try {
-            GZIPInputStream gis = new GZIPInputStream(is);
-            write(gis, os);
-            return true;
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            return false;
-        }
+    public static boolean decompress(InputStream is, OutputStream os) throws IOException {
+        GZIPInputStream gis = new GZIPInputStream(is);
+        write(gis, os);
+        return true;
     }
 
     public static final Properties loadProperties(File file) {

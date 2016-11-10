@@ -13,8 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
@@ -22,12 +21,15 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.applications.AppUtil;
-import cm.android.framework.core.daemon.DaemonService;
+import cm.android.framework.server.daemon.DaemonService;
 import cm.android.util.IntentUtil;
 import cm.android.util.SystemUtil;
 import cm.java.util.IoUtil;
 
-final class ApplicationImpl {
+import static android.content.Context.MODE_PRIVATE;
+
+@Deprecated
+public final class ApplicationImpl {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
 
@@ -61,6 +63,7 @@ final class ApplicationImpl {
         appContext = context.getApplicationContext();
         appConfig.init(appContext);
         CoreService.bind(appContext, mServiceConnection, serviceName);
+//        Bundle response = new ProviderCall.Builder(context, SERVICE_CP_AUTH).methodName("@").call();
 
         PackageInfo packageInfo = AppUtil.getPackageInfo(
                 appContext.getPackageManager(), appContext.getPackageName(),
@@ -86,7 +89,7 @@ final class ApplicationImpl {
         StateHolder.writeState(appContext, true);
 
         synchronized (this) {
-            this.initListener = new WeakReference<ServiceManager.InitListener>(initListener);
+            this.initListener = new WeakReference<>(initListener);
         }
 
         if (isSystemReady()) {
@@ -148,6 +151,7 @@ final class ApplicationImpl {
         }
     }
 
+    //TODO ggg 采用Provider.call()查询iBinder
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -157,9 +161,12 @@ final class ApplicationImpl {
                 logger.error("iBinder = null");
                 return;
             }
+
+            //TODO ggg
             serviceBidnerProxy.bindServiceBinder(iBinder);
 
             systemReady();
+            logger.info("systemReady:isBindService = {}", serviceBidnerProxy.isBindService());
         }
 
         @Override
@@ -203,46 +210,129 @@ final class ApplicationImpl {
         }
     }
 
-    private static class StateHolder {
+    public static class StateHolder {
 
         private static final String STATE_FILE_NAME = "framework_app_status";
 
         private static final String TAG_STATE = "state";
 
-        private static boolean isStateInit(Context context) {
+        private static final String ID = "_id";
+
+        private static final String DB_NAME = "framework.db";
+
+        public static boolean isStateInit(Context context) {
             return readState(context);
         }
 
-        private static void writeState(Context context, boolean state) {
-            logger.info("writeState:state = " + state);
+//        public static class OpenHelper extends SQLiteOpenHelper {
+//
+//            public static final int VERSION = 1;
+//
+//            public OpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+//                super(context, name, factory, VERSION);
+//            }
+//
+//            @Override
+//            public void onCreate(SQLiteDatabase db) {
+//                String CREATE_TABLE = "create table if not exists " + STATE_FILE_NAME
+//                        + "(" + ID + " integer primary key autoincrement,"
+//                        + TAG_STATE + " text)";
+//                db.execSQL(CREATE_TABLE);
+//            }
+//
+//            @Override
+//            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//            }
+//        }
 
-            File file = new File(context.getFilesDir(), STATE_FILE_NAME);
-            Properties properties = IoUtil.loadProperties(file);
+        public static void writeState(Context context, boolean state) {
+            logger.info("StateHolder:writeState:state = " + state);
+
+            Properties properties = new Properties();
             properties.setProperty(TAG_STATE, String.valueOf(state));
 
             OutputStream os = null;
             try {
-                os = new FileOutputStream(file);
+                os = context.openFileOutput(STATE_FILE_NAME, MODE_PRIVATE);
                 properties.store(os, "writeState:state = " + state);
             } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                logger.error(e.getMessage());
             } finally {
                 IoUtil.closeQuietly(os);
             }
+
+//            OpenHelper helper = new OpenHelper(context, DB_NAME, null);
+//            SQLiteDatabase dbw = helper.getWritableDatabase();
+//            SQLiteDatabase dbr = helper.getReadableDatabase();
+//            ContentValues cv = new ContentValues();
+//            cv.put(TAG_STATE, String.valueOf(state));
+//
+////            String sql = new StringBuilder()
+////                    .append("select * from ")
+////                    .append(STATE_FILE_NAME)
+////                    .append(" where ")
+////                    .append(TAG_STATE)
+////                    .append(" =? ")
+////                    .toString();
+//            Cursor cursor = null;
+//            try {
+//                cursor = dbr.query(STATE_FILE_NAME, null, null, null, null, null, ID + " asc");
+//                if (null == cursor || !cursor.moveToFirst()) {
+//                    //查询不到表明未插入
+//                    dbw.insert(STATE_FILE_NAME, "false", cv);
+//                } else {
+//                    //已插入，更新值
+//                    String whereClause = " " + ID + " = ? ";
+//                    String[] whereArgs = {String.valueOf(1)};
+//                    dbw.update(STATE_FILE_NAME, cv, whereClause, whereArgs);
+//                }
+//            } catch (Exception e) {
+//                logger.error(e.getMessage());
+//            } finally {
+//                IoUtil.closeQuietly(cursor);
+//            }
+////            Cursor c = db.rawQuery("select * from "+STATE_FILE_NAME+" where username=? and password = ?",
+////                    new Stirng[]{"用户名","密码"});
+
         }
 
         private static boolean readState(Context context) {
-            File file = new File(context.getFilesDir(), STATE_FILE_NAME);
-            if (!file.exists()) {
+//            OpenHelper helper = new OpenHelper(context, DB_NAME, null);
+//            SQLiteDatabase dbr = helper.getReadableDatabase();
+//            Cursor cursor = null;
+//            try {
+//                cursor = dbr.query(STATE_FILE_NAME, null, null, null, null, null, ID + " asc");
+//                if (null == cursor || !cursor.moveToFirst()) {
+//                    //查询不到表明未插入
+//                    logger.info("StateHolder:writeState:state = false,cursor = null");
+//                    return false;
+//                }
+//
+//                boolean state = Boolean.valueOf(cursor.getString(cursor.getColumnIndex(TAG_STATE)));
+//                logger.info("StateHolder:writeState:state = {}", state);
+//                return state;
+//            } catch (Exception e) {
+//                logger.error("StateHolder:writeState:state = false,error = {}", e.getMessage());
+//                return false;
+//            } finally {
+//                IoUtil.closeQuietly(cursor);
+//            }
+
+            FileInputStream fis = null;
+            try {
+                fis = context.openFileInput(STATE_FILE_NAME);
+                Properties properties = new Properties();
+                properties.load(fis);
+
+                boolean state = Boolean.valueOf(properties.getProperty(TAG_STATE, String.valueOf(false)));
+                logger.info("StateHolder:readState:state = " + state);
+                return state;
+            } catch (IOException e) {
+                logger.info("StateHolder:readState:state = false:" + e.getMessage());
                 return false;
+            } finally {
+                IoUtil.closeQuietly(fis);
             }
-
-            Properties properties = IoUtil.loadProperties(file);
-            boolean state = Boolean.valueOf(
-                    properties.getProperty(TAG_STATE, String.valueOf(false)));
-
-            logger.info("readState:state = " + state);
-            return state;
         }
     }
 
@@ -261,6 +351,7 @@ final class ApplicationImpl {
 
         boolean isBindService() {
             if (serviceBinder == null) {
+                logger.error("isBindService:serviceBinder = null");
                 return false;
             }
             return serviceBinder.asBinder().isBinderAlive();

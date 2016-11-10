@@ -59,7 +59,7 @@ public class SystemUtil {
 
     public static boolean isMainProcess(Context context) {
         String processName = SystemUtil.getCurProcessName();
-        if (context.getPackageName().equals(processName)) {
+        if (context.getApplicationInfo().processName.equals(processName)) {
             return true;
         }
         return false;

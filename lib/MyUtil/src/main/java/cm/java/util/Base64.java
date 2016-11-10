@@ -16,8 +16,9 @@
 
 package cm.java.util;
 
+import android.util.Base64OutputStream;
+
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
 /**
  * Utilities for encoding and decoding the Base64 representation of
@@ -26,7 +27,6 @@ import java.nio.charset.Charset;
  * href="http://www.ietf.org/rfc/rfc3548.txt">3548</a>.
  */
 public class Base64 {
-
     /**
      * Default values for encoder/decoder flags.
      */
@@ -60,7 +60,7 @@ public class Base64 {
     public static final int URL_SAFE = 8;
 
     /**
-     * Flag to pass to {@link android.util.Base64OutputStream} to indicate that it
+     * Flag to pass to {@link Base64OutputStream} to indicate that it
      * should not close the output stream it is wrapping when it
      * itself is closed.
      */
@@ -71,9 +71,7 @@ public class Base64 {
     //  --------------------------------------------------------
 
     /* package */ static abstract class Coder {
-
         public byte[] output;
-
         public int op;
 
         /**
@@ -105,7 +103,7 @@ public class Base64 {
     /**
      * Decode the Base64-encoded data in input and return the data in
      * a new byte array.
-     * <p/>
+     *
      * <p>The padding '=' characters at the end are considered optional, but
      * if any are present, there must be the correct number of them.
      *
@@ -117,13 +115,13 @@ public class Base64 {
      *                                  incorrect padding
      */
     public static byte[] decode(String str, int flags) {
-        return decode(str.getBytes(Charset.defaultCharset()), flags);
+        return decode(str.getBytes(), flags);
     }
 
     /**
      * Decode the Base64-encoded data in input and return the data in
      * a new byte array.
-     * <p/>
+     *
      * <p>The padding '=' characters at the end are considered optional, but
      * if any are present, there must be the correct number of them.
      *
@@ -140,7 +138,7 @@ public class Base64 {
     /**
      * Decode the Base64-encoded data in input and return the data in
      * a new byte array.
-     * <p/>
+     *
      * <p>The padding '=' characters at the end are considered optional, but
      * if any are present, there must be the correct number of them.
      *
@@ -174,7 +172,6 @@ public class Base64 {
     }
 
     /* package */ static class Decoder extends Coder {
-
         /**
          * Lookup table for turning bytes into their position in the
          * Base64 alphabet.
@@ -221,11 +218,8 @@ public class Base64 {
                 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         };
 
-        /**
-         * Non-data values in the DECODE arrays.
-         */
+        /** Non-data values in the DECODE arrays. */
         private static final int SKIP = -1;
-
         private static final int EQUALS = -2;
 
         /**
@@ -238,7 +232,6 @@ public class Base64 {
          * in the input and no future input can "fix" it.
          */
         private int state;   // state number (0 to 6)
-
         private int value;
 
         final private int[] alphabet;
@@ -266,9 +259,7 @@ public class Base64 {
          * bad base-64 data has been detected in the input stream.
          */
         public boolean process(byte[] input, int offset, int len, boolean finish) {
-            if (this.state == 6) {
-                return false;
-            }
+            if (this.state == 6) return false;
 
             int p = offset;
             len += offset;
@@ -311,9 +302,7 @@ public class Base64 {
                         op += 3;
                         p += 4;
                     }
-                    if (p >= len) {
-                        break;
-                    }
+                    if (p >= len) break;
                 }
 
                 // The fast path isn't available -- either we've read a
@@ -536,8 +525,6 @@ public class Base64 {
                 case 2:
                     output_len += 3;
                     break;
-                default:
-                    break;
             }
         }
 
@@ -556,7 +543,6 @@ public class Base64 {
     }
 
     /* package */ static class Encoder extends Coder {
-
         /**
          * Emit a new line every this many output tuples.  Corresponds to
          * a 76-character line length (the maximum allowable according to
@@ -587,17 +573,12 @@ public class Base64 {
         };
 
         final private byte[] tail;
-
         /* package */ int tailLen;
-
         private int count;
 
         final public boolean do_padding;
-
         final public boolean do_newline;
-
         final public boolean do_cr;
-
         final private byte[] alphabet;
 
         public Encoder(int flags, byte[] output) {
@@ -671,9 +652,7 @@ public class Base64 {
                 output[op++] = alphabet[(v >> 6) & 0x3f];
                 output[op++] = alphabet[v & 0x3f];
                 if (--count == 0) {
-                    if (do_cr) {
-                        output[op++] = '\r';
-                    }
+                    if (do_cr) output[op++] = '\r';
                     output[op++] = '\n';
                     count = LINE_GROUPS;
                 }
@@ -695,9 +674,7 @@ public class Base64 {
                 p += 3;
                 op += 4;
                 if (--count == 0) {
-                    if (do_cr) {
-                        output[op++] = '\r';
-                    }
+                    if (do_cr) output[op++] = '\r';
                     output[op++] = '\n';
                     count = LINE_GROUPS;
                 }
@@ -720,9 +697,7 @@ public class Base64 {
                         output[op++] = '=';
                     }
                     if (do_newline) {
-                        if (do_cr) {
-                            output[op++] = '\r';
-                        }
+                        if (do_cr) output[op++] = '\r';
                         output[op++] = '\n';
                     }
                 } else if (p - tailLen == len - 2) {
@@ -737,15 +712,11 @@ public class Base64 {
                         output[op++] = '=';
                     }
                     if (do_newline) {
-                        if (do_cr) {
-                            output[op++] = '\r';
-                        }
+                        if (do_cr) output[op++] = '\r';
                         output[op++] = '\n';
                     }
                 } else if (do_newline && op > 0 && count != LINE_GROUPS) {
-                    if (do_cr) {
-                        output[op++] = '\r';
-                    }
+                    if (do_cr) output[op++] = '\r';
                     output[op++] = '\n';
                 }
 

@@ -213,7 +213,7 @@ public class SystemInfoUtil {
 //        CmdExecute.run(args, "/system/bin/");
 
         String[] cmd = new String[]{
-                "kill"
+                "kill", String.valueOf(pid)
         };
         CmdExecute.exec(cmd);
     }

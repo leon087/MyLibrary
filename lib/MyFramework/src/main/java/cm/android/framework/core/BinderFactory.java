@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import cm.java.proguard.annotations.Keep;
 
+@Deprecated
 public final class BinderFactory {
 
     public static interface IBinderProxy {

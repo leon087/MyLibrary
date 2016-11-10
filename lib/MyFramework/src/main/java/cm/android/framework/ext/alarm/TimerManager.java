@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import android.os.IBinder;
 
-import cm.android.framework.core.BinderFactory;
+import cm.android.framework.client.ipc.BinderFactory;
 
 public final class TimerManager extends ITimerServer.Stub implements BinderFactory.IBinderProxy {
 

@@ -1,5 +1,6 @@
 package cm.android.framework.core;
 
+@Deprecated
 public interface IApp {
 
     /**

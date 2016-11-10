@@ -63,7 +63,7 @@ public class AppUtilTest extends InstrumentationTestCase {
     public void testGetPackageInfo() throws Exception {
         PackageManager packageManager = getInstrumentation().getContext().getPackageManager();
         String packageName = getInstrumentation().getContext().getPackageName();
-        PackageInfo packageInfo = AppUtil.getPackageInfo(packageManager, packageName);
+        PackageInfo packageInfo = AppUtil.getPackageInfo(packageManager, packageName, 0);
         boolean result = packageInfo == null;
         assertEquals(false, result);
     }

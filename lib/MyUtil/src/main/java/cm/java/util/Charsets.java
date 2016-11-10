@@ -16,19 +16,20 @@
 
 package cm.java.util;
 
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
 /**
- * Provides convenient access to the most important built-in charsets. Saves a
- * hash lookup and unnecessary handling of UnsupportedEncodingException at call
- * sites, compared to using the charset's name.
+ * Defines the same class as the java.nio.charset.Charsets which was added in
+ * Dalvik VM. This hack, provides a replacement for that class which can't be
+ * loaded in the standard JVM since it's in the java package and standard JVM
+ * doesn't have it. An implementation of the native methods in the original
+ * class has been added.
  * <p/>
- * Also various special-case charset conversions (for performance).
- *
- * @hide internal use only
+ * Extracted from API level 18, file:
+ * platform/libcore/luni/src/main/java/java/nio/charset/Charsets
  */
 public final class Charsets {
-
     /**
      * A cheap and type-safe constant for the ISO-8859-1 Charset.
      */
@@ -44,38 +45,41 @@ public final class Charsets {
      */
     public static final Charset UTF_8 = Charset.forName("UTF-8");
 
-    private Charsets() {
+    /**
+     * Returns a new byte array containing the bytes corresponding to the given characters,
+     * encoded in US-ASCII. Unrepresentable characters are replaced by (byte) '?'.
+     */
+    public static byte[] toAsciiBytes(char[] chars, int offset, int length) {
+        CharBuffer cb = CharBuffer.allocate(length);
+        cb.put(chars, offset, length);
+        return US_ASCII.encode(cb).array();
     }
 
     /**
-     * Returns a new byte array containing the bytes corresponding to the given
-     * characters, encoded in US-ASCII. Unrepresentable characters are replaced
-     * by (byte) '?'.
+     * Returns a new byte array containing the bytes corresponding to the given characters,
+     * encoded in ISO-8859-1. Unrepresentable characters are replaced by (byte) '?'.
      */
-    public static native byte[] toAsciiBytes(char[] chars, int offset,
-            int length);
+    public static byte[] toIsoLatin1Bytes(char[] chars, int offset, int length) {
+        CharBuffer cb = CharBuffer.allocate(length);
+        cb.put(chars, offset, length);
+        return ISO_8859_1.encode(cb).array();
+    }
 
     /**
-     * Returns a new byte array containing the bytes corresponding to the given
-     * characters, encoded in ISO-8859-1. Unrepresentable characters are
-     * replaced by (byte) '?'.
+     * Returns a new byte array containing the bytes corresponding to the given characters,
+     * encoded in UTF-8. All characters are representable in UTF-8.
      */
-    public static native byte[] toIsoLatin1Bytes(char[] chars, int offset,
-            int length);
+    public static byte[] toUtf8Bytes(char[] chars, int offset, int length) {
+        CharBuffer cb = CharBuffer.allocate(length);
+        cb.put(chars, offset, length);
+        return UTF_8.encode(cb).array();
+    }
 
     /**
-     * Returns a new byte array containing the bytes corresponding to the given
-     * characters, encoded in UTF-8. All characters are representable in UTF-8.
+     * Returns a new byte array containing the bytes corresponding to the given characters,
+     * encoded in UTF-16BE. All characters are representable in UTF-16BE.
      */
-    public static native byte[] toUtf8Bytes(char[] chars, int offset, int length);
-
-    /**
-     * Returns a new byte array containing the bytes corresponding to the given
-     * characters, encoded in UTF-16BE. All characters are representable in
-     * UTF-16BE.
-     */
-    public static byte[] toBigEndianUtf16Bytes(char[] chars, int offset,
-            int length) {
+    public static byte[] toBigEndianUtf16Bytes(char[] chars, int offset, int length) {
         byte[] result = new byte[length * 2];
         int end = offset + length;
         int resultIndex = 0;
@@ -88,22 +92,42 @@ public final class Charsets {
     }
 
     /**
-     * Decodes the given US-ASCII bytes into the given char[]. Equivalent to but
-     * faster than:
-     * <p/>
-     * for (int i = 0; i < count; ++i) { char ch = (char) (data[start++] &
-     * 0xff); value[i] = (ch <= 0x7f) ? ch : REPLACEMENT_CHAR; }
+     * Decodes the given US-ASCII bytes into the given char[]. Equivalent to but faster than:
+     *
+     * for (int i = 0; i < count; ++i) {
+     * char ch = (char) (data[start++] & 0xff);
+     * value[i] = (ch <= 0x7f) ? ch : REPLACEMENT_CHAR;
+     * }
      */
-    public static native void asciiBytesToChars(byte[] bytes, int offset,
-            int length, char[] chars);
+    public static void asciiBytesToChars(byte[] bytes, int offset, int length, char[] chars) {
+        if (bytes == null || chars == null) {
+            return;
+        }
+        final char REPLACEMENT_CHAR = (char) 0xffd;
+        int start = offset;
+        for (int i = 0; i < length; ++i) {
+            char ch = (char) (bytes[start++] & 0xff);
+            chars[i] = (ch <= 0x7f) ? ch : REPLACEMENT_CHAR;
+        }
+    }
 
     /**
-     * Decodes the given ISO-8859-1 bytes into the given char[]. Equivalent to
-     * but faster than:
-     * <p/>
-     * for (int i = 0; i < count; ++i) { value[i] = (char) (data[start++] &
-     * 0xff); }
+     * Decodes the given ISO-8859-1 bytes into the given char[]. Equivalent to but faster than:
+     *
+     * for (int i = 0; i < count; ++i) {
+     * value[i] = (char) (data[start++] & 0xff);
+     * }
      */
-    public static native void isoLatin1BytesToChars(byte[] bytes, int offset,
-            int length, char[] chars);
+    public static void isoLatin1BytesToChars(byte[] bytes, int offset, int length, char[] chars) {
+        if (bytes == null || chars == null) {
+            return;
+        }
+        int start = offset;
+        for (int i = 0; i < length; ++i) {
+            chars[i] = (char) (bytes[start++] & 0xff);
+        }
+    }
+
+    private Charsets() {
+    }
 }

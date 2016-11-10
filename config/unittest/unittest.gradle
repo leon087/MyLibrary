@@ -1,14 +1,31 @@
-
 dependencies {
     //test framework
-    compile "com.google.dagger:dagger:$rootProject.daggerVersion"
-    compile "javax.annotation:jsr250-api:$rootProject.jsr250Version"
+//    compile "com.google.dagger:dagger:$rootProject.daggerVersion"
+//    compile "javax.annotation:jsr250-api:$rootProject.jsr250Version"
 //    apt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
-    testCompile "junit:junit:$rootProject.junitVersion"
-    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
-    testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
-    testCompile "org.robolectric:shadows-support-v4:$rootProject.robolectricVersion"
-    testCompile "org.robolectric:shadows-core:$rootProject.robolectricVersion"
-    testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
+//    testCompile "junit:junit:$rootProject.junitVersion"
+//    testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
+//    testCompile "org.robolectric:robolectric:$rootProject.robolectricVersion"
+//    testCompile "org.robolectric:shadows-support-v4:$rootProject.robolectricVersion"
+//    testCompile "org.robolectric:shadows-core:$rootProject.robolectricVersion"
+//    testCompile "org.robolectric:shadows-multidex:$rootProject.robolectricVersion"
+
+    def baseDependencies = rootProject.ext.testDependencies
+    testCompile baseDependencies.junit
+    testCompile baseDependencies.mockito_core
+    testCompile baseDependencies.robolectric
+    testCompile baseDependencies.shadows_support_v4
+    testCompile baseDependencies.shadows_core
+    testCompile baseDependencies.shadows_multidex
+}
+
+android {
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
 }

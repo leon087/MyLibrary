@@ -7,6 +7,7 @@ import cm.android.util.AndroidUtils;
 /**
  * 用户保存全局数据
  */
+@Deprecated
 public class GlobalData {
 
     private Map<String, Object> mData = AndroidUtils.newMap();

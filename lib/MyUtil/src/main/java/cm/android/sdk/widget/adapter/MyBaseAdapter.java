@@ -8,6 +8,10 @@ import android.widget.AbsListView;
 
 import java.util.ArrayList;
 
+/**
+ * 改用RecyclerView
+ */
+@Deprecated
 public abstract class MyBaseAdapter<T> extends AbstractAdapter<T> implements
         AbsListView.RecyclerListener {
 

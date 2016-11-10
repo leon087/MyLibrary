@@ -1,5 +1,8 @@
 package cm.android.common.db;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -9,9 +12,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import java.util.Arrays;
-
 public class BaseDao {
+    private static final Logger logger = LoggerFactory.getLogger("db");
 
     protected ContentResolver resolver = null;
 
@@ -31,7 +33,7 @@ public class BaseDao {
     public BaseDao(Uri uri, String[] projection, Context context) {
         resolver = context.getContentResolver();
         this.contentUri = uri;
-        this.projection = Arrays.copyOf(projection, projection.length);
+        this.projection = projection.clone();
     }
 
     public int deleteAll() {
@@ -73,7 +75,12 @@ public class BaseDao {
     }
 
     public void upsert(ContentValues values, String selection, String[] selectionArgs) {
-        Cursor cursor = query(selection, selectionArgs, null);
+        Cursor cursor = null;
+//        try {
+        cursor = query(selection, selectionArgs, null);
+//        } catch (RuntimeException e) {
+//            logger.error(e.getMessage(), e);
+//        }
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 int id = parseId(cursor);
@@ -87,8 +94,7 @@ public class BaseDao {
     }
 
     protected Cursor query(String selection, String[] selectionArgs, String sortOrder) {
-        Cursor cursor = resolver.query(contentUri, projection,
-                selection, selectionArgs, sortOrder);
+        Cursor cursor = resolver.query(contentUri, projection, selection, selectionArgs, sortOrder);
         return cursor;
     }
 

@@ -32,13 +32,26 @@ public class LogConfig {
 //        log.info("gggg1,{},{}", "ggggg2", "ggggg3");
 //        log.error("gggg1,{},{}", "ggggg2", "ggggg3");
 //    }
+    //logback_debug.xml
+    //logback.xml
 
     private static volatile boolean configFlag = false;
 
-    private static final String PATTERN_LOGCAT = "[%logger:%thread:%file:%method:%line] %msg%n";
+    private static final String PATTERN_RELEASE = "[%logger:%thread:%line]";
+    private static final String PATTERN_DEBUG = "[%logger:%thread:%file:%method:%line]";
 
-    private static final String PATTERN_FILE
-            = "%date %-5level [%logger:%thread:%file:%method:%line] - %msg%n";
+    private static volatile String pattern = PATTERN_DEBUG;
+
+    private static final String PATTERN_LOGCAT = pattern + " %msg%n";
+    private static final String PATTERN_FILE = "%date %-5level " + pattern + " - %msg%n";
+
+    public static void configPattern(boolean debug) {
+        if (debug) {
+            pattern = PATTERN_DEBUG;
+        } else {
+            pattern = PATTERN_RELEASE;
+        }
+    }
 
     public static void configLogback(Level level, File logDir) {
         if (configFlag) {
@@ -77,8 +90,7 @@ public class LogConfig {
 
         RollingFileAppender<ILoggingEvent> fileAppender = new RollingFileAppender<ILoggingEvent>();
         fileAppender.setContext(lc);
-        fileAppender.setFile(logDir.getAbsolutePath() + File.separator
-                + "logback.log");
+        fileAppender.setFile(logDir.getAbsolutePath() + File.separator + "logback.log");
         fileAppender.setEncoder(encoder1);
 
         TimeBasedRollingPolicy<ILoggingEvent> policy = new TimeBasedRollingPolicy<ILoggingEvent>();
@@ -95,8 +107,7 @@ public class LogConfig {
         root.addAppender(fileAppender);
     }
 
-    private static void setLogcatMode(ch.qos.logback.classic.Logger root,
-                                      LoggerContext lc) {
+    private static void setLogcatMode(ch.qos.logback.classic.Logger root, LoggerContext lc) {
         // setup LogcatAppender
         PatternLayoutEncoder encoder2 = new PatternLayoutEncoder();
         encoder2.setContext(lc);
@@ -112,17 +123,14 @@ public class LogConfig {
     }
 
     public static String genXml(LogLevel level, File logDir) {
-        String xmlConfig = "<configuration>" +
-                genFileString(logDir) +
-
+        String xmlConfig = "<configuration>" + genFileString(logDir) +
                 "<appender name='LOGCAT' class='ch.qos.logback.classic.android.LogcatAppender'>" +
                 "<encoder>" +
                 "<pattern>" + PATTERN_LOGCAT + "</pattern>" +
                 "</encoder>" +
                 "</appender>" +
 
-                "<root level='" + level.getLevel() + "'>" +
-                genFileAppenderRef(logDir) +
+                "<root level='" + level.getLevel() + "'>" + genFileAppenderRef(logDir) +
                 "<appender-ref ref='LOGCAT' />" +
                 "</root>" +
 
@@ -150,9 +158,7 @@ public class LogConfig {
         }
 
         String fileXmlConfig = "<property name='LOG_DIR' value='" + logDir.getAbsolutePath() + "'/>"
-                +
-
-                "<appender name='FILE' class='ch.qos.logback.core.rolling.RollingFileAppender'>" +
+                + "<appender name='FILE' class='ch.qos.logback.core.rolling.RollingFileAppender'>" +
                 "<file>${LOG_DIR}/logback.log</file>" +
 
                 "<rollingPolicy class='ch.qos.logback.core.rolling.TimeBasedRollingPolicy'>" +

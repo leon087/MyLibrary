@@ -15,9 +15,11 @@ import android.util.DisplayMetrics;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -109,8 +111,7 @@ public class AppUtil {
             PackageManager pm) {
         int retrieveFlags = PackageManager.GET_UNINSTALLED_PACKAGES
                 | PackageManager.GET_DISABLED_COMPONENTS;
-        List<ApplicationInfo> packages = pm
-                .getInstalledApplications(retrieveFlags);
+        List<ApplicationInfo> packages = pm.getInstalledApplications(retrieveFlags);
         return packages;
     }
 
@@ -120,8 +121,7 @@ public class AppUtil {
      * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
      * @return ApplicationInfo列表
      */
-    public static List<ApplicationInfo> getInstalledApps(PackageManager pm,
-                                                         int flag) {
+    public static List<ApplicationInfo> getInstalledApps(PackageManager pm, int flag) {
         List<ApplicationInfo> apps = getInstalledApplications(pm);
         List<ApplicationInfo> appList = ObjectUtil.newArrayList();
 
@@ -151,8 +151,7 @@ public class AppUtil {
      *
      * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
      */
-    public static Map<String, ApplicationInfo> getInstalledAppsMap(
-            PackageManager pm, int flag) {
+    public static Map<String, ApplicationInfo> getInstalledAppsMap(PackageManager pm, int flag) {
         List<ApplicationInfo> apps = getInstalledApplications(pm);
         Map<String, ApplicationInfo> appMap = AndroidUtils.newMap();
 
@@ -185,8 +184,7 @@ public class AppUtil {
      *
      * @param flag {@link #APP_USER},{@link #APP_SYSTEM},{@link #APP_ALL}
      */
-    public static Map<String, PackageInfo> getInstalledPackagesMap(
-            PackageManager pm, int flag) {
+    public static Map<String, PackageInfo> getInstalledPackagesMap(PackageManager pm, int flag) {
         List<PackageInfo> packages = getInstalledPackages(pm);
         Map<String, PackageInfo> appMap = AndroidUtils.newMap();
 
@@ -217,8 +215,7 @@ public class AppUtil {
     /**
      * 同时获取用户应用和系统应用
      */
-    public static void getPackages(PackageManager pm,
-                                   List<PackageInfo> userAppList, List<PackageInfo> sysAppList) {
+    public static void getPackages(PackageManager pm, List<PackageInfo> userAppList, List<PackageInfo> sysAppList) {
         List<PackageInfo> packages = getInstalledPackages(pm);
 
         if (null != userAppList) {
@@ -249,8 +246,7 @@ public class AppUtil {
      * @param archiveFilePath APK文件的路径。如：/sdcard /download/XX.apk
      */
     public static PackageInfo getArchiveInfo(PackageManager pm, String archiveFilePath) {
-        PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath,
-                PackageManager.GET_ACTIVITIES);
+        PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath, PackageManager.GET_ACTIVITIES);
         return info;
     }
 
@@ -262,12 +258,10 @@ public class AppUtil {
         Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         // 通过查询，获得所有ResolveInfo对象.
-        List<ResolveInfo> resolveInfos = pm
-                .queryIntentActivities(mainIntent, 0);
+        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(mainIntent, 0);
         // 调用系统排序 ， 根据name排序
         // 该排序很重要，否则只能显示系统应用，而不能列出第三方应用程序
-        Collections.sort(resolveInfos,
-                new ResolveInfo.DisplayNameComparator(pm));
+        Collections.sort(resolveInfos, new ResolveInfo.DisplayNameComparator(pm));
         return resolveInfos;
 
         // if (mlistAppInfo != null) {
@@ -293,25 +287,29 @@ public class AppUtil {
         // }
     }
 
+//    /**
+//     * 获取应用PackageInfo信息
+//     */
+//    @Deprecated
+//    public static PackageInfo getPackageInfo(PackageManager pm, String packageName) {
+//        PackageInfo packageInfo = getPackageInfo(pm, packageName, PackageManager.GET_ACTIVITIES |
+//                PackageManager.GET_GIDS |
+//                PackageManager.GET_CONFIGURATIONS |
+//                PackageManager.GET_INSTRUMENTATION |
+//                PackageManager.GET_PERMISSIONS |
+//                PackageManager.GET_PROVIDERS |
+//                PackageManager.GET_RECEIVERS |
+//                PackageManager.GET_SERVICES |
+//                PackageManager.GET_SIGNATURES |
+//                PackageManager.GET_UNINSTALLED_PACKAGES |
+//                PackageManager.GET_URI_PERMISSION_PATTERNS |
+//                PackageManager.GET_SHARED_LIBRARY_FILES);
+//        return packageInfo;
+//    }
+
     /**
      * 获取应用PackageInfo信息
      */
-    public static PackageInfo getPackageInfo(PackageManager pm, String packageName) {
-        PackageInfo packageInfo = getPackageInfo(pm, packageName, PackageManager.GET_ACTIVITIES |
-                PackageManager.GET_GIDS |
-                PackageManager.GET_CONFIGURATIONS |
-                PackageManager.GET_INSTRUMENTATION |
-                PackageManager.GET_PERMISSIONS |
-                PackageManager.GET_PROVIDERS |
-                PackageManager.GET_RECEIVERS |
-                PackageManager.GET_SERVICES |
-                PackageManager.GET_SIGNATURES |
-                PackageManager.GET_UNINSTALLED_PACKAGES |
-                PackageManager.GET_URI_PERMISSION_PATTERNS |
-                PackageManager.GET_SHARED_LIBRARY_FILES);
-        return packageInfo;
-    }
-
     public static PackageInfo getPackageInfo(PackageManager pm, String packageName, int flags) {
         try {
             PackageInfo packageInfo = pm.getPackageInfo(packageName, flags);
@@ -325,8 +323,7 @@ public class AppUtil {
     /**
      * 获取应用签名
      */
-    public static android.content.pm.Signature[] getSignature(
-            PackageManager pm, String packageName) {
+    public static android.content.pm.Signature[] getSignature(PackageManager pm, String packageName) {
         try {
             android.content.pm.Signature[] sigs = pm.getPackageInfo(
                     packageName, PackageManager.GET_SIGNATURES).signatures;
@@ -337,20 +334,28 @@ public class AppUtil {
         }
     }
 
-    public static byte[] getPublicKey(Signature signature) {
+    public static X509Certificate getCertificate(Signature signature) {
         if (signature == null) {
             return null;
         }
 
         try {
-            CertificateFactory certFactory = CertificateFactory
-                    .getInstance("X.509");
-            X509Certificate cert = (X509Certificate) certFactory
-                    .generateCertificate(new ByteArrayInputStream(signature.toByteArray()));
-            byte[] pubKey = cert.getPublicKey().getEncoded();
-            return pubKey;
+            InputStream is = new ByteArrayInputStream(signature.toByteArray());
+            CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
+            X509Certificate cert = (X509Certificate) certFactory.generateCertificate(is);
+            return cert;
         } catch (CertificateException e) {
             logger.error(e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public static byte[] getPublicKey(Signature signature) {
+        X509Certificate cert = getCertificate(signature);
+        if (cert != null) {
+            byte[] pubKey = cert.getPublicKey().getEncoded();
+            return pubKey;
+        } else {
             return null;
         }
     }

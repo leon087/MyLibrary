@@ -12,7 +12,7 @@ public final class TimerServer extends ITimerServer.Stub {
     }
 
     public void start(Context context) {
-        timerTaskManager.start(context.getApplicationContext());
+        timerTaskManager.start(context);
     }
 
     public void stop() {

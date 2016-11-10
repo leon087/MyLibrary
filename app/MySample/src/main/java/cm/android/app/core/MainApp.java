@@ -5,16 +5,17 @@ import com.squareup.leakcanary.LeakCanary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
 
-import cm.android.framework.core.BaseApp;
-import cm.android.framework.core.IServiceManager;
-import cm.android.framework.core.ServiceManager;
+import cm.android.app.sample.BuildConfig;
+import cm.android.framework.client.core.Framework;
+import cm.android.framework.server.ServerProvider;
 import cm.android.util.AndroidUtils;
 import cm.android.util.SystemUtil;
 
-public class MainApp extends BaseApp {
+public class MainApp extends Application {
 
     private static final Logger logger = LoggerFactory.getLogger("ggg");
 
@@ -24,39 +25,35 @@ public class MainApp extends BaseApp {
 
     @Override
     protected void attachBaseContext(Context base) {
+        ServerProvider.authoritiy(BuildConfig.APPLICATION_ID + "." + ServerProvider.SERVICE_AUTH);
+
+        new MainConfig().initLog(base);
+
         super.attachBaseContext(base);
         android.support.multidex.MultiDex.install(this);
+
+        Framework.get().startup(base, MyBinderServer.class);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         logger.error("ggg application onCreate");
+        android.util.Log.e("ggggggg", "ggggggg application onCreate");
         sMainApp = this;
-        setStrictMode(this);
+        ObjectPool.init(this);
+
+//        setStrictMode(this);
         LeakCanary.install(this);
 
         daemonReceiver.registerLocal(this);
 
         String pName = SystemUtil.getCurProcessName();
-        if (getPackageName().equals(pName)) {
-        }
     }
 
     public static MainApp getApp() {
         return sMainApp;
     }
-
-    @Override
-    public ServiceManager.AppConfig initConfig() {
-        return new MainConfig();
-    }
-
-    @Override
-    protected Class<? extends IServiceManager> initServiceManager() {
-        return MyServiceManager.class;
-    }
-
 
     private void setStrictMode(Context context) {
         if (AndroidUtils.isDebuggable(context)) {
@@ -67,6 +64,7 @@ public class MainApp extends BaseApp {
 
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
+                    .penaltyDialog()
                     .penaltyLog()
                     .penaltyDeathOnNetwork()
                     .build());

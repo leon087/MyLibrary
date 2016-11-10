@@ -9,12 +9,12 @@ buildscript {
             }
         }
         maven { url uri(new File(rootDir, 'local_repo')) }
+        mavenLocal()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
-//        classpath 'ggg.android:cm.android.gradle:1.0.19'
-        classpath 'ggg.android:cm.android.gradle:local'
+        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath "ggg.android:cm.android.gradle:1.45"
     }
 }
 
@@ -24,7 +24,10 @@ task clean(type: Delete) {
 
 //Project
 allprojects {
-    tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        options.compilerArgs << "-Xlint:unchecked"
+    }
 
     repositories {
         jcenter()
@@ -39,24 +42,113 @@ allprojects {
         flatDir {
             dirs "$rootDir/local_repo"
         }
-    }
-
-    task findbugs {
-        dependsOn tasks.withType(FindBugs)
+        mavenLocal()
     }
 }
-task wrapper(type: Wrapper) { gradleVersion = '2.11' }
+task wrapper(type: Wrapper) { gradleVersion = '2.14.1' }
 //apply plugin: 'android-reporting'
 
 ext {
-    supportLibraryVersion = '23.4.0'
-    logbackAndroidVersion = '1.1.1-4'
-    slf4jVersion = '1.7.14'
+    //SDK
+    minSdkVersion = 16
+    targetSdkVersion = 22//6.0动态权限适配
+    compileSdkVersion = 23
+    buildToolsVersion = "24.0.2"
+
+    //dependencies
+    supportLibraryVersion = '24.2.1'
+    logbackAndroidVersion = '1.1.1-5'
+    leakcanaryVersion = '1.4-beta2'
     junitVersion = '4.12'
+    okhttpVersion = "3.4.1"
 
     //test framework
     daggerVersion = '2.0.2'
     jsr250Version = '1.0'
     mockitoVersion = '1.10.19'
-    robolectricVersion = '3.1-rc1'
+    robolectricVersion = '3.1.2'
+
+    testDependencies = [
+            //test framework
+//            dagger            : "com.google.dagger:dagger:2.0.2",
+//            jsr250_api        : "javax.annotation:jsr250-api:1.0",
+            //apt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion",
+
+            junit             : "junit:junit:4.12",
+            mockito_core      : "org.mockito:mockito-core:1.10.19",
+            robolectric       : "org.robolectric:robolectric:$rootProject.robolectricVersion",
+            shadows_support_v4: "org.robolectric:shadows-support-v4:$rootProject.robolectricVersion",
+            shadows_core      : "org.robolectric:shadows-core:$rootProject.robolectricVersion",
+            shadows_multidex  : "org.robolectric:shadows-multidex:$rootProject.robolectricVersion",
+    ]
+
+    baseDependencies = [
+            leakcanary_android         : "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanaryVersion",
+            leakcanary_android_no_op   : "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion",
+
+            //log
+            slf4j                      : "org.slf4j:slf4j-api:1.7.21",
+            logback_android_classic    : "com.github.tony19:logback-android-core:$rootProject.logbackAndroidVersion",
+            logback_android_core       : "com.github.tony19:logback-android-classic:$rootProject.logbackAndroidVersion",
+
+            support_design             : "com.android.support:design:$rootProject.supportLibraryVersion",
+            support_v13                : "com.android.support:support-v13:$rootProject.supportLibraryVersion",
+            support_appcompat_v7       : "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion",
+            support_cardview_v7        : "com.android.support:cardview-v7:$rootProject.supportLibraryVersion",
+            support_annotations        : 'com.android.support:support-annotations:23.3.0',
+            support_multidex           : "com.android.support:multidex:1.0.1",
+
+            okhttp3_logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion",
+            okhttp3                    : "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion",
+            disklrucache               : "com.jakewharton:disklrucache:2.0.2",
+    ]
+
+    aptDependencies = [
+    ]
+
+    //checkstyle
+    checkstyleExclude = [
+            'cm/android/app/control/policy/**',
+            'cm/android/app/fence/**',
+            'cm/android/app/info/Info.java'
+    ]
+
+    findbugsExclude = []
+
+    // jacoco config
+    jacocoVersion = '0.7.7.201606060606'
+    ignoredByJacoco = [
+            'app',
+            'lib',
+            'MySample',
+            'MyFramework',
+    ]
+    moduleClassDirs = [
+            'MyUtil'  : 'build/intermediates/classes/debug',
+            'MyCommon': "build/intermediates/classes/debug"
+    ]
+    moduleJacocoExec = [
+            'MyUtil'  : 'build/jacoco/testDebugUnitTest.exec',
+            'MyCommon': "build/jacoco/testDebugUnitTest.exec"
+    ]
+    moduleExcludes = [
+            'MyUtil'  : [// Android framework related
+                         '**/R*.class',
+                         '**/BuildConfig*',
+
+                         // test code
+                         '**/**Test.**',
+            ],
+            'MyCommon': [// Android framework related
+                         '**/R*.class',
+                         '**/BuildConfig*',
+
+                         // test code
+                         '**/**Test.**',
+            ],
+            'MySample': ['**/R*.class',
+                         '**/BuildConfig*'
+            ]
+    ]
 }
+apply from: "$rootDir/config/jacocoo.gradle"

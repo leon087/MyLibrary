@@ -9,6 +9,7 @@ import android.content.Intent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Deprecated
 public abstract class FrameworkService extends Service {
 
     private final AtomicBoolean create = new AtomicBoolean(false);

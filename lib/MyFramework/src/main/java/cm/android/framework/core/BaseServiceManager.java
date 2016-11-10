@@ -2,6 +2,10 @@ package cm.android.framework.core;
 
 import android.content.Context;
 
+import cm.java.proguard.annotations.Keep;
+
+@Keep
+@Deprecated
 public abstract class BaseServiceManager implements IServiceManager {
 
     private Context context;

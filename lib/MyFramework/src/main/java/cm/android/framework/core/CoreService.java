@@ -3,7 +3,6 @@ package cm.android.framework.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -14,6 +13,7 @@ import android.os.RemoteException;
 import cm.android.framework.core.binder.ServiceBinderImpl;
 import cm.android.sdk.PersistentService;
 
+@Deprecated
 public final class CoreService extends PersistentService {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");
@@ -53,7 +53,6 @@ public final class CoreService extends PersistentService {
         }
     };
 
-    @TargetApi(18)
     @Override
     public final IBinder onBind(Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -68,10 +67,22 @@ public final class CoreService extends PersistentService {
             return EMPTY_BINDER;
         }
 
-        logger.info("CoreService:onBind:initService:intent = {}", intent);
+        logger.info("CoreService:onBind:initServer:intent = {}", intent);
         String serviceManagerName = bundle.getString(TAG_SERVICE_MANAGER);
         serviceBinder.initService(serviceManagerName);
         return serviceBinder;
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        logger.info("onTrimMemory:level = {}", level);
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        logger.info("onTaskRemoved:intent = {}", rootIntent);
     }
 
     @Override
@@ -106,12 +117,12 @@ public final class CoreService extends PersistentService {
         bundle.putString(TAG_SERVICE_MANAGER, serviceManagerName);
         bundle.putString(TAG_ACTION, ACTION_BIND);
         intent.putExtras(bundle);
-        return context.getApplicationContext().bindService(intent, connection,
+        return context.bindService(intent, connection,
                 Context.BIND_AUTO_CREATE);
     }
 
     public final static void unBind(Context context, ServiceConnection connection) {
-        context.getApplicationContext().unbindService(connection);
+        context.unbindService(connection);
     }
 
     public static final void start(Context context, String action, Bundle bundle) {

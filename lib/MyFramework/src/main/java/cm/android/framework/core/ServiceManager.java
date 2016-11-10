@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
 
+@Deprecated
 public final class ServiceManager {
 
     public static final String ACTION_BIND_SUCCEED

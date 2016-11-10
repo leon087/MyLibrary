@@ -153,12 +153,14 @@ public class DeviceUtil {
         }
     }
 
-    @TargetApi(9)
+    /**
+     * 目前已知中兴手机相同机型返回值一样
+     */
     public static String getSerial() {
         try {
             String serial = ReflectUtil.getStaticFieldValue(Build.class, "SERIAL");
-            if (Utils.isEmpty(serial)) {
-                logger.error("serial = " + serial);
+            if (Utils.isEmpty(serial) || "unknown".equalsIgnoreCase(serial)) {
+                logger.error("serial = {}", serial);
                 return "";
             }
             return serial;
@@ -174,37 +176,56 @@ public class DeviceUtil {
      */
     @TargetApi(3)
     public static String getAndroidId(Context context) {
-        return Settings.Secure
-                .getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public static UUID getUUID(Context context) {
-        String appTag = "cm";
-        return getUUID(context, appTag);
+    /**
+     * 获取唯一识别码
+     */
+    public static String getDeviceId(Context context) {
+//        String serial = getSerial();
+//        if (!Utils.isEmpty(serial)) {
+//            return serial;
+//        }
+
+        //1. 部分机型androidId一样
+        //2. 恢复出厂设置后androidId会变
+        String androidId = getAndroidId(context);
+        if (!Utils.isEmpty(androidId)) {
+            return androidId;
+        }
+
+        logger.error("getDeviceId() = null");
+        return "";
     }
 
-    public static UUID getUUID(Context context, String appTag) {
-//        ro.boot.serialno
-//        String serialno = SystemPropertiesProxy.get("ro.serialno", "ro.serialno");
+//    public static UUID getUUID(Context context) {
+//        String appTag = "cm";
+//        return getUUID(context, appTag);
+//    }
 
-        String board = Build.BOARD;
-
-        String model = Build.MODEL;
-
-        //可能相同或为null
-        String serial = getSerial();
-
-        int appTagHashCode = appTag.hashCode();
-        int serialHashCode = serial.hashCode();
-
-        int boardHashCode = board.hashCode();
-        int modelHashCode = model.hashCode();
-
-        long mostSigBits = ((long) appTagHashCode) << 32 | serialHashCode;
-        long leastSigBits = ((long) boardHashCode) << 32 | modelHashCode;
-        UUID deviceUuid = new UUID(mostSigBits, leastSigBits);
-        return deviceUuid;
-    }
+//    public static UUID getUUID(Context context, String appTag) {
+////        ro.boot.serialno
+////        String serialno = SystemPropertiesProxy.get("ro.serialno", "ro.serialno");
+//
+//        String board = Build.BOARD;
+//
+//        String model = Build.MODEL;
+//
+//        //可能相同或为null
+//        String serial = getSerial();
+//
+//        int appTagHashCode = appTag.hashCode();
+//        int serialHashCode = serial.hashCode();
+//
+//        int boardHashCode = board.hashCode();
+//        int modelHashCode = model.hashCode();
+//
+//        long mostSigBits = ((long) appTagHashCode) << 32 | serialHashCode;
+//        long leastSigBits = ((long) boardHashCode) << 32 | modelHashCode;
+//        UUID deviceUuid = new UUID(mostSigBits, leastSigBits);
+//        return deviceUuid;
+//    }
 
 //    public static UUID getUUID(Context context, String appTag) {
 //        //需要通信模块

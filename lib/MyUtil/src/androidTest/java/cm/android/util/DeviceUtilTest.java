@@ -3,8 +3,6 @@ package cm.android.util;
 import android.content.Context;
 import android.test.InstrumentationTestCase;
 
-import java.util.UUID;
-
 public class DeviceUtilTest extends InstrumentationTestCase {
 
 //    public void testGetDeviceFeatures() throws Exception {//android.permission.READ_PHONE_STATE.
@@ -49,13 +47,6 @@ public class DeviceUtilTest extends InstrumentationTestCase {
         String temp = DeviceUtil.getAndroidId(context);
         boolean result = temp.equals("");
         assertEquals(result, false);
-    }
-
-    public void testGetUUID() throws Exception {
-        Context context = getInstrumentation().getContext();
-        UUID temp = DeviceUtil.getUUID(context);
-        boolean result = temp != null;
-        assertEquals(result, true);
     }
 
     // sim卡是否可读

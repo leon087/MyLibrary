@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import cm.android.app.core.MyManager;
+import cm.android.app.core.ObjectPool;
 import cm.java.util.IoUtil;
 import cm.java.util.Utils;
 
@@ -17,7 +17,7 @@ public class DataHelper {
     private static Properties properties;
 
     private static void write(String key, String value) {
-        File file = new File(MyManager.getAppContext().getFilesDir(), STATE_FILE_NAME);
+        File file = new File(ObjectPool.getAppContext().getFilesDir(), STATE_FILE_NAME);
         Properties properties = IoUtil.loadProperties(file);
         properties.setProperty(key, value);
 
@@ -36,7 +36,7 @@ public class DataHelper {
     }
 
     private static String read(String key) {
-        File file = new File(MyManager.getAppContext().getFilesDir(), STATE_FILE_NAME);
+        File file = new File(ObjectPool.getAppContext().getFilesDir(), STATE_FILE_NAME);
         if (!file.exists()) {
             return "";
         }

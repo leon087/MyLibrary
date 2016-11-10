@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
+@Deprecated
 public final class ServiceHolder {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");

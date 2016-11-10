@@ -30,7 +30,7 @@ public class MapUtil {
         try {
             return Parse.getString(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -46,7 +46,7 @@ public class MapUtil {
         try {
             return Parse.getBoolean(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -62,7 +62,7 @@ public class MapUtil {
         try {
             return Parse.getLong(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -78,7 +78,7 @@ public class MapUtil {
         try {
             return Parse.getInt(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -94,7 +94,7 @@ public class MapUtil {
         try {
             return Parse.getDouble(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -110,7 +110,7 @@ public class MapUtil {
         try {
             return Parse.getFloat(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -122,7 +122,7 @@ public class MapUtil {
         try {
             return Parse.getList(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return ObjectUtil.newArrayList(0);
         }
     }
@@ -131,7 +131,7 @@ public class MapUtil {
         try {
             return Parse.getMap(map, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return ObjectUtil.newHashMap(0);
         }
     }

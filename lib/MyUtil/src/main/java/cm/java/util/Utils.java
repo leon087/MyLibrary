@@ -15,6 +15,9 @@ import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
@@ -331,5 +334,18 @@ public final class Utils {
         }
 
         return str.trim();
+    }
+
+    public static Certificate readCert(InputStream is) {
+        CertificateFactory cf = null;
+        try {
+            cf = CertificateFactory.getInstance("X.509");
+            return cf.generateCertificate(is);
+        } catch (CertificateException e) {
+            logger.error(e.getMessage(), e);
+            return null;
+        }
+//        Log.i("Longer", "ca=" + ((X509Certificate) ca).getSubjectDN());
+//        Log.i("Longer", "key=" + ((X509Certificate) ca).getPublicKey());
     }
 }

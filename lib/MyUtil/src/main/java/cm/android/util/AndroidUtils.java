@@ -1,7 +1,5 @@
 package cm.android.util;
 
-import com.alibaba.fastjson.JSON;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,13 +9,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.PowerManager;
+import android.os.Process;
 import android.provider.Settings;
 import android.util.TypedValue;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -28,6 +28,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cm.android.applications.AppUtil;
+import cm.java.util.IoUtil;
 import cm.java.util.Utils;
 
 /**
@@ -51,35 +52,27 @@ public final class AndroidUtils {
     /**
      * 桩模块(Stub), 获取假数据，用于各个子功能单元测试
      */
-    public static Map<String, Object> getStubFile(Context cxt, String stubFileName) {
+    public static byte[] getStubFile(Context cxt, String stubFileName) {
         if (Utils.isEmpty(stubFileName)) {
-            return AndroidUtils.newMap();
+            return null;
         }
-        Map<String, Object> stubMap = null;
         InputStream inputStream = null;
-        // AssetManager assetManager = StoreApp.getApp().getAssets();
-
         try {
             AssetManager assetManager = cxt.getAssets();
             inputStream = assetManager.open(stubFileName);
             byte[] bytes = cm.java.util.IoUtil.read(inputStream);
-            stubMap = JSON.parseObject(bytes, Map.class);
+            return bytes;
         } catch (Exception e) {
             logger.error("stubFileName = " + stubFileName, e);
         } finally {
             cm.java.util.IoUtil.closeQuietly(inputStream);
         }
 
-        if (stubMap == null) {
-            logger.error("stubMap = null");
-            return AndroidUtils.newMap();
-        }
-        return stubMap;
+        return null;
     }
 
     public static int getVersionCode(Context context) {
-        PackageInfo packageInfo = AppUtil.getPackageInfo(
-                context.getPackageManager(), context.getPackageName());
+        PackageInfo packageInfo = AppUtil.getPackageInfo(context.getPackageManager(), context.getPackageName(), 0);
         if (packageInfo == null) {
             return -1;
         }
@@ -87,8 +80,7 @@ public final class AndroidUtils {
     }
 
     public static String getVersionName(Context context) {
-        PackageInfo packageInfo = AppUtil.getPackageInfo(
-                context.getPackageManager(), context.getPackageName());
+        PackageInfo packageInfo = AppUtil.getPackageInfo(context.getPackageManager(), context.getPackageName(), 0);
         if (packageInfo == null) {
             return "";
         }
@@ -182,8 +174,7 @@ public final class AndroidUtils {
     }
 
     public static boolean isDebuggable(Context context, String packageName) {
-        PackageInfo pkginfo = AppUtil.getPackageInfo(context.getPackageManager(), packageName,
-                PackageManager.GET_ACTIVITIES);
+        PackageInfo pkginfo = AppUtil.getPackageInfo(context.getPackageManager(), packageName, 0);
         if (pkginfo != null) {
             return isDebuggable(pkginfo.applicationInfo);
         }
@@ -202,16 +193,16 @@ public final class AndroidUtils {
         }
     }
 
-    public static void killProcess(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        if (EnvironmentUtil.SdkUtil.hasFroyo()) {
-            am.killBackgroundProcesses(context.getPackageName());
-        } else {
-            am.restartPackage(context.getPackageName());
-        }
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
-    }
+//    public static void killProcess(Context context) {
+//        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+//        if (EnvironmentUtil.SdkUtil.hasFroyo()) {
+//            am.killBackgroundProcesses(context.getPackageName());
+//        } else {
+//            am.restartPackage(context.getPackageName());
+//        }
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//        System.exit(0);
+//    }
 
     public static void transferData(Bundle oldBundle, Bundle newBundle) {
         if (oldBundle != null) {
@@ -257,5 +248,72 @@ public final class AndroidUtils {
         android.support.v4.util.ArrayMap<K, V> arrayMap = new android.support.v4.util.ArrayMap<>();
         arrayMap.putAll(map);
         return arrayMap;
+    }
+
+    public static int getMemCacheSizePercent(float percent) {
+        if (percent < 0.05f || percent > 0.8f) {
+            throw new IllegalArgumentException(
+                    "setMemCacheSizePercent - percent must be "
+                            + "between 0.05 and 0.8 (inclusive)");
+        }
+        return Math.round(percent * Runtime.getRuntime().maxMemory() / 1024);
+    }
+
+    /**
+     * 打印内存信息以及dump Hprof
+     */
+    public static void logMemoryInfo(Context context, File dumpDir) {
+        Logger logger = LoggerFactory.getLogger("LogMemoryInfo");
+        int pid = Process.myPid();
+        StringBuffer sb = new StringBuffer();
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        Debug.MemoryInfo memoryInfo = am.getProcessMemoryInfo(new int[]{pid})[0];
+        sb.append("** MEMINFO ** in pid ").append(pid).append("\n")
+                .append("processName : ").append(SystemUtil.getCurProcessName()).append("\n")
+                .append("totalPrivateDirty : ").append(memoryInfo.getTotalPrivateDirty()).append("\n")
+                .append("totalSharedDirty : ").append(memoryInfo.getTotalSharedDirty()).append("\n")
+                .append("totalPss : ").append(memoryInfo.getTotalPss()).append("\n")
+                .append("dalvikPrivateDirty : ").append(memoryInfo.dalvikPrivateDirty).append("\n")
+                .append("dalvikPss : ").append(memoryInfo.dalvikPss).append("\n")
+                .append("dalvikSharedDirty : ").append(memoryInfo.dalvikSharedDirty).append("\n")
+                .append("nativePrivateDirty : ").append(memoryInfo.nativePrivateDirty).append("\n")
+                .append("nativePss : ").append(memoryInfo.nativePss).append("\n")
+                .append("nativeSharedDirty : ").append(memoryInfo.nativeSharedDirty).append("\n")
+                .append("otherPrivateDirty : ").append(memoryInfo.otherPrivateDirty).append("\n")
+                .append("otherPss : ").append(memoryInfo.otherPss).append("\n")
+                .append("otherSharedDirty : ").append(memoryInfo.otherSharedDirty).append("\n");
+
+        logger.error("memory detail = {} ", sb.toString());
+
+        //TODO ggg 需保存多份，打印初次时，由于是多线程执行，导致并行
+        // 策略1：保存最近5份（异常时保存的5份都是最近的）
+        // 策略2：保存最近5天（每天保存最近一次，仅保存一份）
+        //:保存最新5份（每天仅保存一份）
+        if (dumpDir == null) {
+            return;
+        }
+        boolean dir = IoUtil.checkDirectory(dumpDir);
+        if (!dir) {
+            return;
+        }
+
+        try {
+            File[] files = dumpDir.listFiles();
+            if (files != null && files.length >= 5) {
+                //不用排序，listFiles默认就是按时间递增顺序排序的
+                int size = files.length;
+                while (size >= 5) {
+                    IoUtil.delete(files[size - 1]);
+                    size--;
+                }
+            }
+
+            String time = MyFormatter.formatDate("yyyyMMdd", System.currentTimeMillis());
+            String dumpName = String.format("dump-%s.dump", time);
+            File dumpFile = new File(dumpDir, dumpName);
+            Debug.dumpHprofData(dumpFile.getAbsolutePath());
+        } catch (IOException e) {
+            logger.error("error = {}", e.getMessage());
+        }
     }
 }

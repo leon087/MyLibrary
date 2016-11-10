@@ -5,6 +5,7 @@ import android.content.Context;
 
 import cm.android.util.EnvironmentUtil;
 
+@Deprecated
 public abstract class BaseApp extends Application implements IApp {
 
     private static BaseApp sApp;

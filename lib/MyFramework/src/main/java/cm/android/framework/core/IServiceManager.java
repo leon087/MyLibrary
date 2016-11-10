@@ -6,6 +6,7 @@ import android.content.Intent;
 import cm.java.proguard.annotations.Keep;
 
 @Keep
+@Deprecated
 public interface IServiceManager {
 
     void onCreate(Context context);

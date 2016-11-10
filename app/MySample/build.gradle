@@ -1,41 +1,19 @@
 import cm.android.gradle.util.Util
+import cm.android.gradle.ExtUtil
 
 apply plugin: 'com.android.application'
 apply from: "$rootDir/ext-android.gradle"
-apply from: "$rootDir/config/findbugs/findbugs.gradle"
+apply from: "$rootDir/config/quality.gradle"
 apply from: "product.gradle"
 
 apply plugin: 'cm.android.gradle'
 apply plugin: 'cm.android.gradle.sign'
-
-def getKeyStore(def propertyFile) {
-    if (propertyFile == null) {
-        return 'debug'
-    }
-
-    def props = new Properties();
-    try {
-        def signingConfig = 'release';
-
-        def ins = new BufferedInputStream(new FileInputStream(propertyFile));
-        props.load(ins);
-        ins.close();
-        project.android.signingConfigs {
-            "$signingConfig" {
-                storeFile = new File(props.getProperty('storeFile'));
-                storePassword = props.getProperty('storePassword');
-                keyAlias = props.getProperty('keyAlias');
-                keyPassword = props.getProperty('keyPassword');
-            }
-        }
-        return "$signingConfig";
-    } catch (Exception e) {
-        return 'debug';
-    }
-}
+apply plugin: 'cm.android.gradle.proguard'
 
 android {
-
+    lintOptions {
+        abortOnError false
+    }
     splits {
         abi {
             enable true
@@ -57,12 +35,6 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file(project.storeFile)
-            storePassword project.storePassword
-            keyAlias project.keyAlias
-            keyPassword project.keyPassword
-        }
     }
 
     buildTypes {
@@ -70,11 +42,10 @@ android {
             shrinkResources true
             zipAlignEnabled true
 
-            signingConfig signingConfigs.(getKeyStore(project.jks_properties))
-
             minifyEnabled true
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'),
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    ExtUtil.getProguardFile(project),
                     new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.pro'),
                     new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.pro'),
                     new File('proguard-rules.pro')
@@ -84,10 +55,9 @@ android {
             initWith(buildTypes.release)
             debuggable true
             minifyEnabled false
+            shrinkResources false
 
             versionNameSuffix "-debug"
-//            signingConfig signingConfigs.debug
-            signingConfig signingConfigs.cm
         }
 
         rtest {
@@ -95,8 +65,6 @@ android {
             debuggable true
 
             versionNameSuffix "-rtest"
-//            signingConfig signingConfigs.debug
-            signingConfig signingConfigs.cm
         }
     }
 
@@ -105,6 +73,7 @@ android {
         //type_product
         gg {
             dimension 'type_product'
+            signingConfig signingConfigs.release
         }
 
         //type_server：平台配置
@@ -166,7 +135,7 @@ android {
         def product = project.extensions.getByName(productName)
 
         variant.mergedFlavor.applicationId = product.applicationId
-//        variant.mergedFlavor.manifestPlaceholders = [BAIDU_LOCATION_API_KEY: product.baidu_location_api_key]
+//        variant.mergedFlavor.manifestPlaceholders = [applicationId: product.applicationId]
 
         def typeServer = variant.productFlavors.get(1).name //"type_server"
 

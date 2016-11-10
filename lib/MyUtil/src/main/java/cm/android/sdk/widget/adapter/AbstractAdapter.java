@@ -11,6 +11,7 @@ import cm.java.util.ObjectUtil;
 /**
  * @desc : 抽象Adapter类
  */
+@Deprecated
 public abstract class AbstractAdapter<T> extends BaseAdapter {
 
     /**

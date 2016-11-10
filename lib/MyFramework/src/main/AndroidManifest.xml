@@ -4,29 +4,44 @@
     <permission android:name="cm.android.framework" android:protectionLevel="signature"/>
 
     <uses-permission android:name="cm.android.framework"/>
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <!--<uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>-->
     <!--<uses-permission android:name="android.permission.RESTART_PACKAGES"/>-->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <!--<uses-permission android:name="android.permission.DEVICE_POWER"/>-->
 
     <application>
-        <service android:name="cm.android.framework.core.daemon.DaemonService"
-                 android:persistent="true" android:exported="true" android:stopWithTask="false"
+        <service android:name="cm.android.framework.server.daemon.DaemonService"
+                 android:persistent="true"
+                 android:exported="false"
+                 android:stopWithTask="false"
                  android:process=":framework"/>
-        <!--android:permission="cm.android.framework"-->
 
-        <receiver android:name="cm.android.framework.core.daemon.DaemonReceiver"
+        <receiver android:name="cm.android.framework.server.daemon.DaemonReceiver"
                   android:exported="true"
+                  android:permission="cm.android.framework"
                   android:process=":framework">
             <intent-filter>
                 <action android:name="cm.android.framework.intent.action.ALARM_WAKE_UP"/>
             </intent-filter>
         </receiver>
 
-        <service android:name="cm.android.framework.core.CoreService" android:persistent="true"
-                 android:stopWithTask="false" android:exported="false"
-                 android:permission="cm.android.framework"
+        <service android:name="cm.android.framework.core.CoreService"
+                 android:persistent="true"
+                 android:stopWithTask="false"
+                 android:exported="false"
                  android:process=":framework"/>
+
+        <provider
+                android:name="cm.android.framework.server.ServerProvider"
+                android:authorities="framework.ServerProvider"
+                android:exported="false"
+                android:process=":framework"/>
+
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--<provider-->
+        <!--android:name="cm.android.framework.server.ServerProvider"-->
+        <!--android:authorities="${applicationId}.framework.ServerProvider"-->
+        <!--tools:replace="android:authorities"/>-->
     </application>
 </manifest>

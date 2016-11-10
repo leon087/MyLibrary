@@ -26,6 +26,7 @@ public class MainConfig extends ServiceManager.AppConfig {
 
     @Override
     public void initLog(Context context) {
+        LogConfig.configPattern(true);
         LogConfig.configLogback(Level.ALL, WorkDir.getDir(LOG_DIR));
     }
 }

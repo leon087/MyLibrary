@@ -3,6 +3,7 @@ package cm.android.app.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -35,18 +36,18 @@ public class MainService extends FrameworkService {
         return null;
     }
 
-    public static final void start() {
+    public static final void start(Context context) {
         logger.info("start:");
-        WakeLockUtil.acquire(MyManager.getAppContext(), "MainService", 3000);
+        WakeLockUtil.acquire(context, "MainService", 3000);
 
-        Intent intent = new Intent(MyManager.getAppContext(), MainService.class);
-        intent.setPackage(MyManager.getAppContext().getPackageName());
-        MyManager.getAppContext().startService(intent);
+        Intent intent = new Intent(context, MainService.class);
+        intent.setPackage(context.getPackageName());
+        context.startService(intent);
     }
 
-    public static final void stop() {
-        Intent intent = new Intent(MyManager.getAppContext(), MainService.class);
-        intent.setPackage(MyManager.getAppContext().getPackageName());
-        MyManager.getAppContext().stopService(intent);
+    public static final void stop(Context context) {
+        Intent intent = new Intent(context, MainService.class);
+        intent.setPackage(context.getPackageName());
+        context.stopService(intent);
     }
 }

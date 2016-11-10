@@ -2,94 +2,42 @@ tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
-apply from: "$rootDir/config/findbugs/findbugs.gradle"
-apply from: "$rootDir/config/checkstyle/checkstyle.gradle"
+apply from: "$rootDir/config/quality.gradle"
 apply from: "$rootDir/config/unittest/unittest.gradle"
 
-android {
-    defaultConfig {
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        consumerProguardFiles 'proguard.txt'
-//         archivesBaseName += ("-" + versionName)
-    }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-
-    //log
-    compile "com.github.tony19:logback-android-classic:$rootProject.logbackAndroidVersion"
-    compile "com.github.tony19:logback-android-core:$rootProject.logbackAndroidVersion"
-    compile "org.slf4j:slf4j-api:$rootProject.slf4jVersion"
-//    compile 'org.slf4j:slf4j-api:1.7.15-SNAPSHOT'
-    //fastjson
-//    compile 'com.alibaba:fastjson:1.1.46.android'
-    compile 'com.alibaba:fastjson:1.2.7'
-
-    // Dependencies for local unit tests
-//    testCompile "junit:junit:$rootProject.ext.junitVersion"
-//    testCompile "org.mockito:mockito-all:$rootProject.ext.mockitoVersion"
-//    testCompile "org.hamcrest:hamcrest-all:$rootProject.ext.hamcrestVersion"
-
-//    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.4.1'
-    //    https://github.com/vgrec/EspressoExamples
-//    androidTestCompile 'junit:junit:4.12'
-//    testCompile 'junit:junit:4.12'
-
-//    androidTestCompile('com.android.support.test:rules:0.3') {
-//        exclude module: 'support-v4'
-//        exclude module: 'support-annotations'
-//    }
-//
-//    androidTestCompile('com.android.support.test:runner:0.3') {
-//        exclude module: 'support-annotations'
-//    }
-
-//        androidTestCompile('com.android.support.test.espresso:espresso-core:2.0') {
-//            exclude module: 'testing-support-lib'
-//            exclude module: 'support-v4'
-//            exclude module: 'support-annotations'
-//            exclude group: 'javax.inject'
-//        }
-}
-
-android.libraryVariants.all { variant ->
-    def name = variant.buildType.name
-    def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompile
-    task.from variant.javaCompile.destinationDir
-    artifacts.add('archives', task);
-}
-
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
-
-artifacts {
-    archives androidSourcesJar
+public static def buildTime() {
+    def date = new Date()
+    def formattedDate = date.format('MMddHH')
+    return formattedDate
 }
 
 def computeVersion(String versionName, String versionCode) {
     return versionName + "." + versionCode
 }
 
-version = computeVersion(project.versionName, project.versionCode)
-
-apply plugin: 'maven'
-uploadArchives {
-    repositories.mavenDeployer {
-        repository(url: RELEASE_REPOSITORY_URL) {
-            authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
-        }
-//        snapshotRepository(url: "http://xxx.xxx.xxx.xx:8080/content/repositories/snapshots") {
-//            authentication(userName: "xxxx", password: "xxxx")
-//        }
-        pom.version = project.version
-        pom.artifactId = POM_ARTIFACT_ID
-        pom.groupId = GROUP
-        pom.name = POM_NAME
-        pom.packaging = POM_PACKAGING
+android {
+    defaultConfig {
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        consumerProguardFiles 'proguard.txt'
+//         archivesBaseName += ("-" + versionName)
+//            versionCode Integer.parseInt(project.versionCode)
+//            versionName computeVersion()
     }
+
+    project.version = computeVersion(project.versionName, project.versionCode)
+
 }
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    def baseDependencies = rootProject.ext.baseDependencies
+    compile baseDependencies.support_appcompat_v7
+    compile([
+            baseDependencies.slf4j,
+            baseDependencies.logback_android_classic,
+            baseDependencies.logback_android_core
+    ])
+}
+
+apply from: "$rootDir/config/maven/maven_publish.gradle"

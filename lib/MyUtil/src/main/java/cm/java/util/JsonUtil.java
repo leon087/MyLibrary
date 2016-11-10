@@ -33,7 +33,7 @@ public class JsonUtil {
         try {
             return obj.getString(key);
         } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -52,7 +52,7 @@ public class JsonUtil {
         try {
             return obj.getBoolean(key);
         } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -71,7 +71,7 @@ public class JsonUtil {
         try {
             return obj.getLong(key);
         } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -90,7 +90,7 @@ public class JsonUtil {
         try {
             return obj.getInt(key);
         } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -109,7 +109,7 @@ public class JsonUtil {
         try {
             return obj.getDouble(key);
         } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -128,7 +128,7 @@ public class JsonUtil {
         try {
             return Parse.getFloat(obj, key);
         } catch (ParseUtil.ParseException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return defaultValue;
         }
     }
@@ -141,20 +141,32 @@ public class JsonUtil {
         try {
             return obj.getJSONArray(key);
         } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return new JSONArray();
         }
     }
 
-    public static JSONObject getObject(JSONObject obj, String key) {
+    public static JSONObject getJSONObject(JSONObject obj, String key) {
         if (obj == null) {
             return new JSONObject();
         }
         try {
             return obj.getJSONObject(key);
         } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage());
             return new JSONObject();
+        }
+    }
+
+    public static Object getObject(JSONObject obj, String key, Object defaultValue) {
+        if (obj == null) {
+            return defaultValue;
+        }
+        try {
+            return obj.get(key);
+        } catch (JSONException e) {
+            logger.error(e.getMessage());
+            return defaultValue;
         }
     }
 

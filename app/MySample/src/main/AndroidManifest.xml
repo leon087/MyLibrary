@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="cm.android.app.sample">
 
     <uses-sdk
@@ -29,6 +30,7 @@
 
     <application
             android:name="cm.android.app.core.MainApp"
+            android:persistent="true"
             android:allowBackup="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_label"
@@ -72,6 +74,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <provider
+                android:name="cm.android.framework.server.ServerProvider"
+                android:authorities="${applicationId}.framework.ServerProvider"
+                tools:replace="android:authorities"/>
 
     </application>
 
