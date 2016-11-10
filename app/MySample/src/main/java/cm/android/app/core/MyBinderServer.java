@@ -38,8 +38,7 @@ public class MyBinderServer extends BaseBinderServer {
 
     @Override
     protected void destroy() {
-        Framework.removeService(TestContext.TEST);
-        Framework.removeService(TestContext.TIMER_TASK_SERVER);
+        Framework.clearService();
         timerServer.stop();
         this.context = null;
     }

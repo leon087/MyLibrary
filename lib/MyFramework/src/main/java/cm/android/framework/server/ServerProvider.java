@@ -10,7 +10,7 @@ import cm.android.framework.client.core.Framework;
 import cm.android.framework.client.core.LogUtil;
 import cm.android.framework.client.ipc.ProviderCall;
 import cm.android.framework.component.BaseContentProvider;
-import cm.android.framework.core.IServiceFetcher;
+import cm.android.framework.interfaces.IServiceFetcher;
 import cm.android.framework.server.daemon.DaemonService;
 
 public final class ServerProvider extends BaseContentProvider {
@@ -20,7 +20,6 @@ public final class ServerProvider extends BaseContentProvider {
     public static final String M_getServiceFetcher = "@getServiceFetcher";
 
     public static String SERVICE_AUTH = "framework.ServerProvider";
-    private static String SERVER_NAME = "";
 
     public static final String KEY_BINDER = "_framework_|_binder_";
 
@@ -31,16 +30,12 @@ public final class ServerProvider extends BaseContentProvider {
         SERVICE_AUTH = authoritiy;
     }
 
-    public static void initServer(String serverName) {
-        SERVER_NAME = serverName;
-    }
-
     @Override
     public boolean onCreate() {
         LogUtil.getLogger().info("ServerProvider:onCreate:{},getContext():{}", this, getContext());
         DaemonService.start(getContext());
 
-        binderServer.attach(SERVER_NAME);
+        binderServer.attach(Framework.SERVER_NAME);
         //TODO ggg 方案1：create时判断是否初始化
         //TODO ggg 确保getContext().getApplicationContext()不为null
         binderServer.restore(getContext());
@@ -97,6 +92,11 @@ public final class ServerProvider extends BaseContentProvider {
             if (name != null) {
                 ServiceCache.removeService(name);
             }
+        }
+
+        @Override
+        public void clearService() throws RemoteException {
+            ServiceCache.clearService();
         }
     }
 

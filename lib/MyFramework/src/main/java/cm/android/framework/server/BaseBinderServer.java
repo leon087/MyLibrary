@@ -4,7 +4,7 @@ import android.content.Context;
 
 import cm.android.framework.client.core.LogUtil;
 import cm.android.framework.client.core.StateHelper;
-import cm.android.framework.core.CoreReceiver;
+import cm.android.framework.component.CoreReceiver;
 import cm.java.proguard.annotations.Keep;
 
 @Keep

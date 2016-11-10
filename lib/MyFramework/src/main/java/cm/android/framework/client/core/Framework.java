@@ -12,14 +12,16 @@ import android.os.Looper;
 import cm.android.applications.AppUtil;
 import cm.android.framework.client.ipc.BinderFactory;
 import cm.android.framework.client.ipc.ServiceManagerNative;
-import cm.android.framework.core.CoreReceiver;
-import cm.android.framework.server.ServerProvider;
+import cm.android.framework.component.CoreReceiver;
 import cm.android.framework.server.IBinderServer;
+import cm.android.framework.server.ServerProvider;
 import cm.android.framework.server.daemon.DaemonService;
 import cm.android.util.SystemUtil;
 
 public class Framework {
     public static String SERVER_PROCESS_NAME = ":framework";
+
+    public static String SERVER_NAME = "";
 
     private static final Framework gCore = new Framework();
     private Context context;
@@ -110,7 +112,7 @@ public class Framework {
             throw new IllegalArgumentException("serviceClass = null");
         }
         String serviceName = serviceClass.getName();
-        ServerProvider.initServer(serviceName);
+        SERVER_NAME = serviceName;
 
         DaemonService.bind(context, serviceConnection);
 
@@ -177,8 +179,8 @@ public class Framework {
         ServiceManagerNative.addService(name, service);
     }
 
-    public static void removeService(String name) {
-        ServiceManagerNative.removeService(name);
+    public static void clearService() {
+        ServiceManagerNative.clearService();
     }
 
     public static void restoreService(Context context, String processName) {

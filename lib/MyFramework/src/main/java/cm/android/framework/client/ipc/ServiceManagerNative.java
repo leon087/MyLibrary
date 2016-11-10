@@ -8,7 +8,7 @@ import android.support.v4.app.BundleCompat;
 
 import cm.android.framework.client.core.Framework;
 import cm.android.framework.client.core.LogUtil;
-import cm.android.framework.core.IServiceFetcher;
+import cm.android.framework.interfaces.IServiceFetcher;
 import cm.android.framework.server.ServerProvider;
 import cm.android.framework.server.ServiceCache;
 
@@ -90,6 +90,22 @@ public class ServiceManagerNative {
         if (fetcher != null) {
             try {
                 fetcher.removeService(name);
+            } catch (RemoteException e) {
+                LogUtil.getLogger().error(e.getMessage(), e);
+            }
+        }
+    }
+
+    public static void clearService() {
+        if (Framework.get().isServerProcess()) {
+            ServiceCache.clearService();
+            return;
+        }
+
+        IServiceFetcher fetcher = getServiceFetcher();
+        if (fetcher != null) {
+            try {
+                fetcher.clearService();
             } catch (RemoteException e) {
                 LogUtil.getLogger().error(e.getMessage(), e);
             }
