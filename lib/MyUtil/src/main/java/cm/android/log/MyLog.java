@@ -17,6 +17,7 @@ import cm.java.util.IoUtil;
 /**
  * android Log的Adapter类，打印调试信息。
  */
+@Deprecated
 public class MyLog {
 
     private MyLog() {

@@ -47,7 +47,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         MyIntent.backup(outState, bundleBak);
         super.onSaveInstanceState(outState);
-        logger.info("bundleBak = " + bundleBak);
+        logger.debug("bundleBak = " + bundleBak);
     }
 
     @Override

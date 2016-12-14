@@ -3,12 +3,13 @@ package cm.android.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.LocalBroadcastManager;
+import android.webkit.MimeTypeMap;
 
 import java.io.File;
 
@@ -40,9 +41,9 @@ public class IntentUtil {
      */
     public static boolean launchApp(Context context, String packageName) {
         try {
-            Intent intent = context.getPackageManager()
-                    .getLaunchIntentForPackage(packageName);
+            Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
             if (null != intent) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
                 return true;
             }
@@ -52,9 +53,19 @@ public class IntentUtil {
         return false;
     }
 
-    public static void startActivitySafely(Activity activity, Intent intent) {
+//    public static void startActivitySafely(Activity activity, Intent intent) {
+//        try {
+//            activity.startActivity(intent);
+//        } catch (ActivityNotFoundException e) {
+//            logger.error("intent = " + intent, e);
+//        } catch (SecurityException e) {
+//            logger.error("intent = " + intent, e);
+//        }
+//    }
+
+    public static void startActivitySafely(Context context, Intent intent) {
         try {
-            activity.startActivity(intent);
+            context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             logger.error("intent = " + intent, e);
         } catch (SecurityException e) {
@@ -67,15 +78,16 @@ public class IntentUtil {
      */
     public static boolean installPackage(Context context, Uri packageURI) {
         File file = new File(packageURI.getPath());
-        if (file == null || !file.exists() || !file.isFile()
-                || file.length() <= 0) {
+        if (!file.exists() || !file.isFile() || file.length() <= 0) {
             return false;
         }
 
-        // acti.finish();
         Intent apkintent = new Intent(Intent.ACTION_VIEW);
-        apkintent.setDataAndType(packageURI,
-                "application/vnd.android.package-archive");
+        String type = "application/vnd.android.package-archive";
+        if (Build.VERSION.SDK_INT >= 23) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension("apk");
+        }
+        apkintent.setDataAndType(packageURI, type);
         apkintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         apkintent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         context.startActivity(apkintent);
@@ -105,6 +117,10 @@ public class IntentUtil {
 
     public static void sendBroadcastLocal(Context context, Intent intent) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public static void sendBroadcastSyncLocal(Context context, Intent intent) {
+        LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
     }
 
     public static void sendBroadcastInternal(Context context, Intent intent, String permission) {

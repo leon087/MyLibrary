@@ -101,7 +101,7 @@ public final class ApplicationImpl {
 
     private synchronized void startInternal() {
         if (!startAtomic.get()) {
-            DaemonService.start(appContext);
+            DaemonService.start(this, appContext);
         } else {
             logger.error("startInternal:startAtomic = " + startAtomic.get());
         }

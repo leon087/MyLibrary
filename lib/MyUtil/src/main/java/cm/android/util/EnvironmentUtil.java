@@ -20,6 +20,7 @@ import java.util.List;
 import cm.java.util.IoUtil;
 import cm.java.util.ObjectProxy;
 import cm.java.util.ObjectUtil;
+import cm.java.util.Utils;
 
 public class EnvironmentUtil {
 
@@ -103,7 +104,7 @@ public class EnvironmentUtil {
      */
     @TargetApi(8)
     public static File getExternalCacheDir(Context context) {
-        if (SdkUtil.hasFroyo()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             File file = context.getExternalCacheDir();
             if (file != null) {
                 return file;
@@ -140,9 +141,8 @@ public class EnvironmentUtil {
     /**
      * 获取外部存储目录""/Android/data/"PackageName"/files/""
      */
-    @TargetApi(8)
     public static File getExternalFilesDir(Context context, String uniqueName) {
-        if (SdkUtil.hasFroyo()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             File file = context.getExternalFilesDir(uniqueName);
             if (file != null) {
                 return file;
@@ -151,20 +151,16 @@ public class EnvironmentUtil {
 
         File externalFilesDir = new File(getExternalDir(context), "files/");
 
-        if (uniqueName == null) {
-            IoUtil.checkDirectory(externalFilesDir);
-            return externalFilesDir;
+        if (!Utils.isEmpty(uniqueName)) {
+            externalFilesDir = new File(externalFilesDir, uniqueName);
         }
-
-        File dir = new File(externalFilesDir, uniqueName);
-        IoUtil.checkDirectory(dir);
-        return dir;
+        IoUtil.checkDirectory(externalFilesDir);
+        return externalFilesDir;
     }
 
     public static File getExternalDir(Context context) {
-        final String filesDir = "/Android/data/" + context.getPackageName();
-        File externalFilesDir = new File(
-                Environment.getExternalStorageDirectory(), filesDir);
+        final String filesDir = "Android/data/" + context.getPackageName();
+        File externalFilesDir = new File(Environment.getExternalStorageDirectory(), filesDir);
 
         IoUtil.checkDirectory(externalFilesDir);
         return externalFilesDir;

@@ -24,13 +24,13 @@ public class ObjectPool {
 
     public static TestManager getTestManager() {
 //        TestManager test = BinderFactory.getProxy(TestContext.TEST, TestManager.class);
-        TestManager test = Framework.get().getService(TestContext.TEST, TestManager.class);
+        TestManager test = Framework.getBinderProxy(TestContext.TEST, TestManager.class);
         return test;
     }
 
     public static TimerManager getTimerManager() {
 //        TimerManager test = BinderFactory.getProxy(TestContext.TIMER_TASK_SERVER,TimerManager.class);
-        TimerManager test = Framework.get().getService(TestContext.TIMER_TASK_SERVER, TimerManager.class);
+        TimerManager test = Framework.getBinderProxy(TestContext.TIMER_TASK_SERVER, TimerManager.class);
         return test;
     }
 }

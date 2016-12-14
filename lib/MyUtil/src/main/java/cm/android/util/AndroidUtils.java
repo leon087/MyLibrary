@@ -29,6 +29,7 @@ import java.util.zip.ZipFile;
 
 import cm.android.applications.AppUtil;
 import cm.java.util.IoUtil;
+import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
 
 /**
@@ -203,6 +204,20 @@ public final class AndroidUtils {
 //        android.os.Process.killProcess(android.os.Process.myPid());
 //        System.exit(0);
 //    }
+
+
+    /**
+     * Process.killProcessGroup(app.info.uid, app.pid);
+     */
+    public static int killProcessGroup(Context context) {
+        Method killProcessGroup = ReflectUtil.getMethod(Process.class, "killProcessGroup", int.class, int.class);
+        if (killProcessGroup != null) {
+            return ReflectUtil.doMethod(Process.class, killProcessGroup, context.getApplicationInfo().uid, Process.myPid());
+        } else {
+            logger.error("killProcessGroup = null");
+            return -1;
+        }
+    }
 
     public static void transferData(Bundle oldBundle, Bundle newBundle) {
         if (oldBundle != null) {

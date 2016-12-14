@@ -12,9 +12,13 @@ buildscript {
         mavenLocal()
     }
 
+    ext {
+        cmGradleVersion = "1.51"
+    }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath "ggg.android:cm.android.gradle:1.45"
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath "ggg.android:cm.android.gradle:$cmGradleVersion"
     }
 }
 
@@ -53,11 +57,11 @@ ext {
     minSdkVersion = 16
     targetSdkVersion = 22//6.0动态权限适配
     compileSdkVersion = 23
-    buildToolsVersion = "24.0.2"
+    buildToolsVersion = "25.0.2"
 
     //dependencies
-    supportLibraryVersion = '24.2.1'
-    logbackAndroidVersion = '1.1.1-5'
+    supportLibraryVersion = '25.0.1'
+    logbackAndroidVersion = '1.1.1-6'
     leakcanaryVersion = '1.4-beta2'
     junitVersion = '4.12'
     okhttpVersion = "3.4.1"
@@ -87,9 +91,11 @@ ext {
             leakcanary_android_no_op   : "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion",
 
             //log
-            slf4j                      : "org.slf4j:slf4j-api:1.7.21",
+            slf4j                      : "org.slf4j:slf4j-api:1.7.22",
             logback_android_classic    : "com.github.tony19:logback-android-core:$rootProject.logbackAndroidVersion",
             logback_android_core       : "com.github.tony19:logback-android-classic:$rootProject.logbackAndroidVersion",
+            slf4j_timber               : 'ggg.android:cm.android.slf4j.timber:1.3@jar',
+            timber                     : 'com.jakewharton.timber:timber:4.4.0',
 
             support_design             : "com.android.support:design:$rootProject.supportLibraryVersion",
             support_v13                : "com.android.support:support-v13:$rootProject.supportLibraryVersion",
@@ -101,6 +107,9 @@ ext {
             okhttp3_logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion",
             okhttp3                    : "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion",
             disklrucache               : "com.jakewharton:disklrucache:2.0.2",
+
+            sqlcipher                  : 'net.zetetic:android-database-sqlcipher:3.5.4@aar',
+            conceal                    : "com.facebook.conceal:conceal:1.1.3@aar",
     ]
 
     aptDependencies = [
@@ -113,9 +122,11 @@ ext {
             'cm/android/app/info/Info.java'
     ]
 
+    findbugsDependsOn = 'assembleDebug'
     findbugsExclude = []
 
     // jacoco config
+    jacocoDependsOn = 'testDebugUnitTest'
     jacocoVersion = '0.7.7.201606060606'
     ignoredByJacoco = [
             'app',
@@ -151,4 +162,4 @@ ext {
             ]
     ]
 }
-apply from: "$rootDir/config/jacocoo.gradle"
+apply plugin: 'cm.android.gradle.script'

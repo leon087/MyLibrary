@@ -13,19 +13,25 @@ import cm.android.applications.AppUtil;
 import cm.android.framework.client.ipc.BinderFactory;
 import cm.android.framework.client.ipc.ServiceManagerNative;
 import cm.android.framework.component.CoreReceiver;
-import cm.android.framework.server.IBinderServer;
+import cm.android.framework.component.IBinderServer;
 import cm.android.framework.server.ServerProvider;
 import cm.android.framework.server.daemon.DaemonService;
 import cm.android.util.SystemUtil;
+import cm.java.util.Utils;
 
 public class Framework {
-    public static String SERVER_PROCESS_NAME = ":framework";
+
+    /**
+     * Server进程后缀
+     */
+    private static String SERVER_PROCESS_SUFFIX_DEF = ":framework";
 
     public static String SERVER_NAME = "";
 
     private static final Framework gCore = new Framework();
     private Context context;
     private String processName;
+    private String serverProcessName;
     private ProcessType processType;
     private boolean isStartUp;
     private ConditionVariable initLock = new ConditionVariable();
@@ -94,11 +100,14 @@ public class Framework {
     private void detectProcessType() {
         // Main process name
         mainProcessName = context.getApplicationInfo().processName;
+        if (Utils.isEmpty(serverProcessName)) {
+            serverProcessName = mainProcessName + SERVER_PROCESS_SUFFIX_DEF;
+        }
         // Current process name
         processName = SystemUtil.getCurProcessName();
         if (processName.equals(mainProcessName)) {
             processType = ProcessType.MAIN;
-        } else if (processName.endsWith(SERVER_PROCESS_NAME)) {
+        } else if (processName.equals(serverProcessName)) {
             processType = ProcessType.SERVER;
         } else {
             processType = ProcessType.CHILD;
@@ -160,11 +169,23 @@ public class Framework {
         return response.getBoolean(ServerProvider.KEY_BINDER);
     }
 
+    public void putBundle(String key, Bundle bundle) {
+        ServerProvider.Proxy.putBundle(context, key, bundle);
+    }
+
+    public Bundle getBundle(String key) {
+        Bundle response = ServerProvider.Proxy.getBundle(context, key);
+        if (response == null) {
+            return null;
+        }
+        return response.getBundle(ServerProvider.KEY_BINDER);
+    }
+
     public static IBinder getService(String name) {
         return ServiceManagerNative.getService(name);
     }
 
-    public static <T> T getService(String name, Class<? extends BinderFactory.IBinderProxy> proxyClass) {
+    public static <T> T getBinderProxy(String name, Class<? extends BinderFactory.IBinderProxy> proxyClass) {
         return BinderFactory.getProxy(name, proxyClass);
     }
 
@@ -178,5 +199,13 @@ public class Framework {
 
     public static void restoreService(Context context, String processName) {
         CoreReceiver.restore(context, processName);
+    }
+
+    public void config(Config config) {
+        ServerProvider.authorities(config.getAuthorities());
+        serverProcessName = config.getServerProcess();
+    }
+
+    private Framework() {
     }
 }

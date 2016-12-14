@@ -16,6 +16,9 @@ public class AsyncHandler extends WeakHandler {
 
     public AsyncHandler(Looper looper) {
         super(looper);
+        if (looper == Looper.getMainLooper()) {
+            logger.error("looper == Looper.getMainLooper()");
+        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.os.RemoteException;
 
 import cm.android.app.sample.ITestManager;
 import cm.android.framework.client.ipc.BinderFactory;
+import cm.android.framework.client.ipc.LocalProxyUtils;
 
 public class TestManager extends ITestManager.Stub implements BinderFactory.IBinderProxy {
 
@@ -19,12 +20,13 @@ public class TestManager extends ITestManager.Stub implements BinderFactory.IBin
     @Override
     public void count() {
         try {
-            if (testManager == null) {
+            if (testManager == null || !testManager.asBinder().isBinderAlive()) {
                 android.util.Log.e("ggg", "ggg testManager = null");
                 return;
             }
 
-            testManager.count();
+            ITestManager server = LocalProxyUtils.genProxy(ITestManager.class, testManager);
+            server.count();
         } catch (RemoteException e) {
             logger.error(e.getMessage(), e);
         }
@@ -34,6 +36,10 @@ public class TestManager extends ITestManager.Stub implements BinderFactory.IBin
     public void bind(IBinder binder) {
         android.util.Log.e("ggg", "ggg binder = " + binder);
         testManager = ITestManager.Stub.asInterface(binder);
-//        testManager = LocalProxyUtils.genProxy(ITestManager.class, remote);
+    }
+
+    @Override
+    public void binderDied() {
+        testManager = null;
     }
 }

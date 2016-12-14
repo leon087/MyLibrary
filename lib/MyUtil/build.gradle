@@ -2,30 +2,12 @@ tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
-apply from: "$rootDir/config/quality.gradle"
 apply from: "$rootDir/config/unittest/unittest.gradle"
-
-public static def buildTime() {
-    def date = new Date()
-    def formattedDate = date.format('MMddHH')
-    return formattedDate
-}
-
-def computeVersion(String versionName, String versionCode) {
-    return versionName + "." + versionCode
-}
 
 android {
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        consumerProguardFiles 'proguard.txt'
-//         archivesBaseName += ("-" + versionName)
-//            versionCode Integer.parseInt(project.versionCode)
-//            versionName computeVersion()
     }
-
-    project.version = computeVersion(project.versionName, project.versionCode)
-
 }
 
 dependencies {
@@ -33,11 +15,15 @@ dependencies {
 
     def baseDependencies = rootProject.ext.baseDependencies
     compile baseDependencies.support_appcompat_v7
-    compile([
-            baseDependencies.slf4j,
-            baseDependencies.logback_android_classic,
-            baseDependencies.logback_android_core
+//    compile([baseDependencies.slf4j,
+//             baseDependencies.logback_android_classic,
+//             baseDependencies.logback_android_core,
+//    ])
+
+    compile([baseDependencies.slf4j,
+             baseDependencies.timber,
+             baseDependencies.slf4j_timber
     ])
 }
 
-apply from: "$rootDir/config/maven/maven_publish.gradle"
+//apply from: "$rootDir/config/maven/maven_publish.gradle"

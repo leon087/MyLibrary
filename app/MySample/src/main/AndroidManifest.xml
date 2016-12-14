@@ -28,6 +28,9 @@
 
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/>
 
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:name="cm.android.app.core.MainApp"
             android:persistent="true"
@@ -77,7 +80,7 @@
 
         <provider
                 android:name="cm.android.framework.server.ServerProvider"
-                android:authorities="${applicationId}.framework.ServerProvider"
+                android:authorities="${applicationId}.framework.provider"
                 tools:replace="android:authorities"/>
 
     </application>

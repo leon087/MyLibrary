@@ -34,8 +34,6 @@ public final class DaemonService extends PersistentService {
         }
 
         String action = intent.getAction();
-        logger.info("intent = " + intent);
-
         if (ACTION_START.equals(action)) {
             logger.info("start daemon");
             DaemonManager.getInstance().startDaemon(this);
@@ -70,8 +68,8 @@ public final class DaemonService extends PersistentService {
         logger.info("DaemonService:onDestroy");
     }
 
-    public static void start(Context context) {
-        WakeLockUtil.acquire(context, "framework", 1000);
+    public static void start(Object obj, Context context) {
+        WakeLockUtil.acquire(context, "framework:" + obj.getClass().getName(), 1000);
 
         Intent intent = new Intent(context, DaemonService.class);
         intent.setPackage(context.getPackageName());

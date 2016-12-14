@@ -21,8 +21,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
@@ -31,6 +29,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cm.java.cmd.CmdExecute;
+
+import static java.io.File.separatorChar;
 
 /**
  * IO读写Util类
@@ -468,31 +468,80 @@ public class IoUtil {
         return true;
     }
 
-    public static File join(File dir, String... paths) {
-        Iterator<String> iterator = Arrays.asList(paths).iterator();
-        StringBuilder appendable = new StringBuilder();
+    private static String join(String prefix, String suffix) {
+        int prefixLength = prefix.length();
+        boolean haveSlash = (prefixLength > 0 && prefix.charAt(prefixLength - 1) == separatorChar);
+        if (!haveSlash) {
+            haveSlash = (suffix.length() > 0 && suffix.charAt(0) == separatorChar);
+        }
+        return haveSlash ? (prefix + suffix) : (prefix + separatorChar + suffix);
+    }
 
-        if (iterator.hasNext()) {
-            appendable.append(iterator.next());
-
-            while (iterator.hasNext()) {
-                appendable.append(File.separator);
-                appendable.append(iterator.next());
+    private static String fixSlashes(String origPath) {
+        // Remove duplicate adjacent slashes.
+        boolean lastWasSlash = false;
+        char[] newPath = origPath.toCharArray();
+        int length = newPath.length;
+        int newLength = 0;
+        for (int i = 0; i < length; ++i) {
+            char ch = newPath[i];
+            if (ch == '/') {
+                if (!lastWasSlash) {
+                    newPath[newLength++] = File.separatorChar;
+                    lastWasSlash = true;
+                }
+            } else {
+                newPath[newLength++] = ch;
+                lastWasSlash = false;
             }
         }
-
-        return paths.length == 0 ? dir : new File(dir, appendable.toString());
+        // Remove any trailing slash (unless this is the root of the file system).
+        if (lastWasSlash && newLength > 1) {
+            newLength--;
+        }
+        // Reuse the original string if possible.
+        return (newLength != length) ? new String(newPath, 0, newLength) : origPath;
     }
 
-    private static int getShort(byte[] data) {
-        return (int) ((data[0] << 8) | data[1] & 0xFF);
+    private static String getPath(String dirPath, String name) {
+        if (dirPath == null || dirPath.isEmpty()) {
+            return fixSlashes(name);
+        } else if (name.isEmpty()) {
+            return fixSlashes(dirPath);
+        } else {
+            return fixSlashes(join(dirPath, name));
+        }
     }
+
+    public static File buildPath(File base, String... segments) {
+        String path = (base == null ? null : base.getPath());
+        for (String segment : segments) {
+            path = getPath(path, segment);
+        }
+        return new File(path);
+    }
+
+//    public static File join(File dir, String... paths) {
+//        Iterator<String> iterator = Arrays.asList(paths).iterator();
+//        StringBuilder appendable = new StringBuilder();
+//
+//        if (iterator.hasNext()) {
+//            appendable.append(iterator.next());
+//
+//            while (iterator.hasNext()) {
+//                appendable.append(File.separator);
+//                appendable.append(iterator.next());
+//            }
+//        }
+//
+//        return paths.length == 0 ? dir : new File(dir, appendable.toString());
+//    }
 
     public static byte[] decompressGZip(byte[] data) {
         byte[] h = new byte[2];
         h[0] = (data)[0];
         h[1] = (data)[1];
-        int head = getShort(h);
+        int head = (int) ((h[0] << 8) | h[1] & 0xFF);
         boolean t = head == 0x1f8b;
         InputStream in = null;
         ByteArrayOutputStream bos = null;

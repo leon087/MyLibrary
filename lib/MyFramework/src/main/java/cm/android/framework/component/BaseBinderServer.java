@@ -1,10 +1,9 @@
-package cm.android.framework.server;
+package cm.android.framework.component;
 
 import android.content.Context;
 
 import cm.android.framework.client.core.LogUtil;
 import cm.android.framework.client.core.StateHelper;
-import cm.android.framework.component.CoreReceiver;
 
 public abstract class BaseBinderServer implements IBinderServer {
 
@@ -49,7 +48,7 @@ public abstract class BaseBinderServer implements IBinderServer {
 
     @Override
     public boolean isActive(Context context) {
-        return StateHelper.isStateInit(context);
+        return StateHelper.isActive(context);
     }
 
     protected abstract void create(Context context);

@@ -47,6 +47,13 @@ public final class ProviderCall {
             return this;
         }
 
+        public Builder addArg(Bundle bundle) {
+            if (bundle != null) {
+                this.bundle.putAll(bundle);
+            }
+            return this;
+        }
+
         public Builder addArg(String key, Object value) {
             if (value != null) {
                 if (value instanceof Boolean) {

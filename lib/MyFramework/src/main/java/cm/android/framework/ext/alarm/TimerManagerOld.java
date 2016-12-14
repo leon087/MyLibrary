@@ -7,6 +7,7 @@ import android.os.IBinder;
 
 import cm.android.framework.core.BinderFactory;
 
+@Deprecated
 public final class TimerManagerOld extends ITimerServer.Stub implements BinderFactory.IBinderProxy {
 
     private static final Logger logger = LoggerFactory.getLogger("timer");

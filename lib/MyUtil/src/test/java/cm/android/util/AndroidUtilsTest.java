@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 
-import java.util.Map;
 import java.util.Properties;
 
 import static junit.framework.Assert.assertEquals;
@@ -28,14 +27,6 @@ public class AndroidUtilsTest {
         bundle.putString("hjgde", "jhuds");
         temp = AndroidUtils.isEmpty(bundle);
         assertEquals(temp, false);
-    }
-
-    @Test
-    public void testGetStubFile() throws Exception {
-        Context context = TestUtil.getContext();
-        Map<String, Object> temp = AndroidUtils.getStubFile(context, "sss");
-        boolean result = temp.isEmpty();
-        assertEquals(result, true);
     }
 
     @Test

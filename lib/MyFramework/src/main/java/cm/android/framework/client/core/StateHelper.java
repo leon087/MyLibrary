@@ -17,7 +17,7 @@ public class StateHelper {
 
     private static final String TAG_STATE = "state";
 
-    public static boolean isStateInit(Context context) {
+    public static boolean isActive(Context context) {
         return readState(context);
     }
 

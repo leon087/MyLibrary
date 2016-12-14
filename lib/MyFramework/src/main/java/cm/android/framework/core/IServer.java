@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
+@Deprecated
 public interface IServer {
 
     public IBinder onBind(Intent intent);

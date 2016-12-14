@@ -12,7 +12,7 @@ public class DaemonReceiver extends BaseBroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         DaemonManager.getInstance().schedule(context);
 
-        DaemonService.start(context);
+//        DaemonService.start(context);
     }
 
     @Override

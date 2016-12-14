@@ -22,29 +22,17 @@ public class ServiceManagerNative {
             Bundle response = ServerProvider.Proxy.getServiceFetcher(context);
             if (response != null) {
                 IBinder binder = BundleCompat.getBinder(response, ServerProvider.KEY_BINDER);
-                linkBinderDied(binder);
+                LocalProxyUtils.linkBinderDied(binder, new IBinder.DeathRecipient() {
+                    @Override
+                    public void binderDied() {
+                        //TODO ggg server挂掉会重启，无需kill。但是需要重新清下数据
+                        sFetcher = null;
+                    }
+                });
                 sFetcher = IServiceFetcher.Stub.asInterface(binder);
             }
         }
         return sFetcher;
-    }
-
-    private static void linkBinderDied(final IBinder binder) {
-        IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
-            @Override
-            public void binderDied() {
-                binder.unlinkToDeath(this, 0);
-                LogUtil.getLogger().error("Ops, the server has crashed.");
-                //TODO ggg server挂掉会重启，无需kill。但是需要重新清下数据
-                sFetcher = null;
-//                Process.killProcess(Process.myPid());
-            }
-        };
-        try {
-            binder.linkToDeath(deathRecipient, 0);
-        } catch (RemoteException e) {
-            LogUtil.getLogger().error(e.getMessage(), e);
-        }
     }
 
     public static IBinder getService(String name) {

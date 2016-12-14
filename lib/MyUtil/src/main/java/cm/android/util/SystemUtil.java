@@ -303,7 +303,7 @@ public class SystemUtil {
         };
         String processName = CmdExecute.exec(cmd);
         if (Utils.isEmpty(processName)) {
-            return null;
+            return "";
         }
         return processName.trim();
     }

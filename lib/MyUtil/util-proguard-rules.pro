@@ -1,5 +1,4 @@
-#================================框架======================================
-
+#================================util======================================
 # Keep our interfaces so they can be used by other ProGuard rules.
 -keep,allowobfuscation @interface cm.java.proguard.annotations.Keep
 -keep,allowobfuscation @interface cm.java.proguard.annotations.KeepAll
@@ -19,14 +18,11 @@
   *** get*();
 }
 
-#保留class名字的时候同时混淆该class
-#-keepnames class cm.java.thread.ThreadPool
-
 -keep class ch.qos.** { *; }
 -keep class org.slf4j.** { *; }
 -dontwarn ch.qos.logback.core.net.*
--assumenosideeffects class org.slf4j.Logger {
-    public void debug(...);
-}
+#-assumenosideeffects class org.slf4j.Logger {
+#    public void debug(...);
+#}
 
-#================================框架======================================
+#================================util======================================

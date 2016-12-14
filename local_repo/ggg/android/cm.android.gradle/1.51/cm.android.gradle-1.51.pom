@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ggg.android</groupId>
   <artifactId>cm.android.gradle</artifactId>
-  <version>1.45</version>
+  <version>1.51</version>
   <dependencies>
     <dependency>
       <groupId>org.tmatesoft.svnkit</groupId>

@@ -38,7 +38,7 @@ public final class MyPackageManager {
                 if (null != observer) {
                     // 获取安装包信息
                     String archiveFilePath = packageURI.getPath();
-                    PackageInfo packageInfo = AppUtil.getArchiveInfo(context.getPackageManager(), archiveFilePath);
+                    PackageInfo packageInfo = AppUtil.getArchiveInfo(context.getPackageManager(), archiveFilePath, 0);
                     String packageName = "";
                     if (packageInfo != null) {
                         packageName = packageInfo.packageName;

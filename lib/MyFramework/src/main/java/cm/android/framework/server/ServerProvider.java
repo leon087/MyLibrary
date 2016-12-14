@@ -18,8 +18,10 @@ public final class ServerProvider extends BaseContentProvider {
     public static final String M_destroy = "@destroy";
     public static final String M_isActive = "@isActive";
     public static final String M_getServiceFetcher = "@getServiceFetcher";
+    public static final String M_getBundle = "@getBundle";
+    public static final String M_putBundle = "@putBundle";
 
-    public static String SERVICE_AUTH = "framework.provider";
+    public static String AUTHORITIES = "framework.provider";
 
     public static final String KEY_BINDER = "_framework_|_binder_";
 
@@ -27,13 +29,13 @@ public final class ServerProvider extends BaseContentProvider {
     private final BinderServerAgent binderServer = new BinderServerAgent();
 
     public static void authorities(String authorities) {
-        SERVICE_AUTH = authorities;
+        AUTHORITIES = authorities;
     }
 
     @Override
     public boolean onCreate() {
         LogUtil.getLogger().info("ServerProvider:onCreate:{},getContext():{}", this, getContext());
-        DaemonService.start(getContext());
+        DaemonService.start(this, getContext());
 
         binderServer.attach(Framework.SERVER_NAME);
         //TODO ggg 方案1：create时判断是否初始化
@@ -66,6 +68,12 @@ public final class ServerProvider extends BaseContentProvider {
             Bundle bundle = new Bundle();
             BundleCompat.putBinder(bundle, KEY_BINDER, mServiceFetcher);
             return bundle;
+        } else if (M_getBundle.equals(method)) {
+            Bundle bundle = new Bundle();
+            bundle.putBundle(KEY_BINDER, binderServer.getBundle(arg));
+            return bundle;
+        } else if (M_putBundle.equals(method)) {
+            binderServer.putBundle(arg, extras);
         }
 
         return null;
@@ -102,8 +110,17 @@ public final class ServerProvider extends BaseContentProvider {
 
     public static class Proxy {
         private static Bundle invokeMethod(Context context, String method) {
-            Bundle response = new ProviderCall.Builder(context, SERVICE_AUTH)
+            Bundle response = new ProviderCall.Builder(context, AUTHORITIES)
                     .methodName(method)
+                    .call();
+            return response;
+        }
+
+        private static Bundle invokeMethod(Context context, String method, String arg, Bundle bundle) {
+            Bundle response = new ProviderCall.Builder(context, AUTHORITIES)
+                    .methodName(method)
+                    .arg(arg)
+                    .addArg(bundle)
                     .call();
             return response;
         }
@@ -122,6 +139,14 @@ public final class ServerProvider extends BaseContentProvider {
 
         public static Bundle getServiceFetcher(Context context) {
             return invokeMethod(context, ServerProvider.M_getServiceFetcher);
+        }
+
+        public static Bundle getBundle(Context context, String key) {
+            return invokeMethod(context, ServerProvider.M_getBundle, key, null);
+        }
+
+        public static Bundle putBundle(Context context, String key, Bundle bundle) {
+            return invokeMethod(context, ServerProvider.M_putBundle, key, bundle);
         }
     }
 }

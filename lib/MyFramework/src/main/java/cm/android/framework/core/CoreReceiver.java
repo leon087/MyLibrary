@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import cm.android.sdk.content.BaseBroadcastReceiver;
 import cm.android.util.IntentUtil;
 
+@Deprecated
 public abstract class CoreReceiver extends BaseBroadcastReceiver {
 
     private static final Logger logger = LoggerFactory.getLogger("framework");

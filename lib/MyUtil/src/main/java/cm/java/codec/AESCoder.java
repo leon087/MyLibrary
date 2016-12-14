@@ -1,7 +1,5 @@
 package cm.java.codec;
 
-import android.annotation.TargetApi;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -91,7 +89,6 @@ public final class AESCoder {
      * BouncyCastleProvider provider = new BouncyCastleProvider(); <br>
      * Security.addProvider(provider);
      */
-    @TargetApi(19)
     public static byte[] encrypt(SecretKey secretKey, byte[] iv, byte[] aad, byte[] src)
             throws Exception {
         IvParameterSpec ivSpec = SecureUtil.getIv(iv);
@@ -108,7 +105,6 @@ public final class AESCoder {
      * BouncyCastleProvider provider = new BouncyCastleProvider(); <br>
      * Security.addProvider(provider);
      */
-    @TargetApi(19)
     public static byte[] decrypt(SecretKey secretKey, byte[] iv, byte[] aad, byte[] src)
             throws Exception {
         IvParameterSpec ivSpec = SecureUtil.getIv(iv);

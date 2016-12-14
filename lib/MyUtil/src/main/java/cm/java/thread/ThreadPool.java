@@ -60,9 +60,17 @@ public class ThreadPool {
     /**
      * 释放资源
      */
-    public void release() {
+    public void shutdown() {
         workQueue.clear();
         executor.shutdown();
+    }
+
+    /**
+     * 清除队列
+     */
+    public void purge() {
+        workQueue.clear();
+        executor.purge();
     }
 
     /**

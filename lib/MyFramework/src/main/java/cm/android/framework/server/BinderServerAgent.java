@@ -1,11 +1,13 @@
 package cm.android.framework.server;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import java.lang.reflect.Constructor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.framework.client.core.LogUtil;
+import cm.android.framework.component.IBinderServer;
 import cm.java.util.Utils;
 
 public final class BinderServerAgent {
@@ -30,6 +32,7 @@ public final class BinderServerAgent {
     private final AtomicBoolean create = new AtomicBoolean(false);
 
     private String serverName;
+    private Bundle bundle = new Bundle();
 
     public void attach(String serverName) {
         this.serverName = serverName;
@@ -75,6 +78,7 @@ public final class BinderServerAgent {
 
         try {
             getServer().onCreate(context);
+            LogUtil.getLogger().info("getServer().onCreate():success");
         } finally {
             create.set(true);
         }
@@ -88,6 +92,7 @@ public final class BinderServerAgent {
 
         try {
             getServer().onDestroy();
+            LogUtil.getLogger().info("getServer().onDestroy():success");
         } finally {
             create.set(false);
         }
@@ -98,6 +103,14 @@ public final class BinderServerAgent {
         boolean isActive = getServer().isActive(context);
         LogUtil.getLogger().info("createBoolean = {},isActive = {}", createBoolean, isActive);
         return createBoolean && isActive;
+    }
+
+    public Bundle getBundle(String key) {
+        return bundle.getBundle(key);
+    }
+
+    public void putBundle(String key, Bundle bundle) {
+        this.bundle.putBundle(key, bundle);
     }
 
     public void restore(Context context) {

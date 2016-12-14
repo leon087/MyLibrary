@@ -1,13 +1,9 @@
-import cm.android.gradle.util.Util
-import cm.android.gradle.ExtUtil
-
 apply plugin: 'com.android.application'
-apply from: "$rootDir/ext-android.gradle"
-apply from: "$rootDir/config/quality.gradle"
 apply from: "product.gradle"
+apply from: "$rootDir/ext-android.gradle"
 
-apply plugin: 'cm.android.gradle'
-apply plugin: 'cm.android.gradle.sign'
+apply plugin: 'cm.android.gradle.pack2'
+//apply plugin: 'cm.android.gradle.sign'
 apply plugin: 'cm.android.gradle.proguard'
 
 android {
@@ -45,7 +41,8 @@ android {
             minifyEnabled true
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'),
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    ExtUtil.getProguardFile(project),
+                    cm.android.gradle.ExtUtil.getProguardFile(project),
+                    new File(project(':lib:MySqlCipher').getProjectDir(), 'proguard-rules.pro'),
                     new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.pro'),
                     new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.pro'),
                     new File('proguard-rules.pro')
@@ -73,7 +70,8 @@ android {
         //type_product
         gg {
             dimension 'type_product'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
 
         //type_server：平台配置
@@ -130,7 +128,6 @@ android {
     }
 
     applicationVariants.all { variant ->
-
         def productName = variant.productFlavors.get(0).name //"type_product"
         def product = project.extensions.getByName(productName)
 
@@ -141,28 +138,19 @@ android {
 
         switch (typeServer) {
             case 'dev':
-                variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_dev))
+                variant.buildConfigField('String', 'ROOT_API', cm.android.gradle.util.Util.wrapStr(product.root_api_dev))
                 break
             case 'devtest':
-                variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_devtest))
+                variant.buildConfigField('String', 'ROOT_API', cm.android.gradle.util.Util.wrapStr(product.root_api_devtest))
                 break
             case 'demo':
-                variant.buildConfigField('String', 'ROOT_API', Util.wrapStr(product.root_api_demo))
+                variant.buildConfigField('String', 'ROOT_API', cm.android.gradle.util.Util.wrapStr(product.root_api_demo))
                 break
             default:
                 break
         }
     }
 }
-
-//def count1 = 0
-//tasks.getByName("check") {
-//    it.doLast {
-//        count1 += 1
-//        println("------------assemble do Last-------------")
-//        println("------------count 1 = " + count1 + "-------------")
-//    }
-//}
 
 buildscript {
     repositories {
@@ -175,8 +163,6 @@ buildscript {
 apply plugin: 'com.neenbedankt.android-apt'
 
 dependencies {
-    //android.jar
-    //compile files("${android.sdk}/platforms/${android.target}/android.jar")
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':lib:MyCommon')
     compile project(':lib:MyFramework')

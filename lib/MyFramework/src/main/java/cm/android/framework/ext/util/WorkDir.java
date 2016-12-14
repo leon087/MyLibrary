@@ -1,4 +1,4 @@
-package cm.android.framework.core.global;
+package cm.android.framework.ext.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,6 @@ import cm.java.util.IoUtil;
 /**
  * 目录管理基类
  */
-@Deprecated
 public class WorkDir {
 
     private static final ExternalWorkDir externalWorkDir = new ExternalWorkDir();

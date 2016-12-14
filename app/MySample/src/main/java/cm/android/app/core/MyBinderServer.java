@@ -4,16 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import cm.android.app.test.TestContext;
 import cm.android.app.test.server.TestManagerServer;
 import cm.android.framework.client.core.Framework;
+import cm.android.framework.component.BaseBinderServer;
 import cm.android.framework.ext.alarm.TimerServer;
-import cm.android.framework.server.BaseBinderServer;
+import cm.java.thread.ThreadUtil;
 
 public class MyBinderServer extends BaseBinderServer {
 
-    private static final Logger logger = LoggerFactory.getLogger("MyServiceManager");
+    private static final Logger logger = LoggerFactory.getLogger("MyBinderServer");
 
     private TestManagerServer testManager;
     private Context context;
@@ -38,9 +40,22 @@ public class MyBinderServer extends BaseBinderServer {
 
     @Override
     protected void destroy() {
-        Framework.clearService();
-        timerServer.stop();
-        this.context = null;
+        ThreadUtil.newCachedThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                Bundle bundle = Framework.get().getBundle("ggg");
+                while (bundle != null && !bundle.getBoolean("exit")) {
+                    logger.error("hhh bundle.getBoolean(\"exit\") = " + bundle.getBoolean("exit"));
+                    ThreadUtil.sleep(20);
+                    bundle = Framework.get().getBundle("ggg");
+                }
+
+                logger.error("hhh destroy");
+                Framework.clearService();
+                timerServer.stop();
+                MyBinderServer.this.context = null;
+            }
+        });
     }
 
     @Override
@@ -51,5 +66,6 @@ public class MyBinderServer extends BaseBinderServer {
     @Override
     protected void stopService() {
         MainService.stop(context);
+        logger.error("hhh stop = ");
     }
 }

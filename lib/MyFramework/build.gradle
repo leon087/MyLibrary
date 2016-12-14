@@ -2,16 +2,8 @@ tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
 
 apply plugin: 'com.android.library'
 apply from: "$rootDir/ext-android.gradle"
-apply from: "$rootDir/config/quality.gradle"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':lib:MyUtil')
 }
-
-def computeVersion(String versionName, String versionCode) {
-    return versionName + "." + versionCode
-}
-
-version = computeVersion(project.versionName, project.versionCode)
-apply from : "$rootDir/config/maven/maven_publish.gradle"

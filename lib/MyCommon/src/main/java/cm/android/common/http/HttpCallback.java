@@ -9,7 +9,9 @@ import okhttp3.Response;
 public class HttpCallback implements Callback {
     @Override
     public void onFailure(Call call, IOException e) {
-
+        if (call.isCanceled()) {
+            Http.logger.info("call({}).isCanceled:{}", call, this);
+        }
     }
 
     @Override

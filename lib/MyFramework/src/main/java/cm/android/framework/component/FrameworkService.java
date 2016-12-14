@@ -1,28 +1,22 @@
 package cm.android.framework.component;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Intent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cm.android.framework.client.core.Framework;
+import cm.android.framework.client.core.LogUtil;
 
 public abstract class FrameworkService extends Service {
 
     private final AtomicBoolean create = new AtomicBoolean(false);
 
-    private static final Logger logger = LoggerFactory.getLogger("FrameworkService");
-
     @Override
     public final void onCreate() {
         super.onCreate();
         boolean start = Framework.get().isActive();
-        logger.info("ServiceManager.isStarted() = {},this = {}", start,
-                this.getClass().getSimpleName());
+        LogUtil.getLogger().info("isActive() = {},this = {}", start, this.getClass().getSimpleName());
         if (!start) {
             stopSelf();
             return;
@@ -34,17 +28,16 @@ public abstract class FrameworkService extends Service {
 
     @Override
     public final void onDestroy() {
-        logger.info("create.get() = {},this = {}", create.get(), this.getClass().getSimpleName());
+        super.onDestroy();
+
+        LogUtil.getLogger().info("create.get() = {},this = {}", create.get(), this.getClass().getSimpleName());
         if (create.get()) {
             onServiceDestroy();
             create.set(false);
         }
-
-        super.onDestroy();
     }
 
     @Override
-    @TargetApi(5)
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (null == intent) {
             if (startId % 3 == 0) {

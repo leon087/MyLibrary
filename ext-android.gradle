@@ -1,3 +1,36 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url RELEASE_REPOSITORY_URL
+            credentials {
+                username NEXUS_USERNAME
+                password NEXUS_PASSWORD
+            }
+        }
+        maven { url uri(new File(rootDir, 'local_repo')) }
+        mavenLocal()
+    }
+//    ext {
+//        cmGradleVersion = "local.local"
+//    }
+
+    dependencies {
+        classpath "ggg.android:cm.android.gradle:$cmGradleVersion"
+    }
+}
+
+if (plugins.hasPlugin('com.android.library')) {
+    if (project.hasProperty("version_prefix")) {
+        version = cm.android.gradle.util.Util.version(project.version_prefix, project.version_code)
+        android {
+            defaultConfig {
+                archivesBaseName += ("-" + project.version_prefix + "." + project.version_code + "." + cm.android.gradle.util.Util.buildTime())
+            }
+        }
+    }
+}
+
 if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.android.library')) {
     android {
         compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,9 +44,6 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
         defaultConfig {
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
-//            versionCode Integer.parseInt(project.versionCode)
-//            versionName computeVersion()
-            archivesBaseName += ("-" + project.versionName + "." + project.versionCode + "." + buildTime())
         }
     }
 
@@ -27,21 +57,6 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
 //            noCompress 'foo', 'bar'
             ignoreAssetsPattern "!.svn:!.git:!.ds_store:!*.scc:.*:<dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"
         }
-
-//        packagingOptions {
-////        pickFirst 'META-INF/foo.txt'
-//
-//            exclude 'META-INF/DEPENDENCIES.txt'
-//            exclude 'META-INF/LICENSE.txt'
-//            exclude 'META-INF/NOTICE.txt'
-//            exclude 'LICENSE.txt'
-//            exclude 'META-INF/LICENSE'
-//            exclude 'META-INF/license.txt'
-//            exclude 'META-INF/NOTICE'
-//            exclude 'META-INF/notice.txt'
-//            exclude 'META-INF/ASL2.0'
-//            exclude 'META-INF/RELEASE_NOTES.txt'
-//        }
 
         packagingOptions.excludes = [
                 '**/LICENSE.txt',
@@ -80,10 +95,4 @@ if (plugins.hasPlugin('com.android.application') || plugins.hasPlugin('com.andro
             javaMaxHeapSize "2g"
         }
     }
-}
-
-public static def buildTime() {
-    def date = new Date()
-    def formattedDate = date.format('MMddHH')
-    return formattedDate
 }

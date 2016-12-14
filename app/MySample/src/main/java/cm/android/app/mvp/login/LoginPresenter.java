@@ -3,7 +3,7 @@ package cm.android.app.mvp.login;
 import android.os.Message;
 import android.support.annotation.NonNull;
 
-import cm.android.sdk.WeakHandler;
+import cm.android.sdk.CloseableHandler;
 
 public class LoginPresenter implements LoginContract.Presenter {
     @NonNull
@@ -15,7 +15,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     private static final int MSG_SUCCESS = 0x01;
     private static final int MSG_FAILURE = MSG_SUCCESS + 1;
 
-    private WeakHandler handler = new WeakHandler() {
+    private CloseableHandler handler = new CloseableHandler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -58,11 +58,12 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void init() {
         logView.init(this);
+        handler.open();
     }
 
     @Override
     public void deInit() {
-        handler.get().removeCallbacksAndMessages(null);
+        handler.close();
         logView.dismissProgress();
         modelRepository.cancel();
     }

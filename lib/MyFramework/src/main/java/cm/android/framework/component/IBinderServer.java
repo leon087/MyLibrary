@@ -1,4 +1,4 @@
-package cm.android.framework.server;
+package cm.android.framework.component;
 
 import android.content.Context;
 

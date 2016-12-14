@@ -1,8 +1,12 @@
 //package cm.android.app.core;
 //
+//import com.marswin89.marsdaemon.DaemonClient;
+//import com.marswin89.marsdaemon.DaemonConfigurations;
 //
 //import android.content.Context;
 //
+//import cm.android.daemon.DaemonAssitReceiver;
+//import cm.android.daemon.DaemonAssitService;
 //import cm.android.framework.server.daemon.DaemonService;
 //
 //public class MyDaemon {

@@ -45,5 +45,15 @@ public abstract class WeakHandler {
                 outer.handleMessage(msg);
             }
         }
+
+        @Override
+        public void dispatchMessage(Message msg) {
+            super.dispatchMessage(msg);
+        }
+
+        @Override
+        public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
+            return super.sendMessageAtTime(msg, uptimeMillis);
+        }
     }
 }

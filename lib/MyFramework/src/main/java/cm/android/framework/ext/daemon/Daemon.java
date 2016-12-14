@@ -1,4 +1,4 @@
-package cm.android.framework.core.daemon;
+package cm.android.framework.ext.daemon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

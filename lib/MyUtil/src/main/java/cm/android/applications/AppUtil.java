@@ -245,8 +245,14 @@ public class AppUtil {
      *
      * @param archiveFilePath APK文件的路径。如：/sdcard /download/XX.apk
      */
+    @Deprecated
     public static PackageInfo getArchiveInfo(PackageManager pm, String archiveFilePath) {
-        PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath, PackageManager.GET_ACTIVITIES);
+        PackageInfo info = getArchiveInfo(pm, archiveFilePath, PackageManager.GET_ACTIVITIES);
+        return info;
+    }
+
+    public static PackageInfo getArchiveInfo(PackageManager pm, String archiveFilePath, int flags) {
+        PackageInfo info = pm.getPackageArchiveInfo(archiveFilePath, flags);
         return info;
     }
 

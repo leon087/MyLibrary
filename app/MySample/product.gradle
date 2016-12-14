@@ -1,3 +1,5 @@
+//apply from: "$rootDir/ext-android.gradle"
+
 apply plugin: ProductPlugin
 
 public class ProductPlugin implements Plugin<Project> {

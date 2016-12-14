@@ -25,9 +25,11 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.UUID;
+import java.util.List;
 
+import cm.java.cmd.CmdExecute;
 import cm.java.util.IoUtil;
 import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
@@ -248,25 +250,92 @@ public class DeviceUtil {
 //    }
 
     /**
+     * 获取设备MAC地址
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>}</p>
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
+     *
+     * @param context 上下文
+     * @return MAC地址
+     */
+    public static String getMacAddress(Context context) {
+        String macAddress = getMacAddressByWifiInfo(context);
+        if (!Utils.isEmpty(macAddress)) {
+            return macAddress;
+        }
+        macAddress = getMacAddressByNetworkInterface();
+        if (!Utils.isEmpty(macAddress)) {
+            return macAddress;
+        }
+        macAddress = getMacAddressByFile();
+        if (!Utils.isEmpty(macAddress)) {
+            return macAddress;
+        }
+        return "";
+    }
+
+
+    /**
      * 获取Mac地址
      * <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
      */
-    public static String getMacAddress(Context context) {
-        String macAddr = "";
+    public static String getMacAddressByWifiInfo(Context context) {
         try {
-            WifiManager wifi = (WifiManager) context
-                    .getSystemService(Context.WIFI_SERVICE);
+            WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             WifiInfo info = wifi.getConnectionInfo();
-            if (null != info) {
+            if (info != null) {
                 String mac = info.getMacAddress();
                 if (!Utils.isEmpty(mac)) {
-                    macAddr = mac;
+                    return mac;
                 }
             }
         } catch (Exception e) {
             logger.error("", e);
         }
-        return macAddr;
+        return "";
+    }
+
+    /**
+     * 获取设备MAC地址
+     * <p>需添加权限 {@code <uses-permission android:name="android.permission.INTERNET"/>}</p>
+     *
+     * @return MAC地址
+     */
+    private static String getMacAddressByNetworkInterface() {
+        try {
+            List<NetworkInterface> nis = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface ni : nis) {
+                if (!ni.getName().equalsIgnoreCase("wlan0")) continue;
+                byte[] macBytes = ni.getHardwareAddress();
+                if (macBytes != null && macBytes.length > 0) {
+                    StringBuilder res1 = new StringBuilder();
+                    for (byte b : macBytes) {
+                        res1.append(String.format("%02x:", b));
+                    }
+                    return res1.deleteCharAt(res1.length() - 1).toString();
+                }
+            }
+        } catch (Exception e) {
+            logger.error("", e);
+        }
+        return "";
+    }
+
+    /**
+     * 获取设备MAC地址
+     *
+     * @return MAC地址
+     */
+    private static String getMacAddressByFile() {
+        String result = CmdExecute.exec(new String[]{
+                "getprop", "wifi.interface"
+        });
+        if (!Utils.isEmpty(result)) {
+            result = CmdExecute.exec(new String[]{
+                    "cat", "/sys/class/net/" + result.trim() + "/address"
+            });
+        }
+
+        return result;
     }
 
     /**

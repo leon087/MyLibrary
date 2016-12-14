@@ -1,13 +1,11 @@
 package cm.android.framework.client.ipc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import android.os.IBinder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import cm.android.framework.client.core.LogUtil;
 import cm.java.proguard.annotations.Keep;
 
 public final class BinderFactory {
@@ -16,9 +14,9 @@ public final class BinderFactory {
 
         @Keep
         void bind(IBinder binder);
-    }
 
-    private static final Logger logger = LoggerFactory.getLogger("framework");
+        void binderDied();
+    }
 
 //    public static HashMap<String, Class> proxy = ObjectUtil.newHashMap();
 
@@ -31,22 +29,28 @@ public final class BinderFactory {
         try {
             Constructor constructor = proxyClass.getDeclaredConstructor();
             constructor.setAccessible(true);
-            IBinderProxy proxy = (IBinderProxy) constructor.newInstance();
+            final IBinderProxy proxy = (IBinderProxy) constructor.newInstance();
 
             IBinder binder = ServiceManagerNative.getService(name);
+            LocalProxyUtils.linkBinderDied(binder, new IBinder.DeathRecipient() {
+                @Override
+                public void binderDied() {
+                    proxy.binderDied();
+                }
+            });
             proxy.bind(binder);
             return (T) proxy;
         } catch (NoSuchMethodException e) {
-            logger.error(e.getMessage(), e);
+            LogUtil.getLogger().error(e.getMessage(), e);
             return null;
         } catch (InstantiationException e) {
-            logger.error(e.getMessage(), e);
+            LogUtil.getLogger().error(e.getMessage(), e);
             return null;
         } catch (IllegalAccessException e) {
-            logger.error(e.getMessage(), e);
+            LogUtil.getLogger().error(e.getMessage(), e);
             return null;
         } catch (InvocationTargetException e) {
-            logger.error(e.getMessage(), e);
+            LogUtil.getLogger().error(e.getMessage(), e);
             return null;
         }
     }

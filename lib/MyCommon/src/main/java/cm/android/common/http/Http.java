@@ -45,7 +45,7 @@ public final class Http {
     public static final String CONTENT_ENCODING = "Content-Encoding";
     public static final String CONTENT_ENCODING_GZIP = "gzip";
 
-    private static final Logger logger = LoggerFactory.getLogger("http");
+    public static final Logger logger = LoggerFactory.getLogger("http");
 
     private static OkHttpClient config() {
 //        client.setCache(new Cache(context.getCacheDir(), maxCacheSize));

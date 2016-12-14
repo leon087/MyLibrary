@@ -8,8 +8,9 @@ import org.slf4j.LoggerFactory;
 import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 
-import cm.android.app.sample.BuildConfig;
+import cm.android.framework.client.core.Config;
 import cm.android.framework.client.core.Framework;
 import cm.android.framework.server.ServerProvider;
 import cm.android.util.AndroidUtils;
@@ -25,13 +26,15 @@ public class MainApp extends Application {
 
     @Override
     protected void attachBaseContext(Context base) {
-        ServerProvider.authoritiy(BuildConfig.APPLICATION_ID + "." + ServerProvider.SERVICE_AUTH);
-
-        new MainConfig().initLog(base);
+        new MainConfig().init(base);
 
         super.attachBaseContext(base);
-        android.support.multidex.MultiDex.install(this);
+        MultiDex.install(this);
 
+        Framework.get().config(new Config.Builder()
+                .authorities(base.getPackageName() + "." + ServerProvider.AUTHORITIES)
+                .serverProcess(base.getApplicationInfo().processName + ":framework")
+                .build());
         Framework.get().startup(base, MyBinderServer.class);
     }
 
