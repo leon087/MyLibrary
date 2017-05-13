@@ -12,20 +12,22 @@ public class DaemonManager {
     public static final String ACTION_ALARM_WAKE_UP
             = "cm.android.framework.intent.action.ALARM_WAKE_UP";
 
-    private static final long DELAY = 1 * 60 * 60 * 1000;
+    private static final long DELAY = 1 * 60 * 60 * 1000L;
 
     private final AtomicBoolean startFlag = new AtomicBoolean(false);
 
     private DaemonManager() {
     }
 
-    private static final class Singleton {
-
-        private static final DaemonManager INSTANCE = new DaemonManager();
-    }
+    private static final cm.java.util.Singleton<DaemonManager> singleton = new cm.java.util.Singleton<DaemonManager>() {
+        @Override
+        protected DaemonManager create() {
+            return new DaemonManager();
+        }
+    };
 
     public static DaemonManager getInstance() {
-        return Singleton.INSTANCE;
+        return singleton.get();
     }
 
     private TimerTask daemonTimerTask = new TimerTask() {

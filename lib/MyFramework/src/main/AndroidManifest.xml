@@ -12,7 +12,7 @@
 
     <application>
         <service android:name="cm.android.framework.server.daemon.DaemonService"
-                 android:persistent="true"
+                 android:persistent="false"
                  android:exported="false"
                  android:stopWithTask="false"
                  android:process=":framework"/>
@@ -27,7 +27,6 @@
         </receiver>
 
         <service android:name="cm.android.framework.core.CoreService"
-                 android:persistent="true"
                  android:stopWithTask="false"
                  android:exported="false"
                  android:process=":framework"/>
@@ -35,6 +34,7 @@
         <provider
                 android:name="cm.android.framework.server.ServerProvider"
                 android:authorities="framework.provider"
+                android:multiprocess="false"
                 android:exported="false"
                 android:process=":framework"/>
 

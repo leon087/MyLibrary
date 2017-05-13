@@ -10,10 +10,13 @@ import android.content.Context;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 
+import cm.android.app.sample.BuildConfig;
+import cm.android.app.test.ServiceProvider;
 import cm.android.framework.client.core.Config;
 import cm.android.framework.client.core.Framework;
 import cm.android.framework.server.ServerProvider;
 import cm.android.util.AndroidUtils;
+import cm.android.util.BuildConfigUtil;
 import cm.android.util.SystemUtil;
 
 public class MainApp extends Application {
@@ -27,9 +30,14 @@ public class MainApp extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         new MainConfig().init(base);
+        BuildConfigUtil.put("app", "FLAVOR", BuildConfig.FLAVOR);
+
+        String flavor = BuildConfigUtil.get("app", "FLAVOR", "ggg");
 
         super.attachBaseContext(base);
         MultiDex.install(this);
+
+        ServiceProvider.authorities("ggg." + ServiceProvider.AUTHORITIES);
 
         Framework.get().config(new Config.Builder()
                 .authorities(base.getPackageName() + "." + ServerProvider.AUTHORITIES)

@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Notification;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 
 import cm.android.sdk.PersistentService;
 import cm.android.sdk.WakeLockUtil;
@@ -21,6 +23,8 @@ public final class DaemonService extends PersistentService {
     public static final String ACTION_START = "cm.android.framework.intent.action.DAEMON_START";
 
     public static final String ACTION_STOP = "cm.android.framework.intent.action.DAEMON_STOP";
+
+    private static final int NOTIFY_ID = 10000;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -49,23 +53,33 @@ public final class DaemonService extends PersistentService {
         daemonReceiver.register(this);
         logger.info("DaemonService:onCreate");
 
-        try {
-            Notification notification = new Notification();
-            notification.flags |= Notification.FLAG_NO_CLEAR;
-            notification.flags |= Notification.FLAG_ONGOING_EVENT;
-            startForeground(0, notification);
-        } catch (Throwable e) {
-            // Ignore
-        }
+        startService(new Intent(this, InnerService.class));
+        startForeground(NOTIFY_ID, new Notification());
     }
 
     @Override
     public void onDestroy() {
         stopForeground(true);
         daemonReceiver.unregister(this);
-//        WakeLockUtil.release(lock);
         super.onDestroy();
         logger.info("DaemonService:onDestroy");
+    }
+
+    public static final class InnerService extends Service {
+
+        @Override
+        public int onStartCommand(Intent intent, int flags, int startId) {
+            startForeground(NOTIFY_ID, new Notification());
+            stopForeground(true);
+            stopSelf();
+            return super.onStartCommand(intent, flags, startId);
+        }
+
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
     }
 
     public static void start(Object obj, Context context) {
@@ -89,7 +103,7 @@ public final class DaemonService extends PersistentService {
     public final static boolean bind(Context context, ServiceConnection connection) {
         Intent intent = new Intent(context, DaemonService.class);
         intent.setPackage(context.getPackageName());
-        return context.bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        return context.bindService(intent, connection, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT | Context.BIND_ABOVE_CLIENT);
     }
 
     public final static void unbind(Context context, ServiceConnection connection) {

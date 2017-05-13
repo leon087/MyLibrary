@@ -9,6 +9,7 @@ import cm.java.util.ObjectUtil;
 /**
  * Activity栈
  */
+@Deprecated
 public final class ActivityStack {
 
     private static final LinkedList<Activity> ACTIVITY_LIST = ObjectUtil.newLinkedList();

@@ -2,6 +2,8 @@ package cm.android.framework.server;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.lang.reflect.Constructor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,13 +34,13 @@ public final class BinderServerAgent {
     private final AtomicBoolean create = new AtomicBoolean(false);
 
     private String serverName;
-    private Bundle bundle = new Bundle();
+    private final Bundle bundle = new Bundle();
 
     public void attach(String serverName) {
         this.serverName = serverName;
     }
 
-    public IBinderServer getServer() {
+    public synchronized IBinderServer getServer() {
         if (binderServer == null) {
             binderServer = createBinderServer(serverName);
         }
@@ -70,7 +72,7 @@ public final class BinderServerAgent {
         }
     }
 
-    public void create(Context context) {
+    public synchronized void create(Context context) {
         LogUtil.getLogger().info("create:create = {},binderServer = {}", create.get(), binderServer);
         if (create.get()) {
             return;
@@ -84,7 +86,7 @@ public final class BinderServerAgent {
         }
     }
 
-    public void destroy() {
+    public synchronized void destroy() {
         LogUtil.getLogger().info("destroy:create = {},binderServer = {}", create.get(), binderServer);
         if (!create.get()) {
             return;
@@ -98,24 +100,29 @@ public final class BinderServerAgent {
         }
     }
 
-    public boolean isActive(Context context) {
+    public synchronized boolean isActive(Context context) {
         boolean createBoolean = create.get();
         boolean isActive = getServer().isActive(context);
         LogUtil.getLogger().info("createBoolean = {},isActive = {}", createBoolean, isActive);
         return createBoolean && isActive;
     }
 
-    public Bundle getBundle(String key) {
+    public synchronized Bundle getBundle(String key) {
         return bundle.getBundle(key);
     }
 
-    public void putBundle(String key, Bundle bundle) {
+    public synchronized void putBundle(String key, Bundle bundle) {
         this.bundle.putBundle(key, bundle);
     }
 
-    public void restore(Context context) {
+    public synchronized void restore(final Context context) {
         if (getServer().isActive(context)) {
-            create(context);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    create(context);
+                }
+            });
         }
     }
 }

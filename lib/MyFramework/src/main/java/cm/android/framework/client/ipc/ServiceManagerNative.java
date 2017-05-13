@@ -12,6 +12,7 @@ import cm.android.framework.interfaces.IServiceFetcher;
 import cm.android.framework.server.ServerProvider;
 import cm.android.framework.server.ServiceCache;
 
+@Deprecated
 public class ServiceManagerNative {
 
     private static IServiceFetcher sFetcher;

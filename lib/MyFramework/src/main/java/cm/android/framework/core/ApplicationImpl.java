@@ -69,7 +69,7 @@ public final class ApplicationImpl {
                 appContext.getPackageManager(), appContext.getPackageName(),
                 PackageManager.GET_ACTIVITIES);
         if (packageInfo == null) {
-            logger.error("packageInfo = null,getPackageName() = {},processName = {}", appContext.getPackageName(), SystemUtil.getCurProcessName());
+            logger.error("packageInfo = null,getPackageName() = {},processName = {}", appContext.getPackageName(), SystemUtil.getCurProcessName(context));
         } else {
             logger.info("versionCode = {},versionName = {},processName = {}", packageInfo.versionCode, packageInfo.versionName, processName);
         }

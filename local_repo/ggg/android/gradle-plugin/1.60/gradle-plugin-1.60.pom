@@ -3,8 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ggg.android</groupId>
-  <artifactId>cm.android.gradle</artifactId>
-  <version>1.51</version>
+  <artifactId>gradle-plugin</artifactId>
+  <version>1.60</version>
   <dependencies>
     <dependency>
       <groupId>org.tmatesoft.svnkit</groupId>

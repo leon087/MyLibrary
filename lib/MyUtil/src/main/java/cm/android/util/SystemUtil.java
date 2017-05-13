@@ -26,7 +26,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import cm.java.cmd.CmdExecute;
 import cm.java.util.IoUtil;
 import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
@@ -37,7 +36,6 @@ import cm.java.util.Utils;
 public class SystemUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(SystemUtil.class);
-
 
     /**
      * 判断进程是否正在运行
@@ -58,7 +56,7 @@ public class SystemUtil {
     }
 
     public static boolean isMainProcess(Context context) {
-        String processName = SystemUtil.getCurProcessName();
+        String processName = SystemUtil.getCurProcessName(context);
         if (context.getApplicationInfo().processName.equals(processName)) {
             return true;
         }
@@ -90,8 +88,7 @@ public class SystemUtil {
      * @param serviceName service名
      * @param processName 该service所在进程名
      */
-    public static boolean isServiceRunning(Context ctx, String serviceName,
-                                           String processName) {
+    public static boolean isServiceRunning(Context ctx, String serviceName, String processName) {
         ActivityManager manager = (ActivityManager) ctx
                 .getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager
@@ -284,24 +281,43 @@ public class SystemUtil {
         return activityName;
     }
 
-    @Deprecated
-    public static String getCurProcessName(Context context) {
+    private static String getCurProcessName2(Context context) {
         int pid = android.os.Process.myPid();
-        logger.info("pid = " + pid);
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningAppProcessInfo appProcess : am.getRunningAppProcesses()) {
             if (appProcess.pid == pid) {
                 return appProcess.processName;
             }
         }
-        return null;
+        return "";
+    }
+
+//    public static String getCurProcessName() {
+////        String[] cmd = new String[]{
+////                "cat", "/proc/" + android.os.Process.myPid() + "/cmdline"
+////        };
+////        String processName = CmdExecute.exec(cmd);
+//        String processName = Shell.exec("cat /proc/" + android.os.Process.myPid() + "/cmdline");
+//        if (Utils.isEmpty(processName)) {
+//            return "";
+//        }
+//        return processName.trim();
+//    }
+
+    public static String getCurProcessName(Context context) {
+        String processName = getCurProcessName();
+        if (Utils.isEmpty(processName)) {
+            processName = getCurProcessName2(context);
+        }
+        return processName;
     }
 
     public static String getCurProcessName() {
-        String[] cmd = new String[]{
-                "cat", "/proc/" + android.os.Process.myPid() + "/cmdline"
-        };
-        String processName = CmdExecute.exec(cmd);
+        byte[] data = IoUtil.readFile(new File("/proc/self/cmdline"));
+        if (data == null) {
+            return "";
+        }
+        String processName = new String(data);
         if (Utils.isEmpty(processName)) {
             return "";
         }

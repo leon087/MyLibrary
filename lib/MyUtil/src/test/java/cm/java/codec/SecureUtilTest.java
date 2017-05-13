@@ -2,21 +2,17 @@ package cm.java.codec;
 
 import org.junit.Test;
 
-import android.test.InstrumentationTestCase;
-
-import javax.crypto.spec.IvParameterSpec;
-
 import static junit.framework.Assert.assertEquals;
 
 public class SecureUtilTest {
 
-    @Test
-    public void testGetIv() throws Exception {
-        byte[] data = {11};
-        IvParameterSpec ivParameterSpec = SecureUtil.getIv(data);
-        byte[] result = ivParameterSpec.getIV();
-        assertEquals(new String(data), new String(result));
-    }
+//    @Test
+//    public void testGetIv() throws Exception {
+//        byte[] data = {11};
+//        IvParameterSpec ivParameterSpec = SecureUtil.getIv(data);
+//        byte[] result = ivParameterSpec.getIV();
+//        assertEquals(new String(data), new String(result));
+//    }
 
     @Test
     public void testGenerateIv() throws Exception {

@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import cm.java.util.ReflectUtil;
+import cm.java.util.Singleton;
 
 /**
  * The type Zte package manager.
@@ -131,16 +132,15 @@ public class PackageManager {
     public static final int DELETE_FAILED_ABORTED = -5;
 
     private static volatile PackageManager INSTANCE;
+    private static final Singleton<PackageManager> singleton = new Singleton<PackageManager>() {
+        @Override
+        protected PackageManager create() {
+            return new PackageManager();
+        }
+    };
 
     public static PackageManager getInstance() {
-        if (null == INSTANCE) {
-            synchronized (PackageManager.class) {
-                if (null == INSTANCE) {
-                    INSTANCE = new PackageManager();
-                }
-            }
-        }
-        return INSTANCE;
+        return singleton.get();
     }
 
     private PackageManager() {

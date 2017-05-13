@@ -3,9 +3,7 @@ package cm.android.net;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 
-import java.lang.reflect.Method;
-
-import cm.java.util.ObjectProxy;
+import cm.java.util.Reflect;
 
 public class WifiApUtil {
 
@@ -64,46 +62,68 @@ public class WifiApUtil {
     }
 
     public static void closeWifiAp(WifiManager wifiManager) {
-        ObjectProxy proxy = new ObjectProxy(wifiManager);
-        Method method = proxy.getMethod("getWifiApConfiguration");
-        WifiConfiguration config = proxy.doMethod(method);
-        setWifiApEnabled(wifiManager, config, false);
+        try {
+            WifiConfiguration config = Reflect.bind(wifiManager).call("getWifiApConfiguration");
+            setWifiApEnabled(wifiManager, config, false);
+        } catch (Reflect.ReflectException e) {
+        }
+        //        ObjectProxy proxy = new ObjectProxy(wifiManager);
+//        Method method = proxy.getMethod("getWifiApConfiguration");
+//        WifiConfiguration config = proxy.doMethod(method);
     }
 
     public static boolean setWifiApEnabled(WifiManager wifiManager, WifiConfiguration config,
-            boolean enable) {
+                                           boolean enable) {
         if (enable && wifiManager.isWifiEnabled()) {
             //wifi和热点不能同时打开，所以打开热点的时候需要关闭wifi
             wifiManager.setWifiEnabled(false);
         }
 
-        ObjectProxy proxy = new ObjectProxy(wifiManager);
-        Method method = proxy.getMethod("setWifiApEnabled", config.getClass(), Boolean.TYPE);
-        Boolean result = proxy.doMethod(method, config, enable);
-        if (result != null) {
-            return result;
+        try {
+            return Reflect.bind(wifiManager).method("setWifiApEnabled", config.getClass(), Boolean.TYPE).call(config, enable);
+        } catch (Reflect.ReflectException e) {
+            return false;
         }
-        return false;
+
+//        ObjectProxy proxy = new ObjectProxy(wifiManager);
+//        Method method = proxy.getMethod("setWifiApEnabled", config.getClass(), Boolean.TYPE);
+//        Boolean result = proxy.doMethod(method, config, enable);
+//        if (result != null) {
+//            return result;
+//        }
+//        return false;
     }
 
     public static boolean isWifiApEnabled(WifiManager wifiManager) {
-        ObjectProxy proxy = new ObjectProxy(wifiManager);
-        Method method = proxy.getMethod("isWifiApEnabled");
-        Boolean result = proxy.doMethod(method);
-        if (result != null) {
-            return result;
+        try {
+            return Reflect.bind(wifiManager).call("isWifiApEnabled");
+        } catch (Reflect.ReflectException e) {
+            return false;
         }
-        return false;
+
+//        ObjectProxy proxy = new ObjectProxy(wifiManager);
+//        Method method = proxy.getMethod("isWifiApEnabled");
+//        Boolean result = proxy.doMethod(method);
+//        if (result != null) {
+//            return result;
+//        }
+//        return false;
     }
 
     public static int getWifiApState(WifiManager wifiManager) {
-        ObjectProxy proxy = new ObjectProxy(wifiManager);
-        Method method = proxy.getMethod("getWifiApState");
-        Integer result = proxy.doMethod(method);
-        if (result != null) {
-            return result;
+        try {
+            return Reflect.bind(wifiManager).call("getWifiApState");
+        } catch (Reflect.ReflectException e) {
+            return 0;
         }
-        return 0;
+
+//        ObjectProxy proxy = new ObjectProxy(wifiManager);
+//        Method method = proxy.getMethod("getWifiApState");
+//        Integer result = proxy.doMethod(method);
+//        if (result != null) {
+//            return result;
+//        }
+//        return 0;
     }
 
 }

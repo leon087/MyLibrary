@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.telephony.TelephonyManager;
 
+import cm.android.util.AndroidUtils;
 import cm.java.util.IoUtil;
 
 /**
@@ -72,7 +73,7 @@ public class ApnUtil {
             logger.error(e.getMessage(), e);
             return -1;
         } finally {
-            IoUtil.closeQuietly(c);
+            AndroidUtils.closeQuietly(c);
         }
     }
 
@@ -104,7 +105,7 @@ public class ApnUtil {
             logger.error(e.getMessage(), e);
             return false;
         } finally {
-            IoUtil.closeQuietly(cursor);
+            AndroidUtils.closeQuietly(cursor);
         }
     }
 
@@ -129,7 +130,7 @@ public class ApnUtil {
         } catch (SecurityException e) {
             logger.error(e.getMessage(), e);
         } finally {
-            IoUtil.closeQuietly(cursor);
+            AndroidUtils.closeQuietly(cursor);
         }
         return -1;
     }

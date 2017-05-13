@@ -14,7 +14,7 @@ import cm.android.util.EnvironmentUtil;
 import cm.java.util.IoUtil;
 
 /**
- * 目录管理基类
+ * 目录管理
  */
 public class WorkDir {
 

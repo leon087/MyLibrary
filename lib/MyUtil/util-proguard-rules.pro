@@ -18,9 +18,14 @@
   *** get*();
 }
 
--keep class ch.qos.** { *; }
--keep class org.slf4j.** { *; }
--dontwarn ch.qos.logback.core.net.*
+-keep class android.app.** {*;}
+-keep class android.content.** {*;}
+-keep class * implements android.os.IInterface {*;}
+-keep class * extends android.os.IInterface {*;}
+
+#-keep class ch.qos.** { *; }
+#-keep class org.slf4j.** { *; }
+#-dontwarn ch.qos.logback.core.net.*
 #-assumenosideeffects class org.slf4j.Logger {
 #    public void debug(...);
 #}

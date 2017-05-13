@@ -348,4 +348,13 @@ public final class Utils {
 //        Log.i("Longer", "ca=" + ((X509Certificate) ca).getSubjectDN());
 //        Log.i("Longer", "key=" + ((X509Certificate) ca).getPublicKey());
     }
+
+    public static void throwRuntimeException(String msg, Exception e) {
+        Throwable cause = e.getCause();
+        if (cause != null) {
+            throw new RuntimeException(msg + ": " + cause.getMessage(), cause);
+        } else {
+            throw new RuntimeException(msg + ": " + e.getMessage(), e);
+        }
+    }
 }

@@ -34,6 +34,7 @@ import java.util.TreeSet;
 /**
  * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类 来接管程序,并记录 发送错误报告.
  */
+@Deprecated
 public class CrashHandler implements UncaughtExceptionHandler {
 
     private static final boolean isSavedSdcard = true;

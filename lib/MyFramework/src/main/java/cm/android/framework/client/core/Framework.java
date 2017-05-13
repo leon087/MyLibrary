@@ -6,12 +6,13 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.ConditionVariable;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 
 import cm.android.applications.AppUtil;
 import cm.android.framework.client.ipc.BinderFactory;
-import cm.android.framework.client.ipc.ServiceManagerNative;
+import cm.android.framework.client.ipc.ServiceManager;
 import cm.android.framework.component.CoreReceiver;
 import cm.android.framework.component.IBinderServer;
 import cm.android.framework.server.ServerProvider;
@@ -104,7 +105,7 @@ public class Framework {
             serverProcessName = mainProcessName + SERVER_PROCESS_SUFFIX_DEF;
         }
         // Current process name
-        processName = SystemUtil.getCurProcessName();
+        processName = SystemUtil.getCurProcessName(context);
         if (processName.equals(mainProcessName)) {
             processType = ProcessType.MAIN;
         } else if (processName.equals(serverProcessName)) {
@@ -120,27 +121,31 @@ public class Framework {
         }
         SERVER_NAME = serverClass.getName();
 
-        DaemonService.bind(context, serviceConnection);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                // TODO: ggg 2017/3/16 : nubia|coolpad上会导致ServerProvider.onCreate执行两次
+                DaemonService.bind(context, new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                        LogUtil.getLogger().info("onServiceConnected:iBinder = {},processName = {}", iBinder, SystemUtil.getCurProcessName(context));
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName componentName) {
+                        LogUtil.getLogger().error("onServiceDisconnected:processName = {}", SystemUtil.getCurProcessName(context));
+                    }
+                });
+            }
+        });
 
         PackageInfo packageInfo = AppUtil.getPackageInfo(context.getPackageManager(), context.getPackageName(), 0);
         if (packageInfo == null) {
-            LogUtil.getLogger().error("packageInfo = null,getPackageName() = {},processName = {}", context.getPackageName(), SystemUtil.getCurProcessName());
+            LogUtil.getLogger().error("packageInfo = null,getPackageName() = {},processName = {}", context.getPackageName(), SystemUtil.getCurProcessName(context));
         } else {
             LogUtil.getLogger().info("versionCode = {},versionName = {},processName = {}", packageInfo.versionCode, packageInfo.versionName, processName);
         }
     }
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            LogUtil.getLogger().info("onServiceConnected:iBinder = {},processName = {}", iBinder, SystemUtil.getCurProcessName());
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            LogUtil.getLogger().error("onServiceDisconnected:processName = {}", SystemUtil.getCurProcessName());
-        }
-    };
 
     /**
      * 开启业务层功能
@@ -149,6 +154,8 @@ public class Framework {
         LogUtil.getLogger().info("framework:start");
         StateHelper.writeState(context, true);
         ServerProvider.Proxy.create(context);
+//        Binder.getCallingPid()
+//        Binder.getCallingUid()
     }
 
     /**
@@ -182,7 +189,8 @@ public class Framework {
     }
 
     public static IBinder getService(String name) {
-        return ServiceManagerNative.getService(name);
+//        return ServiceManagerNative.getService(name);
+        return ServiceManager.getService(name);
     }
 
     public static <T> T getBinderProxy(String name, Class<? extends BinderFactory.IBinderProxy> proxyClass) {
@@ -190,11 +198,13 @@ public class Framework {
     }
 
     public static void addService(String name, IBinder service) {
-        ServiceManagerNative.addService(name, service);
+//        ServiceManagerNative.addService(name, service);
+        ServiceManager.addService(name, service);
     }
 
     public static void clearService() {
-        ServiceManagerNative.clearService();
+//        ServiceManagerNative.clearService();
+        ServiceManager.clearService();
     }
 
     public static void restoreService(Context context, String processName) {

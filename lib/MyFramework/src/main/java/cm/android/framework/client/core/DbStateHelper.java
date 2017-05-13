@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import cm.android.util.AndroidUtils;
 import cm.java.util.IoUtil;
 
 public class DbStateHelper {
@@ -67,7 +68,7 @@ public class DbStateHelper {
         } catch (Exception e) {
             LogUtil.getLogger().error(e.getMessage());
         } finally {
-            IoUtil.closeQuietly(cursor);
+            AndroidUtils.closeQuietly(cursor);
         }
     }
 
@@ -90,7 +91,7 @@ public class DbStateHelper {
             LogUtil.getLogger().error("StateHolder:writeState:state = false,error = {}", e.getMessage());
             return false;
         } finally {
-            IoUtil.closeQuietly(cursor);
+            AndroidUtils.closeQuietly(cursor);
         }
     }
 }

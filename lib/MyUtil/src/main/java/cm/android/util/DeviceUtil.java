@@ -29,8 +29,9 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
-import cm.java.cmd.CmdExecute;
+import cm.java.cmd.Shell;
 import cm.java.util.IoUtil;
+import cm.java.util.Reflect;
 import cm.java.util.ReflectUtil;
 import cm.java.util.Utils;
 
@@ -160,15 +161,15 @@ public class DeviceUtil {
      */
     public static String getSerial() {
         try {
-            String serial = ReflectUtil.getStaticFieldValue(Build.class, "SERIAL");
+            // TODO: ggg 2017/3/22 : Android O上改为Build.getSerial()，需READ_PHONE_STATE权限
+            String serial = Reflect.load(Build.class).field("SERIAL");
+//            String serial = ReflectUtil.getStaticFieldValue(Build.class, "SERIAL");
             if (Utils.isEmpty(serial) || "unknown".equalsIgnoreCase(serial)) {
                 logger.error("serial = {}", serial);
                 return "";
             }
             return serial;
-        } catch (NoSuchFieldException e) {
-            return "";
-        } catch (IllegalAccessException e) {
+        } catch (Reflect.ReflectException e) {
             return "";
         }
     }
@@ -178,6 +179,7 @@ public class DeviceUtil {
      */
     @TargetApi(3)
     public static String getAndroidId(Context context) {
+//        InstanceId.getId
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
@@ -281,6 +283,10 @@ public class DeviceUtil {
     public static String getMacAddressByWifiInfo(Context context) {
         try {
             WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+//            if (!wifi.isWifiEnabled()) {
+//                wifi.setWifiEnabled(true);
+//                wifi.setWifiEnabled(false);
+//            }
             WifiInfo info = wifi.getConnectionInfo();
             if (info != null) {
                 String mac = info.getMacAddress();
@@ -326,13 +332,17 @@ public class DeviceUtil {
      * @return MAC地址
      */
     private static String getMacAddressByFile() {
-        String result = CmdExecute.exec(new String[]{
-                "getprop", "wifi.interface"
-        });
+//        String result = CmdExecute.exec(new String[]{
+//                "getprop", "wifi.interface"
+//        });
+
+        String result = Shell.exec("getprop wifi.interface");
+
         if (!Utils.isEmpty(result)) {
-            result = CmdExecute.exec(new String[]{
-                    "cat", "/sys/class/net/" + result.trim() + "/address"
-            });
+//            result = CmdExecute.exec(new String[]{
+//                    "cat", "/sys/class/net/" + result.trim() + "/address"
+//            });
+            result = Shell.exec("cat /sys/class/net/" + result.trim() + "/address");
         }
 
         return result;
@@ -343,13 +353,11 @@ public class DeviceUtil {
      */
     public static String getIpAddress() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface
-                    .getNetworkInterfaces(); en.hasMoreElements(); ) {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf
-                        .getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
+                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress()) {
                         return inetAddress.getHostAddress().toString();
                     }
                 }
@@ -400,41 +408,59 @@ public class DeviceUtil {
 
     public static String getHostName() {
         try {
-            Method getString = Build.class.getDeclaredMethod("getString", String.class);
-            getString.setAccessible(true);
-            return getString.invoke(null, "net.hostname").toString();
-        } catch (NoSuchMethodException e) {
-            logger.debug(e.getMessage(), e);
-        } catch (IllegalAccessException e) {
-            logger.debug(e.getMessage(), e);
-        } catch (InvocationTargetException e) {
-            logger.debug(e.getMessage(), e);
+            return Reflect.load(Build.class)
+                    .method("getString", String.class)
+                    .call("net.hostname");
+        } catch (Reflect.ReflectException e) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
+            return sb.toString();
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
-        return sb.toString();
+//        try {
+//            Method getString = Build.class.getDeclaredMethod("getString", String.class);
+//            getString.setAccessible(true);
+//            return getString.invoke(null, "net.hostname").toString();
+//        } catch (NoSuchMethodException e) {
+//            logger.debug(e.getMessage(), e);
+//        } catch (IllegalAccessException e) {
+//            logger.debug(e.getMessage(), e);
+//        } catch (InvocationTargetException e) {
+//            logger.debug(e.getMessage(), e);
+//        }
     }
 
+    // TODO: ggg 2017/3/22 : 8.0上不在支持SystemProperties.get("net.hostname")
     public static String getHostName2() {
         try {
-            Class clazz = Class.forName("android.os.SystemProperties");
-            Method get = clazz.getDeclaredMethod("get", String.class);
-            get.setAccessible(true);
-            return get.invoke(null, "net.hostname").toString();
-        } catch (ClassNotFoundException e) {
-            logger.debug(e.getMessage(), e);
-        } catch (NoSuchMethodException e) {
-            logger.debug(e.getMessage(), e);
-        } catch (IllegalAccessException e) {
-            logger.debug(e.getMessage(), e);
-        } catch (InvocationTargetException e) {
-            logger.debug(e.getMessage(), e);
+            return Reflect.load("android.os.SystemProperties")
+                    .method("get", String.class, String.class)
+                    .call("net.hostname", Build.UNKNOWN);
+        } catch (Reflect.ReflectException e) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
+            return sb.toString();
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
-        return sb.toString();
+//        try {
+//            // TODO: ggg 2017/3/22 : 8.0上不在支持SystemProperties.get("net.hostname")
+//            Class clazz = Class.forName("android.os.SystemProperties");
+//            Method get = clazz.getDeclaredMethod("get", String.class);
+//            get.setAccessible(true);
+//            return get.invoke(null, "net.hostname").toString();
+//        } catch (ClassNotFoundException e) {
+//            logger.debug(e.getMessage(), e);
+//        } catch (NoSuchMethodException e) {
+//            logger.debug(e.getMessage(), e);
+//        } catch (IllegalAccessException e) {
+//            logger.debug(e.getMessage(), e);
+//        } catch (InvocationTargetException e) {
+//            logger.debug(e.getMessage(), e);
+//        }
+//
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(Build.MANUFACTURER).append("_").append(Build.MODEL);
+//        return sb.toString();
     }
 
     public static int getAdbEnabled(Context context) {

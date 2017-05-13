@@ -87,9 +87,9 @@ public class SystemInfoUtilTest extends InstrumentationTestCase {
         assertEquals(result, false);
     }
 
-    public void testGetMacAddress() throws Exception {
-        String temp = SystemInfoUtil.getMacAddress();
-        boolean result = temp.equals("");
-        assertEquals(result, false);
-    }
+//    public void testGetMacAddress() throws Exception {
+//        String temp = SystemInfoUtil.getMacAddress();
+//        boolean result = temp.equals("");
+//        assertEquals(result, false);
+//    }
 }

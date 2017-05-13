@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.PowerManager;
@@ -40,6 +41,12 @@ public final class AndroidUtils {
     private static final Logger logger = LoggerFactory.getLogger(AndroidUtils.class);
 
     private AndroidUtils() {
+    }
+
+    public static void closeQuietly(Cursor cursor) {
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
     }
 
     public static boolean isEmpty(Bundle bundle) {
@@ -284,7 +291,7 @@ public final class AndroidUtils {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         Debug.MemoryInfo memoryInfo = am.getProcessMemoryInfo(new int[]{pid})[0];
         sb.append("** MEMINFO ** in pid ").append(pid).append("\n")
-                .append("processName : ").append(SystemUtil.getCurProcessName()).append("\n")
+                .append("processName : ").append(SystemUtil.getCurProcessName(context)).append("\n")
                 .append("totalPrivateDirty : ").append(memoryInfo.getTotalPrivateDirty()).append("\n")
                 .append("totalSharedDirty : ").append(memoryInfo.getTotalSharedDirty()).append("\n")
                 .append("totalPss : ").append(memoryInfo.getTotalPss()).append("\n")

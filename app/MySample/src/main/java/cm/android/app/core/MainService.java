@@ -6,11 +6,9 @@ import org.slf4j.LoggerFactory;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import cm.android.framework.client.core.Framework;
 import cm.android.framework.client.core.LogUtil;
 import cm.android.sdk.WakeLockUtil;
 
@@ -55,19 +53,12 @@ public class MainService extends Service {
     public void onDestroy() {
         super.onDestroy();
         LogUtil.getLogger().error("gggg:MainService:onDestroy");
-
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("exit", true);
-        Framework.get().putBundle("ggg", bundle);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         LogUtil.getLogger().error("gggg:MainService:onCreate");
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("exit", false);
-        Framework.get().putBundle("ggg", bundle);
     }
 
     @Override

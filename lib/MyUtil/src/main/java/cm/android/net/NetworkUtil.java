@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import cm.android.util.EnvironmentUtil;
-import cm.java.util.ObjectProxy;
+import cm.java.util.Reflect;
 
 public class NetworkUtil {
 
@@ -123,8 +123,7 @@ public class NetworkUtil {
      * 获取当前的网络状态 -1：没有网络 1：WIFI网络2：wap 网络3：net网络
      */
     public static NetType getAPNType(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo == null) {
             return NetType.NONE_NET;
@@ -216,24 +215,36 @@ public class NetworkUtil {
         final ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        ObjectProxy proxy = new ObjectProxy(cm);
-        Method setMobileDataEnabledMethod = proxy
-                .getMethod("setMobileDataEnabled", Boolean.TYPE);
-        if (setMobileDataEnabledMethod != null) {
-            proxy.doMethod(setMobileDataEnabledMethod, enabled);
+        try {
+            Reflect.bind(cm).method("setMobileDataEnabled", boolean.class).call(enabled);
+        } catch (Reflect.ReflectException e) {
+            logger.error(e.getMessage(), e);
         }
+
+//        ObjectProxy proxy = new ObjectProxy(cm);
+//        Method setMobileDataEnabledMethod = proxy
+//                .getMethod("setMobileDataEnabled", Boolean.TYPE);
+//        if (setMobileDataEnabledMethod != null) {
+//            proxy.doMethod(setMobileDataEnabledMethod, enabled);
+//        }
     }
 
     private static boolean getMobileDataEnabledLow(Context context) {
         final ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        ObjectProxy proxy = new ObjectProxy(cm);
-        Method getMobileDataEnabledMethod = proxy.getMethod("getMobileDataEnabled");
-        if (getMobileDataEnabledMethod != null) {
-            return proxy.doMethod(getMobileDataEnabledMethod);
+        try {
+            return Reflect.bind(cm).call("getMobileDataEnabled");
+        } catch (Reflect.ReflectException e) {
+            return true;
         }
-        return true;
+
+//        ObjectProxy proxy = new ObjectProxy(cm);
+//        Method getMobileDataEnabledMethod = proxy.getMethod("getMobileDataEnabled");
+//        if (getMobileDataEnabledMethod != null) {
+//            return proxy.doMethod(getMobileDataEnabledMethod);
+//        }
+//        return true;
     }
 
     public static boolean getMobileDataEnabled(Context context) {

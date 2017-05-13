@@ -4,14 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.net.Uri;
 
 import cm.android.app.test.TestContext;
 import cm.android.app.test.server.TestManagerServer;
 import cm.android.framework.client.core.Framework;
+import cm.android.framework.client.core.LogUtil;
 import cm.android.framework.component.BaseBinderServer;
 import cm.android.framework.ext.alarm.TimerServer;
-import cm.java.thread.ThreadUtil;
+import cm.android.util.SystemUtil;
 
 public class MyBinderServer extends BaseBinderServer {
 
@@ -40,26 +41,18 @@ public class MyBinderServer extends BaseBinderServer {
 
     @Override
     protected void destroy() {
-        ThreadUtil.newCachedThreadPool().execute(new Runnable() {
-            @Override
-            public void run() {
-                Bundle bundle = Framework.get().getBundle("ggg");
-                while (bundle != null && !bundle.getBoolean("exit")) {
-                    logger.error("hhh bundle.getBoolean(\"exit\") = " + bundle.getBoolean("exit"));
-                    ThreadUtil.sleep(20);
-                    bundle = Framework.get().getBundle("ggg");
-                }
-
-                logger.error("hhh destroy");
-                Framework.clearService();
-                timerServer.stop();
-                MyBinderServer.this.context = null;
-            }
-        });
+        logger.error("hhh destroy");
+        Framework.clearService();
+        timerServer.stop();
+        MyBinderServer.this.context = null;
     }
 
     @Override
     protected void startService() {
+        LogUtil.getLogger().error("ggggggggg before call:this = {}", this);
+        context.getContentResolver().call(Uri.parse("content://" + "ggg.service"), "gggmethod", null, null);
+        LogUtil.getLogger().error("ggggggggg after call" + SystemUtil.getCurProcessName());
+
         MainService.start(context);
     }
 

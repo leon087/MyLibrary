@@ -83,15 +83,31 @@ public class ReflectUtil {
         field.set(null, filedValue);
     }
 
+//    public static Method getMethod(Class clazz, String methodName, Class<?>... parameterTypes) {
+//        try {
+//            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
+//            method.setAccessible(true);
+//            return method;
+//        } catch (NoSuchMethodException e) {
+//            logger.error(e.getMessage(), e);
+//            return null;
+//        }
+//    }
+
     public static Method getMethod(Class clazz, String methodName, Class<?>... parameterTypes) {
-        try {
-            Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
-            method.setAccessible(true);
-            return method;
-        } catch (NoSuchMethodException e) {
-            logger.error(e.getMessage(), e);
-            return null;
+        Class<?> type = clazz;
+        do {
+            try {
+                Method method = type.getDeclaredMethod(methodName, parameterTypes);
+                method.setAccessible(true);
+                return method;
+            } catch (NoSuchMethodException ignore) {
+            }
+            type = type.getSuperclass();
         }
+        while (type != null);
+
+        return null;
     }
 
     /**
@@ -100,7 +116,7 @@ public class ReflectUtil {
      * @param anClazz 注解类
      */
     public static Annotation getAnnotation(Class anClazz, String methodName,
-            Class<?>... parameterTypes) {
+                                           Class<?>... parameterTypes) {
         Method method = getMethod(anClazz, methodName, parameterTypes);
         if (method != null) {
             return method.getAnnotation(anClazz);

@@ -42,7 +42,7 @@ android {
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'),
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     cm.android.gradle.ExtUtil.getProguardFile(project),
-                    new File(project(':lib:MySqlCipher').getProjectDir(), 'proguard-rules.pro'),
+//                    new File(project(':lib:MySqlCipher').getProjectDir(), 'proguard-rules.pro'),
                     new File(project(':lib:MyUtil').getProjectDir(), 'util-proguard-rules.pro'),
                     new File(project(':lib:MyCommon').getProjectDir(), 'common-proguard-rules.pro'),
                     new File('proguard-rules.pro')
@@ -96,9 +96,9 @@ android {
             dimension 'type_xx'
         }
 
-        full {
-            dimension 'type_xx'
-        }
+//        full {
+//            dimension 'type_xx'
+//        }
     }
 
     variantFilter { variant ->
@@ -168,9 +168,9 @@ dependencies {
     compile project(':lib:MyFramework')
 
     //http
-    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
 //    compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
     //rx
     compile 'io.reactivex:rxandroid:1.1.0'
@@ -183,9 +183,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'multidex'
     }
 
-    rtestCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    rtestCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     compile 'com.squareup:otto:1.3.8'
 

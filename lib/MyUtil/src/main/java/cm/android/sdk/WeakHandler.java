@@ -1,5 +1,8 @@
 package cm.android.sdk;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -7,6 +10,7 @@ import android.os.Message;
 import java.lang.ref.WeakReference;
 
 public abstract class WeakHandler {
+    private static final Logger logger = LoggerFactory.getLogger("WeakHandler");
 
     private Handler handler = null;
 
@@ -43,6 +47,8 @@ public abstract class WeakHandler {
             cm.android.sdk.WeakHandler outer = mOuter.get();
             if (outer != null) {
                 outer.handleMessage(msg);
+            } else {
+                logger.error("WeakHandler:outer = null");
             }
         }
 

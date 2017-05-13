@@ -15,15 +15,8 @@ dependencies {
 
     def baseDependencies = rootProject.ext.baseDependencies
     compile baseDependencies.support_appcompat_v7
-//    compile([baseDependencies.slf4j,
-//             baseDependencies.logback_android_classic,
-//             baseDependencies.logback_android_core,
-//    ])
 
-    compile([baseDependencies.slf4j,
-             baseDependencies.timber,
-             baseDependencies.slf4j_timber
-    ])
+    compile baseDependencies.slf4j_android
 }
 
 //apply from: "$rootDir/config/maven/maven_publish.gradle"

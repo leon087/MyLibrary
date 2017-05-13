@@ -3,8 +3,6 @@ package cm.java.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import android.database.Cursor;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -28,7 +26,7 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import cm.java.cmd.CmdExecute;
+import cm.java.cmd.Shell;
 
 import static java.io.File.separatorChar;
 
@@ -59,12 +57,6 @@ public class IoUtil {
             throw rethrown;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-        }
-    }
-
-    public static void closeQuietly(Cursor cursor) {
-        if (cursor != null && !cursor.isClosed()) {
-            cursor.close();
         }
     }
 
@@ -150,7 +142,7 @@ public class IoUtil {
         String[] cmd = new String[]{
                 "rm", "-fr", "--", file.getAbsolutePath()
         };
-        CmdExecute.exec(cmd);
+        Shell.exec(cmd);
 
         boolean exist = file.exists();
         logger.info("file.exists() = ", exist);

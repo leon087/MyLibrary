@@ -2,8 +2,6 @@ package cm.java.codec;
 
 import java.security.SecureRandom;
 
-import javax.crypto.spec.IvParameterSpec;
-
 public final class SecureUtil {
 
     public static final String RANDOM_ALGORITHM = "SHA1PRNG";
@@ -17,20 +15,18 @@ public final class SecureUtil {
 
     public static byte[] getSaltDef() {
         return SALT_DEF.clone();
-//        return Arrays.copyOf(SALT_DEF, SALT_DEF.length);
     }
 
     public static byte[] getIvDef() {
-//        return Arrays.copyOf(IV_DEF, IV_DEF.length);
         return IV_DEF.clone();
     }
 
-    public static IvParameterSpec getIv(byte[] iv) {
-        if (iv == null) {
-            iv = SecureUtil.getIvDef();
-        }
-        return new IvParameterSpec(iv);
-    }
+//    public static IvParameterSpec getIv(byte[] iv) {
+//        if (iv == null) {
+//            iv = SecureUtil.getIvDef();
+//        }
+//        return new IvParameterSpec(iv);
+//    }
 
     public static byte[] generateIv() {
         return randomByte(16);

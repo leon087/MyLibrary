@@ -83,6 +83,9 @@
                 android:authorities="${applicationId}.framework.provider"
                 tools:replace="android:authorities"/>
 
+        <provider android:authorities="ggg.service"
+                  android:name="cm.android.app.test.ServiceProvider"/>
+
     </application>
 
 </manifest>

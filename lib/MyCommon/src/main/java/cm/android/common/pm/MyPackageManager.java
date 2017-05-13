@@ -6,23 +6,24 @@ import android.net.Uri;
 
 import cm.android.applications.AppUtil;
 import cm.java.thread.ThreadUtil;
+import cm.java.util.Singleton;
+
+import static okhttp3.internal.Internal.instance;
 
 /**
  * PackageManager适配器
  */
 public final class MyPackageManager {
 
-    private static volatile MyPackageManager INSTANCE;
+    private static final Singleton<MyPackageManager> singleton = new Singleton<MyPackageManager>() {
+        @Override
+        protected MyPackageManager create() {
+            return new MyPackageManager();
+        }
+    };
 
     public static MyPackageManager getInstance() {
-        if (null == INSTANCE) {
-            synchronized (MyPackageManager.class) {
-                if (null == INSTANCE) {
-                    INSTANCE = new MyPackageManager();
-                }
-            }
-        }
-        return INSTANCE;
+        return singleton.get();
     }
 
     private MyPackageManager() {

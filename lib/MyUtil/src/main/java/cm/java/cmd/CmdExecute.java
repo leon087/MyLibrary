@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
 
 import cm.java.util.IoUtil;
 
+@Deprecated
 public final class CmdExecute {
 
     private static final Logger logger = LoggerFactory.getLogger("cmd");

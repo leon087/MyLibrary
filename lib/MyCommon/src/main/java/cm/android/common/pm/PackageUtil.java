@@ -11,9 +11,11 @@ import java.io.File;
 
 import cm.android.applications.AppUtil;
 import cm.android.util.IntentUtil;
-import cm.java.cmd.ShellUtil;
-import cm.java.cmd.ShellUtil.CommandResult;
+import cm.java.cmd.Shell;
 import cm.java.util.Utils;
+
+import static cm.java.cmd.Shell.SH;
+import static cm.java.cmd.Shell.SU;
 
 /**
  * PackageUtil
@@ -322,7 +324,7 @@ public class PackageUtil {
      */
     public static final int install(Context context, String filePath) {
         if (PackageUtil.isSystemApplication(context)
-                || ShellUtil.checkRootPermission()) {
+                || Shell.su()) {
             return installSilent(context, filePath);
         }
         return installNormal(context, filePath) ? INSTALL_DELETE_NORMAL
@@ -378,143 +380,146 @@ public class PackageUtil {
         StringBuilder command = new StringBuilder().append(
                 "LD_LIBRARY_PATH=/vendor/lib:/system/lib pm install -r ")
                 .append(filePath.replace(" ", "\\ "));
-        CommandResult commandResult = ShellUtil.exec(command.toString(),
-                !isSystemApplication(context), true);
+//        CommandResult commandResult = ShellUtil.exec(command.toString(),
+//                !isSystemApplication(context), true);
 
-        if (commandResult.successMsg != null
-                && (commandResult.successMsg.contains("Success") || commandResult.successMsg
+        String shell = isSystemApplication(context) ? SH : SU;
+        Shell.Result commandResult = Shell.exec2(shell, new String[]{command.toString()});
+
+        if (commandResult.output != null
+                && (commandResult.output.contains("Success") || commandResult.output
                 .contains("success"))) {
             return INSTALL_SUCCEEDED;
         }
 
         logger.error(new StringBuilder().append("installSilent successMsg:")
-                .append(commandResult.successMsg).append(", ErrorMsg:")
-                .append(commandResult.errorMsg).toString());
-        if (commandResult.errorMsg == null) {
+                .append(commandResult.output).append(", ErrorMsg:")
+                .append(commandResult.error).toString());
+        if (commandResult.error == null) {
             return INSTALL_FAILED_OTHER;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
+        if (commandResult.error.contains("INSTALL_FAILED_ALREADY_EXISTS")) {
             return INSTALL_FAILED_ALREADY_EXISTS;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_APK")) {
+        if (commandResult.error.contains("INSTALL_FAILED_INVALID_APK")) {
             return INSTALL_FAILED_INVALID_APK;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_INVALID_URI")) {
+        if (commandResult.error.contains("INSTALL_FAILED_INVALID_URI")) {
             return INSTALL_FAILED_INVALID_URI;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_INSUFFICIENT_STORAGE")) {
             return INSTALL_FAILED_INSUFFICIENT_STORAGE;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_DUPLICATE_PACKAGE")) {
+        if (commandResult.error.contains("INSTALL_FAILED_DUPLICATE_PACKAGE")) {
             return INSTALL_FAILED_DUPLICATE_PACKAGE;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_NO_SHARED_USER")) {
+        if (commandResult.error.contains("INSTALL_FAILED_NO_SHARED_USER")) {
             return INSTALL_FAILED_NO_SHARED_USER;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_UPDATE_INCOMPATIBLE")) {
             return INSTALL_FAILED_UPDATE_INCOMPATIBLE;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_SHARED_USER_INCOMPATIBLE")) {
             return INSTALL_FAILED_SHARED_USER_INCOMPATIBLE;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_MISSING_SHARED_LIBRARY")) {
             return INSTALL_FAILED_MISSING_SHARED_LIBRARY;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_REPLACE_COULDNT_DELETE")) {
             return INSTALL_FAILED_REPLACE_COULDNT_DELETE;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_DEXOPT")) {
+        if (commandResult.error.contains("INSTALL_FAILED_DEXOPT")) {
             return INSTALL_FAILED_DEXOPT;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_OLDER_SDK")) {
+        if (commandResult.error.contains("INSTALL_FAILED_OLDER_SDK")) {
             return INSTALL_FAILED_OLDER_SDK;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_CONFLICTING_PROVIDER")) {
             return INSTALL_FAILED_CONFLICTING_PROVIDER;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_NEWER_SDK")) {
+        if (commandResult.error.contains("INSTALL_FAILED_NEWER_SDK")) {
             return INSTALL_FAILED_NEWER_SDK;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_TEST_ONLY")) {
+        if (commandResult.error.contains("INSTALL_FAILED_TEST_ONLY")) {
             return INSTALL_FAILED_TEST_ONLY;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_CPU_ABI_INCOMPATIBLE")) {
             return INSTALL_FAILED_CPU_ABI_INCOMPATIBLE;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_MISSING_FEATURE")) {
+        if (commandResult.error.contains("INSTALL_FAILED_MISSING_FEATURE")) {
             return INSTALL_FAILED_MISSING_FEATURE;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_CONTAINER_ERROR")) {
+        if (commandResult.error.contains("INSTALL_FAILED_CONTAINER_ERROR")) {
             return INSTALL_FAILED_CONTAINER_ERROR;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_INVALID_INSTALL_LOCATION")) {
             return INSTALL_FAILED_INVALID_INSTALL_LOCATION;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_MEDIA_UNAVAILABLE")) {
+        if (commandResult.error.contains("INSTALL_FAILED_MEDIA_UNAVAILABLE")) {
             return INSTALL_FAILED_MEDIA_UNAVAILABLE;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_VERIFICATION_TIMEOUT")) {
             return INSTALL_FAILED_VERIFICATION_TIMEOUT;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_FAILED_VERIFICATION_FAILURE")) {
             return INSTALL_FAILED_VERIFICATION_FAILURE;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_PACKAGE_CHANGED")) {
+        if (commandResult.error.contains("INSTALL_FAILED_PACKAGE_CHANGED")) {
             return INSTALL_FAILED_PACKAGE_CHANGED;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_UID_CHANGED")) {
+        if (commandResult.error.contains("INSTALL_FAILED_UID_CHANGED")) {
             return INSTALL_FAILED_UID_CHANGED;
         }
-        if (commandResult.errorMsg.contains("INSTALL_PARSE_FAILED_NOT_APK")) {
+        if (commandResult.error.contains("INSTALL_PARSE_FAILED_NOT_APK")) {
             return INSTALL_PARSE_FAILED_NOT_APK;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_BAD_MANIFEST")) {
             return INSTALL_PARSE_FAILED_BAD_MANIFEST;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION")) {
             return INSTALL_PARSE_FAILED_UNEXPECTED_EXCEPTION;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_NO_CERTIFICATES")) {
             return INSTALL_PARSE_FAILED_NO_CERTIFICATES;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES")) {
             return INSTALL_PARSE_FAILED_INCONSISTENT_CERTIFICATES;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING")) {
             return INSTALL_PARSE_FAILED_CERTIFICATE_ENCODING;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME")) {
             return INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID")) {
             return INSTALL_PARSE_FAILED_BAD_SHARED_USER_ID;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_MANIFEST_MALFORMED")) {
             return INSTALL_PARSE_FAILED_MANIFEST_MALFORMED;
         }
-        if (commandResult.errorMsg
+        if (commandResult.error
                 .contains("INSTALL_PARSE_FAILED_MANIFEST_EMPTY")) {
             return INSTALL_PARSE_FAILED_MANIFEST_EMPTY;
         }
-        if (commandResult.errorMsg.contains("INSTALL_FAILED_INTERNAL_ERROR")) {
+        if (commandResult.error.contains("INSTALL_FAILED_INTERNAL_ERROR")) {
             return INSTALL_FAILED_INTERNAL_ERROR;
         }
         return INSTALL_FAILED_OTHER;
@@ -531,8 +536,7 @@ public class PackageUtil {
      * @param packageName package name of app
      */
     public static final int uninstall(Context context, String packageName) {
-        if (PackageUtil.isSystemApplication(context)
-                || ShellUtil.checkRootPermission()) {
+        if (PackageUtil.isSystemApplication(context) || Shell.su()) {
             return uninstallSilent(context, packageName);
         }
         return uninstallNormal(context, packageName) ? INSTALL_DELETE_NORMAL
@@ -581,7 +585,7 @@ public class PackageUtil {
      * denied</li>
      */
     public static int uninstallSilent(Context context, String packageName,
-            boolean isKeepData) {
+                                      boolean isKeepData) {
         if (packageName == null || packageName.length() == 0) {
             return DELETE_FAILED_INVALID_PACKAGE;
         }
@@ -595,20 +599,22 @@ public class PackageUtil {
                 .append("LD_LIBRARY_PATH=/vendor/lib:/system/lib pm uninstall")
                 .append(isKeepData ? " -k " : " ")
                 .append(packageName.replace(" ", "\\ "));
-        CommandResult commandResult = ShellUtil.exec(command.toString(),
-                !isSystemApplication(context), true);
-        if (commandResult.successMsg != null
-                && (commandResult.successMsg.contains("Success") || commandResult.successMsg
+//        CommandResult commandResult = ShellUtil.exec(command.toString(), !isSystemApplication(context), true);
+        String shell = isSystemApplication(context) ? Shell.SH : Shell.SU;
+        Shell.Result commandResult = Shell.exec2(shell, new String[]{command.toString()});
+
+        if (commandResult.output != null
+                && (commandResult.output.contains("Success") || commandResult.output
                 .contains("success"))) {
             return DELETE_SUCCEEDED;
         }
         logger.error(new StringBuilder().append("uninstallSilent successMsg:")
-                .append(commandResult.successMsg).append(", ErrorMsg:")
-                .append(commandResult.errorMsg).toString());
-        if (commandResult.errorMsg == null) {
+                .append(commandResult.output).append(", ErrorMsg:")
+                .append(commandResult.error).toString());
+        if (commandResult.error == null) {
             return DELETE_FAILED_INTERNAL_ERROR;
         }
-        if (commandResult.errorMsg.contains("Permission denied")) {
+        if (commandResult.error.contains("Permission denied")) {
             return DELETE_FAILED_PERMISSION_DENIED;
         }
         return DELETE_FAILED_INTERNAL_ERROR;
@@ -629,7 +635,7 @@ public class PackageUtil {
      * whether packageName is system application
      */
     public static boolean isSystemApplication(Context context,
-            String packageName) {
+                                              String packageName) {
         if (context == null) {
             return false;
         }

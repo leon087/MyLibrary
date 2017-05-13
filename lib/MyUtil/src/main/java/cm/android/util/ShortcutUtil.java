@@ -142,7 +142,7 @@ public class ShortcutUtil {
             }
             return false;
         } finally {
-            IoUtil.closeQuietly(c);
+            AndroidUtils.closeQuietly(c);
         }
     }
 

@@ -1,11 +1,16 @@
 package cm.java.codec;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,6 +23,11 @@ public final class AESCoder {
 
     public static final String C_AES_CBC_PKCS5PADDING = "AES/CBC/PKCS5Padding";
 
+    /**
+     * 需要BC支持<br>
+     * BouncyCastleProvider provider = new BouncyCastleProvider(); <br>
+     * Security.addProvider(provider);
+     */
     public static final String C_AES_GCM = "AES/GCM/NoPadding";
 
     /**
@@ -44,7 +54,7 @@ public final class AESCoder {
     }
 
     public static SecretKey generateKey(char[] password, byte[] salt, int keyLength)
-            throws InvalidKeySpecException {
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
         SecretKey tmp = HashUtil.generateHash(password, salt, keyLength);
         SecretKey secret = getSecretKey(tmp.getEncoded());
         return secret;
@@ -66,54 +76,45 @@ public final class AESCoder {
     }
 
     public static byte[] encrypt(SecretKey secretKey, byte[] iv, byte[] src) throws Exception {
-        IvParameterSpec ivSpec = SecureUtil.getIv(iv);
-
-        Cipher cipher = Cipher.getInstance(C_AES_CBC_PKCS5PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-        byte[] encrypted = cipher.doFinal(src);
-        return encrypted;
+        return encrypt(C_AES_CBC_PKCS5PADDING, secretKey, iv, null, src);
     }
 
-    public static byte[] decrypt(SecretKey secretKey, byte[] iv, byte[] src)
-            throws Exception {
-        IvParameterSpec ivSpec = SecureUtil.getIv(iv);
-
-        Cipher cipher = Cipher.getInstance(C_AES_CBC_PKCS5PADDING);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
-        byte[] decrypted = cipher.doFinal(src);
-        return decrypted;
+    public static byte[] decrypt(SecretKey secretKey, byte[] iv, byte[] src) throws Exception {
+        return decrypt(C_AES_CBC_PKCS5PADDING, secretKey, iv, null, src);
     }
 
-    /**
-     * 需要BC支持<br>
-     * BouncyCastleProvider provider = new BouncyCastleProvider(); <br>
-     * Security.addProvider(provider);
-     */
-    public static byte[] encrypt(SecretKey secretKey, byte[] iv, byte[] aad, byte[] src)
-            throws Exception {
-        IvParameterSpec ivSpec = SecureUtil.getIv(iv);
-
-        Cipher cipher = Cipher.getInstance(C_AES_GCM);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-        cipher.updateAAD(aad);
-        byte[] encrypted = cipher.doFinal(src);
-        return encrypted;
+    public static byte[] encrypt(String transformation, SecretKey secretKey, byte[] iv, byte[] aad, byte[] src) throws Exception {
+        return doFinal(transformation, Cipher.ENCRYPT_MODE, secretKey, iv, aad, src);
     }
 
-    /**
-     * 需要BC支持<br>
-     * BouncyCastleProvider provider = new BouncyCastleProvider(); <br>
-     * Security.addProvider(provider);
-     */
-    public static byte[] decrypt(SecretKey secretKey, byte[] iv, byte[] aad, byte[] src)
-            throws Exception {
-        IvParameterSpec ivSpec = SecureUtil.getIv(iv);
+    public static byte[] decrypt(String transformation, SecretKey secretKey, byte[] iv, byte[] aad, byte[] src) throws Exception {
+        return doFinal(transformation, Cipher.DECRYPT_MODE, secretKey, iv, aad, src);
+    }
 
-        Cipher cipher = Cipher.getInstance(C_AES_GCM);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
-        cipher.updateAAD(aad);
-        byte[] decrypted = cipher.doFinal(src);
-        return decrypted;
+    private static byte[] doFinal(String transformation,
+                                  int opmode,
+                                  SecretKey secretKey,
+                                  byte[] iv,
+                                  byte[] aad,
+                                  byte[] src)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        IvParameterSpec ivSpec = getIv(iv);
+
+        Cipher cipher = Cipher.getInstance(transformation);
+        cipher.init(opmode, secretKey, ivSpec);
+        if (aad != null) {
+            cipher.updateAAD(aad);
+        }
+        byte[] dest = cipher.doFinal(src);
+        return dest;
+    }
+
+    private static IvParameterSpec getIv(byte[] iv) {
+        if (iv == null) {
+            return null;
+        } else {
+            return new IvParameterSpec(iv);
+        }
     }
 
 }

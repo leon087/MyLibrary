@@ -18,6 +18,7 @@ public class AsyncHandler extends WeakHandler {
         super(looper);
         if (looper == Looper.getMainLooper()) {
             logger.error("looper == Looper.getMainLooper()");
+            throw new IllegalArgumentException("AsyncHandler:looper == Looper.getMainLooper()");
         }
     }
 

@@ -14,12 +14,11 @@ import android.os.StatFs;
 import android.os.storage.StorageManager;
 
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.List;
 
 import cm.java.util.IoUtil;
-import cm.java.util.ObjectProxy;
 import cm.java.util.ObjectUtil;
+import cm.java.util.Reflect;
 import cm.java.util.Utils;
 
 public class EnvironmentUtil {
@@ -102,7 +101,6 @@ public class EnvironmentUtil {
      * @param context The context to use
      * @return The external cache dir
      */
-    @TargetApi(8)
     public static File getExternalCacheDir(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             File file = context.getExternalCacheDir();
@@ -340,12 +338,17 @@ public class EnvironmentUtil {
 //    }
 
     public static String[] getVolumePaths(Context context) {
-        StorageManager storageManager = (StorageManager) context.getSystemService(
-                Context.STORAGE_SERVICE);
-        ObjectProxy proxy = new ObjectProxy(storageManager);
-        Method method = proxy.getMethod("getVolumePaths");
-        String[] paths = proxy.doMethod(method);
-        return paths;
+        StorageManager storageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
+        try {
+            return Reflect.bind(storageManager).call("getVolumePaths");
+        } catch (Reflect.ReflectException e) {
+            return null;
+        }
+
+//        ObjectProxy proxy = new ObjectProxy(storageManager);
+//        Method method = proxy.getMethod("getVolumePaths");
+//        String[] paths = proxy.doMethod(method);
+//        return paths;
     }
 
     /**

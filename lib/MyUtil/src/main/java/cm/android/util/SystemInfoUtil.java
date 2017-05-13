@@ -3,7 +3,7 @@ package cm.android.util;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
-import cm.java.cmd.CmdExecute;
+import cm.java.cmd.Shell;
 
 public class SystemInfoUtil {
 
@@ -103,97 +103,112 @@ public class SystemInfoUtil {
 
     public static String getVersionInfo() {
 //        String args = "cat /proc/version";
-        String[] args = new String[]{
-                "cat", "/proc/version"
-        };
-        return CmdExecute.exec(args);
+//        String[] args = new String[]{
+//                "cat", "/proc/version"
+//        };
+//        return CmdExecute.exec(args);
+
+        return Shell.exec("cat /proc/version");
     }
 
     public static String getCpuInfo() {
-//        String args = "cat /proc/cpuinfo";
-        String[] cmd = new String[]{
-                "cat", "/proc/cpuinfo"
-        };
-        return CmdExecute.exec(cmd);
+        String args = "cat /proc/cpuinfo";
+        return Shell.exec(args);
+
+//        String[] cmd = new String[]{
+//                "cat", "/proc/cpuinfo"
+//        };
+//        return CmdExecute.exec(cmd);
     }
 
     public static String getDiskInfo() {
+        return Shell.exec("df");
+
 //        String[] args = {"/system/bin/df"};
 //        return CmdExecute.run(args, "/system/bin/");
-        String[] cmd = new String[]{
-                "df"
-        };
-        return CmdExecute.exec(cmd);
+//        String[] cmd = new String[]{
+//                "df"
+//        };
+//        return CmdExecute.exec(cmd);
     }
 
     public static String getDmesgInfo() {
+        return Shell.exec("dmesg");
+
 //        String[] args = {"/system/bin/dmesg"};
 //        return CmdExecute.run(args, "/system/bin/");
 
-        String[] cmd = new String[]{
-                "dmesg"
-        };
-        return CmdExecute.exec(cmd);
+//        String[] cmd = new String[]{
+//                "dmesg"
+//        };
+//        return CmdExecute.exec(cmd);
     }
 
     public static String getNetConfigInfo() {
 //        String[] args = {"/system/bin/netcfg"};
 //        return CmdExecute.run(args, "/system/bin/");
 
-        String[] cmd = new String[]{
-                "netcfg"
-        };
-        return CmdExecute.exec(cmd);
+//        String[] cmd = new String[]{
+//                "netcfg"
+//        };
+//        return CmdExecute.exec(cmd);
+        return Shell.exec("netcfg");
     }
 
     public static String getNetStatusInfo() {
 //        String[] args = {"/system/bin/netstat"};
 //        return CmdExecute.run(args, "/system/bin/");
 
-        String[] cmd = new String[]{
-                "netstat"
-        };
-        return CmdExecute.exec(cmd);
+//        String[] cmd = new String[]{
+//                "netstat"
+//        };
+//        return CmdExecute.exec(cmd);
+        return Shell.exec("netstat");
     }
 
     public static String getMountInfo() {
 //        String args = "mount";
-        String[] args = new String[]{
-                "mount"
-        };
-        return CmdExecute.exec(args);
+//        String[] args = new String[]{
+//                "mount"
+//        };
+//        return CmdExecute.exec(args);
+        return Shell.exec("mount");
     }
 
     public static String getDumpsysMeminfo(String packageName) {
 //        String args = "dumpsys meminfo " + packageName;
-        String[] args = new String[]{
-                "dumpsys", "meminfo", packageName
-        };
-        return CmdExecute.exec(args);
+//        String[] args = new String[]{
+//                "dumpsys", "meminfo", packageName
+//        };
+//        return CmdExecute.exec(args);
+        return Shell.exec("dumpsys meminfo " + packageName);
     }
 
     public static String getDumpsysCpuinfo() {
 //        String args = "dumpsys cpuinfo";
-        String[] args = new String[]{
-                "dumpsys", "cpuinfo"
-        };
-        return CmdExecute.exec(args);
+//        String[] args = new String[]{
+//                "dumpsys", "cpuinfo"
+//        };
+//        return CmdExecute.exec(args);
+        return Shell.exec("dumpsys cpuinfo");
     }
 
     public static String getDumpsysBattery() {
 //        String args = "dumpsys battery";
-        String[] args = new String[]{
-                "dumpsys", "battery"
-        };
-        return CmdExecute.exec(args);
+//        String[] args = new String[]{
+//                "dumpsys", "battery"
+//        };
+//        return CmdExecute.exec(args);
+        return Shell.exec("dumpsys battery");
     }
 
     public static String getMemoryInfo(Context context) {
 //        String args = "cat /proc/meminfo";
-        String[] args = new String[]{
-                "cat", "/proc/meminfo"
-        };
-        return CmdExecute.exec(args);
+//        String[] args = new String[]{
+//                "cat", "/proc/meminfo"
+//        };
+//        return CmdExecute.exec(args);
+        return Shell.exec("cat /proc/meminfo");
     }
 
     public static String getProcessRunningInfo() {
@@ -201,10 +216,11 @@ public class SystemInfoUtil {
 //        String result = CmdExecute.run(args, "/system/bin/");
 //        return result;
 
-        String[] cmd = new String[]{
-                "top", "-n", "1"
-        };
-        return CmdExecute.exec(cmd);
+//        String[] cmd = new String[]{
+//                "top", "-n", "1"
+//        };
+//        return CmdExecute.exec(cmd);
+        return Shell.exec("top -n 1");
     }
 
     public static void killProcess(int pid) {
@@ -212,10 +228,11 @@ public class SystemInfoUtil {
 //        String[] args = {"/system/bin/kill", String.valueOf(pid)};
 //        CmdExecute.run(args, "/system/bin/");
 
-        String[] cmd = new String[]{
-                "kill", String.valueOf(pid)
-        };
-        CmdExecute.exec(cmd);
+//        String[] cmd = new String[]{
+//                "kill", String.valueOf(pid)
+//        };
+//        CmdExecute.exec(cmd);
+        Shell.exec("kill " + String.valueOf(pid));
     }
 
 //    // 直接复制的反编译结果，未整理。
@@ -311,13 +328,13 @@ public class SystemInfoUtil {
 //        return stringbuilder16.append(s31).append("\n").toString();
 //    }
 
-    public static String getMacAddress() {
-//        String[] args = {"/system/bin/cat", "/sys/class/net/wlan0/address"};
-//        return CmdExecute.run(args, "/system/bin/");
-
-        String[] cmd = new String[]{
-                "cat", "/sys/class/net/wlan0/address"
-        };
-        return CmdExecute.exec(cmd);
-    }
+//    public static String getMacAddress() {
+////        String[] args = {"/system/bin/cat", "/sys/class/net/wlan0/address"};
+////        return CmdExecute.run(args, "/system/bin/");
+//
+//        String[] cmd = new String[]{
+//                "cat", "/sys/class/net/wlan0/address"
+//        };
+//        return CmdExecute.exec(cmd);
+//    }
 }

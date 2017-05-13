@@ -31,7 +31,8 @@ public final class BinderFactory {
             constructor.setAccessible(true);
             final IBinderProxy proxy = (IBinderProxy) constructor.newInstance();
 
-            IBinder binder = ServiceManagerNative.getService(name);
+//            IBinder binder = ServiceManagerNative.getService(name);
+            IBinder binder = ServiceManager.getService(name);
             LocalProxyUtils.linkBinderDied(binder, new IBinder.DeathRecipient() {
                 @Override
                 public void binderDied() {

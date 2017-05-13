@@ -1,6 +1,7 @@
 package cm.android.framework.server;
 
 import android.content.Context;
+import android.content.pm.ProviderInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -33,57 +34,64 @@ public final class ServerProvider extends BaseContentProvider {
     }
 
     @Override
+    public void attachInfo(Context context, ProviderInfo info) {
+        super.attachInfo(context, info);
+    }
+
+    @Override
     public boolean onCreate() {
         LogUtil.getLogger().info("ServerProvider:onCreate:{},getContext():{}", this, getContext());
         DaemonService.start(this, getContext());
 
-        binderServer.attach(Framework.SERVER_NAME);
-        //TODO ggg 方案1：create时判断是否初始化
-        //TODO ggg 确保getContext().getApplicationContext()不为null
-        binderServer.restore(getContext());
-
+        synchronized (this) {
+            binderServer.attach(Framework.SERVER_NAME);
+            //TODO ggg 方案1：create时判断是否初始化
+            //TODO ggg 确保getContext().getApplicationContext()不为null
+            binderServer.restore(getContext());
+        }
         return true;
     }
 
-    private void addService(String name, IBinder service) {
-        ServiceCache.addService(name, service);
-    }
+//    private void addService(String name, IBinder service) {
+//        ServiceFetcherServer.get().addService(name, service);
+//    }
 
     @Override
     public Bundle call(String method, String arg, Bundle extras) {
         LogUtil.getLogger().info("ServerProvider:isStartup = {},method = {},arg = {},extras = {}", Framework.get().isStartup(), method, arg, extras);
 
-        if (M_create.equals(method)) {
-            binderServer.create(getContext());
-        } else if (M_destroy.equals(method)) {
-            binderServer.destroy();
-        } else if (M_isActive.equals(method)) {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(KEY_BINDER, binderServer.isActive(getContext()));
-            return bundle;
-        } else if (M_getServiceFetcher.equals(method)) {
-            //TODO 方案2:ggg 每次get前判断下是否初始化
+        synchronized (this) {
+            if (M_create.equals(method)) {
+                binderServer.create(getContext());
+            } else if (M_destroy.equals(method)) {
+                binderServer.destroy();
+            } else if (M_isActive.equals(method)) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(KEY_BINDER, binderServer.isActive(getContext()));
+                return bundle;
+            } else if (M_getServiceFetcher.equals(method)) {
+                //TODO 方案2:ggg 每次get前判断下是否初始化
 //            binderServer.restore(getContext());
 
-            Bundle bundle = new Bundle();
-            BundleCompat.putBinder(bundle, KEY_BINDER, mServiceFetcher);
-            return bundle;
-        } else if (M_getBundle.equals(method)) {
-            Bundle bundle = new Bundle();
-            bundle.putBundle(KEY_BINDER, binderServer.getBundle(arg));
-            return bundle;
-        } else if (M_putBundle.equals(method)) {
-            binderServer.putBundle(arg, extras);
+                Bundle bundle = new Bundle();
+                BundleCompat.putBinder(bundle, KEY_BINDER, mServiceFetcher);
+                return bundle;
+            } else if (M_getBundle.equals(method)) {
+                Bundle bundle = new Bundle();
+                bundle.putBundle(KEY_BINDER, binderServer.getBundle(arg));
+                return bundle;
+            } else if (M_putBundle.equals(method)) {
+                binderServer.putBundle(arg, extras);
+            }
         }
-
         return null;
     }
 
-    private class ServiceFetcher extends IServiceFetcher.Stub {
+    private static class ServiceFetcher extends IServiceFetcher.Stub {
         @Override
         public IBinder getService(String name) throws RemoteException {
             if (name != null) {
-                return ServiceCache.getService(name);
+                return ServiceFetcherServer.get().getService(name);
             }
             return null;
         }
@@ -91,20 +99,20 @@ public final class ServerProvider extends BaseContentProvider {
         @Override
         public void addService(String name, IBinder service) throws RemoteException {
             if (name != null && service != null) {
-                ServiceCache.addService(name, service);
+                ServiceFetcherServer.get().addService(name, service);
             }
         }
 
         @Override
         public void removeService(String name) throws RemoteException {
             if (name != null) {
-                ServiceCache.removeService(name);
+                ServiceFetcherServer.get().removeService(name);
             }
         }
 
         @Override
         public void clearService() throws RemoteException {
-            ServiceCache.clearService();
+            ServiceFetcherServer.get().clearService();
         }
     }
 

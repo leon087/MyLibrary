@@ -18,8 +18,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import cm.java.util.HexUtil;
-
 public final class HashUtil {
 
     private static final Logger logger = LoggerFactory.getLogger("codec");
@@ -29,9 +27,10 @@ public final class HashUtil {
     private HashUtil() {
     }
 
-    private static final String ALG_PBK = "PBKDF2WithHmacSHA1";
+    public static final String ALG_PBK = "PBKDF2WithHmacSHA1";
 
-    private static final String ALG_PBE_LOW = "PBEWithMD5AndDES";
+    @Deprecated
+    public static final String ALG_PBE_LOW = "PBEWithMD5AndDES";
 
     public static final String ALG_SHA = "SHA-256";
 
@@ -45,42 +44,42 @@ public final class HashUtil {
 
     private static final int KEY_LENGTH = 16;
 
-    public static SecretKey generateHash(char[] password, byte[] salt, int iterationCount,
-                                         int keyLength) throws InvalidKeySpecException {
+    public static SecretKey generateHash(char[] password, byte[] salt, int iterationCount, int keyLength)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
         try {
             SecretKey key = generatePBEKey(password, salt, ALG_PBK, iterationCount, keyLength);
             return key;
         } catch (NoSuchAlgorithmException e) {
             logger.error(e.getMessage(), e);
-            try {
-                SecretKey key = generatePBEKey(password, salt, ALG_PBE_LOW, iterationCount,
-                        keyLength);
-                return key;
-            } catch (NoSuchAlgorithmException e1) {
-                logger.error(e1.getMessage(), e1);
-                throw new RuntimeException(e1);
-            }
+            throw e;
+//            try {
+//                SecretKey key = generatePBEKey(password, salt, ALG_PBE_LOW, iterationCount,
+//                        keyLength);
+//                return key;
+//            } catch (NoSuchAlgorithmException e1) {
+//                logger.error(e1.getMessage(), e1);
+//                throw new RuntimeException(e1);
+//            }
         }
     }
 
     public static SecretKey generateHash(char[] password, byte[] salt)
-            throws InvalidKeySpecException {
-        if (null == salt) {
-            salt = SecureUtil.getSaltDef();
-        }
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+//        if (null == salt) {
+//            salt = SecureUtil.getSaltDef();
+//        }
         return generateHash(password, salt, KEY_LENGTH);
     }
 
     public static SecretKey generateHash(char[] password, byte[] salt, int keyLength)
-            throws InvalidKeySpecException {
-        if (null == salt) {
-            salt = SecureUtil.getSaltDef();
-        }
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+//        if (null == salt) {
+//            salt = SecureUtil.getSaltDef();
+//        }
         return generateHash(password, salt, ITERATIONS, keyLength);
     }
 
-    private static SecretKey generatePBEKey(char[] password, byte[] salt, String algorthm,
-                                            int iterations, int keyLength)
+    private static SecretKey generatePBEKey(char[] password, byte[] salt, String algorthm, int iterations, int keyLength)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
         int keySizeBit = SecureUtil.convertSize(keyLength);
 
@@ -90,25 +89,25 @@ public final class HashUtil {
         return secretKey;
     }
 
-    /**
-     * 返回小写形式16进制编码的sha256
-     */
-    public static String getShaHex(final byte[] data) {
-        final byte[] digest = getSha(data);
-        return HexUtil.encode(digest).toLowerCase();
-    }
+//    /**
+//     * 返回小写形式16进制编码的sha256
+//     */
+//    public static String getShaHex(final byte[] data) {
+//        final byte[] digest = getSha(data);
+//        return HexUtil.encode(digest).toLowerCase();
+//    }
 
     public static byte[] getSha(final byte[] data) {
         return getMessageDigest(data, ALG_SHA);
     }
 
-    /**
-     * 返回小写形式16进制编码的md5
-     */
-    public static String getMd5(InputStream inputStream) throws IOException {
-        byte[] data = getMessageDigest(inputStream, ALG_MD5);
-        return HexUtil.encode(data).toLowerCase();
-    }
+//    /**
+//     * 返回小写形式16进制编码的md5
+//     */
+//    public static String getMd5(InputStream inputStream) throws IOException {
+//        byte[] data = getMessageDigest(inputStream, ALG_MD5);
+//        return HexUtil.encode(data).toLowerCase();
+//    }
 
     public static byte[] getSha(InputStream inputStream) throws IOException {
         return getMessageDigest(inputStream, ALG_SHA);
